@@ -3,6 +3,8 @@
    Matches Figma mockups & production screenshots exactly.
    ========================================================================== */
 
+@import url("app-standard-type.css");
+
 :root {
   --barq-blue: #2563EB;
   --barq-blue-hover: #1D4ED8;

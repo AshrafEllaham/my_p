@@ -249,6 +249,15 @@
       color: #FFFFFF;
     }
 
+    /* Keep the optional tracker badge from resizing the sidebar header. */
+    #aiVisionBadge {
+      display: block;
+      max-width: 126px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
     /* --------------------------------------------------------------------------
        2. CENTER STAGE (منصة عرض الموبايل بالحجم الكامل من أول الشاشة لآخرها)
        -------------------------------------------------------------------------- */
@@ -1128,9 +1137,198 @@
       background: #334155;
     }
 
+    /* =====================================================================
+       SA'Y PREVIEW STUDIO — visual polish layer
+       ===================================================================== */
+    body { background: #F4F7FB; }
+
+    aside.right-sidebar,
+    aside.left-panel {
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(18px);
+    }
+
+    aside.right-sidebar { box-shadow: -10px 0 30px rgba(15, 23, 42, 0.035); }
+    aside.left-panel { box-shadow: 10px 0 30px rgba(15, 23, 42, 0.025); }
+
+    .sidebar-header { padding: 20px 18px 14px; gap: 12px; }
+    .brand-title { font-size: 25px; color: #1D4ED8; }
+    .brand-subtitle { max-width: 158px; line-height: 1.55; }
+    .search-box { margin: 14px 18px 10px; }
+    .search-box input { min-height: 40px; border-radius: 11px; background: #F8FAFC; border-color: #E7EDF5; }
+    .screens-nav-list { padding: 12px 12px 24px; gap: 18px; }
+    .nav-section-title { padding: 0 8px 5px; color: #94A3B8; font-size: 10px; }
+    .nav-section-title span:last-child { min-width: 19px; height: 19px; border-radius: 99px; background: #F1F5F9; display: grid; place-items: center; font-size: 9px; }
+    .screen-item-btn { min-height: 40px; padding: 8px 9px; border-radius: 11px; }
+    .screen-item-btn:hover { background: #F8FBFF; border-color: #DCE8F7; transform: translateX(-1px); }
+    .screen-item-btn.active { background: linear-gradient(135deg, #EFF6FF, #F8FBFF); border-color: #BFDBFE; box-shadow: 0 3px 10px rgba(37, 99, 235, 0.08); }
+    .screen-badge-num { width: 24px; height: 24px; border-radius: 8px; }
+
+    main.center-stage {
+      background-color: #F5F8FC;
+      background-image:
+        radial-gradient(circle at 50% 40%, rgba(37, 99, 235, 0.11), transparent 34%),
+        linear-gradient(rgba(148, 163, 184, 0.075) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148, 163, 184, 0.075) 1px, transparent 1px);
+      background-size: auto, 24px 24px, 24px 24px;
+    }
+
+    .stage-meta {
+      position: absolute;
+      top: 18px;
+      right: 22px;
+      left: 22px;
+      z-index: 12;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+
+    .stage-meta-title {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      color: #64748B;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .stage-meta-title strong { color: #0F172A; font-size: 13px; font-weight: 800; }
+    .stage-device-chip { padding: 6px 10px; border: 1px solid #DCE6F2; border-radius: 99px; background: rgba(255,255,255,.8); color: #475569; font: 700 10px 'Plus Jakarta Sans', sans-serif; box-shadow: 0 3px 10px rgba(15,23,42,.04); }
+
+    .phone-mockup-frame { border-color: #D8E2EE; box-shadow: 0 24px 50px rgba(15, 23, 42, 0.14), 0 3px 10px rgba(15, 23, 42, 0.05); }
+    .stage-arrow-btn { width: 40px; height: 40px; border-color: #DCE5F0; box-shadow: 0 6px 16px rgba(15,23,42,.08); }
+
+    aside.left-panel { padding: 20px 16px; gap: 14px; }
+    .panel-sync-card { border-color: #E3EAF3; border-radius: 16px; padding: 12px; box-shadow: 0 5px 16px rgba(15,23,42,.035); }
+    .file-path-badge { background: #F8FAFC; border-color: #E4EAF2; color: #475569; }
+    .tag-pill { border-radius: 99px; padding: 4px 9px; }
+    .design-notes-card { border-radius: 16px; border-color: #E3EAF3; background: #FBFCFE; }
+
+    [data-theme="dark"] main.center-stage,
+    body.dark-mode main.center-stage { background-color: #0B1220; background-image: radial-gradient(circle at 50% 40%, rgba(96,165,250,.14), transparent 35%), linear-gradient(rgba(148,163,184,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,.06) 1px, transparent 1px); }
+    [data-theme="dark"] .stage-meta-title strong, body.dark-mode .stage-meta-title strong { color: #F8FAFC; }
+    [data-theme="dark"] .stage-device-chip, body.dark-mode .stage-device-chip { background: rgba(15,23,42,.8); border-color: #334155; color: #CBD5E1; }
+
+    @media (max-width: 900px) { .stage-meta { right: 16px; left: 16px; } }
+    @media (max-width: 620px) { .stage-meta { top: 12px; } .stage-meta-title { display: none; } }
+
+    /* Figma-inspired studio shell */
+    body { flex-direction: column; }
+    .studio-topbar {
+      height: 54px;
+      min-height: 54px;
+      padding: 0 16px;
+      background: #FFFFFF;
+      border-bottom: 1px solid #E5EBF3;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      direction: rtl;
+      z-index: 50;
+    }
+    .studio-file { display:flex; align-items:center; gap:10px; min-width:0; }
+    .studio-file-mark { width:30px; height:30px; flex:0 0 auto; }
+    .studio-file-text { min-width:0; display:flex; flex-direction:column; gap:1px; }
+    .studio-file-text strong { font-size:12px; font-weight:800; color:#0F172A; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .studio-file-text span { font:600 9.5px 'Plus Jakarta Sans',sans-serif; color:#94A3B8; }
+    .studio-mode-tabs { display:flex; align-items:center; gap:2px; padding:3px; background:#F1F5F9; border-radius:9px; }
+    .studio-mode-tab { border:0; border-radius:7px; background:transparent; color:#64748B; padding:5px 10px; font:700 10px 'Plus Jakarta Sans',sans-serif; }
+    .studio-mode-tab.active { background:#FFFFFF; color:#2563EB; box-shadow:0 1px 3px rgba(15,23,42,.08); }
+    .studio-actions { display:flex; align-items:center; gap:6px; direction:ltr; }
+    .studio-tool-btn, .studio-zoom-label { height:30px; border:1px solid #E1E8F0; background:#FFFFFF; color:#475569; display:grid; place-items:center; cursor:pointer; font:700 13px 'Plus Jakarta Sans',sans-serif; }
+    .studio-tool-btn { width:30px; border-radius:8px; }
+    .studio-tool-btn:hover { color:#2563EB; border-color:#BFDBFE; background:#EFF6FF; }
+    .studio-zoom-label { min-width:57px; border-radius:8px; font-size:10px; }
+    .studio-reset { font-size:15px; }
+    .app-container { height:calc(100vh - 54px); min-height:0; }
+    aside.right-sidebar { height:100%; }
+    aside.left-panel { height:100%; }
+    .phone-mockup-frame { height:min(852px, calc(100vh - 86px)); max-height:min(852px, calc(100vh - 86px)); }
+    .canvas-viewport { position:absolute; inset:0; overflow:hidden; display:grid; place-items:center; touch-action:none; cursor:default; }
+    .canvas-viewport.is-panning { cursor:grabbing; }
+    .canvas-content { display:flex; align-items:center; justify-content:center; transform-origin:center; will-change:transform; }
+    .canvas-nav-btn { position:absolute; top:50%; z-index:14; transform:translateY(-50%); }
+    .canvas-nav-btn:hover { transform:translateY(-50%) scale(1.08); }
+    .canvas-nav-next { right:20px; }
+    .canvas-nav-prev { left:20px; }
+    .canvas-status { position:absolute; bottom:16px; left:50%; transform:translateX(-50%); z-index:12; padding:6px 10px; border:1px solid #DCE6F2; border-radius:9px; background:rgba(255,255,255,.78); color:#64748B; font-size:10px; font-weight:700; box-shadow:0 3px 12px rgba(15,23,42,.05); backdrop-filter:blur(8px); pointer-events:none; }
+    .canvas-status kbd { padding:1px 4px; border:1px solid #DCE5EF; border-radius:4px; background:#FFF; font:700 9px monospace; color:#475569; }
+    [data-theme="dark"] .studio-topbar, body.dark-mode .studio-topbar { background:#0F172A; border-color:#1E293B; }
+    [data-theme="dark"] .studio-file-text strong, body.dark-mode .studio-file-text strong { color:#F8FAFC; }
+    [data-theme="dark"] .studio-mode-tabs, body.dark-mode .studio-mode-tabs { background:#1E293B; }
+    [data-theme="dark"] .studio-mode-tab.active, body.dark-mode .studio-mode-tab.active { background:#334155; color:#93C5FD; }
+    [data-theme="dark"] .studio-tool-btn, [data-theme="dark"] .studio-zoom-label, body.dark-mode .studio-tool-btn, body.dark-mode .studio-zoom-label { background:#151D2A; border-color:#334155; color:#CBD5E1; }
+    [data-theme="dark"] .canvas-status, body.dark-mode .canvas-status { background:rgba(15,23,42,.78); border-color:#334155; color:#CBD5E1; }
+    @media (max-width: 760px) { .studio-mode-tabs { display:none; } .studio-topbar { padding:0 10px; } .studio-file-text span { display:none; } .canvas-nav-next { right:8px; } .canvas-nav-prev { left:8px; } .canvas-status { display:none; } .phone-mockup-frame { height:min(852px, calc(100vh - 78px)); max-height:min(852px, calc(100vh - 78px)); } }
+
+    /* Readability upgrade: information panels remain legible at normal desktop zoom. */
+    :root { --sidebar-width: 304px; --left-panel-width: 352px; }
+    aside.left-panel { padding: 24px 21px; gap: 17px; }
+    .panel-sync-card { padding: 14px; border-radius: 18px; }
+    .sync-status, .auto-sync-toggle { font-size: 12px; }
+    .stage-action-pill { min-height: 35px; padding: 7px 11px; font-size: 11.5px; }
+    .current-label { font-size: 12px; }
+    .current-title { font-size: 24px; line-height: 1.35; }
+    .file-path-badge { padding: 7px 10px; font-size: 11.5px; line-height: 1.45; }
+    .tag-pill { padding: 5px 10px; font-size: 11px; }
+    .screen-desc-text { font-size: 13.5px; line-height: 1.75; }
+    .design-notes-card { padding: 16px; gap: 12px; }
+    .notes-title { font-size: 14px; }
+    .notes-list { gap: 9px; }
+    .note-item { gap: 8px; font-size: 12.5px; line-height: 1.65; }
+    .note-item span.diamond { font-size: 10px; margin-top: 4px; }
+    .brand-subtitle { font-size: 11.5px; }
+    .search-box input { font-size: 12.5px; }
+    .screen-item-btn { min-height: 46px; padding: 9px 10px; }
+    .screen-item-title { font-size: 13px; }
+    .screen-badge-num { width: 26px; height: 26px; font-size: 11px; }
+    .stage-meta-title { font-size: 11px; }
+    .stage-meta-title strong { font-size: 15px; }
+    .stage-device-chip { padding: 7px 12px; font-size: 11px; }
+    .canvas-status { padding: 8px 12px; font-size: 11px; }
+    .canvas-status kbd { font-size: 10px; }
+    @media (max-width: 1250px) {
+      :root { --sidebar-width: 262px; --left-panel-width: 310px; }
+      aside.left-panel { padding: 18px 15px; }
+      .current-title { font-size: 21px; }
+      .screen-desc-text { font-size: 12px; }
+      .note-item { font-size: 11.5px; }
+    }
+    @media (max-width: 980px) {
+      aside.right-sidebar { display: none; }
+      :root { --left-panel-width: 330px; }
+    }
+    @media (max-width: 720px) {
+      aside.left-panel { display: none; }
+      .phone-mockup-frame { height:min(852px, calc(100vh - 70px)); max-height:min(852px, calc(100vh - 70px)); }
+    }
+    .canvas-content { position:relative; }
+    .canvas-content .canvas-nav-btn { position:absolute; top:50%; z-index:20; transform:translateY(-50%); }
+    .canvas-content .canvas-nav-next { right:-64px; }
+    .canvas-content .canvas-nav-prev { left:-64px; }
+    .canvas-content .canvas-nav-btn:hover { transform:translateY(-50%) scale(1.08); }
+    @media (max-width: 980px) { .canvas-content .canvas-nav-next { right:-54px; } .canvas-content .canvas-nav-prev { left:-54px; } }
+    @media (max-width: 720px) { .canvas-content .canvas-nav-next { right:-48px; } .canvas-content .canvas-nav-prev { left:-48px; } }
   </style>
 </head>
 <body>
+
+  <header class="studio-topbar">
+    <div class="studio-file">
+      <img class="studio-file-mark" src="screens/saey-mark.svg" alt="">
+      <div class="studio-file-text"><strong id="topbarScreenName">سعي — واجهات التطبيق</strong><span>DESIGN STUDIO · 393 × 852</span></div>
+    </div>
+    <div class="studio-mode-tabs" aria-label="وضع المعاينة"><button class="studio-mode-tab active" type="button">Design</button><button class="studio-mode-tab" type="button" disabled>Prototype</button></div>
+    <div class="studio-actions">
+      <button class="studio-tool-btn" id="zoomOutBtn" type="button" title="تصغير">−</button>
+      <button class="studio-zoom-label" id="zoomLabel" type="button" title="إعادة ضبط العرض">100%</button>
+      <button class="studio-tool-btn" id="zoomInBtn" type="button" title="تكبير">+</button>
+      <button class="studio-tool-btn studio-reset" id="resetCanvasBtn" type="button" title="إعادة ضبط المكان">⌖</button>
+    </div>
+  </header>
 
   <div class="app-container">
 
@@ -1149,7 +1347,7 @@
           </div>
           <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
             <span id="brandStatusBadge" style="font-size:10px; font-weight:800; background:#DCFCE7; color:#15803D; padding:3px 8px; border-radius:6px;">مكتمل ✓</span>
-            <span id="aiVisionBadge" style="font-size:9.5px; font-weight:800; color:#1D4ED8; background:rgba(29,78,216,0.08); border:1px solid rgba(29,78,216,0.2); border-radius:6px; padding:2px 6px; white-space:nowrap; transition:all 0.2s;" title="يراقب المساعد الذكي مكان وقوف الماوس لحظياً">🤖 AI Tracker: Active</span>
+            <span id="aiVisionBadge" style="font-size:9.5px; font-weight:800; color:#1D4ED8; background:rgba(29,78,216,0.08); border:1px solid rgba(29,78,216,0.2); border-radius:6px; padding:2px 6px; white-space:nowrap; transition:all 0.2s;" title="يعرض الشاشة المختارة حاليًا">🤖 AI Tracker: Active</span>
           </div>
         </div>
 
@@ -1190,12 +1388,13 @@
         <span id="toastMsg">تم تحديث الشاشة من الملف!</span>
       </div>
 
-      <div class="stage-wrapper">
-        <button class="stage-arrow-btn" onclick="nextScreen()" title="الشاشة التالية">
-          ➔
-        </button>
+      <div class="stage-meta" aria-hidden="true">
+        <div class="stage-meta-title"><span id="stageMetaLabel">معاينة الشاشة</span><strong id="stageMetaTitle">تسجيل الدخول</strong></div>
+        <span class="stage-device-chip">393 × 852</span>
+      </div>
 
-        <!-- iPhone Black Titanium Hardware Mockup Frame -->
+      <div class="canvas-viewport" id="canvasViewport">
+        <div class="canvas-content" id="canvasContent">
         <div class="phone-mockup-frame">
           <div class="phone-speaker-earpiece"></div>
           <div class="phone-btn-action"></div>
@@ -1204,10 +1403,9 @@
           <div class="phone-btn-power"></div>
           <iframe id="phoneViewportIframe" class="phone-screen-iframe" src="screens/01-login.html" title="شاشة الموبايل"></iframe>
         </div>
-
-        <button class="stage-arrow-btn" onclick="prevScreen()" title="الشاشة السابقة">
-          ←
-        </button>
+        <button class="stage-arrow-btn canvas-nav-btn canvas-nav-next" onclick="nextScreen()" title="الشاشة التالية" aria-label="الشاشة التالية">➔</button>
+        <button class="stage-arrow-btn canvas-nav-btn canvas-nav-prev" onclick="prevScreen()" title="الشاشة السابقة" aria-label="الشاشة السابقة">←</button>
+        </div>
       </div>
     </main>
 
@@ -1804,18 +2002,42 @@
       ]
     });
 
+    screens.push({
+      id: 24,
+      num: '09',
+      section: 'تطبيق المستخدم',
+      sectionEn: 'Buyer Experience',
+      file: '08-user-home.html',
+      title: 'الرئيسية',
+      titleEn: 'User Home',
+      tags: ['User', 'Store Discovery', 'Pickup'],
+      desc: 'الواجهة الرئيسية للمستخدم: سلايدر عروض، أقسام، منتجات مميزة، ثم متاجر مميزة.',
+      descEn: 'The user hub with a campaign slider, categories, featured products, and featured stores.',
+      notes: ['تسلسل المحتوى: سلايدر ثم أقسام ثم منتجات ثم متاجر', 'QR ينشئه المتجر ويُمسح خارج التطبيق', 'لا توجد تجربة توصيل'],
+      notesEn: ['Slider, categories, products, then stores', 'Store QR is scanned outside the app', 'No delivery experience']
+    });
+
+    screens.push(
+      { id: 25, num: '10', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '09-categories.html', title: 'كل الأقسام', titleEn: 'All Categories', tags: ['Categories', 'Discovery'], desc: 'صفحة تصفح جميع أقسام سعي.', descEn: 'Browse every Saey category.', notes: ['شبكة أقسام', 'بحث في الأقسام'], notesEn: ['Category grid', 'Category search'] },
+      { id: 26, num: '11', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '10-featured-products.html', title: 'منتجات مميزة', titleEn: 'Featured Products', tags: ['Products', 'Catalog'], desc: 'كتالوج للمنتجات المميزة مع السعر والتقييم.', descEn: 'Featured product catalog with prices and ratings.', notes: ['شبكة منتجات', 'سعر قبل وبعد الخصم'], notesEn: ['Product grid', 'Original and discounted price'] },
+      { id: 27, num: '12', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '11-featured-stores.html', title: 'متاجر مميزة', titleEn: 'Featured Stores', tags: ['Stores', 'Discovery'], desc: 'قائمة بالمتاجر المميزة القريبة من المستخدم.', descEn: 'A list of featured stores near the user.', notes: ['بحث عن متجر', 'المسافة وحالة المتجر'], notesEn: ['Store search', 'Distance and store status'] },
+      { id: 28, num: '13', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '12-product-details.html', title: 'تفاصيل المنتج', titleEn: 'Product Details', tags: ['Product', 'Pickup', 'Favorite'], desc: 'تفاصيل المنتج مع الصور والمقاس واللون والمتجر وزر الإضافة للطلب.', descEn: 'Product information, choices, store details, and add-to-order action.', notes: ['شارة خصم ومفضلة', 'اختيار المقاس واللون', 'استلام من المتجر فقط'], notesEn: ['Discount and favorite', 'Size and color choices', 'Store pickup only'] },
+      { id: 29, num: '14', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '13-notifications.html', title: 'الإشعارات', titleEn: 'Notifications', tags: ['Notifications', 'Orders', 'Offers'], desc: 'إشعارات الطلبات والعروض مع إمكانية حذفها كلها.', descEn: 'Order and offer notifications with a clear-all action.', notes: ['حالات طلب الاستلام', 'عروض المتاجر', 'حالة فارغة بعد حذف الكل'], notesEn: ['Pickup order updates', 'Store offers', 'Empty state after clear all'] }
+    );
+
     // المرحلة الأولى الحالية تقتصر على شاشات التسجيل والتهيئة فقط.
     const authScreenFiles = new Set([
       '00-splash.html', '00-splash-01.html', '00-splash-02.html',
       '01-login.html', '02-signup.html', '03-verify-otp.html',
       '04-account-type.html', '05-profile-setup.html',
-      '06-distributor-setup.html', '07-forgot-password.html', '08-profile-setup.html'
+      '06-distributor-setup.html', '07-forgot-password.html', '08-profile-setup.html', '08-user-home.html',
+      '09-categories.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '13-notifications.html'
     ]);
     const authScreenOrder = [
       '00-splash.html', '00-splash-01.html', '00-splash-02.html',
       '01-login.html', '02-signup.html', '03-verify-otp.html',
       '05-profile-setup.html', '04-account-type.html', '08-profile-setup.html',
-      '06-distributor-setup.html', '07-forgot-password.html'
+      '06-distributor-setup.html', '08-user-home.html', '09-categories.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '13-notifications.html', '07-forgot-password.html'
     ];
     screens.splice(0, screens.length, ...screens
       .filter(screen => authScreenFiles.has(screen.file))
@@ -1864,7 +2086,7 @@
       applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
     }
 
-    // AI Hover & Active Screen Bridge
+    // Active Screen Bridge — invoked on selection only to keep sidebar hover smooth.
     function notifyAiHover(screen, action = 'hover') {
       if (!screen) return;
       const url = `http://localhost:8085/api/hover?file=${encodeURIComponent(screen.file)}&title=${encodeURIComponent(screen.title)}&section=${encodeURIComponent(screen.section)}&theme=${currentTheme}&lang=${currentLang}&action=${action}`;
@@ -1893,6 +2115,80 @@
     let searchQuery = '';
     let autoSyncEnabled = true;
     let toastTimeout = null;
+    let canvasZoom = 1;
+    let canvasPanX = 0;
+    let canvasPanY = 0;
+    let spacePressed = false;
+
+    function updateCanvasTransform() {
+      const content = document.getElementById('canvasContent');
+      const label = document.getElementById('zoomLabel');
+      if (content) content.style.transform = `translate(${canvasPanX}px, ${canvasPanY}px) scale(${canvasZoom})`;
+      if (label) label.innerText = `${Math.round(canvasZoom * 100)}%`;
+    }
+
+    function setCanvasZoom(nextZoom) {
+      canvasZoom = Math.min(1.5, Math.max(0.55, Math.round(nextZoom * 100) / 100));
+      updateCanvasTransform();
+    }
+
+    function resetCanvas() {
+      canvasZoom = 1;
+      canvasPanX = 0;
+      canvasPanY = 0;
+      updateCanvasTransform();
+    }
+
+    function initCanvas() {
+      const viewport = document.getElementById('canvasViewport');
+      if (!viewport) return;
+      document.getElementById('zoomInBtn')?.addEventListener('click', () => setCanvasZoom(canvasZoom + 0.1));
+      document.getElementById('zoomOutBtn')?.addEventListener('click', () => setCanvasZoom(canvasZoom - 0.1));
+      document.getElementById('zoomLabel')?.addEventListener('click', resetCanvas);
+      document.getElementById('resetCanvasBtn')?.addEventListener('click', resetCanvas);
+
+      let panning = false;
+      let pointerStartX = 0;
+      let pointerStartY = 0;
+      let panStartX = 0;
+      let panStartY = 0;
+
+      viewport.addEventListener('pointerdown', (event) => {
+        if (event.button !== 1 && !spacePressed) return;
+        panning = true;
+        pointerStartX = event.clientX;
+        pointerStartY = event.clientY;
+        panStartX = canvasPanX;
+        panStartY = canvasPanY;
+        viewport.classList.add('is-panning');
+        viewport.setPointerCapture(event.pointerId);
+        event.preventDefault();
+      });
+      viewport.addEventListener('pointermove', (event) => {
+        if (!panning) return;
+        canvasPanX = panStartX + event.clientX - pointerStartX;
+        canvasPanY = panStartY + event.clientY - pointerStartY;
+        updateCanvasTransform();
+      });
+      const stopPanning = () => { panning = false; viewport.classList.remove('is-panning'); };
+      viewport.addEventListener('pointerup', stopPanning);
+      viewport.addEventListener('pointercancel', stopPanning);
+      viewport.addEventListener('wheel', (event) => {
+        if (!event.ctrlKey && !event.metaKey) return;
+        event.preventDefault();
+        setCanvasZoom(canvasZoom + (event.deltaY < 0 ? 0.08 : -0.08));
+      }, { passive: false });
+      document.addEventListener('keydown', (event) => {
+        const typing = /INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName || '');
+        if (typing) return;
+        if (event.key === ' ') { spacePressed = true; event.preventDefault(); }
+        if (event.key === '+' || event.key === '=') { event.preventDefault(); setCanvasZoom(canvasZoom + 0.1); }
+        if (event.key === '-') { event.preventDefault(); setCanvasZoom(canvasZoom - 0.1); }
+        if (event.key === '0') { event.preventDefault(); resetCanvas(); }
+      });
+      document.addEventListener('keyup', (event) => { if (event.key === ' ') spacePressed = false; });
+      updateCanvasTransform();
+    }
 
     const uiStrings = {
       ar: {
@@ -1905,6 +2201,7 @@
         syncPaused: 'المزامنة التلقائية متوقفة (اضغط زر التحديث أو R)',
         btnRefreshText: '🔄 تحديث',
         autoSyncLabelText: 'مزامنة تلقائية',
+        stageMetaLabel: 'معاينة الشاشة',
         currentScreenLabel: '● شاشة حالية (HTML & CSS)',
         notesSectionTitle: 'ملاحظات التصميم والمنطق البرمجي',
         copyCodeBtn: '📋 نسخ الكود',
@@ -1923,6 +2220,7 @@
         syncPaused: 'Live sync paused (press Reload button or R)',
         btnRefreshText: '🔄 Reload',
         autoSyncLabelText: 'Auto-sync',
+        stageMetaLabel: 'Screen preview',
         currentScreenLabel: '● Current Screen (HTML & CSS)',
         notesSectionTitle: 'Design Notes & Technical Logic',
         copyCodeBtn: '📋 Copy Code',
@@ -1954,6 +2252,7 @@
       if (el('screenSearchInput')) el('screenSearchInput').placeholder = s.searchPlaceholder;
       if (el('btnRefreshText')) el('btnRefreshText').innerText = s.btnRefreshText;
       if (el('autoSyncLabelText')) el('autoSyncLabelText').innerText = s.autoSyncLabelText;
+      if (el('stageMetaLabel')) el('stageMetaLabel').innerText = s.stageMetaLabel;
       if (el('currentScreenLabel')) el('currentScreenLabel').innerText = s.currentScreenLabel;
       if (el('notesSectionTitle')) el('notesSectionTitle').innerText = s.notesSectionTitle;
 
@@ -2023,7 +2322,6 @@
           btn.className = `screen-item-btn ${originalIndex === currentIndex ? 'active' : ''}`;
           btn.id = `nav-btn-${originalIndex}`;
           btn.onclick = () => selectScreen(originalIndex);
-          btn.onmouseenter = () => notifyAiHover(s, 'hover');
 
           const displayTitle = currentLang === 'en' ? (s.titleEn || s.title) : s.title;
 
@@ -2127,6 +2425,10 @@
 
       // Update Left Panel Details
       document.getElementById('screenTitle').innerText = isEn ? s.titleEn : s.title;
+      const stageMetaTitle = document.getElementById('stageMetaTitle');
+      if (stageMetaTitle) stageMetaTitle.innerText = isEn ? s.titleEn : s.title;
+      const topbarScreenName = document.getElementById('topbarScreenName');
+      if (topbarScreenName) topbarScreenName.innerText = `${isEn ? 'Saey' : 'سعي'} — ${isEn ? s.titleEn : s.title}`;
       document.getElementById('screenDescription').innerText = isEn ? s.descEn : s.desc;
       document.getElementById('screenFilePath').innerText = `screens/${s.file}`;
       
@@ -2238,6 +2540,7 @@
     });
 
     document.addEventListener('DOMContentLoaded', () => {
+      initCanvas();
       applyTheme(currentTheme);
       const targetFile = urlParams.get('file') || urlParams.get('screen');
       if (targetFile) {
