@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="شعار سوق مصر">
+  <defs>
+    <!-- Background Gradient: Deep Egyptian Royal Blue to Midnight Indigo -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563EB"/>
+      <stop offset="45%" stop-color="#1D4ED8"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+
+    <!-- Amber Commerce Accent Gradient: Sunset Gold to Vivid Amber -->
+    <linearGradient id="amberGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE047"/>
+      <stop offset="40%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#EA580C"/>
+    </linearGradient>
+
+    <!-- Glass Rim Gradient -->
+    <linearGradient id="rimGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.08"/>
+    </linearGradient>
+
+    <!-- Drop Shadow Filter for Badge -->
+    <filter id="badgeShadow" x="-20%" y="-20%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#1D4ED8" flood-opacity="0.35"/>
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0F172A" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Squircle Base Container -->
+  <rect x="10" y="10" width="108" height="108" rx="28" fill="url(#bgGrad)" filter="url(#badgeShadow)"/>
+  <rect x="10" y="10" width="108" height="108" rx="28" fill="none" stroke="url(#rimGrad)" stroke-width="1.5"/>
+
+  <!-- Subtle Top Light Reflection -->
+  <path d="M12 36 C12 22.75 22.75 12 36 12 H92 C105.25 12 116 22.75 116 36 C80 44 45 44 12 36 Z" fill="#FFFFFF" fill-opacity="0.08"/>
+
+  <!-- Shopping Bag Handle -->
+  <path d="M48 42 V34 C48 25.16 55.16 18 64 18 C72.84 18 80 25.16 80 34 V42" 
+        fill="none" 
+        stroke="#FFFFFF" 
+        stroke-width="5.5" 
+        stroke-linecap="round"/>
+
+  <!-- Shopping Bag Body (Crisp, Modern Geometric Tote) -->
+  <path d="M33 42 H95 C97.5 42 99.4 44.2 99 46.7 L92.2 91.5 C91.7 94.9 88.8 97.5 85.4 97.5 H42.6 C39.2 97.5 36.3 94.9 35.8 91.5 L29 46.7 C28.6 44.2 30.5 42 33 42 Z" 
+        fill="#FFFFFF" 
+        fill-opacity="0.12" 
+        stroke="#FFFFFF" 
+        stroke-width="5" 
+        stroke-linejoin="round"/>
+
+  <!-- Golden Egyptian "س" Monogram / Dynamic Commerce Flow -->
+  <!-- Stylized calligraphy seen (3 crests flowing into a forward arrow) -->
+  <path d="M43 65 C47 65 49 61 52 61 C55 61 56 65 59 65 C62 65 63 61 66 61 C69 61 71 73 60 78 C55 80.2 47 78 45 73.5" 
+        fill="none" 
+        stroke="url(#amberGrad)" 
+        stroke-width="4.5" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+
+  <!-- Forward Commerce Arrow & Exchange -->
+  <path d="M65 73 L78 73 M73 68 L78 73 L73 78" 
+        fill="none" 
+        stroke="url(#amberGrad)" 
+        stroke-width="4" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+
+  <!-- Golden Star / Spark of Excellence -->
+  <path d="M80 51 L81.8 55.5 L86 57 L81.8 58.5 L80 63 L78.2 58.5 L74 57 L78.2 55.5 Z" 
+        fill="url(#amberGrad)"/>
+</svg>

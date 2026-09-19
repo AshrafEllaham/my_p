@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>02 — إنشاء حساب جديد</title><link rel="stylesheet" href="common.css"><link rel="stylesheet" href="auth.css"></head>
+<body class="auth-v2 auth-signup">
+  <div class="status-bar"><span class="status-time">9:41</span><div class="dynamic-island"><div class="camera-lens"></div></div><div class="status-icons">📶 🔋</div></div>
+  <main class="auth-page">
+    <div class="auth-topbar"><a class="auth-back" href="01-login.html">→</a><div class="auth-brand"><img class="auth-brand-mark" src="logo-mark.svg" alt=""><span>سوق مصر</span></div><span class="auth-step">01 / 03</span></div>
+    <div class="auth-progress"><span class="active"></span><span></span><span></span></div>
+    <div class="auth-card"><div class="auth-form">
+      <div class="auth-field"><label>وسيلة التسجيل</label><select><option>رقم الهاتف المحمول</option><option>البريد الإلكتروني</option><option>Google</option><option>Apple</option></select></div>
+      <div class="auth-field"><label>الهاتف أو البريد الإلكتروني</label><input type="text" placeholder="010XXXXXXXX أو name@email.com"></div>
+      <div style="display:flex;gap:10px"><div class="auth-field" style="flex:1"><label>الدولة</label><select><option>مصر</option></select></div><div class="auth-field" style="flex:1"><label>المحافظة</label><select><option>القاهرة</option><option>الجيزة</option><option>الإسكندرية</option></select></div></div>
+      <div class="auth-field"><label>كلمة مرور جديدة</label><input type="password" placeholder="اختر كلمة مرور قوية"><div style="display:flex;gap:4px;margin-top:2px"><i style="height:4px;flex:1;background:#10B981;border-radius:9px"></i><i style="height:4px;flex:1;background:#10B981;border-radius:9px"></i><i style="height:4px;flex:1;background:#E2E8F0;border-radius:9px"></i><i style="height:4px;flex:1;background:#E2E8F0;border-radius:9px"></i></div></div>
+      <div class="auth-field"><label>تأكيد كلمة المرور</label><input type="password" placeholder="أعد كتابة كلمة المرور"></div>
+      <div style="display:flex;gap:10px;margin-top:-2px"><button type="button" class="auth-btn secondary" style="flex:1;height:46px;padding:0">G&nbsp; Google</button><button type="button" class="auth-btn secondary" style="flex:1;height:46px;padding:0">&nbsp; Apple</button></div>
+      <div class="auth-note info" style="margin-top:0">حتى عند التسجيل باستخدام Google أو Apple، سيتم تأكيد وسيلة التواصل عبر OTP قبل استكمال الحساب.</div>
+      <label class="auth-check"><input type="checkbox" checked><span>أوافق على الشروط والأحكام وسياسة الخصوصية.</span></label>
+      <a class="auth-btn" href="03-verify-otp.html">متابعة واستلام رمز التحقق <span>←</span></a>
+    </div></div>
+    <div class="auth-footer">لديك حساب بالفعل؟ <a class="auth-link" href="01-login.html">تسجيل الدخول</a></div>
+  </main>
+  <div class="home-bar"><div class="home-bar-pill"></div></div><script src="i18n.js"></script>
+</body></html>

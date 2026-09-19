@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>00 — شاشة البداية</title>
+  <link rel="stylesheet" href="common.css">
+  <link rel="stylesheet" href="auth.css">
+  <style>
+    body.splash-v2 {
+      background: #0B1329;
+      color: #FFFFFF;
+      overflow: hidden;
+    }
+    .splash {
+      min-height: calc(100vh - 46px);
+      width: min(100%, 430px);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 28px;
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(circle at 80% 15%, rgba(37, 99, 235, 0.38), transparent 45%),
+                  radial-gradient(circle at 20% 85%, rgba(245, 158, 11, 0.18), transparent 40%),
+                  #0B1329;
+    }
+    .splash:before, .splash:after {
+      content: '';
+      position: absolute;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 50%;
+      width: 360px;
+      height: 360px;
+      top: -140px;
+      left: -130px;
+      pointer-events: none;
+    }
+    .splash:after {
+      width: 280px;
+      height: 280px;
+      top: auto;
+      left: auto;
+      right: -110px;
+      bottom: -90px;
+      border-color: rgba(37, 99, 235, 0.18);
+    }
+    .splash > * {
+      position: relative;
+      z-index: 1;
+    }
+    .splash-logo {
+      width: 120px;
+      height: 120px;
+      filter: drop-shadow(0 20px 35px rgba(29, 78, 216, 0.45));
+      animation: float 3.5s ease-in-out infinite;
+    }
+    .splash-title {
+      margin-top: 26px;
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: -0.8px;
+      color: #FFFFFF;
+      text-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+    .splash-subtitle {
+      margin-top: 8px;
+      color: #94A3B8;
+      font-size: 13.5px;
+      font-weight: 600;
+    }
+    .splash-rule {
+      width: 44px;
+      height: 4px;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #F59E0B, #EA580C);
+      margin-top: 20px;
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.5);
+    }
+    .splash-bottom {
+      position: absolute;
+      bottom: 38px;
+      text-align: center;
+      color: #64748B;
+      font-size: 11px;
+      line-height: 1.7;
+    }
+    .splash-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+      padding: 5px 14px;
+      border-radius: 99px;
+      color: #E2E8F0;
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .splash-badge i {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #F59E0B;
+      display: inline-block;
+      box-shadow: 0 0 8px #F59E0B;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+  </style>
+</head>
+<body class="splash-v2">
+  <div class="status-bar" style="background:transparent;color:#FFFFFF">
+    <span class="status-time">9:41</span>
+    <div class="dynamic-island"><div class="camera-lens"></div></div>
+    <div class="status-icons">📶 🔋</div>
+  </div>
+  <main class="splash">
+    <img class="splash-logo" src="logo-mark.svg" alt="شعار سوق مصر">
+    <div class="splash-title">سوق مصر</div>
+    <div class="splash-subtitle">اختيارات أقرب • تجربة أبسط</div>
+    <div class="splash-rule"></div>
+    <div class="splash-bottom">
+      <div class="splash-badge"><i></i> الإطلاق التجريبي</div>
+      <div>مصر • متاجر ومنتجات متنوعة</div>
+    </div>
+  </main>
+  <script>setTimeout(() => location.href = '01-login.html', 1800)</script>
+</body>
+</html>

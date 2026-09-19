@@ -1,0 +1,2173 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>سوق مصر — منصة واجهات HTML & CSS (الخطة الأولى)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1D4ED8;
+      --primary-hover: #1E40AF;
+      --primary-soft: #EFF6FF;
+      --primary-text: #1D4ED8;
+      --accent-amber: #F59E0B;
+      --accent-amber-hover: #D97706;
+      --bg-stage: #F8FAFC;
+      --panel-bg: #FFFFFF;
+      --border: #F1F5F9;
+      --border-soft: #F8FAFC;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --text-light: #94A3B8;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --sidebar-width: 290px;
+      --left-panel-width: 325px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Cairo', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-stage);
+      color: var(--text-main);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+    }
+
+    /* ==========================================================================
+       3-COLUMN APP SHELL ARCHITECTURE
+       ========================================================================== */
+    .app-container {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* --------------------------------------------------------------------------
+       1. RIGHT SIDEBAR (قائمة الشاشات)
+       -------------------------------------------------------------------------- */
+    aside.right-sidebar {
+      width: var(--sidebar-width);
+      min-width: var(--sidebar-width);
+      background: var(--panel-bg);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      z-index: 20;
+    }
+
+    .sidebar-header {
+      padding: 18px 16px 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .brand-title {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--primary);
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-subtitle {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      margin-top: 2px;
+    }
+
+    .lang-switcher {
+      display: flex;
+      background: #F1F5F9;
+      border-radius: 10px;
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .lang-tab {
+      flex: 1;
+      text-align: center;
+      padding: 6px 0;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      border-radius: 8px;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .lang-tab.active {
+      background: #FFFFFF;
+      color: var(--primary-text);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+
+    .search-box {
+      position: relative;
+      margin: 12px 20px 8px;
+    }
+
+    .search-box input {
+      width: 100%;
+      background: #F8FAFC;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 9px 36px 9px 14px;
+      font-size: 12px;
+      font-family: inherit;
+      color: var(--text-main);
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .search-box input:focus {
+      border-color: var(--primary);
+      background: #FFFFFF;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      color: var(--text-light);
+      pointer-events: none;
+    }
+
+    /* Scrollable screens navigation */
+    .screens-nav-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 14px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .screens-nav-list::-webkit-scrollbar {
+      width: 5px;
+    }
+    .screens-nav-list::-webkit-scrollbar-thumb {
+      background: #E2E8F0;
+      border-radius: 4px;
+    }
+
+    .nav-section-title {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 0 10px 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-section-items {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .screen-item-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 7px 10px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      cursor: pointer;
+      text-align: right;
+      transition: all 0.18s ease;
+      font-family: inherit;
+    }
+
+    .screen-item-btn:hover {
+      background: #F8FAFC;
+      border-color: #E2E8F0;
+    }
+
+    .screen-item-btn.active {
+      background: var(--primary-soft);
+      border-color: #BFDBFE;
+    }
+
+    .screen-item-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      flex: 1;
+      margin-left: 8px;
+    }
+
+    .screen-item-btn.active .screen-item-title {
+      color: var(--primary-text);
+      font-weight: 800;
+    }
+
+    .screen-badge-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      background: #F1F5F9;
+      color: var(--text-muted);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 10.5px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .screen-item-btn.active .screen-badge-num {
+      background: var(--primary);
+      color: #FFFFFF;
+    }
+
+    /* --------------------------------------------------------------------------
+       2. CENTER STAGE (منصة عرض الموبايل بالحجم الكامل من أول الشاشة لآخرها)
+       -------------------------------------------------------------------------- */
+    main.center-stage {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 50% 45%, #F7FAFD 0%, #E3E9F2 100%);
+      position: relative;
+      padding: 8px 16px;
+      overflow: hidden;
+    }
+
+    /* Left Panel Live Sync Control Card */
+    .panel-sync-card {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px 12px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    }
+
+    .panel-sync-status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .panel-sync-actions-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding-top: 8px;
+      border-top: 1px solid #F1F5F9;
+    }
+
+    .sync-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      white-space: nowrap;
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10B981;
+      box-shadow: 0 0 0 2.5px rgba(16, 185, 129, 0.25);
+      animation: pulseLive 2s infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes pulseLive {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+      70% { box-shadow: 0 0 0 5px rgba(16, 185, 129, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    .sync-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stage-action-pill {
+      background: var(--primary-soft);
+      color: var(--primary-text);
+      border: 1px solid #BFDBFE;
+      padding: 4px 10px;
+      border-radius: 7px;
+      font-size: 10.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+
+    .stage-action-pill:hover {
+      background: var(--primary);
+      color: #FFFFFF;
+      border-color: var(--primary);
+      box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
+    }
+
+    .stage-action-pill kbd {
+      background: rgba(0, 0, 0, 0.08);
+      padding: 1px 4px;
+      border-radius: 4px;
+      font-size: 9px;
+      font-family: monospace;
+    }
+
+    .auto-sync-toggle {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10.5px;
+      color: var(--text-muted);
+      cursor: pointer;
+      user-select: none;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .auto-sync-toggle input {
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    /* Reload Notification Toast */
+    .reload-toast {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: #0F172A;
+      color: #FFFFFF;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 100;
+      white-space: nowrap;
+    }
+
+    .reload-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast-icon {
+      color: #10B981;
+      font-weight: 900;
+    }
+
+    .stage-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      height: 100%;
+      max-height: 100vh;
+      width: 100%;
+      padding: 12px 0;
+    }
+
+    .stage-arrow-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.1);
+      color: var(--text-main);
+      font-size: 16px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    .stage-arrow-btn:hover {
+      background: var(--primary);
+      color: #FFFFFF;
+      border-color: var(--primary);
+      transform: scale(1.08);
+    }
+
+    /* Mobile Frame Mockup (Black Titanium iPhone - طِبق الأصل من الصورة) */
+    .phone-mockup-frame {
+      height: calc(100vh - 56px);
+      max-height: calc(100vh - 56px);
+      aspect-ratio: 393 / 852;
+      width: auto;
+      max-width: 430px;
+      background: #0B0D11;
+      border-radius: 54px;
+      padding: 10px;
+      box-shadow: 
+        0 0 0 1.5px #4B4F58, /* Brushed Titanium Chamfer Highlight */
+        0 0 0 3.5px #22252A, /* Mid Titanium Outer Bezel */
+        0 0 0 5px #0C0E12,   /* Matte Black Outer Edge */
+        0 25px 65px -10px rgba(0, 0, 0, 0.6),
+        0 8px 25px -5px rgba(15, 23, 42, 0.35);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      margin: auto 0;
+    }
+
+    /* Speaker Earpiece Slit at Top */
+    .phone-speaker-earpiece {
+      position: absolute;
+      top: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 52px;
+      height: 3.5px;
+      background: #1E2026;
+      border-radius: 3px;
+      z-index: 25;
+      pointer-events: none;
+    }
+
+    /* Physical Side Buttons (Black Titanium) */
+    .phone-btn-action {
+      position: absolute;
+      left: -6.5px;
+      top: 100px;
+      width: 3.5px;
+      height: 28px;
+      background: linear-gradient(to right, #4B4F58, #181A20);
+      border-radius: 3px 0 0 3px;
+      box-shadow: -1px 0 2px rgba(0, 0, 0, 0.5);
+    }
+
+    .phone-btn-vol-up {
+      position: absolute;
+      left: -6.5px;
+      top: 146px;
+      width: 3.5px;
+      height: 52px;
+      background: linear-gradient(to right, #4B4F58, #181A20);
+      border-radius: 3px 0 0 3px;
+      box-shadow: -1px 0 2px rgba(0, 0, 0, 0.5);
+    }
+
+    .phone-btn-vol-down {
+      position: absolute;
+      left: -6.5px;
+      top: 212px;
+      width: 3.5px;
+      height: 52px;
+      background: linear-gradient(to right, #4B4F58, #181A20);
+      border-radius: 3px 0 0 3px;
+      box-shadow: -1px 0 2px rgba(0, 0, 0, 0.5);
+    }
+
+    .phone-btn-power {
+      position: absolute;
+      right: -6.5px;
+      top: 160px;
+      width: 3.5px;
+      height: 78px;
+      background: linear-gradient(to left, #4B4F58, #181A20);
+      border-radius: 0 3px 3px 0;
+      box-shadow: 1px 0 2px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Iframe embedding the standalone screen file */
+    .phone-screen-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #F8FAFC;
+      border-radius: 44px;
+      display: block;
+      overflow: hidden;
+    }
+
+    /* --------------------------------------------------------------------------
+       3. LEFT PANEL (معلومات الشاشة وملاحظات التصميم)
+       -------------------------------------------------------------------------- */
+    aside.left-panel {
+      width: var(--left-panel-width);
+      min-width: var(--left-panel-width);
+      background: var(--panel-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 18px 16px;
+      gap: 10px;
+      overflow-y: auto;
+      z-index: 20;
+    }
+
+    .current-label {
+      font-size: 10.5px;
+      font-weight: 800;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .current-title {
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--text-main);
+      margin-top: 2px;
+      line-height: 1.25;
+    }
+
+    .file-path-badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: #F1F5F9;
+      border: 1px solid #E2E8F0;
+      border-radius: 7px;
+      padding: 4px 8px;
+      font-family: monospace;
+      font-size: 10.5px;
+      color: #0F172A;
+      margin-top: 4px;
+      word-break: break-all;
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .tag-pill {
+      background: #EFF6FF;
+      color: var(--primary-text);
+      border: 1px solid #DBEAFE;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2.5px 8px;
+      border-radius: 6px;
+    }
+
+    .screen-desc-text {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Design Notes Card */
+    .design-notes-card {
+      background: #F8FAFC;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .notes-title {
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .notes-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .note-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    .note-item span.diamond {
+      color: var(--primary);
+      font-size: 9px;
+      margin-top: 2px;
+    }
+
+    /* Action Buttons in Left Panel */
+    .panel-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: auto;
+    }
+
+    .btn-action-primary {
+      width: 100%;
+      background: var(--primary);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 11.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .btn-action-primary:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+    }
+
+    .btn-action-secondary {
+      width: 100%;
+      background: #FFFFFF;
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 7px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+      font-family: inherit;
+      text-decoration: none;
+    }
+
+    .btn-action-secondary:hover {
+      background: #F8FAFC;
+      border-color: #CBD5E1;
+    }
+
+    .current-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .current-title {
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--text-main);
+      margin-top: 4px;
+      line-height: 1.3;
+    }
+
+    .file-path-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #F1F5F9;
+      border: 1px solid #E2E8F0;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-family: monospace;
+      font-size: 11px;
+      color: #0F172A;
+      margin-top: 6px;
+      word-break: break-all;
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag-pill {
+      background: #EFF6FF;
+      color: var(--primary-text);
+      border: 1px solid #DBEAFE;
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 8px;
+    }
+
+    .screen-desc-text {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Design Notes Card */
+    .design-notes-card {
+      background: #F8FAFC;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .notes-title {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .notes-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .note-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .note-item span.diamond {
+      color: var(--primary);
+      font-size: 10px;
+      margin-top: 3px;
+    }
+
+    /* Action Buttons in Left Panel */
+    .panel-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .btn-action-primary {
+      width: 100%;
+      background: var(--primary);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 12px;
+      padding: 11px 14px;
+      font-size: 12.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .btn-action-primary:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    }
+
+    .btn-action-secondary {
+      width: 100%;
+      background: #FFFFFF;
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+      font-family: inherit;
+      text-decoration: none;
+    }
+
+    .btn-action-secondary:hover {
+      background: #F8FAFC;
+      border-color: #CBD5E1;
+    }
+
+    /* Code Modal Popup */
+    .code-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .code-modal-overlay.active {
+      display: flex;
+    }
+
+    .code-box {
+      width: 800px;
+      max-width: 95vw;
+      height: 680px;
+      max-height: 90vh;
+      background: #0F172A;
+      color: #F8FAFC;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    .code-header {
+      padding: 16px 20px;
+      background: #1E293B;
+      border-bottom: 1px solid #334155;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .code-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #E2E8F0;
+      font-family: monospace;
+    }
+
+    .code-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-copy-code {
+      background: var(--primary);
+      color: #FFF;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .btn-close-modal {
+      background: transparent;
+      color: #94A3B8;
+      border: 1px solid #334155;
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .code-content {
+      flex: 1;
+      padding: 20px;
+      overflow: auto;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      color: #93C5FD;
+      white-space: pre-wrap;
+      direction: ltr;
+      text-align: left;
+    }
+  
+    /* ==========================================================================
+       THEME TOGGLE BUTTON & PREVIEW DARK MODE
+       ========================================================================== */
+    .theme-toggle-btn {
+      width: 36px;
+      height: 32px;
+      border-radius: 9px;
+      background: #F1F5F9;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s ease;
+      color: var(--text-main);
+      flex-shrink: 0;
+    }
+
+    .theme-toggle-btn:hover {
+      background: var(--primary-soft);
+      border-color: var(--primary);
+      transform: scale(1.05);
+    }
+
+    /* Dark Mode Theme Tokens for Preview Studio */
+    [data-theme="dark"],
+    body.dark-mode {
+      --primary: #60A5FA;
+      --primary-hover: #1D4ED8;
+      --primary-soft: rgba(37, 99, 235, 0.18);
+      --primary-text: #93C5FD;
+      --bg-stage: #080C14;
+      --panel-bg: #0F172A;
+      --border: #1E293B;
+      --border-soft: #1E293B;
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --text-light: #64748B;
+    }
+
+    [data-theme="dark"] body,
+    body.dark-mode {
+      background-color: var(--bg-stage);
+      color: var(--text-main);
+    }
+
+    [data-theme="dark"] aside.right-sidebar,
+    body.dark-mode aside.right-sidebar,
+    [data-theme="dark"] aside.left-panel,
+    body.dark-mode aside.left-panel {
+      background: var(--panel-bg);
+      border-color: var(--border);
+    }
+
+    [data-theme="dark"] main.center-stage,
+    body.dark-mode main.center-stage {
+      background: radial-gradient(circle at center, #182234 0%, #080C14 100%);
+    }
+
+    [data-theme="dark"] .lang-switcher,
+    body.dark-mode .lang-switcher {
+      background: #1E293B;
+    }
+
+    [data-theme="dark"] .lang-tab.active,
+    body.dark-mode .lang-tab.active {
+      background: #334155;
+      color: #FFFFFF;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    [data-theme="dark"] .theme-toggle-btn,
+    body.dark-mode .theme-toggle-btn {
+      background: #1E293B;
+      border-color: #334155;
+      color: #F8FAFC;
+    }
+
+    [data-theme="dark"] .search-box input,
+    body.dark-mode .search-box input {
+      background: #151D2A;
+      border-color: #334155;
+      color: #F8FAFC;
+    }
+
+    [data-theme="dark"] .search-box input:focus,
+    body.dark-mode .search-box input:focus {
+      background: #1E293B;
+      border-color: var(--primary);
+    }
+
+    [data-theme="dark"] .screen-item-btn:hover,
+    body.dark-mode .screen-item-btn:hover {
+      background: #1E293B;
+      border-color: #334155;
+    }
+
+    [data-theme="dark"] .screen-item-btn.active,
+    body.dark-mode .screen-item-btn.active {
+      background: rgba(99, 102, 241, 0.18);
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+
+    [data-theme="dark"] .screen-badge-num,
+    body.dark-mode .screen-badge-num {
+      background: #1E293B;
+      color: #94A3B8;
+    }
+
+    [data-theme="dark"] .screen-item-btn.active .screen-badge-num,
+    body.dark-mode .screen-item-btn.active .screen-badge-num {
+      background: #2563EB;
+      color: #FFFFFF;
+    }
+
+    [data-theme="dark"] .panel-sync-card,
+    body.dark-mode .panel-sync-card {
+      background: #151D2A;
+      border-color: #1E293B;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    [data-theme="dark"] .panel-sync-actions-row,
+    body.dark-mode .panel-sync-actions-row {
+      border-top-color: #1E293B;
+    }
+
+    [data-theme="dark"] .stage-action-pill,
+    body.dark-mode .stage-action-pill {
+      background: #1E293B;
+      border-color: #334155;
+      color: #A5B4FC;
+    }
+
+    [data-theme="dark"] .stage-action-pill:hover,
+    body.dark-mode .stage-action-pill:hover {
+      background: #2563EB;
+      color: #FFFFFF;
+      border-color: #2563EB;
+    }
+
+    [data-theme="dark"] .file-path-badge,
+    body.dark-mode .file-path-badge {
+      background: #151D2A;
+      border-color: #334155;
+      color: #93C5FD;
+    }
+
+    [data-theme="dark"] .tag-pill,
+    body.dark-mode .tag-pill {
+      background: #151D2A;
+      border-color: #334155;
+      color: #A5B4FC;
+    }
+
+    [data-theme="dark"] .design-notes-card,
+    body.dark-mode .design-notes-card {
+      background: #151D2A;
+      border-color: #1E293B;
+    }
+
+    [data-theme="dark"] .stage-arrow-btn,
+    body.dark-mode .stage-arrow-btn {
+      background: #151D2A;
+      border-color: #334155;
+      color: #F8FAFC;
+    }
+
+    [data-theme="dark"] .stage-arrow-btn:hover,
+    body.dark-mode .stage-arrow-btn:hover {
+      background: #2563EB;
+      color: #FFFFFF;
+      border-color: #2563EB;
+    }
+
+    [data-theme="dark"] .screens-nav-list::-webkit-scrollbar-thumb,
+    body.dark-mode .screens-nav-list::-webkit-scrollbar-thumb {
+      background: #334155;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+
+    <!-- ========================================================================
+         1. RIGHT SIDEBAR (قائمة الشاشات المعمارية)
+         ======================================================================== -->
+    <aside class="right-sidebar">
+      <div class="sidebar-header">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <img src="screens/logo-mark.svg" alt="شعار سوق مصر" style="width:38px;height:38px;border-radius:10px;filter:drop-shadow(0 4px 10px rgba(29,78,216,0.25));flex-shrink:0;">
+            <div>
+              <h1 class="brand-title" id="brandTitle">سوق مصر</h1>
+              <p class="brand-subtitle" id="brandSubtitle">Plan 1 • 20 Native HTML & CSS Screens</p>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+            <span id="brandStatusBadge" style="font-size:10px; font-weight:800; background:#DCFCE7; color:#15803D; padding:3px 8px; border-radius:6px;">مكتمل ✓</span>
+            <span id="aiVisionBadge" style="font-size:9.5px; font-weight:800; color:#1D4ED8; background:rgba(29,78,216,0.08); border:1px solid rgba(29,78,216,0.2); border-radius:6px; padding:2px 6px; white-space:nowrap; transition:all 0.2s;" title="يراقب المساعد الذكي مكان وقوف الماوس لحظياً">🤖 AI Tracker: Active</span>
+          </div>
+        </div>
+
+        <!-- Controls Row: Language Switcher & Dark Mode Toggle -->
+        <div style="display: flex; gap: 8px; align-items: center; margin-top: 10px;">
+          <!-- Language Switcher Tab -->
+          <div class="lang-switcher" style="flex: 1;">
+            <button class="lang-tab active" id="langTabAr" onclick="switchLanguage('ar')">عربي</button>
+            <button class="lang-tab" id="langTabEn" onclick="switchLanguage('en')">English</button>
+          </div>
+
+          <!-- Theme Switcher Button -->
+          <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleDarkMode()" title="تبديل الوضع الليلي / النهاري">
+            <span id="themeIcon">🌙</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Search -->
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="screenSearchInput" placeholder="بحث في الشاشات (مثال: سلة، موزع، دفع)..." oninput="handleSearch(this.value)">
+      </div>
+
+      <!-- Navigation List Grouped By Domain -->
+      <div class="screens-nav-list" id="screensNavList">
+        <!-- Rendered dynamically -->
+      </div>
+    </aside>
+
+    <!-- ========================================================================
+         2. CENTER STAGE (الهاتف التفاعلي - يعرض الملف المباشر)
+         ======================================================================== -->
+    <main class="center-stage">
+      <!-- Toast feedback -->
+      <div id="reloadToast" class="reload-toast">
+        <span class="toast-icon">✓</span>
+        <span id="toastMsg">تم تحديث الشاشة من الملف!</span>
+      </div>
+
+      <div class="stage-wrapper">
+        <button class="stage-arrow-btn" onclick="nextScreen()" title="الشاشة التالية">
+          ➔
+        </button>
+
+        <!-- iPhone Black Titanium Hardware Mockup Frame -->
+        <div class="phone-mockup-frame">
+          <div class="phone-speaker-earpiece"></div>
+          <div class="phone-btn-action"></div>
+          <div class="phone-btn-vol-up"></div>
+          <div class="phone-btn-vol-down"></div>
+          <div class="phone-btn-power"></div>
+          <iframe id="phoneViewportIframe" class="phone-screen-iframe" src="screens/01-login.html" title="شاشة الموبايل"></iframe>
+        </div>
+
+        <button class="stage-arrow-btn" onclick="prevScreen()" title="الشاشة السابقة">
+          ←
+        </button>
+      </div>
+    </main>
+
+    <!-- ========================================================================
+         3. LEFT PANEL (معلومات الشاشة وملاحظات التصميم)
+         ======================================================================== -->
+    <aside class="left-panel">
+      <!-- Live Sync Control Card (منقول إلى الشريط الجانبي الأيسر) -->
+      <div class="panel-sync-card">
+        <div class="panel-sync-status-row">
+          <div class="sync-status">
+            <span class="live-dot"></span>
+            <span id="syncStatusText">مزامنة حية من screens/</span>
+          </div>
+        </div>
+        <div class="panel-sync-actions-row">
+          <button class="stage-action-pill" onclick="reloadActiveScreen(true)" title="إعادة تحميل الشاشة الحالية لرؤية التعديلات فوراً (أو اضغط R)">
+            <span id="btnRefreshText">🔄 تحديث</span> <kbd>R</kbd>
+          </button>
+          <label class="auto-sync-toggle" title="تحديث الشاشة تلقائياً بمجرد العودة للمتصفح بعد حفظ التعديل">
+            <input type="checkbox" id="autoSyncCheckbox" checked onchange="toggleAutoSync(this.checked)">
+            <span id="autoSyncLabelText">مزامنة تلقائية</span>
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <div class="current-label">
+          <span id="currentScreenLabel">● شاشة حالية (HTML & CSS)</span>
+        </div>
+        <h1 class="current-title" id="screenTitle">تسجيل الدخول</h1>
+        <div class="file-path-badge" id="screenFilePath">screens/01-login.html</div>
+      </div>
+
+      <div class="tags-row" id="tagsContainer">
+        <!-- Tags rendered dynamically -->
+      </div>
+
+      <p class="screen-desc-text" id="screenDescription">
+        واجهة الدخول الأساسية بالهاتف أو البريد، مع دعم الدخول السريع عبر حساب Google والتحقق بخطوتين.
+      </p>
+
+      <div class="design-notes-card">
+        <div class="notes-title" id="notesSectionTitle">ملاحظات التصميم والمنطق البرمجي</div>
+        <ul class="notes-list" id="designNotesList">
+          <!-- Notes rendered dynamically -->
+        </ul>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- Code Viewer Modal -->
+  <div class="code-modal-overlay" id="codeModal">
+    <div class="code-box">
+      <div class="code-header">
+        <div class="code-title" id="codeModalTitle">screens/01-login.html</div>
+        <div class="code-actions">
+          <button class="btn-copy-code" onclick="copyModalCode()">📋 نسخ الكود</button>
+          <button class="btn-close-modal" onclick="closeCodeModal()">✕</button>
+        </div>
+      </div>
+      <pre class="code-content" id="codeContentDisplay">جاري جلب الكود من الملف...</pre>
+    </div>
+  </div>
+
+    <script>
+    // Complete 20 Plan 1 Screens Metadata (Bilingual AR / EN)
+    const screens = [
+      {
+        id: 0,
+        num: '00',
+        section: 'البداية',
+        sectionEn: 'Launch',
+        file: '00-splash.html',
+        title: 'شاشة البداية',
+        titleEn: 'Splash Screen',
+        tags: ['Brand Launch', 'Logo', 'Pilot Scope'],
+        desc: 'شاشة افتتاحية هادئة تعرض الشعار ونطاق الإطلاق التجريبي قبل بدء رحلة الدخول.',
+        descEn: 'Calm launch screen presenting the brand mark and pilot scope before authentication.',
+        notes: ['لوجو أولي قابل للتطوير بصيغة SVG', 'توضيح المنطقة والقسم في الإطلاق الأول'],
+        notesEn: ['Scalable initial logo in SVG format', 'Clear pilot area and category scope']
+      },
+      // 1. الدخول وحسابات المستخدمين / Auth & Onboarding
+      {
+        id: 1,
+        num: '01',
+        section: 'الدخول',
+        sectionEn: 'Auth & Onboarding',
+        file: '01-login.html',
+        title: 'تسجيل الدخول',
+        titleEn: 'Sign In',
+        tags: ['Authentication', 'OTP Support', 'Google SSO', 'Biometrics'],
+        desc: 'واجهة الدخول الأساسية بالهاتف أو البريد، مع دعم الدخول السريع عبر حساب Google والتحقق بخطوتين.',
+        descEn: 'Primary sign-in interface via phone or email, supporting instant Google SSO and 2-step OTP verification.',
+        notes: [
+          'زر Google المتجه بألوانه الرسمية الأربعة المعيارية لتعزيز الثقة',
+          'إمكانية الدخول الفوري برقم الموبايل دون كلمة مرور معقدة',
+          'روابط مباشرة لاستعادة كلمة المرور والتسجيل الجديد'
+        ],
+        notesEn: [
+          'Official 4-color Google sign-in button for high user trust',
+          'Instant phone number authentication without requiring complex passwords',
+          'Direct links for password recovery and new user registration'
+        ]
+      },
+      {
+        id: 2,
+        num: '02',
+        section: 'الدخول',
+        sectionEn: 'Auth & Onboarding',
+        file: '02-signup.html',
+        title: 'إنشاء حساب جديد',
+        titleEn: 'Create New Account',
+        tags: ['Registration', 'Mobile Verification', 'Terms & Conditions'],
+        desc: 'تسجيل حساب مستخدم جديد برقم الهاتف والاسم الكامل والموافقة على الشروط وسياسة الخصوصية.',
+        descEn: 'New user registration with mobile number, full name, and terms of service acceptance.',
+        notes: [
+          'حقول إدخال واضحة ومتباعدة لتقليل الأخطاء أثناء الكتابة',
+          'التحقق المسبق من صحة رقم الموبايل المصري (010/011/012/015)',
+          'رابط مباشر للعودة لتسجيل الدخول في حال امتلاك حساب سابق'
+        ],
+        notesEn: [
+          'Clean, high-contrast input fields to minimize typing errors',
+          'Egyptian mobile prefix validation (010, 011, 012, 015)',
+          'Direct link to return to Sign In if already registered'
+        ]
+      },
+      {
+        id: 3,
+        num: '03',
+        section: 'الدخول',
+        sectionEn: 'Auth & Onboarding',
+        file: '03-verify-otp.html',
+        title: 'تأكيد رمز التحقق (OTP)',
+        titleEn: 'Verify OTP Code',
+        tags: ['OTP Verification', 'SMS Gateway', 'Resend Timer', 'WhatsApp fallback'],
+        desc: 'إدخال رمز الأمان المكون من 4 أرقام المرسل برسالة نصية للتحقق من هوية صاحب الرقم.',
+        descEn: 'Enter 4-digit security code sent via SMS to verify phone number ownership.',
+        notes: [
+          'خانات إدخال منفصلة مع انتقال تلقائي للخانة التالية',
+          'عداد تنازلي ذكي لإعادة الإرسال (0:45 ثانية)',
+          'خيار بديل لاستلام الرمز عبر WhatsApp لحل مشاكل تأخر الرسائل'
+        ],
+        notesEn: [
+          'Individual input boxes with automatic focus progression',
+          'Smart 45-second resend countdown timer',
+          'WhatsApp fallback button for instant delivery during SMS network delays'
+        ]
+      },
+      {
+        id: 4,
+        num: '04',
+        section: 'الدخول',
+        sectionEn: 'Auth & Onboarding',
+        file: '04-account-type.html',
+        title: 'اختيار نوع الحساب',
+        titleEn: 'Select Account Type',
+        tags: ['Account Onboarding', 'Customer Role', 'Distributor / Vendor'],
+        desc: 'تحديد مسار المستخدم في الإطلاق التجريبي: التسوق داخل المعادي أو إرسال طلب انضمام كبائع يخضع للمراجعة.',
+        descEn: 'Pilot onboarding: shop within the launch area or submit a seller application for manual review.',
+        notes: [
+          'كروت تفاعلية بارزة ومميزة لكل فئة مستخدم',
+          'تحديد نطاق الإطلاق والمنطقة والقسم المتاح بوضوح',
+          'تنبيه بأن تفعيل البائع والمنتجات يتم يدويًا قبل النشر'
+        ],
+        notesEn: [
+          'Prominent role cards with visual feature comparisons',
+          'Clear explanation of vendor benefits: storefront, logistics, and earnings',
+          'Upgrade path available later from buyer profile'
+        ]
+      },
+      {
+        id: 5,
+        num: '05',
+        section: 'الدخول',
+        sectionEn: 'Auth & Onboarding',
+        file: '05-profile-setup.html',
+        title: 'بيانات الحساب الشخصي',
+        titleEn: 'Buyer Profile Setup',
+        tags: ['Profile Setup', 'Avatar Upload', 'Governorate Picker'],
+        desc: 'استكمال بيانات المشتري الأساسية: الصورة، المحافظة والمدينة، والعنوان الدقيق لتسهيل عمليات التوصيل.',
+        descEn: 'Complete essential customer info: avatar, Egyptian governorate/city, and detailed delivery address.',
+        notes: [
+          'رفع وتعديل الصورة الشخصية بسهولة',
+          'قوائم منسدلة للمحافظات المصرية لحساب تكلفة الشحن تلقائياً',
+          'إمكانية التخطي والاستكمال لاحقاً عند الشراء'
+        ],
+        notesEn: [
+          'Easy avatar upload and profile photo management',
+          'Egyptian governorates dropdown for automated shipping calculation',
+          'Option to skip and complete during checkout'
+        ]
+      },
+      {
+        id: 6,
+        num: '06',
+        section: 'الدخول',
+        sectionEn: 'Auth & Onboarding',
+        file: '06-distributor-setup.html',
+        title: 'إعداد وتوثيق متجر الموزع',
+        titleEn: 'Distributor KYC & Setup',
+        tags: ['Vendor KYC', 'Commercial Register', 'Tax Card', 'Store Setup'],
+        desc: 'إدخال اسم المتجر ونشاطه ورفع مستندات السجل التجاري والبطاقة الضريبية للاعتماد من الإدارة.',
+        descEn: 'Register storefront details and upload commercial register and tax card for admin approval.',
+        notes: [
+          'منطقة سحب وإفلات لرفع صور المستندات الرسمية',
+          'خطوة محورية تضمن جودة وأمان التجار داخل المنصة',
+          'توضيح زمن المراجعة السريع (خلال 24 ساعة عمل)'
+        ],
+        notesEn: [
+          'Drag-and-drop document upload zones for official certificates',
+          'Mandatory KYC milestone ensuring trust and platform compliance',
+          'Clear 24-hour review timeline notification'
+        ]
+      },
+      {
+        id: 7,
+        num: '07',
+        section: 'الدخول',
+        sectionEn: 'Auth & Onboarding',
+        file: '07-forgot-password.html',
+        title: 'استعادة كلمة المرور',
+        titleEn: 'Password Recovery',
+        tags: ['Password Reset', 'Security', 'Magic Link'],
+        desc: 'إدخال رقم الموبايل أو البريد لاستلام رابط أو رمز إعادة تعيين كلمة المرور.',
+        descEn: 'Enter registered mobile or email to receive password reset link or SMS code.',
+        notes: [
+          'تصميم مركز وبسيط لتقليل تشتت المستخدم في حالات الطوارئ',
+          'إرسال رابط آمن ومؤقت ينتهي بعد 15 دقيقة لضمان الحماية',
+          'زر واضح للعودة لشاشة تسجيل الدخول الرئيسية'
+        ],
+        notesEn: [
+          'Focused layout minimizing cognitive load during recovery',
+          'Time-limited secure reset link expiring in 15 minutes',
+          'Clear button to return to login screen'
+        ]
+      },
+
+      // 2. تطبيق المشتري والماركت بليس / Buyer Experience
+      {
+        id: 8,
+        num: '08',
+        section: 'تطبيق المستخدم',
+        sectionEn: 'Buyer Experience',
+        file: '08-marketplace-home.html',
+        title: 'الصفحة الرئيسية للماركت بليس',
+        titleEn: 'Marketplace Home',
+        tags: ['Home Feed', 'Flash Deals', 'Categories Grid', 'Location Selector'],
+        desc: 'واجهة السوق التنافسي الرئيسية: شريط البحث وتحديد موقع التوصيل، بانرات العروض، وتصنيفات المنتجات المتنوعة.',
+        descEn: 'Core shopping hub: location selector, sticky search bar, promo banners, and category product grids.',
+        notes: [
+          'شريط علوي يوضح موقع التوصيل الحالي وزر السلة التفاعلي',
+          'سلايدر عروض ترويجية بخصومات حصرية وبانرات ملفتة',
+          'شبكة منتجات ذكية مع زر إضافة سريع للسلة وشارات الخصم'
+        ],
+        notesEn: [
+          'Header with live location selector and shopping cart badge',
+          'High-impact flash sale promo slider with countdown badges',
+          'Product cards with quick add-to-cart button and discount tags'
+        ]
+      },
+      {
+        id: 9,
+        num: '09',
+        section: 'تطبيق المستخدم',
+        sectionEn: 'Buyer Experience',
+        file: '09-category-products.html',
+        title: 'تصفح منتجات القسم',
+        titleEn: 'Category Catalog',
+        tags: ['Subcategories', 'Sort & Filter', 'Vendor Badges', 'Price Range'],
+        desc: 'عرض المنتجات التابعة لقسم محدد (مثل الملابس الرجالي أو الإلكترونيات) مع الفرز والتصفية.',
+        descEn: 'Browse categorized products with quick chips, sorting options, and stock indicators.',
+        notes: [
+          'شرائح تصنيف فرعية أفقية سريعة للتنقل السلس',
+          'أزرار ترتيب حسب الأرخص أو الأعلى تقييماً أو الأحدث',
+          'تمييز اسم الموزع وشارة التوثيق على كل بطاقة منتج'
+        ],
+        notesEn: [
+          'Subcategory chips for rapid horizontal navigation',
+          'Sort by lowest price, top rated, or newest arrivals',
+          'Clear distributor badges on every product item'
+        ]
+      },
+      {
+        id: 10,
+        num: '10',
+        section: 'تطبيق المستخدم',
+        sectionEn: 'Buyer Experience',
+        file: '10-search-filters.html',
+        title: 'البحث المتقدم والفلاتر',
+        titleEn: 'Advanced Search & Filters',
+        tags: ['Price Range', 'Rating Filter', 'Free Delivery', 'Governorate Filter'],
+        desc: 'واجهة التصفية الذكية: تحديد نطاق السعر، تقييم البائع، توفر الشحن المجاني، والمحافظة.',
+        descEn: 'Multi-facet filtering: price range slider, star rating, free delivery, and governorate.',
+        notes: [
+          'منزلق مزدوج لتحديد الحد الأدنى والأعلى للسعر بدقة',
+          'عداد مباشر يوضح عدد النتائج المطابقة قبل تطبيق الفلتر',
+          'زر إعادة ضبط لتفريغ كل الخيارات بنقرة واحدة'
+        ],
+        notesEn: [
+          'Dual-slider interactive price range control',
+          'Instant match counter showing available products before applying',
+          'One-tap reset button for quick filter clearing'
+        ]
+      },
+      {
+        id: 11,
+        num: '11',
+        section: 'تطبيق المستخدم',
+        sectionEn: 'Buyer Experience',
+        file: '11-product-details.html',
+        title: 'تفاصيل المنتج واختيار الموزع',
+        titleEn: 'Product Details & Vendor Choice',
+        tags: ['Multi-Vendor Offers', 'Variants (Sizes/Colors)', 'Reviews', 'Sticky Buy Bar'],
+        desc: 'صفحة المنتج الكاملة: معرض الصور، المواصفات، جدول مقاسات، ومقارنة عروض الموزعين لنفس الصنف.',
+        descEn: 'Full product view: image carousel, specifications, size/color matrix, and multi-distributor offer table.',
+        notes: [
+          'جدول تنافسي يوضح أسعار الموزعين ومواعيد التوصيل وتقييم كل تاجر',
+          'اختيار تفاعلي للمقاس واللون مع تحديث المخزون والسعر',
+          'شريط سفلي ثابت يتيح الإضافة للسلة أو الشراء الفوري مباشرة'
+        ],
+        notesEn: [
+          'Multi-distributor offer selector showing prices and delivery ETAs',
+          'Interactive color swatches and size picker with live stock info',
+          'Sticky bottom bar with immediate Add to Cart and Buy Now buttons'
+        ]
+      },
+      {
+        id: 12,
+        num: '12',
+        section: 'تطبيق المستخدم',
+        sectionEn: 'Buyer Experience',
+        file: '12-cart-checkout.html',
+        title: 'سلة المشتريات والدفع',
+        titleEn: 'Cart & Checkout',
+        tags: ['Split Cart by Vendor', 'Vodafone Cash', 'Instapay', 'Promo Codes'],
+        desc: 'إدارة السلال المقسمة حسب كل موزع، تطبيق كوبون الخصم، واختيار وسيلة الدفع (فودافون كاش، بطاقة، دفع عند الاستلام).',
+        descEn: 'Multi-vendor split carts, promo code discounts, and local payment methods (Vodafone Cash, Card, COD).',
+        notes: [
+          'تقسيم بنية السلة لكل موزع على حدة وفق متطلبات الخطة 1',
+          'دعم وسائل الدفع المصرية الشائعة كالمحافظ الإلكترونية وإنستاباي',
+          'تفصيل شفاف لمجموع المنتجات والشحن وضريبة القيمة المضافة'
+        ],
+        notesEn: [
+          'Distributor-separated cart sections per Plan 1 logistics architecture',
+          'Local Egyptian payment options including Vodafone Cash & Instapay',
+          'Transparent summary breakdown showing subtotal, VAT, and shipping'
+        ]
+      },
+      {
+        id: 13,
+        num: '13',
+        section: 'تطبيق المستخدم',
+        sectionEn: 'Buyer Experience',
+        file: '13-order-tracking.html',
+        title: 'تتبع الطلب وحالة الشحن',
+        titleEn: 'Order Tracking & Shipment',
+        tags: ['Order Timeline', 'Courier Info', 'AWB Number', 'Delivery Contact'],
+        desc: 'متابعة خط سير الشحنة خطوة بخطوة مع اسم شركة الشحن ورقم البوليصة والتواصل مع المندوب.',
+        descEn: 'Real-time step-by-step parcel tracking with courier details, AWB number, and delivery driver contact.',
+        notes: [
+          'مخطط زمني رأسي يوضح مراحل: التأكيد، التجهيز، الشحن، والاستلام',
+          'زر اتصال سريع ورسالة واتساب لمندوب التوصيل الميداني',
+          'عرض الفاتورة الإلكترونية ومحتويات الطلب داخل الشاشة'
+        ],
+        notesEn: [
+          'Vertical visual progress timeline from confirmed to delivered',
+          'Direct call and WhatsApp button for delivery driver',
+          'Embedded digital invoice and order items summary'
+        ]
+      },
+      {
+        id: 14,
+        num: '14',
+        section: 'تطبيق المستخدم',
+        sectionEn: 'Buyer Experience',
+        file: '14-chat-conversation.html',
+        title: 'محادثة فورية مع الموزع',
+        titleEn: 'In-App Live Chat',
+        tags: ['Live Messaging', 'Product Context Pinned', 'Voice Notes', 'Image Attach'],
+        desc: 'دردشة مباشرة مشفرة بين المشتري والتاجر للاستفسار عن المقاسات، الألوان، أو تفاصيل الشحن.',
+        descEn: 'Direct live messaging between customer and seller for inquiries on specs, sizing, and delivery.',
+        notes: [
+          'تثبيت كارت المنتج المستفسر عنه أعلى شاشة المحادثة',
+          'دعم تسجيل الرسائل الصوتية وإرسال الصور الملتقطة بالكاميرا',
+          'مؤشر قراءة الرسائل وحالة الموزع (متصل الآن)'
+        ],
+        notesEn: [
+          'Contextual product card pinned at the top of the chat',
+          'Support for voice notes, photo attachments, and canned quick replies',
+          'Real-time message read receipts and distributor online badge'
+        ]
+      },
+      {
+        id: 15,
+        num: '15',
+        section: 'تطبيق المستخدم',
+        sectionEn: 'Buyer Experience',
+        file: '15-chat-list.html',
+        title: 'صندوق رسائل المحادثات',
+        titleEn: 'Inbox & Conversations',
+        tags: ['Chat Inbox', 'Unread Counter', 'Vendor Badges', 'Filter by Unread'],
+        desc: 'قائمة كل المحادثات السابقة والنشطة مع مختلف الموزعين والدعم الفني.',
+        descEn: 'Overview of all active customer conversations with various vendors and platform support.',
+        notes: [
+          'شريط بحث سريع للوصول لمحادثة موزع أو متجر معين',
+          'شارات عدد الرسائل غير المقروءة بتصميم بارز وواضح',
+          'إمكانية أرشفة أو كتم إشعارات المحادثات القديمة'
+        ],
+        notesEn: [
+          'Unread badge counters and last message timestamps',
+          'Search bar to quickly find conversations by vendor name',
+          'Swipe actions for archiving or muting chats'
+        ]
+      },
+      {
+        id: 16,
+        num: '16',
+        section: 'تطبيق المستخدم',
+        sectionEn: 'Buyer Experience',
+        file: '16-dispute-reviews.html',
+        title: 'التقييمات وبلاغات فض النزاع',
+        titleEn: 'Reviews & Dispute Resolution',
+        tags: ['Ratings & Reviews', 'Dispute Resolution', 'Buyer Protection', 'Refund'],
+        desc: 'تقييم تجربة الشراء بالنجوم وكتابة الرأي، مع قسم خاص لفتح بلاغ نزاع واسترجاع المبلغ في حال تضرر المنتج.',
+        descEn: 'Star ratings and customer reviews, plus Plan 1 14-day dispute claim filing for buyer protection.',
+        notes: [
+          'نموذج تقييم شفاف يساعد بقية المشترين في اختيار المنتجات',
+          'قسم فتح نزاع محمي وفق قانون حماية المستهلك المصري وسياسة 14 يوماً',
+          'رفع صور الإثبات وبوليصة الشحن لتدخل إدارة المنصة وحفظ الحقوق'
+        ],
+        notesEn: [
+          'Transparent star rating matrix and user photo attachments',
+          'Egyptian Consumer Protection compliant 14-day dispute claim submission',
+          'Evidence photo uploader and admin escalation workflow'
+        ]
+      },
+
+      // 3. لوحة تحكم الموزع / Distributor Portal
+      {
+        id: 17,
+        num: '17',
+        section: 'الموزع',
+        sectionEn: 'Distributor Portal',
+        file: '17-distributor-dashboard.html',
+        title: 'لوحة تشغيل البائع',
+        titleEn: 'Pilot Seller Dashboard',
+        tags: ['Pilot Operations', 'Pending Review', 'Orders', 'Support'],
+        desc: 'لوحة بسيطة لمتابعة الطلبات والمنتجات قيد المراجعة أثناء التشغيل التجريبي، بدون أرباح أو سحب أو إعلانات.',
+        descEn: 'Pilot seller workspace for orders and review status, without payouts, wallets, or ads.',
+        notes: [
+          'مؤشرات تشغيلية للطلبات والمنتجات قيد المراجعة',
+          'إشعارات بالطلبات الجديدة واحتياجها للتأكيد أو التجهيز',
+          'رابط مباشر للدعم والسياسات أثناء التجربة'
+        ],
+        notesEn: [
+          'Instant KPI metric cards for revenue, orders, and ratings',
+          'Actionable alert center for orders needing immediate fulfillment',
+          'Automated low-inventory warnings preventing out-of-stock orders'
+        ]
+      },
+      {
+        id: 18,
+        num: '18',
+        section: 'الموزع',
+        sectionEn: 'Distributor Portal',
+        file: '18-add-product.html',
+        title: 'إضافة وتعديل منتج جديد',
+        titleEn: 'Add / Edit Product',
+        tags: ['Add Product', 'Photo Uploader', 'Variants Setup', 'Pricing & SKU'],
+        desc: 'واجهة متكاملة للموزع لإدراج منتج جديد: الصور، الوصف، التسعير، رمز SKU، وتحديد المقاسات والألوان المتوفرة.',
+        descEn: 'Comprehensive product creation: image upload, category selection, pricing, SKU, and variant matrix.',
+        notes: [
+          'مربعات سحب وإفلات مريحة لرفع صور المنتج مع تمييز صورة الغلاف',
+          'محدد مرن للمقاسات والألوان المتعددة لنفس الصنف',
+          'خيارات سريعة لحفظ كمسودة أو النشر الفوري في الماركت بليس'
+        ],
+        notesEn: [
+          'Drag-and-drop image uploader with cover photo indicator',
+          'Flexible multi-size and multi-color variant pricing manager',
+          'Quick options to save as draft or publish directly to marketplace'
+        ]
+      },
+      {
+        id: 19,
+        num: '19',
+        section: 'الموزع',
+        sectionEn: 'Distributor Portal',
+        file: '19-distributor-ads.html',
+        title: 'الإعلانات والباقات — مؤجلة',
+        titleEn: 'Ads & Packages — Deferred',
+        tags: ['Deferred Feature', 'Pilot Scope', 'Fair Ranking'],
+        desc: 'شاشة توضح أن الإعلانات والباقات مؤجلة حتى تثبت دورة الطلب والتوصيل ويتم اعتماد نموذج العمولة والتسويات.',
+        descEn: 'Explains that ads and packages are deferred until ordering, delivery, commission, and settlement rules are validated.',
+        notes: [
+          'لا توجد محفظة أو رسوم إعلان في التشغيل التجريبي',
+          'ترتيب عادل حسب القسم والتوفر وجودة المحتوى',
+          'تفعيل الباقات لاحقًا بعد مراجعة النتائج والسياسات'
+        ],
+        notesEn: [
+          'Integrated wallet balance card with fast top-up options',
+          'Placement targeting: Top of Search or Homepage Featured Banners',
+          'Performance analytics tracking impressions, clicks, and conversion rates'
+        ]
+      },
+
+      // 4. لوحة الإدارة / Admin Operations
+      {
+        id: 20,
+        num: '20',
+        section: 'الإدارة',
+        sectionEn: 'Admin Operations',
+        file: '20-admin-approvals.html',
+        title: 'لوحة الإدارة والاعتمادات',
+        titleEn: 'Admin Approvals & KYC',
+        tags: ['Super Admin', 'Vendor KYC Approval', 'Product Compliance', 'Disputes'],
+        desc: 'لوحة تحكم إدارة سوق مصر: مراجعة طلبات توثيق الموزعين الجدد، فحص الأوراق والسجلات، والبت في قضايا النزاع.',
+        descEn: 'Platform governance center: verify merchant KYC docs, inspect commercial registrations, and arbitrate disputes.',
+        notes: [
+          'طابور اعتمادات منظم لمراجعة السجلات التجارية والبطاقات الضريبية',
+          'أزرار قرار سريعة للاعتماد الفوري أو الرفض مع سبب محدد',
+          'مركز فض النزاعات لرد الأموال للمشتري أو إغلاق الشكوى'
+        ],
+        notesEn: [
+          'Organized approval queue for KYC tax cards and commercial records',
+          'Fast-action buttons for instant approval or rejection with reason',
+          'Dispute arbitration portal to refund buyers or close cases'
+        ]
+      }
+    ];
+
+    // المرحلة الأولى الحالية تقتصر على شاشات التسجيل والتهيئة فقط.
+    const authScreenFiles = new Set([
+      '00-splash.html', '01-login.html', '02-signup.html', '03-verify-otp.html',
+      '04-account-type.html', '05-profile-setup.html',
+      '06-distributor-setup.html', '07-forgot-password.html'
+    ]);
+    screens.splice(0, screens.length, ...screens.filter(screen => authScreenFiles.has(screen.file)));
+
+    const urlParams = new URLSearchParams(window.location.search);
+    let currentLang = urlParams.get('lang') || localStorage.getItem('souq_lang') || 'ar';
+    let currentTheme = urlParams.get('theme') || localStorage.getItem('souq_theme') || 'light';
+
+    function applyTheme(theme) {
+      currentTheme = theme;
+      try {
+        localStorage.setItem('souq_theme', theme);
+      } catch (e) {}
+
+      const isDark = theme === 'dark';
+      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+      if (isDark) {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
+
+      const icon = document.getElementById('themeIcon');
+      if (icon) {
+        icon.innerText = isDark ? '☀️' : '🌙';
+      }
+
+      const btn = document.getElementById('themeToggleBtn');
+      if (btn) {
+        btn.title = isDark 
+          ? (currentLang === 'en' ? 'Switch to Light Mode' : 'التحويل للوضع النهاري') 
+          : (currentLang === 'en' ? 'Switch to Dark Mode' : 'التحويل للوضع الليلي');
+      }
+
+      // Sync theme to mobile iframe
+      const iframe = document.getElementById('phoneViewportIframe');
+      if (iframe && iframe.contentWindow) {
+        try {
+          iframe.contentWindow.postMessage({ type: 'SET_THEME', theme: theme }, '*');
+        } catch (e) {}
+      }
+    }
+
+    function toggleDarkMode() {
+      applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
+    }
+
+    // AI Hover & Active Screen Bridge
+    function notifyAiHover(screen, action = 'hover') {
+      if (!screen) return;
+      const url = `http://localhost:8085/api/hover?file=${encodeURIComponent(screen.file)}&title=${encodeURIComponent(screen.title)}&section=${encodeURIComponent(screen.section)}&theme=${currentTheme}&lang=${currentLang}&action=${action}`;
+      fetch(url, { mode: 'cors' }).catch(() => {});
+
+      try {
+        localStorage.setItem('antigravity_hover_screen', JSON.stringify({
+          file: screen.file,
+          title: screen.title,
+          titleEn: screen.titleEn,
+          action: action,
+          timestamp: new Date().toISOString()
+        }));
+      } catch (e) {}
+
+      const badge = document.getElementById('aiVisionBadge');
+      if (badge) {
+        const titleStr = currentLang === 'en' ? (screen.titleEn || screen.title) : screen.title;
+        badge.innerHTML = `<span style="color:#10B981;">👁️</span> يرى: <b>${screen.num}</b> (${titleStr})`;
+        badge.style.background = 'rgba(16, 185, 129, 0.12)';
+        badge.style.borderColor = '#10B981';
+        badge.style.color = '#059669';
+      }
+    }
+    let currentIndex = 0;
+    let searchQuery = '';
+    let autoSyncEnabled = true;
+    let toastTimeout = null;
+
+    const uiStrings = {
+      ar: {
+        brandTitle: 'سوق مصر',
+        brandSubtitle: 'Plan 1 • 20 Native HTML & CSS Screens',
+        brandStatusBadge: 'مكتمل ✓',
+        searchPlaceholder: 'بحث في الشاشات (مثال: سلة، موزع، دفع)...',
+        syncDefault: 'مزامنة حية من screens/',
+        syncActive: 'المزامنة الحية مفعلة (يتم التحديث فور العودة للمتصفح)',
+        syncPaused: 'المزامنة التلقائية متوقفة (اضغط زر التحديث أو R)',
+        btnRefreshText: '🔄 تحديث',
+        autoSyncLabelText: 'مزامنة تلقائية',
+        currentScreenLabel: '● شاشة حالية (HTML & CSS)',
+        notesSectionTitle: 'ملاحظات التصميم والمنطق البرمجي',
+        copyCodeBtn: '📋 نسخ الكود',
+        codeCopied: 'تم نسخ الكود بنجاح!',
+        screenUpdatedToast: (title) => `تم تحديث شاشة [${title}] بنجاح!`,
+        screenCopiedToast: (title) => `تم نسخ كود شاشة (${title}) بنجاح!`,
+        fetchErrorModal: (file) => `// تعذر جلب محتوى الملف تلقائياً عبر fetch (البروتوكول المحلي)\n// يمكنك فتح الملف مباشرة من المسار:\n// screens/${file}`
+      },
+      en: {
+        brandTitle: 'Souq Masr',
+        brandSubtitle: 'Plan 1 • 20 Native HTML & CSS Screens',
+        brandStatusBadge: 'Completed ✓',
+        searchPlaceholder: 'Search screens (e.g. cart, vendor, checkout)...',
+        syncDefault: 'Live sync from screens/',
+        syncActive: 'Live sync active (reloads when focusing tab)',
+        syncPaused: 'Live sync paused (press Reload button or R)',
+        btnRefreshText: '🔄 Reload',
+        autoSyncLabelText: 'Auto-sync',
+        currentScreenLabel: '● Current Screen (HTML & CSS)',
+        notesSectionTitle: 'Design Notes & Technical Logic',
+        copyCodeBtn: '📋 Copy Code',
+        codeCopied: 'Code copied to clipboard!',
+        screenUpdatedToast: (title) => `Screen [${title}] updated!`,
+        screenCopiedToast: (title) => `Code for (${title}) copied!`,
+        fetchErrorModal: (file) => `// Could not fetch file content automatically via fetch\n// You can open file directly from:\n// screens/${file}`
+      }
+    };
+
+    function switchLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('souq_lang', lang);
+
+      // Update tabs
+      const tabAr = document.getElementById('langTabAr');
+      const tabEn = document.getElementById('langTabEn');
+      if (tabAr && tabEn) {
+        tabAr.classList.toggle('active', lang === 'ar');
+        tabEn.classList.toggle('active', lang === 'en');
+      }
+
+      // Update UI static labels
+      const s = uiStrings[lang];
+      const el = (id) => document.getElementById(id);
+      if (el('brandTitle')) el('brandTitle').innerText = s.brandTitle;
+      if (el('brandSubtitle')) el('brandSubtitle').innerText = s.brandSubtitle;
+      if (el('brandStatusBadge')) el('brandStatusBadge').innerText = s.brandStatusBadge;
+      if (el('screenSearchInput')) el('screenSearchInput').placeholder = s.searchPlaceholder;
+      if (el('btnRefreshText')) el('btnRefreshText').innerText = s.btnRefreshText;
+      if (el('autoSyncLabelText')) el('autoSyncLabelText').innerText = s.autoSyncLabelText;
+      if (el('currentScreenLabel')) el('currentScreenLabel').innerText = s.currentScreenLabel;
+      if (el('notesSectionTitle')) el('notesSectionTitle').innerText = s.notesSectionTitle;
+
+      // Update iframe language dynamically via postMessage
+      const iframe = document.getElementById('phoneViewportIframe');
+      if (iframe && iframe.contentWindow) {
+        try {
+          iframe.contentWindow.postMessage({ type: 'SET_LANG', lang: lang }, '*');
+        } catch (e) {}
+      }
+
+      renderSidebar();
+      updateActiveScreenUI();
+    }
+
+    // Render Navigation Sidebar grouped by Section
+    function renderSidebar() {
+      const container = document.getElementById('screensNavList');
+      container.innerHTML = '';
+
+      const sectionGroups = currentLang === 'en'
+      ? [
+            { key: 'Launch', arKey: 'البداية' },
+            { key: 'Auth & Onboarding', arKey: 'الدخول' },
+            { key: 'Buyer Experience', arKey: 'تطبيق المستخدم' },
+            { key: 'Distributor Portal', arKey: 'الموزع' },
+            { key: 'Admin Operations', arKey: 'الإدارة' }
+          ]
+      : [
+            { key: 'البداية', arKey: 'البداية' },
+            { key: 'الدخول', arKey: 'الدخول' },
+            { key: 'تطبيق المستخدم', arKey: 'تطبيق المستخدم' },
+            { key: 'الموزع', arKey: 'الموزع' },
+            { key: 'الإدارة', arKey: 'الإدارة' }
+          ];
+
+      sectionGroups.forEach(grp => {
+        const matchingScreens = screens.filter(s => {
+          const matchSec = s.section === grp.arKey;
+          if (!searchQuery) return matchSec;
+          const q = searchQuery.toLowerCase();
+          const title = (currentLang === 'en' ? s.titleEn : s.title).toLowerCase();
+          const altTitle = (currentLang === 'en' ? s.title : s.titleEn).toLowerCase();
+          return matchSec && (
+            title.includes(q) ||
+            altTitle.includes(q) ||
+            s.tags.some(t => t.toLowerCase().includes(q)) ||
+            s.file.toLowerCase().includes(q)
+          );
+        });
+
+        if (matchingScreens.length === 0) return;
+
+        // Section Title
+        const secHeader = document.createElement('div');
+        secHeader.className = 'nav-section-title';
+        secHeader.innerHTML = `<span>${grp.key}</span> <span>${matchingScreens.length}</span>`;
+        container.appendChild(secHeader);
+
+        // Section Container
+        const secItems = document.createElement('div');
+        secItems.className = 'nav-section-items';
+
+        matchingScreens.forEach(s => {
+          const originalIndex = screens.findIndex(item => item.id === s.id);
+          const btn = document.createElement('button');
+          btn.className = `screen-item-btn ${originalIndex === currentIndex ? 'active' : ''}`;
+          btn.id = `nav-btn-${originalIndex}`;
+          btn.onclick = () => selectScreen(originalIndex);
+          btn.onmouseenter = () => notifyAiHover(s, 'hover');
+
+          const displayTitle = currentLang === 'en' ? (s.titleEn || s.title) : s.title;
+
+          btn.innerHTML = `
+            <span class="screen-item-title">${displayTitle}</span>
+            <span class="screen-badge-num">${s.num}</span>
+          `;
+          secItems.appendChild(btn);
+        });
+
+        container.appendChild(secItems);
+      });
+    }
+
+    // Select Screen by Index
+    function selectScreen(index) {
+      if (index < 0 || index >= screens.length) return;
+      currentIndex = index;
+      notifyAiHover(screens[index], 'active_screen');
+      updateActiveScreenUI();
+
+      // Update sidebar active highlights
+      document.querySelectorAll('.screen-item-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById(`nav-btn-${index}`);
+      if (activeBtn) {
+        activeBtn.classList.add('active');
+        activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    function showReloadToast(msg) {
+      const toast = document.getElementById('reloadToast');
+      const msgEl = document.getElementById('toastMsg');
+      if (toast && msgEl) {
+        msgEl.innerText = msg;
+        toast.classList.add('show');
+        if (toastTimeout) clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+          toast.classList.remove('show');
+        }, 2200);
+      }
+    }
+
+    function toggleAutoSync(enabled) {
+      autoSyncEnabled = enabled;
+      const statusEl = document.getElementById('syncStatusText');
+      if (statusEl) {
+        const s = uiStrings[currentLang];
+        statusEl.innerText = enabled ? s.syncActive : s.syncPaused;
+      }
+    }
+
+    // Direct live reload of the active screen from disk
+    function reloadActiveScreen(showToast = false) {
+      const s = screens[currentIndex];
+      const iframe = document.getElementById('phoneViewportIframe');
+      iframe.src = `screens/${s.file}?lang=${currentLang}&theme=${currentTheme}&v=${Date.now()}`;
+      iframe.setAttribute('data-loaded-file', s.file);
+
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const statusEl = document.getElementById('syncStatusText');
+      if (statusEl) {
+        const prefix = currentLang === 'en' ? 'Loaded' : 'تم استدعاء';
+        statusEl.innerHTML = `${prefix} <bdi style="font-family:monospace; color:var(--primary); font-weight:700;">${s.file}</bdi> (${timeStr})`;
+      }
+
+      if (showToast) {
+        const title = currentLang === 'en' ? s.titleEn : s.title;
+        showReloadToast(uiStrings[currentLang].screenUpdatedToast(title));
+      }
+    }
+
+    // Automatically reload when user switches back to browser tab from their code editor
+    window.addEventListener('focus', () => {
+      if (autoSyncEnabled) {
+        reloadActiveScreen(true);
+      }
+    });
+
+    // Update Stage & Left Panel Content
+    function updateActiveScreenUI() {
+      const s = screens[currentIndex];
+      const isEn = currentLang === 'en';
+
+      // Update phone iframe source directly with language query param
+      const iframe = document.getElementById('phoneViewportIframe');
+      const targetSrc = `screens/${s.file}?lang=${currentLang}&theme=${currentTheme}&v=${Date.now()}`;
+      
+      // If same file, postMessage is instantaneous; else load src
+      if (iframe.getAttribute('data-loaded-file') === s.file) {
+        try {
+          iframe.contentWindow.postMessage({ type: 'SET_LANG', lang: currentLang }, '*');
+        } catch (e) {
+          iframe.src = targetSrc;
+        }
+      } else {
+        iframe.src = targetSrc;
+        iframe.setAttribute('data-loaded-file', s.file);
+      }
+
+      // Update Left Panel Details
+      document.getElementById('screenTitle').innerText = isEn ? s.titleEn : s.title;
+      document.getElementById('screenDescription').innerText = isEn ? s.descEn : s.desc;
+      document.getElementById('screenFilePath').innerText = `screens/${s.file}`;
+      
+      const directLink = document.getElementById('openDirectFileLink');
+      if (directLink) {
+        directLink.href = `screens/${s.file}?lang=${currentLang}&theme=${currentTheme}`;
+      }
+
+      const statusEl = document.getElementById('syncStatusText');
+      if (statusEl) {
+        statusEl.innerHTML = isEn 
+          ? `Viewing: <bdi style="font-family:monospace; color:#2563EB;">${s.file}</bdi>`
+          : `معروض: <bdi style="font-family:monospace; color:#2563EB;">${s.file}</bdi>`;
+      }
+
+      // Update Tags
+      const tagsContainer = document.getElementById('tagsContainer');
+      tagsContainer.innerHTML = '';
+      s.tags.forEach(tag => {
+        const pill = document.createElement('span');
+        pill.className = 'tag-pill';
+        pill.innerText = tag;
+        tagsContainer.appendChild(pill);
+      });
+
+      // Update Design Notes
+      const notesList = document.getElementById('designNotesList');
+      notesList.innerHTML = '';
+      const notesToRender = isEn ? (s.notesEn || s.notes) : s.notes;
+      notesToRender.forEach(note => {
+        const li = document.createElement('li');
+        li.className = 'note-item';
+        li.innerHTML = `<span class="diamond">◆</span> <span>${note}</span>`;
+        notesList.appendChild(li);
+      });
+    }
+
+    function nextScreen() {
+      currentIndex = (currentIndex + 1) % screens.length;
+      selectScreen(currentIndex);
+    }
+
+    function prevScreen() {
+      currentIndex = (currentIndex - 1 + screens.length) % screens.length;
+      selectScreen(currentIndex);
+    }
+
+    function handleSearch(val) {
+      searchQuery = val.trim();
+      renderSidebar();
+    }
+
+    // Fetch and display the code for the active screen
+    async function openCodeModal() {
+      const s = screens[currentIndex];
+      document.getElementById('codeModalTitle').innerText = `screens/${s.file} (HTML & CSS)`;
+      document.getElementById('codeContentDisplay').textContent = currentLang === 'en' ? 'Reading file code...' : 'جاري قراءة كود الملف...';
+      document.getElementById('codeModal').classList.add('active');
+
+      try {
+        const res = await fetch(`screens/${s.file}?v=${Date.now()}`);
+        if (!res.ok) throw new Error('Failed to load file');
+        const code = await res.text();
+        document.getElementById('codeContentDisplay').textContent = code;
+      } catch (err) {
+        document.getElementById('codeContentDisplay').textContent = uiStrings[currentLang].fetchErrorModal(s.file);
+      }
+    }
+
+    function closeCodeModal() {
+      document.getElementById('codeModal').classList.remove('active');
+    }
+
+    function copyModalCode() {
+      const code = document.getElementById('codeContentDisplay').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        alert(uiStrings[currentLang].codeCopied);
+      });
+    }
+
+    async function copyCurrentHtml() {
+      const s = screens[currentIndex];
+      const title = currentLang === 'en' ? s.titleEn : s.title;
+      try {
+        const res = await fetch(`screens/${s.file}?v=${Date.now()}`);
+        const code = await res.text();
+        await navigator.clipboard.writeText(code);
+        showReloadToast(uiStrings[currentLang].screenCopiedToast(title));
+      } catch (err) {
+        await navigator.clipboard.writeText(`screens/${s.file}`);
+        alert(`Path: screens/${s.file}`);
+      }
+    }
+
+    // Keyboard Arrow Keys & Live Reload Shortcut Navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        currentLang === 'en' ? nextScreen() : prevScreen();
+      }
+      if (e.key === 'ArrowRight') {
+        currentLang === 'en' ? prevScreen() : nextScreen();
+      }
+      if (e.key === 'r' || e.key === 'R') {
+        if (!document.getElementById('codeModal').classList.contains('active')) {
+          reloadActiveScreen(true);
+        }
+      }
+      if (e.key === 'Escape') closeCodeModal();
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      applyTheme(currentTheme);
+      switchLanguage(currentLang);
+    });
+  </script>
+</body>
+</html>
