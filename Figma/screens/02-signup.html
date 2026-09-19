@@ -1,23 +1,91 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>02 — إنشاء حساب جديد</title><link rel="stylesheet" href="common.css"><link rel="stylesheet" href="auth.css"></head>
-<body class="auth-v2 auth-signup">
-  <div class="status-bar"><span class="status-time">9:41</span><div class="dynamic-island"><div class="camera-lens"></div></div><div class="status-icons">📶 🔋</div></div>
-  <main class="auth-page">
-    <div class="auth-topbar"><a class="auth-back" href="01-login.html">→</a><div class="auth-brand"><img class="auth-brand-mark" src="logo-mark.svg" alt=""><span>سوق مصر</span></div><span class="auth-step">01 / 03</span></div>
-    <div class="auth-progress"><span class="active"></span><span></span><span></span></div>
-    <div class="auth-card"><div class="auth-form">
-      <div class="auth-field"><label>وسيلة التسجيل</label><select><option>رقم الهاتف المحمول</option><option>البريد الإلكتروني</option><option>Google</option><option>Apple</option></select></div>
-      <div class="auth-field"><label>الهاتف أو البريد الإلكتروني</label><input type="text" placeholder="010XXXXXXXX أو name@email.com"></div>
-      <div style="display:flex;gap:10px"><div class="auth-field" style="flex:1"><label>الدولة</label><select><option>مصر</option></select></div><div class="auth-field" style="flex:1"><label>المحافظة</label><select><option>القاهرة</option><option>الجيزة</option><option>الإسكندرية</option></select></div></div>
-      <div class="auth-field"><label>كلمة مرور جديدة</label><input type="password" placeholder="اختر كلمة مرور قوية"><div style="display:flex;gap:4px;margin-top:2px"><i style="height:4px;flex:1;background:#10B981;border-radius:9px"></i><i style="height:4px;flex:1;background:#10B981;border-radius:9px"></i><i style="height:4px;flex:1;background:#E2E8F0;border-radius:9px"></i><i style="height:4px;flex:1;background:#E2E8F0;border-radius:9px"></i></div></div>
-      <div class="auth-field"><label>تأكيد كلمة المرور</label><input type="password" placeholder="أعد كتابة كلمة المرور"></div>
-      <div style="display:flex;gap:10px;margin-top:-2px"><button type="button" class="auth-btn secondary" style="flex:1;height:46px;padding:0">G&nbsp; Google</button><button type="button" class="auth-btn secondary" style="flex:1;height:46px;padding:0">&nbsp; Apple</button></div>
-      <div class="auth-note info" style="margin-top:0">حتى عند التسجيل باستخدام Google أو Apple، سيتم تأكيد وسيلة التواصل عبر OTP قبل استكمال الحساب.</div>
-      <label class="auth-check"><input type="checkbox" checked><span>أوافق على الشروط والأحكام وسياسة الخصوصية.</span></label>
-      <a class="auth-btn" href="03-verify-otp.html">متابعة واستلام رمز التحقق <span>←</span></a>
-    </div></div>
-    <div class="auth-footer">لديك حساب بالفعل؟ <a class="auth-link" href="01-login.html">تسجيل الدخول</a></div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02 — إنشاء حساب جديد | تطبيق برق للتوزيع</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body class="barq-auth-body">
+
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="dynamic-island"><div class="camera-lens"></div></div>
+    <div class="status-icons">📶 🔋</div>
+  </div>
+
+  <main class="barq-page">
+
+    <!-- Top Navigation Bar -->
+    <div class="barq-topbar" style="justify-content: flex-end;">
+      <a class="barq-back-circle" href="01-login.html" title="العودة">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Centered Barq Logo Mark -->
+    <div class="barq-brand-centered">
+      <span class="barq-brand-text">برق</span>
+      <div class="barq-brand-badge">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" fill="white" stroke="white" stroke-width="1.2" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <section class="barq-hero">
+      <h1>إنشاء حساب جديد</h1>
+      <p>سجل بياناتك للبدء في استخدام منصة برق</p>
+    </section>
+
+    <!-- Nested Input: Full Name -->
+    <div class="barq-input-card">
+      <label class="barq-input-label">الاسم الكامل</label>
+      <div class="barq-input-inner">
+        <input type="text" placeholder="محمد أحمد">
+        <div class="barq-input-icon">
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nested Input: Phone Number -->
+    <div class="barq-input-card">
+      <label class="barq-input-label">رقم الهاتف المحمول</label>
+      <div class="barq-input-inner">
+        <input type="tel" placeholder="010XXXXXXXX">
+        <div class="barq-input-icon">
+          <svg viewBox="0 0 24 24"><path d="M6.5 4.5h3l1.5 4-2 1.5a14 14 0 0 0 5 5l1.5-2 4 1.5v3a2 2 0 0 1-2 2C10.6 19.5 4.5 13.4 4.5 6.5a2 2 0 0 1 2-2Z"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nested Input: Password -->
+    <div class="barq-input-card">
+      <label class="barq-input-label">كلمة المرور</label>
+      <div class="barq-input-inner">
+        <input type="password" placeholder="••••••••">
+        <div class="barq-input-icon">
+          <svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4M12 15v2"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Primary Action Button -->
+    <a class="barq-btn-primary" href="03-verify-otp.html" style="margin-top: 8px;">متابعة واستلام رمز التحقق</a>
+
+    <div class="barq-footer">
+      لديك حساب بالفعل؟ <a href="01-login.html">تسجيل الدخول</a>
+    </div>
+
   </main>
-  <div class="home-bar"><div class="home-bar-pill"></div></div><script src="i18n.js"></script>
-</body></html>
+
+  <div class="home-bar"><div class="home-bar-pill"></div></div>
+
+</body>
+</html>

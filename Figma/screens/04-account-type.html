@@ -1,17 +1,92 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>04 — اختيار نوع الحساب</title><link rel="stylesheet" href="common.css"><link rel="stylesheet" href="auth.css"></head>
-<body class="auth-v2">
-  <div class="status-bar"><span class="status-time">9:41</span><div class="dynamic-island"><div class="camera-lens"></div></div><div class="status-icons">📶 🔋</div></div>
-  <main class="auth-page">
-    <div class="auth-topbar"><a class="auth-back" href="03-verify-otp.html">→</a><div class="auth-brand"><img class="auth-brand-mark" src="logo-mark.svg" alt=""><span>سوق مصر</span></div><span class="auth-step">03 / 03</span></div>
-    <div class="auth-progress"><span class="active"></span><span class="active"></span><span class="active"></span></div>
-    <section class="auth-intro"><div class="auth-kicker">ONE LAST STEP</div><h1>هتستخدم سوق مصر<br>بأي طريقة؟</h1><p>اختار المسار المناسب لك في الإطلاق التجريبي.</p></section>
-    <div class="auth-options">
-      <a class="auth-option selected" href="05-profile-setup.html"><div class="auth-option-head"><span class="auth-pill blue">حساب مستخدم ✓</span><span style="font-size:25px">🛍️</span></div><h2>مستخدم</h2><p>أتصفح المنتجات وأتابع طلباتي وأحفظ عنوان التوصيل الخاص بي.</p></a>
-      <a class="auth-option" href="06-distributor-setup.html"><div class="auth-option-head"><span class="auth-pill amber">يتطلب مراجعة</span><span style="font-size:25px">🏪</span></div><h2>متجر</h2><p>أنشئ واجهة متجري وأضف منتجاتي بعد مراجعة الإدارة.</p></a>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>04 — اختيار نوع الحساب | تطبيق برق للتوزيع</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body class="barq-auth-body">
+
+  <!-- Status Bar & Dynamic Island -->
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="dynamic-island"><div class="camera-lens"></div></div>
+    <div class="status-icons">📶 🔋</div>
+  </div>
+
+  <main class="barq-page">
+
+    <!-- Screen Title & Subtitle -->
+    <section class="barq-hero" style="margin-top: 14px;">
+      <h1>اختر نوع الحساب</h1>
+      <p>حدد طبيعة استخدامك للتطبيق لتهيئة تجربتك</p>
+    </section>
+
+    <!-- Role Option Cards (Matching Image 5) -->
+    <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 10px;">
+      
+      <!-- Option 1: حساب شخصي (Unselected) -->
+      <div class="barq-role-card" id="cardPersonal">
+        <div class="barq-role-icon">
+          <!-- User Profile Icon -->
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="barq-role-content">
+          <div class="barq-role-title">حساب شخصي</div>
+          <div class="barq-role-desc">لطلب الشحنات، التوصيل السريع للمنازل، والمشتريات الشخصية</div>
+        </div>
+      </div>
+
+      <!-- Option 2: حساب موزع (Selected as in Image 5) -->
+      <div class="barq-role-card selected" id="cardDistributor">
+        <!-- Mint badge & Checkmark -->
+        <span class="barq-badge-mint">موصى به للتجار</span>
+        <span class="barq-check-badge">✓</span>
+
+        <div class="barq-role-icon">
+          <!-- Delivery Truck Icon -->
+          <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </div>
+        <div class="barq-role-content">
+          <div class="barq-role-title">حساب موزع</div>
+          <div class="barq-role-desc">للموزعين، مستودعات التجزئة، وتجار الجملة المعتمدين</div>
+          <div class="barq-role-note">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span>يتطلب مراجعة وقبول الإدارة</span>
+          </div>
+        </div>
+      </div>
+
     </div>
-    <div class="auth-note warn">اختيار الدولة والمحافظة يحدد نطاق التوصيل. المتاجر والمنتجات تمر بالمراجعة قبل الظهور.</div>
+
+    <!-- Primary Action Button: متابعة -->
+    <a class="barq-btn-primary" id="continueBtn" href="05-profile-setup.html" style="margin-top: 14px;">متابعة</a>
+
   </main>
-  <div class="home-bar"><div class="home-bar-pill"></div></div><script src="i18n.js"></script>
-</body></html>
+
+  <!-- iOS Home Bar -->
+  <div class="home-bar"><div class="home-bar-pill"></div></div>
+
+  <script>
+    const cardPersonal = document.getElementById('cardPersonal');
+    const cardDistributor = document.getElementById('cardDistributor');
+    const continueBtn = document.getElementById('continueBtn');
+
+    cardPersonal.addEventListener('click', () => {
+      cardPersonal.classList.add('selected');
+      cardDistributor.classList.remove('selected');
+      continueBtn.href = '05-profile-setup.html';
+    });
+
+    cardDistributor.addEventListener('click', () => {
+      cardDistributor.classList.add('selected');
+      cardPersonal.classList.remove('selected');
+      continueBtn.href = '06-distributor-setup.html';
+    });
+  </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>سوق مصر — منصة واجهات HTML & CSS (الخطة الأولى)</title>
+  <title>برق — منصة واجهات تطبيق برق للتوزيع</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -1141,10 +1141,10 @@
       <div class="sidebar-header">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <div style="display:flex; align-items:center; gap:10px;">
-            <img src="screens/logo-mark.svg" alt="شعار سوق مصر" style="width:38px;height:38px;border-radius:10px;filter:drop-shadow(0 4px 10px rgba(29,78,216,0.25));flex-shrink:0;">
+            <img src="screens/logo-mark.svg" alt="شعار تطبيق برق" style="width:38px;height:38px;border-radius:10px;filter:drop-shadow(0 4px 10px rgba(37,99,235,0.3));flex-shrink:0;">
             <div>
-              <h1 class="brand-title" id="brandTitle">سوق مصر</h1>
-              <p class="brand-subtitle" id="brandSubtitle">Plan 1 • 20 Native HTML & CSS Screens</p>
+              <h1 class="brand-title" id="brandTitle">برق</h1>
+              <p class="brand-subtitle" id="brandSubtitle">تطبيق برق للتوزيع • واجهات Figma & HTML</p>
             </div>
           </div>
           <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
@@ -1283,13 +1283,21 @@
         section: 'البداية',
         sectionEn: 'Launch',
         file: '00-splash.html',
-        title: 'شاشة البداية',
+        title: 'شاشة البداية والترحيب',
         titleEn: 'Splash Screen',
-        tags: ['Brand Launch', 'Logo', 'Pilot Scope'],
-        desc: 'شاشة افتتاحية هادئة تعرض الشعار ونطاق الإطلاق التجريبي قبل بدء رحلة الدخول.',
-        descEn: 'Calm launch screen presenting the brand mark and pilot scope before authentication.',
-        notes: ['لوجو أولي قابل للتطوير بصيغة SVG', 'توضيح المنطقة والقسم في الإطلاق الأول'],
-        notesEn: ['Scalable initial logo in SVG format', 'Clear pilot area and category scope']
+        tags: ['Brand Launch', 'Lightning Logo', 'Barq Distribution'],
+        desc: 'شاشة افتتاحية رسمية لتطبيق برق للتوزيع مع شعار الصاعقة الديناميكي ومسار البدء الفوري.',
+        descEn: 'Official launch screen for Barq Distribution featuring the signature lightning mark and instant start CTA.',
+        notes: [
+          'شعار برق الديناميكي مع صاعقة بيضاء في مربع أزرق منحني',
+          'خلفية تدرج ليلي أنيق مع زر متابعة أزرق عريض',
+          'متوافق مع أبعاد هواتف iOS والـ Dynamic Island'
+        ],
+        notesEn: [
+          'Signature dynamic Barq electric bolt squircle logo',
+          'Deep midnight ambient backdrop with broad primary blue action button',
+          'Engineered to match iOS viewports and Dynamic Island dimensions'
+        ]
       },
       // 1. الدخول وحسابات المستخدمين / Auth & Onboarding
       {
@@ -1300,18 +1308,18 @@
         file: '01-login.html',
         title: 'تسجيل الدخول',
         titleEn: 'Sign In',
-        tags: ['Authentication', 'OTP Support', 'Google SSO', 'Biometrics'],
-        desc: 'واجهة الدخول الأساسية بالهاتف أو البريد، مع دعم الدخول السريع عبر حساب Google والتحقق بخطوتين.',
-        descEn: 'Primary sign-in interface via phone or email, supporting instant Google SSO and 2-step OTP verification.',
+        tags: ['Segmented Tabs', 'Nested Card Inputs', 'Social SSO', 'Password Reveal'],
+        desc: 'تسجيل الدخول بالبريد الإلكتروني أو رقم الهاتف مع دعم تسجيل الدخول عبر Apple وGoogle والمدخلات المزدوجة المتداخلة.',
+        descEn: 'Authentication via email or mobile phone with Apple & Google SSO, segmented tabs, and nested card inputs.',
         notes: [
-          'زر Google المتجه بألوانه الرسمية الأربعة المعيارية لتعزيز الثقة',
-          'إمكانية الدخول الفوري برقم الموبايل دون كلمة مرور معقدة',
-          'روابط مباشرة لاستعادة كلمة المرور والتسجيل الجديد'
+          'تبديل تفاعلي بين البريد الإلكتروني ورقم الهاتف مع تحديث التسميات والأيقونات',
+          'حقول متداخلة (Nested Card Inputs) مع حاوية خارجية وحقل داخلي أبيض وأيقونات',
+          'أزرار دخول ابل وجوجل بتصميم أنيق وزر إظهار/إخفاء كلمة المرور'
         ],
         notesEn: [
-          'Official 4-color Google sign-in button for high user trust',
-          'Instant phone number authentication without requiring complex passwords',
-          'Direct links for password recovery and new user registration'
+          'Smooth segmented toggle between Email and Phone with dynamic labels and icons',
+          'Two-tier nested card inputs with outer label card and inner field container',
+          'Clean Apple and Google social buttons with password visibility toggle'
         ]
       },
       {
@@ -1322,17 +1330,17 @@
         file: '02-signup.html',
         title: 'إنشاء حساب جديد',
         titleEn: 'Create New Account',
-        tags: ['Registration', 'Mobile Verification', 'Terms & Conditions'],
-        desc: 'تسجيل حساب مستخدم جديد برقم الهاتف والاسم الكامل والموافقة على الشروط وسياسة الخصوصية.',
+        tags: ['Registration', 'Nested Inputs', 'Mobile Verification'],
+        desc: 'تسجيل حساب مستخدم جديد برقم الهاتف والاسم الكامل مع نمط حقول برق المزدوج.',
         descEn: 'New user registration with mobile number, full name, and terms of service acceptance.',
         notes: [
-          'حقول إدخال واضحة ومتباعدة لتقليل الأخطاء أثناء الكتابة',
-          'التحقق المسبق من صحة رقم الموبايل المصري (010/011/012/015)',
+          'حقول الاسم والموبايل وكلمة المرور بأسلوب برق المتداخل',
+          'زر رجوع دائري في الأعلى للانتقال المريح',
           'رابط مباشر للعودة لتسجيل الدخول في حال امتلاك حساب سابق'
         ],
         notesEn: [
-          'Clean, high-contrast input fields to minimize typing errors',
-          'Egyptian mobile prefix validation (010, 011, 012, 015)',
+          'Full name, phone, and password fields using Barq nested card design',
+          'Circular back button for quick navigation',
           'Direct link to return to Sign In if already registered'
         ]
       },
@@ -1342,20 +1350,20 @@
         section: 'الدخول',
         sectionEn: 'Auth & Onboarding',
         file: '03-verify-otp.html',
-        title: 'تأكيد رمز التحقق (OTP)',
+        title: 'التحقق من الرمز',
         titleEn: 'Verify OTP Code',
-        tags: ['OTP Verification', 'SMS Gateway', 'Resend Timer', 'WhatsApp fallback'],
-        desc: 'إدخال رمز الأمان المكون من 4 أرقام المرسل برسالة نصية للتحقق من هوية صاحب الرقم.',
-        descEn: 'Enter 4-digit security code sent via SMS to verify phone number ownership.',
+        tags: ['Unified Track', '4-Digit OTP', 'Blinking Cursor', '00:30 Timer'],
+        desc: 'إدخال رمز التحقق المكون من 4 أرقام داخل شريط موحد يحتوي على خانات منفصلة ومؤشر يومض وعداد 00:30 ثانية.',
+        descEn: '4-digit OTP security code verification inside a unified track container with active blinking cursor and 00:30 timer.',
         notes: [
-          'خانات إدخال منفصلة مع انتقال تلقائي للخانة التالية',
-          'عداد تنازلي ذكي لإعادة الإرسال (0:45 ثانية)',
-          'خيار بديل لاستلام الرمز عبر WhatsApp لحل مشاكل تأخر الرسائل'
+          'شريط موحد لمربعات الرمز مع خانة نشطة ذات إطار أزرق ومؤشر كتابة يومض',
+          'عرض الأرقام المدخلة (5 ثم 8) مع دعم الكتابة التفاعلية',
+          'عداد تنازلي ذكي 00:30 ثانية وزر تحقق أزرق عريض'
         ],
         notesEn: [
-          'Individual input boxes with automatic focus progression',
-          'Smart 45-second resend countdown timer',
-          'WhatsApp fallback button for instant delivery during SMS network delays'
+          'Unified OTP track with active blue border cell and blinking vertical cursor',
+          'Pre-populated sample digits (5 and 8) with interactive numeric keyboard input',
+          '00:30 countdown timer and full-width royal blue verify button'
         ]
       },
       {
@@ -1364,20 +1372,20 @@
         section: 'الدخول',
         sectionEn: 'Auth & Onboarding',
         file: '04-account-type.html',
-        title: 'اختيار نوع الحساب',
+        title: 'اختر نوع الحساب',
         titleEn: 'Select Account Type',
-        tags: ['Account Onboarding', 'Customer Role', 'Distributor / Vendor'],
-        desc: 'تحديد مسار المستخدم في الإطلاق التجريبي: التسوق داخل المعادي أو إرسال طلب انضمام كبائع يخضع للمراجعة.',
-        descEn: 'Pilot onboarding: shop within the launch area or submit a seller application for manual review.',
+        tags: ['Account Type', 'Distributor Role', 'Personal Role', 'Mint Badge'],
+        desc: 'تحديد طبيعة استخدام التطبيق بين حساب شخصي وحساب موزع معتمد مع شارة موصى به للتجار وعلامة صح.',
+        descEn: 'Select account role between Personal and Verified Distributor, highlighting the distributor card with mint badge and checkmark.',
         notes: [
-          'كروت تفاعلية بارزة ومميزة لكل فئة مستخدم',
-          'تحديد نطاق الإطلاق والمنطقة والقسم المتاح بوضوح',
-          'تنبيه بأن تفعيل البائع والمنتجات يتم يدويًا قبل النشر'
+          'كارت حساب موزع محدد بإطار أزرق 2px مع شارة "موصى به للتجار" وعلامة صح ✓',
+          'أيقونات زرقاء مخصصة (مستخدم للمشتريات وشاحنة للموزع)',
+          'تنبيه رسمي بأن حساب الموزع يتطلب مراجعة وقبول الإدارة'
         ],
         notesEn: [
-          'Prominent role cards with visual feature comparisons',
-          'Clear explanation of vendor benefits: storefront, logistics, and earnings',
-          'Upgrade path available later from buyer profile'
+          'Distributor card highlighted with 2px blue border, mint badge, and blue checkmark ✓',
+          'Custom squircle icons (user for personal, truck for distributor)',
+          'Administrative approval requirement notice'
         ]
       },
       {
@@ -1386,20 +1394,20 @@
         section: 'الدخول',
         sectionEn: 'Auth & Onboarding',
         file: '05-profile-setup.html',
-        title: 'بيانات الحساب الشخصي',
-        titleEn: 'Buyer Profile Setup',
-        tags: ['Profile Setup', 'Avatar Upload', 'Governorate Picker'],
-        desc: 'استكمال بيانات المشتري الأساسية: الصورة، المحافظة والمدينة، والعنوان الدقيق لتسهيل عمليات التوصيل.',
-        descEn: 'Complete essential customer info: avatar, Egyptian governorate/city, and detailed delivery address.',
+        title: 'تحديد الموقع',
+        titleEn: 'Location Selection',
+        tags: ['Location Setup', 'Country Flag', 'Governorate Dropdown', 'Skip Option'],
+        desc: 'اختيار الدولة والمحافظة لتخصيص تجربة التوزيع مع كروت منسدلة أنيقة وزر تخطي الآن.',
+        descEn: 'Select Country (Egypt 🇪🇬) and Governorate dropdown to customize delivery and distribution coverage.',
         notes: [
-          'رفع وتعديل الصورة الشخصية بسهولة',
-          'قوائم منسدلة للمحافظات المصرية لحساب تكلفة الشحن تلقائياً',
-          'إمكانية التخطي والاستكمال لاحقاً عند الشراء'
+          'قائمة منسدلة لاختيار الدولة مع إبراز علم مصر 🇪🇬',
+          'قائمة منسدلة تفاعلية للمحافظات المصرية مع مؤشرات الأسهم ⌄',
+          'زر متابعة رئيسي أزرق مع خيار "تخطي الآن" الثانوي'
         ],
         notesEn: [
-          'Easy avatar upload and profile photo management',
-          'Egyptian governorates dropdown for automated shipping calculation',
-          'Option to skip and complete during checkout'
+          'Country selector card featuring the Egyptian flag 🇪🇬',
+          'Interactive Egyptian governorate dropdown selector with chevron icon ⌄',
+          'Primary blue "Continue" button and secondary outline "Skip Now" button'
         ]
       },
       {
@@ -1408,19 +1416,19 @@
         section: 'الدخول',
         sectionEn: 'Auth & Onboarding',
         file: '06-distributor-setup.html',
-        title: 'إعداد وتوثيق متجر الموزع',
+        title: 'توثيق حساب الموزع',
         titleEn: 'Distributor KYC & Setup',
-        tags: ['Vendor KYC', 'Commercial Register', 'Tax Card', 'Store Setup'],
-        desc: 'إدخال اسم المتجر ونشاطه ورفع مستندات السجل التجاري والبطاقة الضريبية للاعتماد من الإدارة.',
-        descEn: 'Register storefront details and upload commercial register and tax card for admin approval.',
+        tags: ['Distributor KYC', 'Commercial Register', 'Store Setup', 'Approval'],
+        desc: 'إدخال اسم المؤسسة ونشاطها ورقم السجل التجاري للاعتماد من إدارة برق.',
+        descEn: 'Register distributor storefront details and commercial register for admin approval.',
         notes: [
-          'منطقة سحب وإفلات لرفع صور المستندات الرسمية',
-          'خطوة محورية تضمن جودة وأمان التجار داخل المنصة',
-          'توضيح زمن المراجعة السريع (خلال 24 ساعة عمل)'
+          'مدخلات متداخلة لاسم المؤسسة ورقم السجل التجاري',
+          'تنبيه إداري بزمن المراجعة خلال 24 ساعة عمل',
+          'زر إرسال طلب التوثيق للمراجعة'
         ],
         notesEn: [
-          'Drag-and-drop document upload zones for official certificates',
-          'Mandatory KYC milestone ensuring trust and platform compliance',
+          'Nested card inputs for business name and commercial register',
+          '24-hour SLA verification notice card',
           'Clear 24-hour review timeline notification'
         ]
       },
@@ -1432,17 +1440,17 @@
         file: '07-forgot-password.html',
         title: 'استعادة كلمة المرور',
         titleEn: 'Password Recovery',
-        tags: ['Password Reset', 'Security', 'Magic Link'],
-        desc: 'إدخال رقم الموبايل أو البريد لاستلام رابط أو رمز إعادة تعيين كلمة المرور.',
+        tags: ['Password Reset', 'Security', 'Barq Inputs'],
+        desc: 'إدخال رقم الموبايل أو البريد لاستلام كود استعادة كلمة المرور وإعادة تعيين الحساب.',
         descEn: 'Enter registered mobile or email to receive password reset link or SMS code.',
         notes: [
-          'تصميم مركز وبسيط لتقليل تشتت المستخدم في حالات الطوارئ',
-          'إرسال رابط آمن ومؤقت ينتهي بعد 15 دقيقة لضمان الحماية',
+          'حقل متداخل لإدخال الهاتف أو البريد',
+          'زر عودة دائري وزر استعادة أساسي',
           'زر واضح للعودة لشاشة تسجيل الدخول الرئيسية'
         ],
         notesEn: [
-          'Focused layout minimizing cognitive load during recovery',
-          'Time-limited secure reset link expiring in 15 minutes',
+          'Nested card input for mobile or email',
+          'Circular back button and primary submit action',
           'Clear button to return to login screen'
         ]
       },
@@ -1725,7 +1733,7 @@
         title: 'لوحة الإدارة والاعتمادات',
         titleEn: 'Admin Approvals & KYC',
         tags: ['Super Admin', 'Vendor KYC Approval', 'Product Compliance', 'Disputes'],
-        desc: 'لوحة تحكم إدارة سوق مصر: مراجعة طلبات توثيق الموزعين الجدد، فحص الأوراق والسجلات، والبت في قضايا النزاع.',
+        desc: 'لوحة تحكم إدارة منصة برق: مراجعة طلبات توثيق الموزعين الجدد، فحص الأوراق والسجلات، والبت في قضايا النزاع.',
         descEn: 'Platform governance center: verify merchant KYC docs, inspect commercial registrations, and arbitrate disputes.',
         notes: [
           'طابور اعتمادات منظم لمراجعة السجلات التجارية والبطاقات الضريبية',
@@ -1823,10 +1831,10 @@
 
     const uiStrings = {
       ar: {
-        brandTitle: 'سوق مصر',
-        brandSubtitle: 'Plan 1 • 20 Native HTML & CSS Screens',
-        brandStatusBadge: 'مكتمل ✓',
-        searchPlaceholder: 'بحث في الشاشات (مثال: سلة، موزع، دفع)...',
+        brandTitle: 'برق',
+        brandSubtitle: 'تطبيق برق للتوزيع • واجهات Figma & HTML',
+        brandStatusBadge: 'مطابق للتصميم ✓',
+        searchPlaceholder: 'بحث في الشاشات (مثال: دخول، رمز، موقع)...',
         syncDefault: 'مزامنة حية من screens/',
         syncActive: 'المزامنة الحية مفعلة (يتم التحديث فور العودة للمتصفح)',
         syncPaused: 'المزامنة التلقائية متوقفة (اضغط زر التحديث أو R)',
@@ -1841,10 +1849,10 @@
         fetchErrorModal: (file) => `// تعذر جلب محتوى الملف تلقائياً عبر fetch (البروتوكول المحلي)\n// يمكنك فتح الملف مباشرة من المسار:\n// screens/${file}`
       },
       en: {
-        brandTitle: 'Souq Masr',
-        brandSubtitle: 'Plan 1 • 20 Native HTML & CSS Screens',
-        brandStatusBadge: 'Completed ✓',
-        searchPlaceholder: 'Search screens (e.g. cart, vendor, checkout)...',
+        brandTitle: 'Barq',
+        brandSubtitle: 'Barq Distribution • Figma & HTML Screens',
+        brandStatusBadge: 'Matched to Design ✓',
+        searchPlaceholder: 'Search screens (e.g. login, otp, location)...',
         syncDefault: 'Live sync from screens/',
         syncActive: 'Live sync active (reloads when focusing tab)',
         syncPaused: 'Live sync paused (press Reload button or R)',
@@ -2166,7 +2174,15 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       applyTheme(currentTheme);
+      const targetFile = urlParams.get('file') || urlParams.get('screen');
+      if (targetFile) {
+        const foundIdx = screens.findIndex(s => s.file === targetFile || s.file.includes(targetFile) || s.num === targetFile);
+        if (foundIdx !== -1) {
+          currentIndex = foundIdx;
+        }
+      }
       switchLanguage(currentLang);
+      selectScreen(currentIndex);
     });
   </script>
 </body>

@@ -1,19 +1,78 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>06 — إعداد المتجر</title><link rel="stylesheet" href="common.css"><link rel="stylesheet" href="auth.css"></head>
-<body class="auth-v2">
-  <div class="status-bar"><span class="status-time">9:41</span><div class="dynamic-island"><div class="camera-lens"></div></div><div class="status-icons">📶 🔋</div></div>
-  <main class="auth-page">
-    <div class="auth-topbar"><a class="auth-back" href="04-account-type.html">→</a><div class="auth-brand"><img class="auth-brand-mark" src="logo-mark.svg" alt=""><span>سوق مصر</span></div><span class="auth-pill amber">قيد المراجعة</span></div>
-    <section class="auth-intro"><div class="auth-kicker">STORE PROFILE</div><h1>جهّز متجرك<br>للبداية.</h1><p>أكمل بيانات المتجر. التفعيل والنشر يتمان بعد مراجعة الإدارة.</p></section>
-    <div class="auth-card"><div class="auth-form">
-      <div class="auth-upload" style="display:flex;gap:10px"><div style="flex:1;padding:12px;border:1px dashed #BFDBFE;border-radius:14px;background:#F8FAFF;text-align:center;font-size:11px">🖼️<br><strong>صورة المتجر</strong></div><div style="flex:1;padding:12px;border:1px dashed #BFDBFE;border-radius:14px;background:#F8FAFF;text-align:center;font-size:11px">🌄<br><strong>غلاف المتجر</strong></div></div>
-      <div class="auth-field"><label>اسم المتجر</label><input type="text" value="متجر الأناقة التجريبي"></div>
-      <div class="auth-field"><label>العنوان</label><input type="text" placeholder="العنوان النصي للمتجر"></div>
-      <div class="auth-field"><label>القسم الأساسي</label><select><option>إلكترونيات</option><option>ملابس</option><option>إكسسوارات</option><option>عربيات</option></select></div>
-      <a class="auth-btn" href="01-login.html">إرسال الطلب للمراجعة <span>←</span></a>
-    </div></div>
-    <div class="auth-note info">🔒 سنراجع البيانات يدويًا ونتواصل معك قبل تفعيل المتجر أو نشر أي منتج.</div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>06 — إعداد وتوثيق حساب الموزع | تطبيق برق للتوزيع</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body class="barq-auth-body">
+
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="dynamic-island"><div class="camera-lens"></div></div>
+    <div class="status-icons">📶 🔋</div>
+  </div>
+
+  <main class="barq-page">
+
+    <div class="barq-topbar" style="justify-content: flex-end;">
+      <a class="barq-back-circle" href="04-account-type.html" title="العودة">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Centered Barq Logo Mark -->
+    <div class="barq-brand-centered">
+      <span class="barq-brand-text">برق</span>
+      <div class="barq-brand-badge">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" fill="white" stroke="white" stroke-width="1.2" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <section class="barq-hero">
+      <h1>توثيق حساب الموزع</h1>
+      <p>أدخل بيانات النشاط التجاري للاعتماد من إدارة برق</p>
+    </section>
+
+    <!-- Nested Input: Store/Company Name -->
+    <div class="barq-input-card">
+      <label class="barq-input-label">اسم المؤسسة أو المتجر</label>
+      <div class="barq-input-inner">
+        <input type="text" placeholder="مؤسسة البرق للتوزيع">
+        <div class="barq-input-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 21h18M3 7v14M21 7v14M6 7V3h12v4M10 11v2M14 11v2M10 17v2M14 17v2"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nested Input: Commercial Register -->
+    <div class="barq-input-card">
+      <label class="barq-input-label">رقم السجل التجاري</label>
+      <div class="barq-input-inner">
+        <input type="text" placeholder="123456789">
+        <div class="barq-input-icon">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <div style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 14px; padding: 12px 14px; font-size: 12px; color: #1E40AF; line-height: 1.6;">
+      ℹ️ يتطلب حساب الموزع فحص المستندات والموافقة الإدارية خلال 24 ساعة عمل.
+    </div>
+
+    <a class="barq-btn-primary" href="01-login.html" style="margin-top: 10px;">إرسال طلب التوثيق للمراجعة</a>
+
   </main>
-  <div class="home-bar"><div class="home-bar-pill"></div></div><script src="i18n.js"></script>
-</body></html>
+
+  <div class="home-bar"><div class="home-bar-pill"></div></div>
+
+</body>
+</html>

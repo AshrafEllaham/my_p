@@ -1,14 +1,126 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>03 — تأكيد رمز التحقق</title><link rel="stylesheet" href="common.css"><link rel="stylesheet" href="auth.css"></head>
-<body class="auth-v2">
-  <div class="status-bar"><span class="status-time">9:41</span><div class="dynamic-island"><div class="camera-lens"></div></div><div class="status-icons">📶 🔋</div></div>
-  <main class="auth-page">
-    <div class="auth-topbar"><a class="auth-back" href="02-signup.html">→</a><div class="auth-brand"><img class="auth-brand-mark" src="logo-mark.svg" alt=""><span>سوق مصر</span></div><span class="auth-step">02 / 03</span></div>
-    <div class="auth-progress"><span class="active"></span><span class="active"></span><span></span></div>
-    <section class="auth-hero"><div class="auth-hero-icon">🛡️</div><div class="auth-kicker">SECURE CHECK</div><h1>أكد وسيلة التواصل</h1><p>أرسلنا رمزًا من 4 أرقام إلى<br><strong style="color:var(--auth-ink)">010****5678</strong><br><span style="font-size:11px">التأكيد مطلوب سواء سجلت بالهاتف أو البريد أو Google أو Apple</span></p></section>
-    <div class="auth-card"><div class="auth-form"><div class="auth-otp"><input maxlength="1" value="4"><input maxlength="1" value="8"><input maxlength="1" value="9"><input maxlength="1" value="2"></div><div style="text-align:center;color:var(--auth-muted);font-size:12px">لم يصلك الرمز؟ <a class="auth-link" href="#">إعادة الإرسال بعد 00:45</a></div><a class="auth-btn" href="04-account-type.html">تأكيد الرمز والمتابعة <span>←</span></a></div></div>
-    <div class="auth-note info">🔒 لا تشارك رمز التحقق مع أي شخص. فريق سوق مصر لن يطلبه منك.</div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>03 — التحقق من الرمز | تطبيق برق للتوزيع</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body class="barq-auth-body">
+
+  <!-- Status Bar & Dynamic Island -->
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="dynamic-island"><div class="camera-lens"></div></div>
+    <div class="status-icons">📶 🔋</div>
+  </div>
+
+  <main class="barq-page">
+
+    <!-- Top Bar with Circular Back Button on Right (RTL start) -->
+    <div class="barq-topbar">
+      <a class="barq-back-circle" href="01-login.html" title="العودة">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Screen Title & Subtitle -->
+    <section class="barq-hero" style="margin-top: 10px;">
+      <h1>التحقق من الرمز</h1>
+      <p>أدخل رمز التحقق المكون من 4 أرقام الذي أرسلناه للتو إلى رقم هاتفك المحمول <strong style="color: var(--barq-ink); font-family: 'Plus Jakarta Sans', sans-serif;">00***50</strong></p>
+    </section>
+
+    <!-- Unified OTP Input Track (Matching Image 4) -->
+    <div class="barq-otp-track" id="otpTrack" style="margin-top: 18px;">
+      <!-- Digit 1 (Rightmost in RTL) -->
+      <div class="barq-otp-cell" data-index="0">5</div>
+      <!-- Digit 2 -->
+      <div class="barq-otp-cell" data-index="1">8</div>
+      <!-- Digit 3 (Active cell with blinking cursor) -->
+      <div class="barq-otp-cell active" data-index="2">
+        <span class="barq-cursor"></span>
+      </div>
+      <!-- Digit 4 (Leftmost in RTL) -->
+      <div class="barq-otp-cell" data-index="3"></div>
+    </div>
+
+    <!-- Hidden real input for typing interaction -->
+    <input type="text" id="hiddenOtpInput" maxlength="4" value="58" style="position: absolute; opacity: 0; pointer-events: none;">
+
+    <!-- Resend Countdown & Action -->
+    <div class="barq-resend-box" style="margin-top: 24px;">
+      <div class="barq-resend-timer" id="timerDisplay">إعادة الإرسال خلال <span style="font-family: 'Plus Jakarta Sans', sans-serif;" id="timerDigits">00:30</span></div>
+      <button class="barq-resend-btn" id="resendBtn" type="button">إعادة إرسال الرمز</button>
+    </div>
+
+    <!-- Primary Action Button: تحقق -->
+    <a class="barq-btn-primary" href="04-account-type.html" style="margin-top: 6px;">تحقق</a>
+
   </main>
-  <div class="home-bar"><div class="home-bar-pill"></div></div><script src="i18n.js"></script>
-</body></html>
+
+  <!-- iOS Home Bar -->
+  <div class="home-bar"><div class="home-bar-pill"></div></div>
+
+  <script>
+    const hiddenInput = document.getElementById('hiddenOtpInput');
+    const cells = document.querySelectorAll('.barq-otp-cell');
+    const otpTrack = document.getElementById('otpTrack');
+
+    function updateCells() {
+      const val = hiddenInput.value;
+      cells.forEach((cell, idx) => {
+        cell.classList.remove('active');
+        if (idx < val.length) {
+          cell.textContent = val[idx];
+        } else if (idx === val.length) {
+          cell.classList.add('active');
+          cell.innerHTML = '<span class="barq-cursor"></span>';
+        } else {
+          cell.textContent = '';
+        }
+      });
+    }
+
+    otpTrack.addEventListener('click', () => {
+      hiddenInput.focus();
+    });
+
+    hiddenInput.addEventListener('input', () => {
+      hiddenInput.value = hiddenInput.value.replace(/[^0-9]/g, '').slice(0, 4);
+      updateCells();
+    });
+
+    // Countdown timer
+    let secondsLeft = 30;
+    const timerDigits = document.getElementById('timerDigits');
+    const resendBtn = document.getElementById('resendBtn');
+
+    const countdown = setInterval(() => {
+      secondsLeft--;
+      if (secondsLeft <= 0) {
+        clearInterval(countdown);
+        timerDigits.textContent = '00:00';
+        resendBtn.classList.add('active');
+        resendBtn.style.color = '#2563EB';
+      } else {
+        const sec = secondsLeft < 10 ? '0' + secondsLeft : secondsLeft;
+        timerDigits.textContent = '00:' + sec;
+      }
+    }, 1000);
+
+    resendBtn.addEventListener('click', () => {
+      if (secondsLeft <= 0) {
+        secondsLeft = 30;
+        resendBtn.classList.remove('active');
+        resendBtn.style.color = '#94A3B8';
+        timerDigits.textContent = '00:30';
+      }
+    });
+  </script>
+</body>
+</html>

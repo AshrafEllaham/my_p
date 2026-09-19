@@ -1,9 +1,9 @@
 {
-  "file": "02-signup.html",
-  "title": "إنشاء حساب جديد",
-  "section": "الدخول",
+  "file": "00-splash.html",
+  "title": "شاشة البداية والترحيب",
+  "section": "البداية",
   "theme": "light",
   "lang": "ar",
   "action": "hover",
-  "timestamp": "2026-09-18 19:53:42"
+  "timestamp": "2026-09-19 12:38:08"
 }
