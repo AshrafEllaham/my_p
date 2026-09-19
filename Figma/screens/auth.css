@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Barq Distribution (تطبيق برق للتوزيع) — Auth & Onboarding Design System
+   Saey Distribution (تطبيق سعي للتوزيع) — Auth & Onboarding Design System
    Matches Figma mockups & production screenshots exactly.
    ========================================================================== */
 
@@ -13,6 +13,9 @@
   --barq-muted: #64748B;
   --barq-light: #94A3B8;
   --barq-line: #E2E8F0;
+  --barq-line-strong: #D7E1EE;
+  --barq-field-surface: #F8FAFD;
+  --barq-field-focus: rgba(37, 99, 235, 0.12);
   --barq-bg: #F8FAFC;
   --barq-card: #FFFFFF;
   --barq-green: #10B981;
@@ -139,16 +142,15 @@ body.barq-auth-body {
   width: 44px;
   height: 44px;
   border-radius: 14px;
-  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 60%, #1D4ED8 100%);
+  background: url('saey-mark.svg') center / contain no-repeat;
   display: grid;
   place-items: center;
-  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.2);
   flex-shrink: 0;
 }
 
 .barq-brand-badge svg {
-  width: 24px;
-  height: 24px;
+  display: none;
 }
 
 /* Hero Typography */
@@ -205,40 +207,49 @@ body.barq-auth-body {
   box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
 }
 
-/* Nested Card Inputs (مطابقة تامة لمدخلات الشاشات المرفقة) */
+/* Professional field system — shared by every onboarding screen */
 .barq-input-card {
-  border: 1px solid var(--barq-line);
-  border-radius: 16px;
-  background: #FAFAFD;
-  padding: 10px 12px 12px;
+  border: 1px solid #E6ECF4;
+  border-radius: 14px;
+  background: var(--barq-field-surface);
+  padding: 8px 9px 9px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  transition: all 0.2s ease;
+  gap: 5px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.015);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .barq-input-card:focus-within {
   border-color: var(--barq-blue);
-  box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.08);
+  box-shadow: 0 0 0 3px var(--barq-field-focus), 0 4px 12px rgba(37, 99, 235, 0.06);
   background: #FFFFFF;
 }
 
 .barq-input-label {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 800;
-  color: var(--barq-slate);
-  padding: 0 2px;
+  color: #475569;
+  padding: 0 4px;
+  line-height: 1.45;
 }
 
 .barq-input-inner {
   background: #FFFFFF;
-  border: 1px solid var(--barq-line);
-  border-radius: 12px;
-  height: 46px;
-  padding: 0 12px;
+  border: 1px solid var(--barq-line-strong);
+  border-radius: 10px;
+  height: 48px;
+  padding: 0 10px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.barq-input-card:focus-within .barq-input-inner {
+  border-color: #93C5FD;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.04);
 }
 
 .barq-input-inner input {
@@ -247,7 +258,9 @@ body.barq-auth-body {
   outline: 0;
   background: transparent;
   color: var(--barq-ink);
-  font: 600 13.5px var(--barq-font);
+  min-width: 0;
+  font: 600 13px var(--barq-font);
+  line-height: 1.5;
   direction: inherit;
 }
 
@@ -256,18 +269,96 @@ body.barq-auth-body {
   font-weight: 500;
 }
 
-.barq-input-icon {
-  width: 20px;
-  height: 20px;
-  color: var(--barq-muted);
-  display: grid;
-  place-items: center;
+.barq-input-inner input:focus::placeholder {
+  color: #CBD5E1;
+}
+
+/* Phone country / dial-code selector */
+.barq-phone-country {
+  position: relative;
+  display: flex;
   flex-shrink: 0;
 }
 
+.barq-phone-country[hidden] { display: none; }
+
+.barq-country-trigger {
+  min-width: 76px;
+  height: 30px;
+  border: 0;
+  border-inline-start: 1px solid #E2E8F0;
+  padding: 0 7px 0 0;
+  background: transparent;
+  color: #475569;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font: 700 11.5px 'Plus Jakarta Sans', var(--barq-font);
+  cursor: pointer;
+}
+
+.barq-country-trigger:hover { color: var(--barq-blue); }
+.barq-country-trigger:focus-visible { outline: 2px solid #93C5FD; outline-offset: 2px; border-radius: 6px; }
+.barq-country-flag { font-size: 16px; line-height: 1; }
+.barq-country-chevron { width: 12px; height: 12px; color: #94A3B8; transition: transform .2s ease; }
+.barq-phone-country.open .barq-country-chevron { transform: rotate(180deg); }
+
+.barq-country-menu {
+  position: absolute;
+  top: calc(100% + 9px);
+  left: 0;
+  z-index: 30;
+  width: 180px;
+  padding: 5px;
+  background: #FFFFFF;
+  border: 1px solid #DCE5F0;
+  border-radius: 12px;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.14);
+}
+
+.barq-country-menu[hidden] { display: none; }
+
+.barq-country-option {
+  width: 100%;
+  min-height: 36px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px;
+  font: 700 11.5px var(--barq-font);
+  cursor: pointer;
+  text-align: right;
+}
+
+.barq-country-option:hover,
+.barq-country-option:focus-visible { background: #EFF6FF; color: var(--barq-blue); outline: 0; }
+.barq-country-option .dial-code { margin-inline-start: auto; font-family: 'Plus Jakarta Sans', sans-serif; direction: ltr; }
+
+.barq-input-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: #F1F5F9;
+  color: #64748B;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.barq-input-card:focus-within .barq-input-icon {
+  color: var(--barq-blue);
+  background: var(--barq-blue-soft);
+}
+
 .barq-input-icon svg {
-  width: 19px;
-  height: 19px;
+  width: 17px;
+  height: 17px;
   stroke: currentColor;
   fill: none;
   stroke-width: 1.8;
@@ -276,18 +367,25 @@ body.barq-auth-body {
 }
 
 .barq-eye-btn {
+  width: 28px;
+  height: 28px;
   border: 0;
+  border-radius: 8px;
   background: transparent;
-  color: var(--barq-muted);
+  color: #64748B;
   cursor: pointer;
   display: grid;
   place-items: center;
-  padding: 4px;
+  padding: 0;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
+.barq-eye-btn:hover { background: #F1F5F9; color: var(--barq-blue); }
+.barq-eye-btn:focus-visible { outline: 2px solid #93C5FD; outline-offset: 2px; }
+
 .barq-eye-btn svg {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   stroke: currentColor;
   fill: none;
   stroke-width: 1.8;
@@ -454,21 +552,27 @@ body.barq-auth-body {
 
 .barq-select-box {
   background: #FFFFFF;
-  border: 1px solid var(--barq-line);
-  border-radius: 14px;
-  height: 52px;
-  padding: 0 16px;
+  border: 1px solid var(--barq-line-strong);
+  border-radius: 12px;
+  height: 50px;
+  padding: 0 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);
-  transition: all 0.2s;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02);
+  transition: border-color 0.2s, box-shadow 0.2s;
   position: relative;
 }
 
 .barq-select-box:hover {
   border-color: var(--barq-blue);
+}
+
+.barq-select-box:focus-within,
+.barq-select-box:active {
+  border-color: var(--barq-blue);
+  box-shadow: 0 0 0 3px var(--barq-field-focus);
 }
 
 .barq-select-value {
@@ -494,10 +598,10 @@ body.barq-auth-body {
 
 /* OTP Track (Image 4) */
 .barq-otp-track {
-  background: #FAFAFD;
-  border: 1px solid var(--barq-line);
-  border-radius: 18px;
-  padding: 8px 10px;
+  background: var(--barq-field-surface);
+  border: 1px solid #E6ECF4;
+  border-radius: 14px;
+  padding: 7px;
   display: flex;
   justify-content: space-between;
   gap: 12px;
@@ -507,21 +611,21 @@ body.barq-auth-body {
 
 .barq-otp-cell {
   flex: 1;
-  height: 64px;
-  border-radius: 14px;
-  border: 1px solid var(--barq-line);
+  height: 58px;
+  border-radius: 11px;
+  border: 1px solid var(--barq-line-strong);
   background: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
-  font: 800 24px 'Plus Jakarta Sans', sans-serif;
+  font: 800 22px 'Plus Jakarta Sans', sans-serif;
   color: var(--barq-ink);
   transition: all 0.2s;
 }
 
 .barq-otp-cell.active {
   border: 2px solid var(--barq-blue);
-  box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.12);
+  box-shadow: 0 0 0 3px var(--barq-field-focus);
 }
 
 .barq-cursor {

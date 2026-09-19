@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>06 — إعداد وتوثيق حساب الموزع | تطبيق برق للتوزيع</title>
+  <title>06 — إعداد ملف المتجر | تطبيق سعي</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -29,7 +29,7 @@
 
     <!-- Centered Barq Logo Mark -->
     <div class="barq-brand-centered">
-      <span class="barq-brand-text">برق</span>
+      <span class="barq-brand-text">سعي</span>
       <div class="barq-brand-badge">
         <svg viewBox="0 0 24 24" fill="none">
           <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" fill="white" stroke="white" stroke-width="1.2" stroke-linejoin="round"/>
@@ -38,37 +38,46 @@
     </div>
 
     <section class="barq-hero">
-      <h1>توثيق حساب الموزع</h1>
-      <p>أدخل بيانات النشاط التجاري للاعتماد من إدارة برق</p>
+      <h1>إعداد ملف المتجر</h1>
+      <p>أكمل بيانات متجرك ليظهر للعملاء بشكل احترافي</p>
     </section>
 
-    <!-- Nested Input: Store/Company Name -->
+    <div class="barq-input-card" style="padding:0; overflow:hidden; border-style:dashed;">
+      <div style="height:104px; display:grid; place-items:center; background:#E0F2FE; color:#64748B; font-size:12px;">أضف غلاف المتجر</div>
+    </div>
+    <div style="display:flex; justify-content:center; margin-top:-42px;">
+      <div style="width:76px;height:76px;border-radius:18px;background:#FFFFFF;border:1px solid #E2E8F0;display:grid;place-items:center;color:#2563EB;box-shadow:0 4px 12px rgba(15,23,42,.08);font-size:12px;">صورة<br>المتجر</div>
+    </div>
+
+    <!-- Store name -->
     <div class="barq-input-card">
-      <label class="barq-input-label">اسم المؤسسة أو المتجر</label>
+      <label class="barq-input-label">اسم المتجر</label>
       <div class="barq-input-inner">
-        <input type="text" placeholder="مؤسسة البرق للتوزيع">
+        <input type="text" placeholder="أدخل اسم المتجر">
         <div class="barq-input-icon">
           <svg viewBox="0 0 24 24"><path d="M3 21h18M3 7v14M21 7v14M6 7V3h12v4M10 11v2M14 11v2M10 17v2M14 17v2"/></svg>
         </div>
       </div>
     </div>
 
-    <!-- Nested Input: Commercial Register -->
     <div class="barq-input-card">
-      <label class="barq-input-label">رقم السجل التجاري</label>
+      <label class="barq-input-label">التصنيف الأساسي</label>
       <div class="barq-input-inner">
-        <input type="text" placeholder="123456789">
+        <input type="text" placeholder="مثال: إلكترونيات">
         <div class="barq-input-icon">
-          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
         </div>
       </div>
     </div>
 
-    <div style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 14px; padding: 12px 14px; font-size: 12px; color: #1E40AF; line-height: 1.6;">
-      ℹ️ يتطلب حساب الموزع فحص المستندات والموافقة الإدارية خلال 24 ساعة عمل.
+    <div class="barq-input-card">
+      <label class="barq-input-label">وصف المتجر</label>
+      <div class="barq-input-inner" style="height:66px; align-items:flex-start; padding-top:12px;">
+        <textarea aria-label="وصف المتجر" placeholder="اكتب وصفًا مختصرًا للمتجر" style="width:100%;height:42px;border:0;outline:0;resize:none;background:transparent;color:#0F172A;font:600 13px var(--barq-font);"></textarea>
+      </div>
     </div>
 
-    <a class="barq-btn-primary" href="01-login.html" style="margin-top: 10px;">إرسال طلب التوثيق للمراجعة</a>
+    <a class="barq-btn-primary" href="08-user-home.html" style="margin-top: 10px;">حفظ واستمرار</a>
 
   </main>
 

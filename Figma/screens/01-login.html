@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>01 — تسجيل الدخول | تطبيق برق للتوزيع</title>
+  <title>01 — تسجيل الدخول | تطبيق سعي للتوزيع</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -20,6 +20,11 @@
       height: 14px;
       border-radius: 50%;
       background: #0F172A;
+      flex-shrink: 0;
+    }
+    .barq-provider-logo {
+      width: 19px;
+      height: 19px;
       flex-shrink: 0;
     }
     /* Input layout: Icon on Right, Input in Middle, Action on Left */
@@ -51,7 +56,7 @@
 
     <!-- Centered Barq Logo Mark -->
     <div class="barq-brand-centered">
-      <span class="barq-brand-text">برق</span>
+      <span class="barq-brand-text">سعي</span>
       <div class="barq-brand-badge">
         <svg viewBox="0 0 24 24" fill="none">
           <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" fill="white" stroke="white" stroke-width="1.2" stroke-linejoin="round"/>
@@ -62,20 +67,20 @@
     <!-- Screen Title & Subtitle -->
     <section class="barq-hero">
       <h1>تسجيل الدخول</h1>
-      <p>مرحباً بك مجدداً في تطبيق برق للتوزيع</p>
+      <p>مرحباً بك مجدداً في تطبيق سعي للتوزيع</p>
     </section>
 
     <!-- Social Login Buttons (Top Position - Matching Image 1) -->
     <div id="socialRowTop" class="barq-social-row">
       <!-- Right Button in RTL -->
-      <button class="barq-social-btn" id="appleLoginTop" type="button">
+      <button class="barq-social-btn social-login" id="appleLoginTop" type="button" data-provider="apple">
         <span>تسجيل ابل</span>
-        <span class="barq-social-dot"></span>
+        <svg class="barq-provider-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="#0F172A" d="M17.05 12.54c-.02-2.07 1.69-3.07 1.77-3.12a3.8 3.8 0 0 0-2.98-1.61c-1.25-.13-2.46.75-3.1.75-.64 0-1.63-.73-2.68-.71a3.96 3.96 0 0 0-3.33 2.03c-1.43 2.48-.36 6.14 1 8.15.67.98 1.46 2.08 2.5 2.04 1-.04 1.37-.65 2.57-.65 1.2 0 1.54.65 2.59.63 1.08-.02 1.76-.98 2.42-1.96a8.03 8.03 0 0 0 1.1-2.27 3.5 3.5 0 0 1-1.86-3.28ZM15.02 6.49c.56-.68.94-1.62.84-2.56-.52.6-.97 1.56-.85 2.47.9.07 1.82-.46 2.38-1.13Z"/></svg>
       </button>
       <!-- Left Button in RTL -->
-      <button class="barq-social-btn" id="googleLoginTop" type="button">
-        <span>تسجيل الوجل</span>
-        <span class="barq-social-dot"></span>
+      <button class="barq-social-btn social-login" id="googleLoginTop" type="button" data-provider="google">
+        <span>تسجيل جوجل</span>
+        <svg class="barq-provider-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M21.35 12.27c0-.72-.06-1.25-.2-1.8H12v3.41h5.37a4.6 4.6 0 0 1-1.99 3.02v2.48h3.2c1.87-1.72 2.77-4.25 2.77-7.11Z"/><path fill="#34A853" d="M12 21.7c2.67 0 4.91-.88 6.55-2.38l-3.2-2.48c-.88.59-2.01 1-3.35 1-2.58 0-4.77-1.74-5.55-4.08H3.15v2.56A9.9 9.9 0 0 0 12 21.7Z"/><path fill="#FBBC05" d="M6.45 13.76A5.94 5.94 0 0 1 6.14 12c0-.61.11-1.21.31-1.76V7.68H3.15A9.9 9.9 0 0 0 2.1 12c0 1.56.37 3.03 1.05 4.32l3.3-2.56Z"/><path fill="#EA4335" d="M12 6.16c1.45 0 2.74.5 3.76 1.48l2.82-2.82C16.9 3.22 14.67 2.3 12 2.3a9.9 9.9 0 0 0-8.85 5.38l3.3 2.56C7.23 7.9 9.42 6.16 12 6.16Z"/></svg>
       </button>
     </div>
 
@@ -98,6 +103,17 @@
         </div>
         <!-- 2. Input on Left/Middle (second in RTL) -->
         <input id="identityInput" type="email" placeholder="example@mail.com" value="">
+        <div class="barq-phone-country" id="phoneCountry" hidden>
+          <button class="barq-country-trigger" id="countryTrigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="اختيار كود الدولة">
+            <span class="barq-country-flag" id="countryFlag">🇪🇬</span><span id="countryDial">+20</span>
+            <svg class="barq-country-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="barq-country-menu" id="countryMenu" role="listbox" hidden>
+            <button class="barq-country-option" type="button" role="option" data-flag="🇪🇬" data-code="+20"><span>🇪🇬 مصر</span><span class="dial-code">+20</span></button>
+            <button class="barq-country-option" type="button" role="option" data-flag="🇸🇦" data-code="+966"><span>🇸🇦 السعودية</span><span class="dial-code">+966</span></button>
+            <button class="barq-country-option" type="button" role="option" data-flag="🇦🇪" data-code="+971"><span>🇦🇪 الإمارات</span><span class="dial-code">+971</span></button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -122,20 +138,7 @@
     <a class="barq-forgot-link" href="07-forgot-password.html">نسيت كلمة المرور؟</a>
 
     <!-- Primary Action Button -->
-    <a class="barq-btn-primary" id="loginBtn" href="03-verify-otp.html">تسجيل الدخول</a>
-
-    <!-- Social Login Buttons (Bottom Position - Matching Image 3) -->
-    <div id="dividerBottom" class="barq-divider" style="display:none;">أو</div>
-    <div id="socialRowBottom" class="barq-social-row" style="display:none;">
-      <button class="barq-social-btn" type="button">
-        <span>تسجيل ابل</span>
-        <span class="barq-social-dot"></span>
-      </button>
-      <button class="barq-social-btn" type="button">
-        <span>تسجيل الوجل</span>
-        <span class="barq-social-dot"></span>
-      </button>
-    </div>
+    <a class="barq-btn-primary" id="loginBtn" href="08-user-home.html">تسجيل الدخول</a>
 
     <!-- Bottom Sign Up Link -->
     <div class="barq-footer">
@@ -153,10 +156,11 @@
     const identityLabel = document.getElementById('identityLabel');
     const identityInput = document.getElementById('identityInput');
     const identityIcon = document.getElementById('identityIcon');
-    const socialRowTop = document.getElementById('socialRowTop');
-    const dividerTop = document.getElementById('dividerTop');
-    const socialRowBottom = document.getElementById('socialRowBottom');
-    const dividerBottom = document.getElementById('dividerBottom');
+    const phoneCountry = document.getElementById('phoneCountry');
+    const countryTrigger = document.getElementById('countryTrigger');
+    const countryMenu = document.getElementById('countryMenu');
+    const countryFlag = document.getElementById('countryFlag');
+    const countryDial = document.getElementById('countryDial');
 
     function setTab(mode) {
       if (mode === 'phone') {
@@ -164,32 +168,52 @@
         emailTab.classList.remove('active');
         identityLabel.textContent = 'رقم الهاتف';
         identityInput.type = 'tel';
-        identityInput.placeholder = '010XXXXXXXX';
+        identityInput.inputMode = 'tel';
+        identityInput.placeholder = '10 1234 5678';
         identityIcon.innerHTML = `<svg viewBox="0 0 24 24"><path d="M6.5 4.5h3l1.5 4-2 1.5a14 14 0 0 0 5 5l1.5-2 4 1.5v3a2 2 0 0 1-2 2C10.6 19.5 4.5 13.4 4.5 6.5a2 2 0 0 1 2-2Z"/></svg>`;
-        
-        // Show bottom social as in Image 3
-        socialRowTop.style.display = 'none';
-        dividerTop.style.display = 'none';
-        socialRowBottom.style.display = 'flex';
-        dividerBottom.style.display = 'flex';
+        phoneCountry.hidden = false;
       } else {
         emailTab.classList.add('active');
         phoneTab.classList.remove('active');
         identityLabel.textContent = 'البريد الإلكتروني';
         identityInput.type = 'email';
+        identityInput.inputMode = 'email';
         identityInput.placeholder = 'example@mail.com';
         identityIcon.innerHTML = `<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 7l9 6 9-6"/></svg>`;
-
-        // Show top social as in Image 1
-        socialRowTop.style.display = 'flex';
-        dividerTop.style.display = 'flex';
-        socialRowBottom.style.display = 'none';
-        dividerBottom.style.display = 'none';
+        phoneCountry.hidden = true;
+        phoneCountry.classList.remove('open');
+        countryMenu.hidden = true;
+        countryTrigger.setAttribute('aria-expanded', 'false');
       }
     }
 
     emailTab.addEventListener('click', () => setTab('email'));
     phoneTab.addEventListener('click', () => setTab('phone'));
+
+    countryTrigger.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const isOpen = !countryMenu.hidden;
+      countryMenu.hidden = isOpen;
+      phoneCountry.classList.toggle('open', !isOpen);
+      countryTrigger.setAttribute('aria-expanded', String(!isOpen));
+    });
+
+    document.querySelectorAll('.barq-country-option').forEach(option => {
+      option.addEventListener('click', () => {
+        countryFlag.textContent = option.dataset.flag;
+        countryDial.textContent = option.dataset.code;
+        countryMenu.hidden = true;
+        phoneCountry.classList.remove('open');
+        countryTrigger.setAttribute('aria-expanded', 'false');
+        identityInput.focus();
+      });
+    });
+
+    document.addEventListener('click', () => {
+      countryMenu.hidden = true;
+      phoneCountry.classList.remove('open');
+      countryTrigger.setAttribute('aria-expanded', 'false');
+    });
 
     // Toggle password reveal
     const passwordInput = document.getElementById('passwordInput');
@@ -204,6 +228,19 @@
       } else {
         eyeIcon.innerHTML = `<path d="M3 3l18 18M10.6 10.6a2 2 0 0 0 2.8 2.8M9.9 4.3A10.8 10.8 0 0 1 12 4c5 0 8.5 4 9.5 6a12.8 12.8 0 0 1-3.4 3.9M6.2 6.2A13.3 13.3 0 0 0 2.5 10c1 2 4.5 6 9.5 6 1 0 2-.2 2.8-.5"/>`;
       }
+    });
+
+    // In production, the identity provider/API determines whether this is a
+    // returning account. The preview exposes the new-account branch with
+    // ?social=new; the default represents a previously registered account.
+    const socialIsNew = new URLSearchParams(window.location.search).get('social') === 'new';
+    document.querySelectorAll('.social-login').forEach(button => {
+      button.addEventListener('click', () => {
+        const provider = button.dataset.provider;
+        window.location.href = socialIsNew
+          ? `03-verify-otp.html?source=${provider}`
+          : `08-user-home.html?provider=${provider}`;
+      });
     });
   </script>
 </body>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>04 — اختيار نوع الحساب | تطبيق برق للتوزيع</title>
+  <title>04 — اختيار نوع الحساب | تطبيق سعي للتوزيع</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -37,7 +37,7 @@
         </div>
         <div class="barq-role-content">
           <div class="barq-role-title">حساب شخصي</div>
-          <div class="barq-role-desc">لطلب الشحنات، التوصيل السريع للمنازل، والمشتريات الشخصية</div>
+          <div class="barq-role-desc">لتصفح المنتجات، الحجز، والاستلام من المتجر</div>
         </div>
       </div>
 
@@ -53,7 +53,7 @@
         </div>
         <div class="barq-role-content">
           <div class="barq-role-title">حساب موزع</div>
-          <div class="barq-role-desc">للموزعين، مستودعات التجزئة، وتجار الجملة المعتمدين</div>
+          <div class="barq-role-desc">لإنشاء متجر، عرض المنتجات، وإدارة طلبات الاستلام</div>
           <div class="barq-role-note">
             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
             <span>يتطلب مراجعة وقبول الإدارة</span>
@@ -64,7 +64,7 @@
     </div>
 
     <!-- Primary Action Button: متابعة -->
-    <a class="barq-btn-primary" id="continueBtn" href="05-profile-setup.html" style="margin-top: 14px;">متابعة</a>
+    <a class="barq-btn-primary" id="continueBtn" href="08-profile-setup.html" style="margin-top: 14px;">متابعة</a>
 
   </main>
 
@@ -79,7 +79,7 @@
     cardPersonal.addEventListener('click', () => {
       cardPersonal.classList.add('selected');
       cardDistributor.classList.remove('selected');
-      continueBtn.href = '05-profile-setup.html';
+      continueBtn.href = '08-profile-setup.html';
     });
 
     cardDistributor.addEventListener('click', () => {

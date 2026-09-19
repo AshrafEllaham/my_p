@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>02 — إنشاء حساب جديد | تطبيق برق للتوزيع</title>
+  <title>02 — إنشاء حساب جديد | تطبيق سعي للتوزيع</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -30,7 +30,7 @@
 
     <!-- Centered Barq Logo Mark -->
     <div class="barq-brand-centered">
-      <span class="barq-brand-text">برق</span>
+      <span class="barq-brand-text">سعي</span>
       <div class="barq-brand-badge">
         <svg viewBox="0 0 24 24" fill="none">
           <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" fill="white" stroke="white" stroke-width="1.2" stroke-linejoin="round"/>
@@ -40,27 +40,38 @@
 
     <section class="barq-hero">
       <h1>إنشاء حساب جديد</h1>
-      <p>سجل بياناتك للبدء في استخدام منصة برق</p>
+      <p>سجل بياناتك للبدء في استخدام منصة سعي</p>
     </section>
-
-    <!-- Nested Input: Full Name -->
-    <div class="barq-input-card">
-      <label class="barq-input-label">الاسم الكامل</label>
-      <div class="barq-input-inner">
-        <input type="text" placeholder="محمد أحمد">
-        <div class="barq-input-icon">
-          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        </div>
-      </div>
-    </div>
 
     <!-- Nested Input: Phone Number -->
     <div class="barq-input-card">
       <label class="barq-input-label">رقم الهاتف المحمول</label>
       <div class="barq-input-inner">
-        <input type="tel" placeholder="010XXXXXXXX">
+        <input id="signupPhone" type="tel" inputmode="tel" placeholder="10 1234 5678">
         <div class="barq-input-icon">
           <svg viewBox="0 0 24 24"><path d="M6.5 4.5h3l1.5 4-2 1.5a14 14 0 0 0 5 5l1.5-2 4 1.5v3a2 2 0 0 1-2 2C10.6 19.5 4.5 13.4 4.5 6.5a2 2 0 0 1 2-2Z"/></svg>
+        </div>
+        <div class="barq-phone-country" id="signupPhoneCountry">
+          <button class="barq-country-trigger" id="signupCountryTrigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="اختيار كود الدولة">
+            <span class="barq-country-flag" id="signupCountryFlag">🇪🇬</span><span id="signupCountryDial">+20</span>
+            <svg class="barq-country-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="barq-country-menu" id="signupCountryMenu" role="listbox" hidden>
+            <button class="barq-country-option" type="button" role="option" data-flag="🇪🇬" data-code="+20"><span>🇪🇬 مصر</span><span class="dial-code">+20</span></button>
+            <button class="barq-country-option" type="button" role="option" data-flag="🇸🇦" data-code="+966"><span>🇸🇦 السعودية</span><span class="dial-code">+966</span></button>
+            <button class="barq-country-option" type="button" role="option" data-flag="🇦🇪" data-code="+971"><span>🇦🇪 الإمارات</span><span class="dial-code">+971</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Email is collected before verification, as required by the auth flow. -->
+    <div class="barq-input-card">
+      <label class="barq-input-label">البريد الإلكتروني</label>
+      <div class="barq-input-inner">
+        <input type="email" placeholder="example@mail.com">
+        <div class="barq-input-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 7l9 6 9-6"/></svg>
         </div>
       </div>
     </div>
@@ -76,8 +87,18 @@
       </div>
     </div>
 
+    <div class="barq-input-card">
+      <label class="barq-input-label">تأكيد كلمة المرور</label>
+      <div class="barq-input-inner">
+        <input type="password" placeholder="أعد كتابة كلمة المرور">
+        <div class="barq-input-icon">
+          <svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4M12 15v2"/></svg>
+        </div>
+      </div>
+    </div>
+
     <!-- Primary Action Button -->
-    <a class="barq-btn-primary" href="03-verify-otp.html" style="margin-top: 8px;">متابعة واستلام رمز التحقق</a>
+    <a class="barq-btn-primary" href="03-verify-otp.html?source=signup" style="margin-top: 8px;">متابعة</a>
 
     <div class="barq-footer">
       لديك حساب بالفعل؟ <a href="01-login.html">تسجيل الدخول</a>
@@ -86,6 +107,40 @@
   </main>
 
   <div class="home-bar"><div class="home-bar-pill"></div></div>
+
+  <script>
+    const signupPhone = document.getElementById('signupPhone');
+    const signupPhoneCountry = document.getElementById('signupPhoneCountry');
+    const signupCountryTrigger = document.getElementById('signupCountryTrigger');
+    const signupCountryMenu = document.getElementById('signupCountryMenu');
+    const signupCountryFlag = document.getElementById('signupCountryFlag');
+    const signupCountryDial = document.getElementById('signupCountryDial');
+
+    signupCountryTrigger.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const isOpen = !signupCountryMenu.hidden;
+      signupCountryMenu.hidden = isOpen;
+      signupPhoneCountry.classList.toggle('open', !isOpen);
+      signupCountryTrigger.setAttribute('aria-expanded', String(!isOpen));
+    });
+
+    signupCountryMenu.querySelectorAll('.barq-country-option').forEach(option => {
+      option.addEventListener('click', () => {
+        signupCountryFlag.textContent = option.dataset.flag;
+        signupCountryDial.textContent = option.dataset.code;
+        signupCountryMenu.hidden = true;
+        signupPhoneCountry.classList.remove('open');
+        signupCountryTrigger.setAttribute('aria-expanded', 'false');
+        signupPhone.focus();
+      });
+    });
+
+    document.addEventListener('click', () => {
+      signupCountryMenu.hidden = true;
+      signupPhoneCountry.classList.remove('open');
+      signupCountryTrigger.setAttribute('aria-expanded', 'false');
+    });
+  </script>
 
 </body>
 </html>
