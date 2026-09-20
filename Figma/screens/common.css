@@ -205,6 +205,11 @@ body.lang-en input:checked + .slider:before {
   color: var(--text-main);
 }
 
+.status-icons svg {
+  display: inline-block;
+  vertical-align: middle;
+}
+
 .status-bar.dark .status-icons {
   color: #FFFFFF;
 }

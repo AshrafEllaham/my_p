@@ -15,7 +15,11 @@
   <div class="status-bar">
     <span class="status-time">9:41</span>
     <div class="dynamic-island"><div class="camera-lens"></div></div>
-    <div class="status-icons">📶 🔋</div>
+    <div class="status-icons">
+      <svg class="status-icon-cellular" viewBox="0 0 17 11" width="17" height="11" fill="currentColor"><path d="M1 9a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-1zm4-2.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v3.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-3.5zm4-2.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1V10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V4zm4-3a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1V10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V1z"/></svg>
+      <svg class="status-icon-wifi" viewBox="0 0 16 12" width="16" height="12" fill="currentColor"><path d="M8 10a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-3.8-3.3a5.5 5.5 0 0 1 7.6 0 .8.8 0 0 0 1.1-1.1 7 7 0 0 0-9.8 0 .8.8 0 0 0 1.1 1.1zm-2.2-2.2a8.5 8.5 0 0 1 12 0 .8.8 0 0 0 1.1-1.1 10 10 0 0 0-14.2 0 .8.8 0 0 0 1.1 1.1z"/></svg>
+      <svg class="status-icon-battery" viewBox="0 0 25 12" width="24" height="11" fill="none"><rect x="0.75" y="0.75" width="20.5" height="10.5" rx="3.25" stroke="currentColor" stroke-width="1.2" stroke-opacity=".4"/><rect x="2.5" y="2.5" width="17" height="7" rx="1.8" fill="currentColor"/><path d="M23 4v4a1.2 1.2 0 0 0 1.2-1.2v-1.6A1.2 1.2 0 0 0 23 4z" fill="currentColor" fill-opacity=".4"/></svg>
+    </div>
   </div>
 
   <main class="barq-page">
@@ -26,14 +30,14 @@
       <p>حدد طبيعة استخدامك للتطبيق لتهيئة تجربتك</p>
     </section>
 
-    <!-- Role Option Cards (Matching Image 5) -->
+    <!-- Role Option Cards -->
     <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 10px;">
       
       <!-- Option 1: حساب شخصي (Unselected) -->
       <div class="barq-role-card" id="cardPersonal">
         <div class="barq-role-icon">
           <!-- User Profile Icon -->
-          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
         </div>
         <div class="barq-role-content">
           <div class="barq-role-title">حساب شخصي</div>
@@ -41,21 +45,29 @@
         </div>
       </div>
 
-      <!-- Option 2: حساب موزع (Selected as in Image 5) -->
+      <!-- Option 2: حساب موزع (Selected) -->
       <div class="barq-role-card selected" id="cardDistributor">
         <!-- Mint badge & Checkmark -->
         <span class="barq-badge-mint">موصى به للتجار</span>
-        <span class="barq-check-badge">✓</span>
+        <span class="barq-check-badge">
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </span>
 
         <div class="barq-role-icon">
           <!-- Delivery Truck Icon -->
-          <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/>
+            <path d="M15 18H9"/>
+            <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/>
+            <circle cx="17" cy="18.5" r="2.5"/>
+            <circle cx="7" cy="18.5" r="2.5"/>
+          </svg>
         </div>
         <div class="barq-role-content">
           <div class="barq-role-title">حساب موزع</div>
           <div class="barq-role-desc">لإنشاء متجر، عرض المنتجات، وإدارة طلبات الاستلام</div>
           <div class="barq-role-note">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
             <span>يتطلب مراجعة وقبول الإدارة</span>
           </div>
         </div>
@@ -64,7 +76,7 @@
     </div>
 
     <!-- Primary Action Button: متابعة -->
-    <a class="barq-btn-primary" id="continueBtn" href="08-profile-setup.html" style="margin-top: 14px;">متابعة</a>
+    <a class="barq-btn-primary" id="continueBtn" href="06-distributor-setup.html" style="margin-top: 14px;">متابعة</a>
 
   </main>
 

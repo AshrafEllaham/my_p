@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>سعي — الدردشات</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="auth.css">
+  <link rel="stylesheet" href="chats.css">
+</head>
+<body class="saey-chats">
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="status-icons">
+      <svg class="status-icon-cellular" viewBox="0 0 17 11" width="17" height="11" fill="currentColor"><path d="M1 9a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-1zm4-2.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v3.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-3.5zm4-2.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1V10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V4zm4-3a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1V10a1 1 0 0 0-1 1h-1a1 1 0 0 1-1-1V1z"/></svg>
+      <svg class="status-icon-wifi" viewBox="0 0 16 12" width="16" height="12" fill="currentColor"><path d="M8 10a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-3.8-3.3a5.5 5.5 0 0 1 7.6 0 .8.8 0 0 0 1.1-1.1 7 7 0 0 0-9.8 0 .8.8 0 0 0 1.1 1.1zm-2.2-2.2a8.5 8.5 0 0 1 12 0 .8.8 0 0 0 1.1-1.1 10 10 0 0 0-14.2 0 .8.8 0 0 0 1.1 1.1z"/></svg>
+      <svg class="status-icon-battery" viewBox="0 0 25 12" width="24" height="11" fill="none"><rect x=".75" y=".75" width="20.5" height="10.5" rx="3.25" stroke="currentColor" stroke-width="1.2" stroke-opacity=".4"/><rect x="2.5" y="2.5" width="17" height="7" rx="1.8" fill="currentColor"/><path d="M23 4v4a1.2 1.2 0 0 0 1.2-1.2V5.2A1.2 1.2 0 0 0 23 4z" fill="currentColor" fill-opacity=".4"/></svg>
+    </div>
+  </div>
+  <main class="chats-page">
+    <header class="chats-head">
+      <a class="chats-back" href="08-user-home.html" aria-label="العودة للرئيسية"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a>
+      <div><h1>الدردشات</h1><span>تواصل مباشرة مع المتاجر</span></div>
+      <button class="new-chat" id="newChat" type="button" aria-label="بدء دردشة جديدة"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg></button>
+    </header>
+
+    <label class="chat-search" for="chatSearch"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg><input id="chatSearch" type="search" placeholder="ابحث باسم متجر أو منتج"></label>
+
+    <section class="chat-filter" aria-label="تصفية المحادثات"><button class="active" type="button" data-filter="all">الكل</button><button type="button" data-filter="unread">غير مقروءة <i>٢</i></button><button type="button" data-filter="stores">المتاجر</button></section>
+
+    <div class="chat-list-head"><p class="chat-section-label">المحادثات</p><span>٣ محادثات</span></div>
+    <section class="chat-list" id="chatList">
+      <button class="chat-row unread" type="button" data-type="stores" data-name="نقطة ستور جاكيت جلد طبيعي">
+        <span class="chat-avatar blue"><img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=120&q=85" alt="نقطة ستور"><i></i></span>
+        <span class="chat-copy"><strong>نقطة ستور <em>موثق</em></strong><span>الجاكيت متوفر بالمقاس M، أهلًا بك.</span><small>متعلق بـ جاكيت جلد طبيعي</small></span>
+        <span class="chat-meta"><time>10:32 ص</time><b>1</b></span>
+      </button>
+      <button class="chat-row unread" type="button" data-type="stores" data-name="التقنية الحديثة سماعة لاسلكية">
+        <span class="chat-avatar mint"><img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=120&q=85" alt="التقنية الحديثة"><i></i></span>
+        <span class="chat-copy"><strong>التقنية الحديثة <em>موثق</em></strong><span>نعم، المنتج متاح للاستلام اليوم.</span><small>متعلق بـ سماعة لاسلكية</small></span>
+        <span class="chat-meta"><time>أمس</time><b>1</b></span>
+      </button>
+      <button class="chat-row" type="button" data-type="stores" data-name="أزياء الشرق فستان نسائي">
+        <span class="chat-avatar peach"><img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=120&q=85" alt="أزياء الشرق"></span>
+        <span class="chat-copy"><strong>أزياء الشرق</strong><span>شكرًا لتواصلك معنا، في خدمتك دائمًا.</span><small>متعلق بـ فستان نسائي أنيق</small></span>
+        <span class="chat-meta"><time>الأحد</time></span>
+      </button>
+    </section>
+    <section class="chat-empty" id="chatEmpty"><span><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8A8.5 8.5 0 0 1 12.5 20a8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7A8.38 8.38 0 0 1 4 11.5 8.5 8.5 0 0 1 8.7 3.9 8.38 8.38 0 0 1 12.5 3h.5a8.48 8.48 0 0 1 8 8v.5Z"/></svg></span><h2>لا توجد محادثات مطابقة</h2><p>جرّب البحث باسم متجر أو منتج آخر.</p></section>
+  </main>
+  <script>
+    const search = document.getElementById('chatSearch'), list = document.getElementById('chatList'), empty = document.getElementById('chatEmpty');
+    let filter = 'all';
+    const refresh = () => {
+      let shown = 0; const term = search.value.trim().toLowerCase();
+      list.querySelectorAll('.chat-row').forEach(row => {
+        const matchFilter = filter === 'all' || (filter === 'unread' && row.classList.contains('unread')) || row.dataset.type === filter;
+        const matchSearch = !term || row.dataset.name.toLowerCase().includes(term);
+        row.hidden = !(matchFilter && matchSearch); if (!row.hidden) shown++;
+      });
+      empty.classList.toggle('visible', shown === 0);
+    };
+    search.addEventListener('input', refresh);
+    document.querySelectorAll('.chat-filter button').forEach(button => button.addEventListener('click', () => { filter = button.dataset.filter; document.querySelectorAll('.chat-filter button').forEach(x => x.classList.toggle('active', x === button)); refresh(); }));
+    list.querySelectorAll('.chat-row').forEach(row => row.addEventListener('click', () => { row.classList.remove('unread'); const badge = row.querySelector('.chat-meta b'); if (badge) badge.remove(); refresh(); }));
+    document.getElementById('newChat').addEventListener('click', () => { search.focus(); search.placeholder = 'ابحث عن المتجر لبدء محادثة'; });
+  </script>
+</body>
+</html>

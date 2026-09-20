@@ -3,85 +3,300 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>06 — إعداد ملف المتجر | تطبيق سعي</title>
+  <title>06 — إعداد ملف المتجر | تطبيق سعي للتوزيع</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="auth.css">
-</head>
-<body class="barq-auth-body">
+  <style>
+    /* Store setup is scrollable without exposing a browser scrollbar. */
+    body.store-setup-page {
+      height: 100vh;
+      min-height: 0;
+      overflow: hidden;
+    }
+    .store-setup-page .barq-page {
+      width: min(100%, 440px);
+      min-height: 0;
+      padding: 6px 16px 12px;
+      gap: 12px;
+      overflow-y: auto;
+      overscroll-behavior-y: contain;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .store-setup-page .barq-page::-webkit-scrollbar { display: none; width: 0; height: 0; }
+    .store-setup-page .barq-topbar { min-height: 42px; }
+    .store-setup-page .barq-back-circle { width: 40px; height: 40px; border-radius: 14px; }
+    .store-setup-page .barq-step-badge { padding: 5px 11px; font-size: 11px; }
+    .store-setup-page .barq-hero { margin: 0 0 3px !important; }
+    .store-setup-page .barq-hero h1 { font-size: 24px; letter-spacing: -.3px; }
+    .store-setup-page .barq-hero p { max-width: 350px; margin-top: 3px; font-size: 13px; line-height: 1.55; }
+    .store-setup-page .store-media-wrapper { margin-bottom: 12px; }
+    .store-setup-page .store-cover-card { height: 110px; border-radius: 18px; }
+    .store-setup-page .store-cover-overlay { gap: 5px; padding-bottom: 18px; }
+    .store-setup-page .store-upload-pill { padding: 7px 14px; font-size: 12px; }
+    .store-setup-page .store-avatar-container { margin-top: -37px; }
+    .store-setup-page .store-avatar-box { width:72px; height:72px; border-radius:21px; }
+    .store-setup-page .store-avatar-icon-wrap { border-radius:17px; }
+    .store-setup-page .store-avatar-label { margin-top:5px; }
+    .store-setup-page .store-avatar-title { font-size:12px; }
+    .store-setup-page .store-avatar-subtitle { font-size:10px; }
+    .store-setup-page .store-setup-form { gap:10px !important; }
+    .store-setup-page .barq-input-card { padding:8px 9px; border-radius:15px; }
+    .store-setup-page .barq-input-inner,.store-setup-page .barq-select-box { height:50px; border-radius:12px; }
+    .store-setup-page .barq-textarea-inner textarea { min-height:62px; }
+    .store-setup-page .store-setup-cta { margin:4px 0 8px !important; }
+    .store-setup-page .barq-btn-primary { height:50px; border-radius:13px; font-size:15px; }
+    .store-setup-page .home-bar { flex-shrink:0; padding:8px 0 7px; }
 
+    /* Inline helper for image preview */
+    .store-cover-card.has-preview {
+      background-size: cover;
+      background-position: center;
+      border-style: solid;
+      border-color: #BFDBFE;
+    }
+    .store-avatar-box.has-preview .store-avatar-icon-wrap {
+      background-size: cover;
+      background-position: center;
+    }
+    .store-avatar-box.has-preview .store-avatar-icon-wrap svg {
+      display: none;
+    }
+  </style>
+</head>
+<body class="barq-auth-body store-setup-page">
+
+  <!-- Status Bar & Dynamic Island -->
   <div class="status-bar">
     <span class="status-time">9:41</span>
     <div class="dynamic-island"><div class="camera-lens"></div></div>
-    <div class="status-icons">📶 🔋</div>
+    <div class="status-icons">
+      <svg class="status-icon-cellular" viewBox="0 0 17 11" width="17" height="11" fill="currentColor"><path d="M1 9a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-1zm4-2.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v3.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-3.5zm4-2.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1V10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V4zm4-3a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1V10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V1z"/></svg>
+      <svg class="status-icon-wifi" viewBox="0 0 16 12" width="16" height="12" fill="currentColor"><path d="M8 10a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-3.8-3.3a5.5 5.5 0 0 1 7.6 0 .8.8 0 0 0 1.1-1.1 7 7 0 0 0-9.8 0 .8.8 0 0 0 1.1 1.1zm-2.2-2.2a8.5 8.5 0 0 1 12 0 .8.8 0 0 0 1.1-1.1 10 10 0 0 0-14.2 0 .8.8 0 0 0 1.1 1.1z"/></svg>
+      <svg class="status-icon-battery" viewBox="0 0 25 12" width="24" height="11" fill="none"><rect x="0.75" y="0.75" width="20.5" height="10.5" rx="3.25" stroke="currentColor" stroke-width="1.2" stroke-opacity=".4"/><rect x="2.5" y="2.5" width="17" height="7" rx="1.8" fill="currentColor"/><path d="M23 4v4a1.2 1.2 0 0 0 1.2-1.2v-1.6A1.2 1.2 0 0 0 23 4z" fill="currentColor" fill-opacity=".4"/></svg>
+    </div>
   </div>
 
   <main class="barq-page">
 
-    <div class="barq-topbar" style="justify-content: flex-end;">
+    <!-- Top Navigation Bar (RTL Standard) -->
+    <div class="barq-topbar">
       <a class="barq-back-circle" href="04-account-type.html" title="العودة">
         <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
+          <path d="m9 18 6-6-6-6"/>
         </svg>
       </a>
+      <span class="barq-step-badge">الخطوة 2 من 2</span>
     </div>
 
-    <!-- Centered Barq Logo Mark -->
-    <div class="barq-brand-centered">
-      <span class="barq-brand-text">سعي</span>
-      <div class="barq-brand-badge">
-        <svg viewBox="0 0 24 24" fill="none">
-          <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" fill="white" stroke="white" stroke-width="1.2" stroke-linejoin="round"/>
-        </svg>
-      </div>
-    </div>
-
-    <section class="barq-hero">
+    <!-- Screen Title & Subtitle -->
+    <section class="barq-hero" style="margin-top: 8px; margin-bottom: 18px;">
       <h1>إعداد ملف المتجر</h1>
-      <p>أكمل بيانات متجرك ليظهر للعملاء بشكل احترافي</p>
+      <p>أكمل بيانات متجرك الأساسية لتظهر للعملاء بشكل احترافي وموثوق</p>
     </section>
 
-    <div class="barq-input-card" style="padding:0; overflow:hidden; border-style:dashed;">
-      <div style="height:104px; display:grid; place-items:center; background:#E0F2FE; color:#64748B; font-size:12px;">أضف غلاف المتجر</div>
-    </div>
-    <div style="display:flex; justify-content:center; margin-top:-42px;">
-      <div style="width:76px;height:76px;border-radius:18px;background:#FFFFFF;border:1px solid #E2E8F0;display:grid;place-items:center;color:#2563EB;box-shadow:0 4px 12px rgba(15,23,42,.08);font-size:12px;">صورة<br>المتجر</div>
-    </div>
+    <!-- Store Media Section: Cover + Avatar -->
+    <div class="store-media-wrapper">
+      <!-- Store Cover Banner Box -->
+      <div class="store-cover-card" id="coverUploadBtn" role="button" tabindex="0" title="رفع غلاف المتجر">
+        <div class="store-cover-overlay" id="coverOverlay">
+          <div class="store-upload-pill">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>
+            <span>إضافة غلاف المتجر</span>
+          </div>
+          <span class="store-cover-hint">المقاس المقترح 1200 × 400</span>
+        </div>
+        <input type="file" id="coverInput" accept="image/*" style="display:none">
+      </div>
 
-    <!-- Store name -->
-    <div class="barq-input-card">
-      <label class="barq-input-label">اسم المتجر</label>
-      <div class="barq-input-inner">
-        <input type="text" placeholder="أدخل اسم المتجر">
-        <div class="barq-input-icon">
-          <svg viewBox="0 0 24 24"><path d="M3 21h18M3 7v14M21 7v14M6 7V3h12v4M10 11v2M14 11v2M10 17v2M14 17v2"/></svg>
+      <!-- Store Avatar Box -->
+      <div class="store-avatar-container">
+        <div class="store-avatar-box" id="avatarUploadBtn" role="button" tabindex="0" title="رفع شعار المتجر">
+          <div class="store-avatar-icon-wrap" id="avatarPreviewWrap">
+            <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/>
+              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+              <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/>
+              <path d="M2 7h20"/>
+            </svg>
+          </div>
+          <div class="store-avatar-badge">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>
+          </div>
+          <input type="file" id="avatarInput" accept="image/*" style="display:none">
+        </div>
+        <div class="store-avatar-label">
+          <span class="store-avatar-title">شعار المتجر</span>
+          <span class="store-avatar-subtitle">اضغط لرفع الشعار</span>
         </div>
       </div>
     </div>
 
-    <div class="barq-input-card">
-      <label class="barq-input-label">التصنيف الأساسي</label>
-      <div class="barq-input-inner">
-        <input type="text" placeholder="مثال: إلكترونيات">
-        <div class="barq-input-icon">
-          <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+    <!-- Form Fields -->
+    <div class="store-setup-form" style="display: flex; flex-direction: column; gap: 14px;">
+
+      <!-- Field 1: اسم المتجر -->
+      <div class="barq-input-card">
+        <label class="barq-input-label" for="storeName">اسم المتجر <span style="color:#EF4444;">*</span></label>
+        <div class="barq-input-inner">
+          <div class="barq-input-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/>
+              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+              <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/>
+              <path d="M2 7h20"/>
+            </svg>
+          </div>
+          <input type="text" id="storeName" placeholder="مثال: متجر النور للتجارة والتوزيع">
         </div>
       </div>
-    </div>
 
-    <div class="barq-input-card">
-      <label class="barq-input-label">وصف المتجر</label>
-      <div class="barq-input-inner" style="height:66px; align-items:flex-start; padding-top:12px;">
-        <textarea aria-label="وصف المتجر" placeholder="اكتب وصفًا مختصرًا للمتجر" style="width:100%;height:42px;border:0;outline:0;resize:none;background:transparent;color:#0F172A;font:600 13px var(--barq-font);"></textarea>
+      <!-- Field 2: التصنيف الأساسي (Interactive Dropdown) -->
+      <div class="barq-select-card" style="position: relative;">
+        <label class="barq-input-label">التصنيف الأساسي <span style="color:#EF4444;">*</span></label>
+        <div class="barq-select-box" id="categoryBox" role="button" tabindex="0" aria-expanded="false">
+          <div class="barq-select-value">
+            <div class="barq-input-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="7" height="7" x="3" y="3" rx="1.5"/>
+                <rect width="7" height="7" x="14" y="3" rx="1.5"/>
+                <rect width="7" height="7" x="14" y="14" rx="1.5"/>
+                <rect width="7" height="7" x="3" y="14" rx="1.5"/>
+              </svg>
+            </div>
+            <span id="categoryValue" class="placeholder">اختر تصنيف نشاط المتجر</span>
+          </div>
+          <div class="barq-select-chevron">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6"/>
+            </svg>
+          </div>
+        </div>
+        <!-- Category Dropdown Menu -->
+        <div class="barq-dropdown-menu" id="categoryMenu">
+          <div class="barq-dropdown-item" data-cat="أجهزة وإلكترونيات">📱 أجهزة وإلكترونيات</div>
+          <div class="barq-dropdown-item" data-cat="مواد غذائية وتوزيع">🥫 مواد غذائية وتوزيع</div>
+          <div class="barq-dropdown-item" data-cat="أزياء وملابس">👕 أزياء وملابس</div>
+          <div class="barq-dropdown-item" data-cat="عناية ومنظفات">🧴 عناية ومنظفات</div>
+          <div class="barq-dropdown-item" data-cat="أدوات منزلية ومكتبية">🏠 أدوات منزلية ومكتبية</div>
+          <div class="barq-dropdown-item" data-cat="قطع غيار ومعدات">⚙️ قطع غيار ومعدات</div>
+        </div>
       </div>
+
+      <!-- Field 3: وصف المتجر (Textarea with Counter) -->
+      <div class="barq-input-card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <label class="barq-input-label" for="storeDesc">وصف المتجر</label>
+          <span style="font-size: 11px; color: #94A3B8;" id="descCounter">0 / 200</span>
+        </div>
+        <div class="barq-textarea-inner">
+          <div class="barq-input-icon" style="margin-top: 2px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" x2="8" y1="13" y2="13"/>
+              <line x1="16" x2="8" y1="17" y2="17"/>
+              <line x1="10" x2="8" y1="9" y2="9"/>
+            </svg>
+          </div>
+          <textarea id="storeDesc" maxlength="200" placeholder="اكتب نبذة مختصرة عن نشاط المتجر، المنتجات المتوفرة، والخدمات للعملاء..."></textarea>
+        </div>
+      </div>
+
     </div>
 
-    <a class="barq-btn-primary" href="08-user-home.html" style="margin-top: 10px;">حفظ واستمرار</a>
+    <!-- CTA Button -->
+    <div class="store-setup-cta" style="margin-top: 18px; margin-bottom: 24px;">
+      <a class="barq-btn-primary" href="08-user-home.html" id="saveStoreBtn">حفظ واستمرار</a>
+    </div>
 
   </main>
 
+  <!-- iOS Home Bar -->
   <div class="home-bar"><div class="home-bar-pill"></div></div>
+
+  <!-- Client-side Interactive Logic -->
+  <script>
+    // 1. Cover Image Upload Simulation
+    const coverUploadBtn = document.getElementById('coverUploadBtn');
+    const coverInput = document.getElementById('coverInput');
+    const coverOverlay = document.getElementById('coverOverlay');
+
+    coverUploadBtn.addEventListener('click', () => coverInput.click());
+    coverInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          coverUploadBtn.style.backgroundImage = `url('${evt.target.result}')`;
+          coverUploadBtn.classList.add('has-preview');
+          coverOverlay.style.background = 'rgba(15, 23, 42, 0.45)';
+          coverOverlay.style.borderRadius = '14px';
+          coverOverlay.style.padding = '8px 14px';
+          coverOverlay.querySelector('.store-cover-hint').style.color = '#FFFFFF';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // 2. Avatar Image Upload Simulation
+    const avatarUploadBtn = document.getElementById('avatarUploadBtn');
+    const avatarInput = document.getElementById('avatarInput');
+    const avatarPreviewWrap = document.getElementById('avatarPreviewWrap');
+
+    avatarUploadBtn.addEventListener('click', () => avatarInput.click());
+    avatarInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          avatarPreviewWrap.style.backgroundImage = `url('${evt.target.result}')`;
+          avatarUploadBtn.classList.add('has-preview');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // 3. Category Selector Dropdown
+    const categoryBox = document.getElementById('categoryBox');
+    const categoryMenu = document.getElementById('categoryMenu');
+    const categoryValue = document.getElementById('categoryValue');
+
+    categoryBox.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = categoryMenu.classList.toggle('open');
+      categoryBox.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    document.querySelectorAll('#categoryMenu .barq-dropdown-item').forEach(item => {
+      item.addEventListener('click', () => {
+        categoryValue.textContent = item.textContent;
+        categoryValue.classList.remove('placeholder');
+        categoryMenu.classList.remove('open');
+        categoryBox.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    document.addEventListener('click', () => {
+      categoryMenu.classList.remove('open');
+      categoryBox.setAttribute('aria-expanded', 'false');
+    });
+
+    // 4. Description Character Counter
+    const storeDesc = document.getElementById('storeDesc');
+    const descCounter = document.getElementById('descCounter');
+    storeDesc.addEventListener('input', () => {
+      descCounter.textContent = `${storeDesc.value.length} / 200`;
+    });
+  </script>
 
 </body>
 </html>

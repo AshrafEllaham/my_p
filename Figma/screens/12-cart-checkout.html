@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>سعي — السلة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="auth.css">
+  <link rel="stylesheet" href="cart.css">
+</head>
+<body class="saey-cart">
+  <div class="status-bar"><span class="status-time">9:41</span><div class="status-icons">▮▮▮　⌁　▰</div></div>
+  <main class="cart-page" id="cartPage">
+    <header class="cart-header">
+      <a class="cart-back" href="08-user-home.html" aria-label="العودة للرئيسية"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></a>
+      <div><h1>السلة</h1><span>٣ منتجات من متجرين</span></div>
+      <button class="cart-edit" id="editCart" type="button">تعديل</button>
+    </header>
+
+    <div class="pickup-note"><span class="pickup-note-icon"><svg viewBox="0 0 24 24"><path d="M3 10h18M5 10V8a7 7 0 0 1 14 0v2M5 14h14v6H5z"/><path d="M9 17h6"/></svg></span><span><strong>الاستلام من المتجر</strong><small>راجع كل منتج عند نقطة الاستلام قبل المغادرة</small></span></div>
+
+    <section class="vendor-cart" data-vendor="نقطة ستور" aria-label="منتجات نقطة ستور">
+      <header class="vendor-cart-head"><div class="vendor-identity"><span class="vendor-avatar">ن</span><span><strong>نقطة ستور</strong><small>متجر موثوق · القاهرة</small></span></div><span class="vendor-count">طلب مستقل · ٢ منتجات</span></header>
+      <article class="cart-item" data-price="2890">
+        <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=300&q=85" alt="جاكيت جلد طبيعي رجالي">
+        <div class="cart-item-info"><span class="cart-item-category">ملابس رجالية</span><h2>جاكيت جلد طبيعي رجالي</h2><small>بني · مقاس M</small><strong class="cart-item-price">٢,٨٩٠ ج.م</strong></div>
+        <div class="cart-item-actions"><button class="remove-item" type="button" aria-label="حذف المنتج">×</button><div class="qty-control"><button class="qty-minus" type="button" aria-label="تقليل الكمية">−</button><b>1</b><button class="qty-plus" type="button" aria-label="زيادة الكمية">+</button></div></div>
+      </article>
+      <article class="cart-item" data-price="1450">
+        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=300&q=85" alt="ساعة كلاسيكية أنيقة">
+        <div class="cart-item-info"><span class="cart-item-category">إكسسوارات</span><h2>ساعة كلاسيكية أنيقة</h2><small>أسود · الكمية متاحة</small><strong class="cart-item-price">١,٤٥٠ ج.م</strong></div>
+        <div class="cart-item-actions"><button class="remove-item" type="button" aria-label="حذف المنتج">×</button><div class="qty-control"><button class="qty-minus" type="button" aria-label="تقليل الكمية">−</button><b>1</b><button class="qty-plus" type="button" aria-label="زيادة الكمية">+</button></div></div>
+      </article>
+      <div class="vendor-order-footer"><span>إجمالي طلب نقطة ستور</span><strong>٤,٣٤٠ ج.م</strong><button class="vendor-checkout" type="button">متابعة الطلب</button></div>
+    </section>
+
+    <section class="vendor-cart" data-vendor="التقنية الحديثة" aria-label="منتجات التقنية الحديثة">
+      <header class="vendor-cart-head"><div class="vendor-identity"><span class="vendor-avatar teal">ت</span><span><strong>التقنية الحديثة</strong><small>متجر موثوق · الجيزة</small></span></div><span class="vendor-count">طلب مستقل · منتج واحد</span></header>
+      <article class="cart-item" data-price="2350">
+        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=300&q=85" alt="سماعة لاسلكية">
+        <div class="cart-item-info"><span class="cart-item-category">إلكترونيات</span><h2>سماعة لاسلكية بعزل الضوضاء</h2><small>أسود · الكمية متاحة</small><strong class="cart-item-price">٢,٣٥٠ ج.م</strong></div>
+        <div class="cart-item-actions"><button class="remove-item" type="button" aria-label="حذف المنتج">×</button><div class="qty-control"><button class="qty-minus" type="button" aria-label="تقليل الكمية">−</button><b>1</b><button class="qty-plus" type="button" aria-label="زيادة الكمية">+</button></div></div>
+      </article>
+      <div class="vendor-order-footer"><span>إجمالي طلب التقنية الحديثة</span><strong>٢,٣٥٠ ج.م</strong><button class="vendor-checkout" type="button">متابعة الطلب</button></div>
+    </section>
+
+    <section class="promo-card"><div><strong>لديك كوبون خصم؟</strong><small>أدخل الكود واستفد من العرض</small></div><div class="promo-field"><input id="promoCode" type="text" placeholder="أدخل الكود"><button id="applyPromo" type="button">تطبيق</button></div></section>
+    <section class="cart-summary"><h2>ملخص الطلبات المستقلة</h2><div><span>إجمالي المنتجات</span><b id="subtotal">٦,٦٩٠ ج.م</b></div><div><span>الاستلام من المتجر</span><b class="free">مجانًا</b></div><div class="summary-total"><span>إجمالي الطلبين</span><strong id="total">٦,٦٩٠ ج.م</strong></div></section>
+  </main>
+  <footer class="cart-checkout-bar"><div><span>إجمالي الطلبين</span><strong id="footerTotal">٦,٦٩٠ ج.م</strong></div><button type="button" id="checkoutButton">متابعة الطلبات (٢)</button></footer>
+  <nav class="cart-nav" aria-label="التنقل الرئيسي"><a href="08-user-home.html"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>الرئيسية</span></a><a href="09-categories.html"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6"/><rect x="14" y="4" width="6" height="6"/><rect x="4" y="14" width="6" height="6"/><rect x="14" y="14" width="6" height="6"/></svg><span>الأقسام</span></a><a class="active" href="12-cart-checkout.html"><svg viewBox="0 0 24 24"><path d="M3 5h2l2.2 10.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="10" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg><span>السلة</span></a><a href="#"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="m9 13 2 2 4-4"/></svg><span>الطلبات</span></a><a href="08-profile-setup.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>حسابي</span></a></nav>
+  <script>
+    const cartPage = document.getElementById('cartPage');
+    const formatPrice = value => `${value.toLocaleString('ar-EG')} ج.م`;
+    const updateVendorTotal = vendor => {
+      let total = 0;
+      vendor.querySelectorAll('.cart-item').forEach(item => total += Number(item.dataset.price) * Number(item.querySelector('.qty-control b').textContent));
+      const totalNode = vendor.querySelector('.vendor-order-footer strong');
+      if (totalNode) totalNode.textContent = formatPrice(total);
+    };
+    const updateCartTotal = () => {
+      let total = 0;
+      cartPage.querySelectorAll('.cart-item').forEach(item => {
+        const qty = Number(item.querySelector('.qty-control b').textContent);
+        total += Number(item.dataset.price) * qty;
+      });
+      ['subtotal', 'total', 'footerTotal'].forEach(id => document.getElementById(id).textContent = formatPrice(total));
+      cartPage.querySelectorAll('.vendor-cart').forEach(updateVendorTotal);
+    };
+    cartPage.querySelectorAll('.qty-control').forEach(control => {
+      control.querySelector('.qty-plus').onclick = () => { const value = control.querySelector('b'); value.textContent = Number(value.textContent) + 1; updateCartTotal(); };
+      control.querySelector('.qty-minus').onclick = () => { const value = control.querySelector('b'); value.textContent = Math.max(1, Number(value.textContent) - 1); updateCartTotal(); };
+    });
+    cartPage.querySelectorAll('.remove-item').forEach(button => button.onclick = () => { button.closest('.cart-item').remove(); updateCartTotal(); });
+    cartPage.querySelectorAll('.vendor-checkout').forEach(button => button.onclick = () => { button.textContent = 'تم حفظ الطلب'; button.classList.add('is-confirmed'); });
+    document.getElementById('applyPromo').onclick = () => { document.getElementById('promoCode').classList.toggle('applied'); document.getElementById('applyPromo').textContent = 'تم التطبيق'; };
+    document.getElementById('editCart').onclick = () => cartPage.classList.toggle('editing');
+    document.getElementById('checkoutButton').onclick = () => document.getElementById('checkoutButton').textContent = 'تم الحفظ للمتابعة';
+  </script>
+</body>
+</html>

@@ -14,7 +14,11 @@
   <div class="status-bar">
     <span class="status-time">9:41</span>
     <div class="dynamic-island"><div class="camera-lens"></div></div>
-    <div class="status-icons">📶 🔋</div>
+    <div class="status-icons">
+      <svg class="status-icon-cellular" viewBox="0 0 17 11" width="17" height="11" fill="currentColor"><path d="M1 9a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-1zm4-2.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v3.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-3.5zm4-2.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1V10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V4zm4-3a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1V10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V1z"/></svg>
+      <svg class="status-icon-wifi" viewBox="0 0 16 12" width="16" height="12" fill="currentColor"><path d="M8 10a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-3.8-3.3a5.5 5.5 0 0 1 7.6 0 .8.8 0 0 0 1.1-1.1 7 7 0 0 0-9.8 0 .8.8 0 0 0 1.1 1.1zm-2.2-2.2a8.5 8.5 0 0 1 12 0 .8.8 0 0 0 1.1-1.1 10 10 0 0 0-14.2 0 .8.8 0 0 0 1.1 1.1z"/></svg>
+      <svg class="status-icon-battery" viewBox="0 0 25 12" width="24" height="11" fill="none"><rect x="0.75" y="0.75" width="20.5" height="10.5" rx="3.25" stroke="currentColor" stroke-width="1.2" stroke-opacity=".4"/><rect x="2.5" y="2.5" width="17" height="7" rx="1.8" fill="currentColor"/><path d="M23 4v4a1.2 1.2 0 0 0 1.2-1.2v-1.6A1.2 1.2 0 0 0 23 4z" fill="currentColor" fill-opacity=".4"/></svg>
+    </div>
   </div>
 
   <main class="barq-page">
@@ -23,17 +27,19 @@
     <div class="barq-topbar" style="justify-content: flex-end;">
       <a class="barq-back-circle" href="01-login.html" title="العودة">
         <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
+          <path d="m9 18 6-6-6-6"/>
         </svg>
       </a>
     </div>
 
-    <!-- Centered Barq Logo Mark -->
+    <!-- Centered Brand Logo Mark -->
     <div class="barq-brand-centered">
       <span class="barq-brand-text">سعي</span>
       <div class="barq-brand-badge">
-        <svg viewBox="0 0 24 24" fill="none">
-          <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" fill="white" stroke="white" stroke-width="1.2" stroke-linejoin="round"/>
+        <svg viewBox="0 0 64 64" fill="none" style="width: 24px; height: 24px;">
+          <path d="M16.5 42c5.1 0 7.3-5.2 10.5-10.4 3.1-5 5.8-9.3 10.5-9.3 5 0 8.1 3.9 12 9.6" stroke="#FFF" stroke-width="5.25" stroke-linecap="round"/>
+          <path d="m44.7 25.7 5.5 6.6-8 .6" stroke="#FFF" stroke-width="4.7" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="16.5" cy="42" r="2.55" fill="#FFF"/>
         </svg>
       </div>
     </div>
@@ -43,18 +49,18 @@
       <p>سجل بياناتك للبدء في استخدام منصة سعي</p>
     </section>
 
-    <!-- Nested Input: Phone Number -->
+    <!-- Phone Number Input -->
     <div class="barq-input-card">
       <label class="barq-input-label">رقم الهاتف المحمول</label>
       <div class="barq-input-inner">
         <input id="signupPhone" type="tel" inputmode="tel" placeholder="10 1234 5678">
         <div class="barq-input-icon">
-          <svg viewBox="0 0 24 24"><path d="M6.5 4.5h3l1.5 4-2 1.5a14 14 0 0 0 5 5l1.5-2 4 1.5v3a2 2 0 0 1-2 2C10.6 19.5 4.5 13.4 4.5 6.5a2 2 0 0 1 2-2Z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
         </div>
         <div class="barq-phone-country" id="signupPhoneCountry">
           <button class="barq-country-trigger" id="signupCountryTrigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="اختيار كود الدولة">
             <span class="barq-country-flag" id="signupCountryFlag">🇪🇬</span><span id="signupCountryDial">+20</span>
-            <svg class="barq-country-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+            <svg class="barq-country-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg>
           </button>
           <div class="barq-country-menu" id="signupCountryMenu" role="listbox" hidden>
             <button class="barq-country-option" type="button" role="option" data-flag="🇪🇬" data-code="+20"><span>🇪🇬 مصر</span><span class="dial-code">+20</span></button>
@@ -65,40 +71,40 @@
       </div>
     </div>
 
-    <!-- Email is collected before verification, as required by the auth flow. -->
+    <!-- Email Input -->
     <div class="barq-input-card">
       <label class="barq-input-label">البريد الإلكتروني</label>
       <div class="barq-input-inner">
         <input type="email" placeholder="example@mail.com">
         <div class="barq-input-icon">
-          <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 7l9 6 9-6"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
         </div>
       </div>
     </div>
 
-    <!-- Nested Input: Password -->
+    <!-- Password Input -->
     <div class="barq-input-card">
       <label class="barq-input-label">كلمة المرور</label>
       <div class="barq-input-inner">
         <input type="password" placeholder="••••••••">
         <div class="barq-input-icon">
-          <svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4M12 15v2"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         </div>
       </div>
     </div>
 
+    <!-- Confirm Password Input -->
     <div class="barq-input-card">
       <label class="barq-input-label">تأكيد كلمة المرور</label>
       <div class="barq-input-inner">
         <input type="password" placeholder="أعد كتابة كلمة المرور">
         <div class="barq-input-icon">
-          <svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4M12 15v2"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         </div>
       </div>
     </div>
 
-    <!-- Primary Action Button -->
-    <a class="barq-btn-primary" href="03-verify-otp.html?source=signup" style="margin-top: 8px;">متابعة</a>
+    <a class="barq-btn-primary" href="03-verify-otp.html">متابعة</a>
 
     <div class="barq-footer">
       لديك حساب بالفعل؟ <a href="01-login.html">تسجيل الدخول</a>
@@ -109,12 +115,11 @@
   <div class="home-bar"><div class="home-bar-pill"></div></div>
 
   <script>
-    const signupPhone = document.getElementById('signupPhone');
-    const signupPhoneCountry = document.getElementById('signupPhoneCountry');
     const signupCountryTrigger = document.getElementById('signupCountryTrigger');
     const signupCountryMenu = document.getElementById('signupCountryMenu');
     const signupCountryFlag = document.getElementById('signupCountryFlag');
     const signupCountryDial = document.getElementById('signupCountryDial');
+    const signupPhoneCountry = document.getElementById('signupPhoneCountry');
 
     signupCountryTrigger.addEventListener('click', (event) => {
       event.stopPropagation();
@@ -124,23 +129,23 @@
       signupCountryTrigger.setAttribute('aria-expanded', String(!isOpen));
     });
 
-    signupCountryMenu.querySelectorAll('.barq-country-option').forEach(option => {
+    document.querySelectorAll('#signupCountryMenu .barq-country-option').forEach(option => {
       option.addEventListener('click', () => {
         signupCountryFlag.textContent = option.dataset.flag;
         signupCountryDial.textContent = option.dataset.code;
         signupCountryMenu.hidden = true;
         signupPhoneCountry.classList.remove('open');
         signupCountryTrigger.setAttribute('aria-expanded', 'false');
-        signupPhone.focus();
       });
     });
 
-    document.addEventListener('click', () => {
-      signupCountryMenu.hidden = true;
-      signupPhoneCountry.classList.remove('open');
-      signupCountryTrigger.setAttribute('aria-expanded', 'false');
+    document.addEventListener('click', (event) => {
+      if (!signupPhoneCountry.contains(event.target)) {
+        signupCountryMenu.hidden = true;
+        signupPhoneCountry.classList.remove('open');
+        signupCountryTrigger.setAttribute('aria-expanded', 'false');
+      }
     });
   </script>
-
 </body>
 </html>

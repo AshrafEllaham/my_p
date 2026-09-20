@@ -15,16 +15,20 @@
   <div class="status-bar">
     <span class="status-time">9:41</span>
     <div class="dynamic-island"><div class="camera-lens"></div></div>
-    <div class="status-icons">📶 🔋</div>
+    <div class="status-icons">
+      <svg class="status-icon-cellular" viewBox="0 0 17 11" width="17" height="11" fill="currentColor"><path d="M1 9a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-1zm4-2.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v3.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-3.5zm4-2.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1V10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V4zm4-3a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1V10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V1z"/></svg>
+      <svg class="status-icon-wifi" viewBox="0 0 16 12" width="16" height="12" fill="currentColor"><path d="M8 10a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-3.8-3.3a5.5 5.5 0 0 1 7.6 0 .8.8 0 0 0 1.1-1.1 7 7 0 0 0-9.8 0 .8.8 0 0 0 1.1 1.1zm-2.2-2.2a8.5 8.5 0 0 1 12 0 .8.8 0 0 0 1.1-1.1 10 10 0 0 0-14.2 0 .8.8 0 0 0 1.1 1.1z"/></svg>
+      <svg class="status-icon-battery" viewBox="0 0 25 12" width="24" height="11" fill="none"><rect x="0.75" y="0.75" width="20.5" height="10.5" rx="3.25" stroke="currentColor" stroke-width="1.2" stroke-opacity=".4"/><rect x="2.5" y="2.5" width="17" height="7" rx="1.8" fill="currentColor"/><path d="M23 4v4a1.2 1.2 0 0 0 1.2-1.2v-1.6A1.2 1.2 0 0 0 23 4z" fill="currentColor" fill-opacity=".4"/></svg>
+    </div>
   </div>
 
   <main class="barq-page">
 
-    <!-- Top Bar with Circular Back Button on Right (RTL start) -->
+    <!-- Top Bar with Circular Back Button -->
     <div class="barq-topbar">
       <a class="barq-back-circle" href="01-login.html" title="العودة">
         <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
+          <path d="m9 18 6-6-6-6"/>
         </svg>
       </a>
     </div>
@@ -35,17 +39,13 @@
       <p>أدخل رمز التحقق المكون من 4 أرقام الذي أرسلناه للتو إلى رقم هاتفك المحمول <strong style="color: var(--barq-ink); font-family: 'Plus Jakarta Sans', sans-serif;">00***50</strong></p>
     </section>
 
-    <!-- Unified OTP Input Track (Matching Image 4) -->
+    <!-- OTP Track -->
     <div class="barq-otp-track" id="otpTrack" style="margin-top: 18px;">
-      <!-- Digit 1 (Rightmost in RTL) -->
       <div class="barq-otp-cell" data-index="0">5</div>
-      <!-- Digit 2 -->
       <div class="barq-otp-cell" data-index="1">8</div>
-      <!-- Digit 3 (Active cell with blinking cursor) -->
       <div class="barq-otp-cell active" data-index="2">
         <span class="barq-cursor"></span>
       </div>
-      <!-- Digit 4 (Leftmost in RTL) -->
       <div class="barq-otp-cell" data-index="3"></div>
     </div>
 
@@ -59,7 +59,7 @@
     </div>
 
     <!-- Primary Action Button: تحقق -->
-    <a class="barq-btn-primary" href="05-profile-setup.html" style="margin-top: 6px;">تحقق</a>
+    <a class="barq-btn-primary" href="05-profile-setup.html" style="margin-top: 24px;">تحقق</a>
 
   </main>
 
@@ -67,9 +67,9 @@
   <div class="home-bar"><div class="home-bar-pill"></div></div>
 
   <script>
-    const hiddenInput = document.getElementById('hiddenOtpInput');
-    const cells = document.querySelectorAll('.barq-otp-cell');
     const otpTrack = document.getElementById('otpTrack');
+    const hiddenInput = document.getElementById('hiddenOtpInput');
+    const cells = Array.from(document.querySelectorAll('.barq-otp-cell'));
 
     function updateCells() {
       const val = hiddenInput.value;
@@ -78,8 +78,8 @@
         if (idx < val.length) {
           cell.textContent = val[idx];
         } else if (idx === val.length) {
-          cell.classList.add('active');
           cell.innerHTML = '<span class="barq-cursor"></span>';
+          cell.classList.add('active');
         } else {
           cell.textContent = '';
         }
@@ -90,12 +90,16 @@
       hiddenInput.focus();
     });
 
-    hiddenInput.addEventListener('input', () => {
-      hiddenInput.value = hiddenInput.value.replace(/[^0-9]/g, '').slice(0, 4);
+    hiddenInput.addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/[^0-9]/g, '');
       updateCells();
     });
 
-    // Countdown timer
+    hiddenInput.addEventListener('focus', () => {
+      updateCells();
+    });
+
+    // Simple countdown timer
     let secondsLeft = 30;
     const timerDigits = document.getElementById('timerDigits');
     const resendBtn = document.getElementById('resendBtn');
@@ -105,22 +109,13 @@
       if (secondsLeft <= 0) {
         clearInterval(countdown);
         timerDigits.textContent = '00:00';
-        resendBtn.classList.add('active');
-        resendBtn.style.color = '#2563EB';
+        resendBtn.style.color = 'var(--barq-blue)';
+        resendBtn.style.cursor = 'pointer';
       } else {
-        const sec = secondsLeft < 10 ? '0' + secondsLeft : secondsLeft;
-        timerDigits.textContent = '00:' + sec;
+        const str = secondsLeft < 10 ? '0' + secondsLeft : secondsLeft;
+        timerDigits.textContent = '00:' + str;
       }
     }, 1000);
-
-    resendBtn.addEventListener('click', () => {
-      if (secondsLeft <= 0) {
-        secondsLeft = 30;
-        resendBtn.classList.remove('active');
-        resendBtn.style.color = '#94A3B8';
-        timerDigits.textContent = '00:30';
-      }
-    });
   </script>
 </body>
 </html>
