@@ -453,7 +453,7 @@
 
 .saey-home .quick-services {
   justify-content: space-between;
-  gap: 7px;
+  gap: 6px;
 }
 
 .saey-home .section-quick-services,
@@ -467,8 +467,10 @@
 
 .saey-home .section-quick-services {
   --section-ink: #000;
-  border: 1px solid #e5e7eb;
+  padding: 10px;
+  border: 1px solid #e8ebef;
   background: #fff;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, .045);
 }
 
 .saey-home .section-recommended {
@@ -494,27 +496,37 @@
 .saey-home .quick-services a {
   min-width: 0;
   flex: 1;
+  min-height: 78px;
   display: grid;
   justify-items: center;
+  align-content: center;
   gap: 7px;
-  color: #334155;
+  padding: 6px 3px;
+  border-radius: 16px;
+  color: #475569;
   text-align: center;
   text-decoration: none;
+  transition: background-color .18s ease, color .18s ease, transform .18s ease;
 }
 
 .saey-home .quick-services a > span {
-  width: 55px;
-  height: 55px;
+  width: 46px;
+  height: 46px;
   display: grid;
   place-items: center;
-  border: 1px solid #e4e9ef;
-  border-radius: 17px;
-  background: #fff;
+  border: 0;
+  border-radius: 15px;
+  background: #f3f4f6;
   color: #000;
 }
-.saey-home .quick-services a:first-child > span { background: #000; color: #fff; border-color: #000; }
-.saey-home .quick-services svg { width: 23px; height: 23px; }
-.saey-home .quick-services strong { font-size: 10px; font-weight: 800; white-space: nowrap; }
+.saey-home .quick-services a:first-child {
+  background: #000;
+  color: #fff;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, .15);
+}
+.saey-home .quick-services a:first-child > span { background: rgba(255, 255, 255, .15); color: #fff; }
+.saey-home .quick-services svg { width: 22px; height: 22px; }
+.saey-home .quick-services strong { font-size: 11px; font-weight: 850; white-space: nowrap; }
 
 .saey-home .offer-section,
 .saey-home .collection-section {
@@ -621,7 +633,8 @@
   .saey-home .collection-section { margin-right: -11px; margin-left: -11px; padding-right: 11px; padding-left: 11px; }
   .saey-home .hero-copy { width: 75%; padding: 21px 18px; }
   .saey-home .hero-copy h1 { font-size: 25px; }
-  .saey-home .quick-services a > span { width: 49px; height: 49px; border-radius: 15px; }
-  .saey-home .quick-services strong { font-size: 9px; }
+  .saey-home .quick-services a { min-height: 70px; gap: 5px; }
+  .saey-home .quick-services a > span { width: 42px; height: 42px; border-radius: 14px; }
+  .saey-home .quick-services strong { font-size: 10px; }
   .saey-home .waffarha-product { min-width: 126px; flex-basis: 126px; }
 }
