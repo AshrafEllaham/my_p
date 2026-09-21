@@ -87,8 +87,8 @@
 - **الاتجاه واللغة:** دعم كامل للغة العربية والاتجاه من اليمين لليسار (`dir="rtl"`).
 - **الخطوط المدمجة:** `Cairo` للنصوص العربية و `Plus Jakarta Sans` للأرقام والأكواد الإنجليزية.
 - **لوحة الألوان الأساسية:**
-  - `Primary Blue`: `#2563EB` إلى `#1D4ED8`
-  - `Light Blue Tint`: `#EFF6FF` / `#DBEAFE`
+  - `Primary Black`: `#000000` إلى `#111111`
+  - `Light Neutral Tint`: `#F2F2F2` / `#E5E5E5`
   - `Background`: `#F8FAFC` مع طبقات `#FFFFFF`
   - `Text Headings`: `#0F172A`
   - `Text Body & Muted`: `#475569` / `#64748B` / `#94A3B8`

@@ -1,0 +1,303 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+/* Uber-inspired UI language: compact type, restrained radius, and one line-icon family. */
+:root {
+  --ui-font: 'Inter', 'Cairo', system-ui, -apple-system, sans-serif;
+  --ui-card-radius: 14px;
+  --ui-control-radius: 10px;
+  --ui-card-shadow: 0 2px 10px rgba(15, 23, 42, 0.045);
+  --ui-icon-size: 20px;
+}
+
+body,
+button,
+input,
+textarea,
+select {
+  font-family: var(--ui-font) !important;
+}
+
+/* Keep the Arabic glyphs readable while using the geometric UI face for Latin text and numbers. */
+[lang="ar"],
+[dir="rtl"] {
+  font-family: var(--ui-font) !important;
+}
+
+/* Uber-style surfaces: flatter, tighter, and less ornamental than the previous cards. */
+.ui-card,
+.quick-action-card,
+.market-card,
+.market-item,
+.catalog-product,
+.catalog-store,
+.product-card,
+.store-card,
+.pickup-card,
+.pickup-card-home,
+.notification-item,
+.chat-row,
+.order-card,
+.order-product,
+.seller-card,
+.view-card,
+.contact-option,
+.choice-list,
+.account-list,
+.conversation-product {
+  border-radius: var(--ui-card-radius) !important;
+  box-shadow: var(--ui-card-shadow) !important;
+}
+
+.ui-card,
+.quick-action-card {
+  padding: 14px !important;
+}
+
+.ui-btn,
+.btn-primary,
+.ui-btn-primary,
+.btn-dark,
+.btn-secondary,
+.barq-btn-primary,
+.barq-btn-secondary,
+.onboarding-action,
+.view-button,
+.add-order,
+.buy-now,
+.sheet-save,
+.apply-filters {
+  border-radius: var(--ui-control-radius) !important;
+  font-family: var(--ui-font) !important;
+}
+
+.input-field,
+.view-input,
+.view-textarea,
+.view-select,
+.market-input,
+.barq-input,
+.barq-textarea,
+.home-search,
+.catalog-search,
+.chat-search,
+.message-composer input {
+  border-radius: var(--ui-control-radius) !important;
+  font-family: var(--ui-font) !important;
+}
+
+.header-btn-circle,
+.back-btn,
+.home-icon-btn,
+.account-icon-button,
+.chats-back,
+.orders-back,
+.catalog-back,
+.notifications-back,
+.details-top a,
+.details-top button,
+.market-back,
+.close-sheet {
+  border-radius: var(--ui-control-radius) !important;
+}
+
+/* One icon treatment: outlined, rounded, and optically 20px like Uber's compact controls. */
+.home-icon-btn svg,
+.home-search svg,
+.home-nav svg,
+.account-icon-button svg,
+.row-icon svg,
+.chats-back svg,
+.chat-search svg,
+.orders-back svg,
+.summary-icon svg,
+.catalog-back svg,
+.catalog-search svg,
+.open-filters svg,
+.notifications-back svg,
+.notification-icon svg,
+.details-top svg,
+.details-actions svg,
+.details-bottom svg,
+.conversation-back svg,
+.conversation-product a svg,
+.message-composer svg,
+.order-details-button svg,
+.barq-input-icon svg,
+.barq-select-chevron svg,
+.contact-option svg,
+.view-back svg {
+  width: var(--ui-icon-size) !important;
+  height: var(--ui-icon-size) !important;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.barq-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.barq-dropdown-item svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Shared bottom navigation: icon above label, with an unmistakable active destination. */
+.saey-bottom-nav {
+  width: min(100%, 440px);
+  height: 76px !important;
+  min-height: 76px;
+  margin: 0 auto;
+  padding: 8px 12px max(8px, env(safe-area-inset-bottom));
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 2px;
+  border-top: 1px solid #E5E5E5;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 -6px 18px rgba(15, 23, 42, 0.045);
+  backdrop-filter: blur(14px);
+  direction: rtl;
+  flex-shrink: 0;
+}
+
+.saey-bottom-nav a {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 1px 2px;
+  border-radius: 10px;
+  color: #6B7280;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-decoration: none;
+  transition: color .18s ease, background-color .18s ease;
+}
+
+.saey-bottom-nav .nav-icon {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  color: currentColor;
+  transition: background-color .18s ease, color .18s ease;
+}
+
+.saey-bottom-nav svg {
+  width: 21px;
+  height: 21px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.saey-bottom-nav a.active,
+.saey-bottom-nav a[aria-current="page"] {
+  color: #000000;
+  font-weight: 800;
+}
+
+.saey-bottom-nav a.active .nav-icon,
+.saey-bottom-nav a[aria-current="page"] .nav-icon {
+  background: #000000;
+  color: #FFFFFF;
+}
+
+.saey-home .saey-bottom-nav a,
+.saey-home .saey-bottom-nav svg {
+  font-size: 11px !important;
+}
+
+.saey-home .saey-bottom-nav svg {
+  width: 21px !important;
+  height: 21px !important;
+  stroke-width: 1.8 !important;
+}
+
+.saey-home .saey-bottom-nav a.active {
+  background: transparent;
+  box-shadow: none;
+}
+
+.saey-cart .cart-checkout-bar {
+  bottom: 76px;
+}
+
+/* Make the existing interface icons use the same rounded, outlined family. */
+:is(.saey-home, .saey-catalog, .saey-cart, .saey-orders, .saey-chats, .saey-account, .saey-account-view, .saey-conversation, .saey-notifications, .saey-product-details) :is(a, button, .row-icon, .summary-icon, .notification-icon, .barq-input-icon, .barq-select-chevron) > svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+:is(.saey-home, .saey-catalog, .saey-cart, .saey-orders, .saey-chats, .saey-account, .saey-account-view, .saey-conversation, .saey-notifications, .saey-product-details) :not(.status-icons) > svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+body.saey-account,
+body.saey-orders,
+body.saey-chats {
+  display: flex;
+  flex-direction: column;
+}
+
+.saey-account .account-page,
+.saey-orders .orders-page,
+.saey-chats .chats-page {
+  height: auto;
+  min-height: 0;
+  flex: 1;
+}
+
+/* Supporting text follows the Uber density: readable, but never oversized. */
+.account-row,
+.chat-copy span,
+.order-product small,
+.notification-copy p,
+.view-intro,
+.details-description {
+  line-height: 1.55;
+}
+
+@media (max-width: 370px) {
+  .ui-card,
+  .quick-action-card {
+    padding: 12px !important;
+  }
+
+  .saey-bottom-nav {
+    height: 72px !important;
+    min-height: 72px;
+    padding-right: 7px;
+    padding-left: 7px;
+  }
+
+  .saey-bottom-nav a {
+    font-size: 10px;
+  }
+
+  .saey-cart .cart-checkout-bar {
+    bottom: 72px;
+  }
+}

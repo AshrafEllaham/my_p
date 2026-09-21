@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="auth.css">
   <link rel="stylesheet" href="catalog.css">
+  <link rel="stylesheet" href="uber-ui.css">
 </head>
 <body class="saey-catalog">
   <div class="status-bar">
@@ -135,6 +136,12 @@
       <button class="apply-filters" type="button">عرض النتائج</button>
     </section>
   </div>
+  <nav class="saey-bottom-nav" aria-label="التنقل الرئيسي">
+    <a href="08-user-home.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22v-9h6v9"/></svg></span><span>الرئيسية</span></a>
+    <a class="active" href="09-categories.html" aria-current="page"><span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg></span><span>الأقسام</span></a>
+    <a href="16-orders.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="m9 13 2 2 4-4"/></svg></span><span>الطلبات</span></a>
+    <a href="15-account.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></span><span>حسابي</span></a>
+  </nav>
   <script>
     const sheet = document.getElementById('filterSheet'),
           open = document.querySelector('.open-filters'),

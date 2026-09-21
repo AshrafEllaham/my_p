@@ -9,8 +9,8 @@
 .saey-home .market-section-head a { font-size:12px !important; }
 
 /* Tall editorial promotion with clear hierarchy. */
-.saey-home .market-banner { height:172px; margin:0; border-radius:22px; box-shadow:0 14px 26px rgba(37,99,235,.2); }
-.saey-home .banner-overlay { background:linear-gradient(100deg,rgba(15,23,42,.08),rgba(29,78,216,.5) 35%,rgba(29,78,216,.97) 100%); }
+.saey-home .market-banner { height:172px; margin:0; border-radius:22px; box-shadow:0 14px 26px rgba(0, 0, 0,.2); }
+.saey-home .banner-overlay { background:linear-gradient(100deg,rgba(15,23,42,.08),rgba(0, 0, 0,.5) 35%,rgba(0, 0, 0,.97) 100%); }
 .saey-home .banner-copy { top:22px; right:19px; }
 .saey-home .banner-copy span { padding:4px 8px; border-radius:8px; font-size:11px; }
 .saey-home .banner-copy h2 { margin:8px 0 4px; font-size:22px !important; line-height:1.33; }
@@ -22,10 +22,10 @@
 /* Category tiles replace small text-only pills. */
 .saey-home .market-categories { gap:10px; padding:1px 1px 8px; scroll-snap-type:x mandatory; scroll-behavior:smooth; -webkit-overflow-scrolling:touch; touch-action:pan-x; }
 .saey-home .market-categories a { min-width:96px; height:86px; display:flex; flex:0 0 96px; flex-direction:column; align-items:center; justify-content:center; gap:7px; padding:7px 4px; border-radius:17px; font-size:12px; scroll-snap-align:start; }
-.saey-home .market-category-icon { width:38px; height:38px; display:grid; place-items:center; border-radius:13px; background:#EFF6FF; color:#2563EB; }
+.saey-home .market-category-icon { width:38px; height:38px; display:grid; place-items:center; border-radius:13px; background:#F2F2F2; color:#000000; }
 .saey-home .market-category-icon svg { width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
-.saey-home .market-categories a.selected { background:#FFF; border-color:#93C5FD; color:#1D4ED8; box-shadow:0 7px 16px rgba(37,99,235,.12); }
-.saey-home .market-categories a.selected .market-category-icon { background:#2563EB; color:#FFF; }
+.saey-home .market-categories a.selected { background:#FFF; border-color:#A3A3A3; color:#000000; box-shadow:0 7px 16px rgba(0, 0, 0,.12); }
+.saey-home .market-categories a.selected .market-category-icon { background:#000000; color:#FFF; }
 
 /* Compact, scrollable product cards: information stays readable instead of filling the page. */
 .saey-home .market-product-grid { display:flex; gap:10px; overflow-x:auto; padding:1px 1px 8px; scroll-snap-type:x mandatory; scroll-behavior:smooth; -webkit-overflow-scrolling:touch; touch-action:pan-x; scrollbar-width:none; }
@@ -47,20 +47,20 @@
 /* Storefront cards: recognizable logo, name, category and trust state at a glance. */
 .saey-home .distributor-row { display:flex; gap:12px; overflow-x:auto; padding:1px 1px 10px; scroll-snap-type:x mandatory; scroll-behavior:smooth; -webkit-overflow-scrolling:touch; touch-action:pan-x; }
 .saey-home .distributor-row a { width:202px; min-width:202px; min-height:96px; display:grid; grid-template-columns:58px minmax(0,1fr) 18px; align-items:center; gap:10px; padding:11px; border:1px solid #E3EAF3; border-radius:18px; background:#FFF; box-shadow:0 7px 18px rgba(15,23,42,.05); scroll-snap-align:start; }
-.saey-home .distributor-logo { width:58px; height:58px; border:2px solid #DBEAFE; border-radius:17px; box-shadow:none; }
+.saey-home .distributor-logo { width:58px; height:58px; border:2px solid #E5E5E5; border-radius:17px; box-shadow:none; }
 .saey-home .distributor-logo::after { width:18px; height:18px; bottom:-4px; left:-4px; font-size:10px; }
 .saey-home .store-card-copy { min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:3px; }
 .saey-home .store-card-copy strong { width:100%; overflow:hidden; color:#0F172A; font-size:14px; font-weight:900; white-space:nowrap; text-overflow:ellipsis; }
 .saey-home .store-card-copy small { display:block; width:100%; overflow:hidden; padding:0; border-radius:0; background:transparent; color:#64748B; font-size:11px; white-space:nowrap; text-overflow:ellipsis; }
 .saey-home .store-card-copy small i { color:#F59E0B; font-size:12px; }
 .saey-home .store-card-copy em { color:#059669; font-size:10px; font-style:normal; font-weight:800; }
-.saey-home .store-arrow { width:18px; height:18px; fill:none; stroke:#2563EB; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.saey-home .store-arrow { width:18px; height:18px; fill:none; stroke:#000000; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
 
 /* Bottom navigation uses full touch targets and a visible active destination. */
 .saey-home .market-nav { height:86px; align-items:stretch; padding:9px 14px 10px; border-top:1px solid #E2E8F0; box-shadow:0 -8px 22px rgba(15,23,42,.055); }
 .saey-home .market-nav a { min-width:0; flex:1; gap:5px; margin:0 2px; border-radius:15px; color:#7C8EAA; font-size:12px; font-weight:800; }
 .saey-home .market-nav svg { width:25px; height:25px; stroke-width:2; }
-.saey-home .market-nav a.active { background:#EFF6FF; color:#2563EB; box-shadow:inset 0 0 0 1px #DBEAFE; }
+.saey-home .market-nav a.active { background:#F2F2F2; color:#000000; box-shadow:inset 0 0 0 1px #E5E5E5; }
 
 @media (max-width:370px) {
   .saey-home .home-page { padding-right:12px; padding-left:12px; gap:13px; }

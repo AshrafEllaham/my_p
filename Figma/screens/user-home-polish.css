@@ -1,7 +1,7 @@
 /* Final readability and hierarchy pass for the approved Saey marketplace home. */
 :root {
-  --saey-blue: #2563EB;
-  --saey-blue-dark: #1D4ED8;
+  --saey-blue: #000000;
+  --saey-blue-dark: #000000;
   --saey-bg: #F7F9FC;
   --saey-ink: #0F172A;
   --saey-muted: #64748B;
@@ -24,6 +24,16 @@
 
 .saey-home .market-section-head a {
   font-size: 11px !important;
+}
+
+.saey-home .recommended-section .market-section-head h2 {
+  direction: rtl;
+  font-family: var(--ui-font, 'Inter', 'Cairo', sans-serif);
+  letter-spacing: 0;
+}
+
+.saey-home .category-section .market-section-head h2 {
+  font-size: 17px !important;
 }
 
 .saey-home .market-search input {

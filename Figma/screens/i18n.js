@@ -347,7 +347,9 @@
 
     const btnTheme = document.getElementById('btnStandaloneTheme');
     if (btnTheme) {
-      btnTheme.innerText = isDark ? '☀️' : '🌙';
+      btnTheme.innerHTML = isDark
+        ? '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/></svg>'
+        : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5 8.5 8.5 0 1 0 20.5 14.5Z"/></svg>';
       btnTheme.title = isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode';
     }
   }
@@ -383,7 +385,7 @@
       align-items: center;
       gap: 4px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.35);
-      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      font-family: 'Inter', system-ui, sans-serif;
       font-size: 11px;
       font-weight: 800;
       border: 1px solid rgba(255,255,255,0.15);
@@ -393,7 +395,7 @@
       <button id="btnLangAr" style="background:transparent; color:#FFF; border:none; padding:4px 10px; border-radius:20px; cursor:pointer; font-weight:800; transition:all .2s;">عربي</button>
       <button id="btnLangEn" style="background:transparent; color:#FFF; border:none; padding:4px 10px; border-radius:20px; cursor:pointer; font-weight:800; transition:all .2s;">English</button>
       <span style="width:1px; height:14px; background:rgba(255,255,255,0.25); margin:0 2px;"></span>
-      <button id="btnStandaloneTheme" style="background:transparent; color:#FFF; border:none; padding:4px 8px; border-radius:20px; cursor:pointer; font-size:13px; transition:all .2s;">🌙</button>
+      <button id="btnStandaloneTheme" aria-label="تبديل المظهر" style="background:transparent; color:#FFF; border:none; padding:4px 8px; border-radius:20px; cursor:pointer; font-size:13px; transition:all .2s;"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:16px;height:16px;display:block;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5 8.5 8.5 0 1 0 20.5 14.5Z"/></svg></button>
     `;
 
     document.body.appendChild(switcher);
@@ -403,10 +405,10 @@
       const btnEn = document.getElementById('btnLangEn');
       if (!btnAr || !btnEn) return;
       if (lang === 'en') {
-        btnEn.style.background = '#2563EB';
+        btnEn.style.background = '#000000';
         btnAr.style.background = 'transparent';
       } else {
-        btnAr.style.background = '#2563EB';
+        btnAr.style.background = '#000000';
         btnEn.style.background = 'transparent';
       }
     };

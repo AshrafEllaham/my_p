@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="auth.css">
   <link rel="stylesheet" href="cart.css">
+  <link rel="stylesheet" href="uber-ui.css">
 </head>
 <body class="saey-cart">
   <div class="status-bar"><span class="status-time">9:41</span><div class="status-icons">▮▮▮　⌁　▰</div></div>
@@ -50,7 +51,7 @@
     <section class="cart-summary"><h2>ملخص الطلبات المستقلة</h2><div><span>إجمالي المنتجات</span><b id="subtotal">٦,٦٩٠ ج.م</b></div><div><span>الاستلام من المتجر</span><b class="free">مجانًا</b></div><div class="summary-total"><span>إجمالي الطلبين</span><strong id="total">٦,٦٩٠ ج.م</strong></div></section>
   </main>
   <footer class="cart-checkout-bar"><div><span>إجمالي الطلبين</span><strong id="footerTotal">٦,٦٩٠ ج.م</strong></div><button type="button" id="checkoutButton">متابعة الطلبات (٢)</button></footer>
-  <nav class="cart-nav" aria-label="التنقل الرئيسي"><a href="08-user-home.html"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>الرئيسية</span></a><a href="09-categories.html"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6"/><rect x="14" y="4" width="6" height="6"/><rect x="4" y="14" width="6" height="6"/><rect x="14" y="14" width="6" height="6"/></svg><span>الأقسام</span></a><a class="active" href="12-cart-checkout.html"><svg viewBox="0 0 24 24"><path d="M3 5h2l2.2 10.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="10" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg><span>السلة</span></a><a href="16-orders.html"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="m9 13 2 2 4-4"/></svg><span>الطلبات</span></a><a href="15-account.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>حسابي</span></a></nav>
+  <nav class="saey-bottom-nav cart-nav" aria-label="التنقل الرئيسي"><a href="08-user-home.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22v-9h6v9"/></svg></span><span>الرئيسية</span></a><a href="09-categories.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg></span><span>الأقسام</span></a><a class="active" href="12-cart-checkout.html" aria-current="page"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 5h2l2.2 10.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="10" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg></span><span>السلة</span></a><a href="16-orders.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="m9 13 2 2 4-4"/></svg></span><span>الطلبات</span></a><a href="15-account.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><span>حسابي</span></a></nav>
   <script>
     const cartPage = document.getElementById('cartPage');
     const formatPrice = value => `${value.toLocaleString('ar-EG')} ج.م`;

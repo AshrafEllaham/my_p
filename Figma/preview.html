@@ -8,14 +8,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Cairo:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
   <style>
     :root {
-      --primary: #2563EB;
-      --primary-hover: #1E40AF;
-      --primary-soft: #EFF6FF;
-      --primary-text: #2563EB;
+      --ui-font: 'Inter', 'Cairo', system-ui, -apple-system, sans-serif;
+      --primary: #000000;
+      --primary-hover: #111111;
+      --primary-soft: #F2F2F2;
+      --primary-text: #000000;
       --accent-amber: #F59E0B;
       --accent-amber-hover: #D97706;
       --bg-stage: #F7F9FC;
@@ -39,7 +40,7 @@
     }
 
     body {
-      font-family: 'Cairo', system-ui, -apple-system, sans-serif;
+      font-family: var(--ui-font);
       background-color: var(--bg-stage);
       color: var(--text-main);
       height: 100vh;
@@ -91,7 +92,7 @@
       font-size: 11px;
       font-weight: 600;
       color: var(--text-muted);
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: var(--ui-font);
       margin-top: 2px;
     }
 
@@ -145,7 +146,7 @@
     .search-box input:focus {
       border-color: var(--primary);
       background: #FFFFFF;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
     }
 
     .search-icon {
@@ -217,7 +218,7 @@
 
     .screen-item-btn.active {
       background: var(--primary-soft);
-      border-color: #BFDBFE;
+      border-color: #D1D1D1;
     }
 
     .screen-item-title {
@@ -239,7 +240,7 @@
       border-radius: 6px;
       background: #F1F5F9;
       color: var(--text-muted);
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: var(--ui-font);
       font-size: 10.5px;
       font-weight: 700;
       display: flex;
@@ -347,7 +348,7 @@
     .stage-action-pill {
       background: var(--primary-soft);
       color: var(--primary-text);
-      border: 1px solid #BFDBFE;
+      border: 1px solid #D1D1D1;
       padding: 4px 10px;
       border-radius: 7px;
       font-size: 10.5px;
@@ -630,9 +631,9 @@
     }
 
     .tag-pill {
-      background: #EFF6FF;
+      background: #F2F2F2;
       color: var(--primary-text);
-      border: 1px solid #DBEAFE;
+      border: 1px solid #E5E5E5;
       font-size: 10px;
       font-weight: 700;
       padding: 2.5px 8px;
@@ -715,7 +716,7 @@
 
     .btn-action-primary:hover {
       background: var(--primary-hover);
-      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
     }
 
     .btn-action-secondary {
@@ -783,9 +784,9 @@
     }
 
     .tag-pill {
-      background: #EFF6FF;
+      background: #F2F2F2;
       color: var(--primary-text);
-      border: 1px solid #DBEAFE;
+      border: 1px solid #E5E5E5;
       font-size: 10.5px;
       font-weight: 700;
       padding: 3px 9px;
@@ -868,7 +869,7 @@
 
     .btn-action-primary:hover {
       background: var(--primary-hover);
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
     }
 
     .btn-action-secondary {
@@ -979,7 +980,7 @@
       font-family: 'Courier New', Courier, monospace;
       font-size: 12px;
       line-height: 1.6;
-      color: #93C5FD;
+      color: #A3A3A3;
       white-space: pre-wrap;
       direction: ltr;
       text-align: left;
@@ -1022,10 +1023,10 @@
     /* Dark Mode Theme Tokens for Preview Studio */
     [data-theme="dark"],
     body.dark-mode {
-      --primary: #60A5FA;
-      --primary-hover: #1D4ED8;
-      --primary-soft: rgba(37, 99, 235, 0.18);
-      --primary-text: #93C5FD;
+      --primary: #FFFFFF;
+      --primary-hover: #E5E5E5;
+      --primary-soft: rgba(255, 255, 255, 0.12);
+      --primary-text: #FFFFFF;
       --bg-stage: #080C14;
       --panel-bg: #0F172A;
       --border: #1E293B;
@@ -1106,7 +1107,7 @@
 
     [data-theme="dark"] .screen-item-btn.active .screen-badge-num,
     body.dark-mode .screen-item-btn.active .screen-badge-num {
-      background: #2563EB;
+      background: #000000;
       color: #FFFFFF;
     }
 
@@ -1131,16 +1132,16 @@
 
     [data-theme="dark"] .stage-action-pill:hover,
     body.dark-mode .stage-action-pill:hover {
-      background: #2563EB;
+      background: #000000;
       color: #FFFFFF;
-      border-color: #2563EB;
+      border-color: #000000;
     }
 
     [data-theme="dark"] .file-path-badge,
     body.dark-mode .file-path-badge {
       background: #151D2A;
       border-color: #334155;
-      color: #93C5FD;
+      color: #A3A3A3;
     }
 
     [data-theme="dark"] .tag-pill,
@@ -1165,9 +1166,9 @@
 
     [data-theme="dark"] .stage-arrow-btn:hover,
     body.dark-mode .stage-arrow-btn:hover {
-      background: #2563EB;
+      background: #000000;
       color: #FFFFFF;
-      border-color: #2563EB;
+      border-color: #000000;
     }
 
     [data-theme="dark"] .screens-nav-list::-webkit-scrollbar-thumb,
@@ -1203,7 +1204,7 @@
 
     .brand-title {
       font-size: 25px;
-      color: #1D4ED8;
+      color: #000000;
     }
 
     .brand-subtitle {
@@ -1256,9 +1257,9 @@
     }
 
     .screen-item-btn.active {
-      background: linear-gradient(135deg, #EFF6FF, #F8FBFF);
-      border-color: #BFDBFE;
-      box-shadow: 0 3px 10px rgba(37, 99, 235, 0.08);
+      background: linear-gradient(135deg, #F2F2F2, #F8FBFF);
+      border-color: #D1D1D1;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
     }
 
     .screen-badge-num {
@@ -1270,7 +1271,7 @@
     main.center-stage {
       background-color: #F5F8FC;
       background-image:
-        radial-gradient(circle at 50% 40%, rgba(37, 99, 235, 0.11), transparent 34%),
+        radial-gradient(circle at 50% 40%, rgba(0, 0, 0, 0.11), transparent 34%),
         linear-gradient(rgba(148, 163, 184, 0.075) 1px, transparent 1px),
         linear-gradient(90deg, rgba(148, 163, 184, 0.075) 1px, transparent 1px);
       background-size: auto, 24px 24px, 24px 24px;
@@ -1309,7 +1310,7 @@
       border-radius: 99px;
       background: rgba(255, 255, 255, .8);
       color: #475569;
-      font: 700 10px 'Plus Jakarta Sans', sans-serif;
+      font: 700 10px var(--ui-font);
       box-shadow: 0 3px 10px rgba(15, 23, 42, .04);
     }
 
@@ -1438,7 +1439,7 @@
     }
 
     .studio-file-text span {
-      font: 600 9.5px 'Plus Jakarta Sans', sans-serif;
+      font: 600 9.5px var(--ui-font);
       color: #94A3B8;
     }
 
@@ -1457,12 +1458,12 @@
       background: transparent;
       color: #64748B;
       padding: 5px 10px;
-      font: 700 10px 'Plus Jakarta Sans', sans-serif;
+      font: 700 10px var(--ui-font);
     }
 
     .studio-mode-tab.active {
       background: #FFFFFF;
-      color: #2563EB;
+      color: #000000;
       box-shadow: 0 1px 3px rgba(15, 23, 42, .08);
     }
 
@@ -1482,7 +1483,7 @@
       display: grid;
       place-items: center;
       cursor: pointer;
-      font: 700 13px 'Plus Jakarta Sans', sans-serif;
+      font: 700 13px var(--ui-font);
     }
 
     .studio-tool-btn {
@@ -1491,9 +1492,9 @@
     }
 
     .studio-tool-btn:hover {
-      color: #2563EB;
-      border-color: #BFDBFE;
-      background: #EFF6FF;
+      color: #000000;
+      border-color: #D1D1D1;
+      background: #F2F2F2;
     }
 
     .studio-zoom-label {
@@ -1611,7 +1612,7 @@
     [data-theme="dark"] .studio-mode-tab.active,
     body.dark-mode .studio-mode-tab.active {
       background: #334155;
-      color: #93C5FD;
+      color: #A3A3A3;
     }
 
     [data-theme="dark"] .studio-tool-btn,
@@ -2009,7 +2010,7 @@
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <div style="display:flex; align-items:center; gap:10px;">
             <img src="screens/saey-mark.svg" alt="شعار تطبيق سعي"
-              style="width:38px;height:38px;filter:drop-shadow(0 4px 10px rgba(37,99,235,0.2));flex-shrink:0;">
+              style="width:38px;height:38px;filter:drop-shadow(0 4px 10px rgba(0, 0, 0,0.2));flex-shrink:0;">
             <div>
               <h1 class="brand-title" id="brandTitle">سعي</h1>
               <p class="brand-subtitle" id="brandSubtitle">تطبيق سعي للتوزيع • واجهات Figma & HTML</p>
@@ -2020,7 +2021,7 @@
               style="font-size:10px; font-weight:800; background:#DCFCE7; color:#15803D; padding:3px 8px; border-radius:6px;">مكتمل
               ✓</span>
             <span id="aiVisionBadge"
-              style="font-size:9.5px; font-weight:800; color:#1D4ED8; background:rgba(29,78,216,0.08); border:1px solid rgba(29,78,216,0.2); border-radius:6px; padding:2px 6px; white-space:nowrap; transition:all 0.2s;"
+              style="font-size:9.5px; font-weight:800; color:#000000; background:rgba(0, 0, 0,0.08); border:1px solid rgba(0, 0, 0,0.2); border-radius:6px; padding:2px 6px; white-space:nowrap; transition:all 0.2s;"
               title="يعرض الشاشة المختارة حاليًا">🤖 AI Tracker: Active</span>
           </div>
         </div>
@@ -2202,13 +2203,13 @@
         desc: 'شاشة افتتاحية رسمية لتطبيق سعي للتوزيع مع الشعار ومسار البدء الفوري.',
         descEn: 'Official launch screen for Saey Distribution featuring the signature mark and instant start CTA.',
         notes: [
-          'شعار سعي الأزرق داخل مربع منحني',
-          'خلفية تدرج ليلي أنيق مع زر متابعة أزرق عريض',
+          'شعار سعي الأسود داخل مربع منحني',
+          'خلفية تدرج ليلي أنيق مع زر متابعة أسود عريض',
           'متوافق مع أبعاد هواتف iOS والـ Dynamic Island'
         ],
         notesEn: [
           'Signature Saey logo mark',
-          'Deep midnight ambient backdrop with broad primary blue action button',
+          'Deep midnight ambient backdrop with broad primary black action button',
           'Engineered to match iOS viewports and Dynamic Island dimensions'
         ]
       },
@@ -2269,14 +2270,14 @@
         desc: 'إدخال رمز التحقق المكون من 4 أرقام داخل شريط موحد يحتوي على خانات منفصلة ومؤشر يومض وعداد 00:30 ثانية.',
         descEn: '4-digit OTP security code verification inside a unified track container with active blinking cursor and 00:30 timer.',
         notes: [
-          'شريط موحد لمربعات الرمز مع خانة نشطة ذات إطار أزرق ومؤشر كتابة يومض',
+          'شريط موحد لمربعات الرمز مع خانة نشطة ذات إطار أسود ومؤشر كتابة يومض',
           'عرض الأرقام المدخلة (5 ثم 8) مع دعم الكتابة التفاعلية',
-          'عداد تنازلي ذكي 00:30 ثانية وزر تحقق أزرق عريض'
+          'عداد تنازلي ذكي 00:30 ثانية وزر تحقق أسود عريض'
         ],
         notesEn: [
-          'Unified OTP track with active blue border cell and blinking vertical cursor',
+          'Unified OTP track with active black border cell and blinking vertical cursor',
           'Pre-populated sample digits (5 and 8) with interactive numeric keyboard input',
-          '00:30 countdown timer and full-width royal blue verify button'
+          '00:30 countdown timer and full-width black verify button'
         ]
       },
       {
@@ -2291,12 +2292,12 @@
         desc: 'تحديد طبيعة استخدام التطبيق بين حساب شخصي وحساب موزع معتمد مع شارة موصى به للتجار وعلامة صح.',
         descEn: 'Select account role between Personal and Verified Distributor, highlighting the distributor card with mint badge and checkmark.',
         notes: [
-          'كارت حساب موزع محدد بإطار أزرق 2px مع شارة "موصى به للتجار" وعلامة صح ✓',
+          'كارت حساب موزع محدد بإطار أسود 2px مع شارة "موصى به للتجار" وعلامة صح ✓',
           'أيقونات زرقاء مخصصة (مستخدم للمشتريات وشاحنة للموزع)',
           'تنبيه رسمي بأن حساب الموزع يتطلب مراجعة وقبول الإدارة'
         ],
         notesEn: [
-          'Distributor card highlighted with 2px blue border, mint badge, and blue checkmark ✓',
+          'Distributor card highlighted with 2px black border, mint badge, and black checkmark ✓',
           'Custom squircle icons (user for personal, truck for distributor)',
           'Administrative approval requirement notice'
         ]
@@ -2315,12 +2316,12 @@
         notes: [
           'قائمة منسدلة لاختيار الدولة مع إبراز علم مصر 🇪🇬',
           'قائمة منسدلة تفاعلية للمحافظات المصرية مع مؤشرات الأسهم ⌄',
-          'زر متابعة رئيسي أزرق مع خيار "تخطي الآن" الثانوي'
+          'زر متابعة رئيسي أسود مع خيار "تخطي الآن" الثانوي'
         ],
         notesEn: [
           'Country selector card featuring the Egyptian flag 🇪🇬',
           'Interactive Egyptian governorate dropdown selector with chevron icon ⌄',
-          'Primary blue "Continue" button and secondary outline "Skip Now" button'
+          'Primary black "Continue" button and secondary outline "Skip Now" button'
         ]
       },
       {
@@ -3166,8 +3167,8 @@
       const statusEl = document.getElementById('syncStatusText');
       if (statusEl) {
         statusEl.innerHTML = isEn
-          ? `Viewing: <bdi style="font-family:monospace; color:#2563EB;">${s.file}</bdi>`
-          : `معروض: <bdi style="font-family:monospace; color:#2563EB;">${s.file}</bdi>`;
+          ? `Viewing: <bdi style="font-family:monospace; color:#000000;">${s.file}</bdi>`
+          : `معروض: <bdi style="font-family:monospace; color:#000000;">${s.file}</bdi>`;
       }
 
       // Update Tags

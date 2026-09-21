@@ -1,16 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="شعار تطبيق برق للتوزيع">
   <defs>
     <linearGradient id="barqBlueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#3B82F6"/>
-      <stop offset="60%" stop-color="#2563EB"/>
-      <stop offset="100%" stop-color="#1D4ED8"/>
+      <stop offset="0%" stop-color="#333333"/>
+      <stop offset="60%" stop-color="#000000"/>
+      <stop offset="100%" stop-color="#000000"/>
     </linearGradient>
     <filter id="barqShadow" x="-20%" y="-20%" width="150%" height="150%">
-      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#2563EB" flood-opacity="0.35"/>
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.35"/>
     </filter>
   </defs>
 
-  <!-- Blue Squircle Container -->
+  <!-- Black Squircle Container -->
   <rect x="8" y="8" width="112" height="112" rx="34" fill="url(#barqBlueGrad)" filter="url(#barqShadow)"/>
 
   <!-- Crisp White Lightning Bolt -->
