@@ -153,46 +153,34 @@ select {
 .saey-bottom-nav {
   position: relative;
   width: calc(min(100%, 440px) - 28px);
-  height: 78px !important;
-  min-height: 78px;
-  margin: 0 auto 12px;
-  padding: 10px 22px;
+  height: 82px !important;
+  min-height: 82px;
+  margin: 0 auto 14px;
+  padding: 10px 23px;
   display: flex;
   align-items: center;
   justify-content: space-around;
-  gap: 10px;
+  gap: 8px;
   border: 1px solid #E5E7EB;
-  border-radius: 25px;
+  border-radius: 28px;
   background: rgba(255, 255, 255, .98);
-  box-shadow: 0 13px 26px rgba(15, 23, 42, .13);
+  box-shadow: 0 12px 25px rgba(15, 23, 42, .11);
   backdrop-filter: blur(14px);
   direction: rtl;
   flex-shrink: 0;
 }
 
-.saey-bottom-nav::after {
-  content: "";
-  position: absolute;
-  right: 50%;
-  bottom: 7px;
-  width: 122px;
-  height: 4px;
-  border-radius: 99px;
-  background: #000;
-  transform: translateX(50%);
-}
-
 .saey-bottom-nav a {
-  width: 46px;
-  height: 46px;
-  min-width: 46px;
-  flex: 0 0 46px;
+  width: 62px;
+  height: 52px;
+  min-width: 62px;
+  flex: 0 0 62px;
   display: grid;
   align-items: center;
   justify-content: center;
   padding: 0;
-  border-radius: 13px;
-  color: #9CA3AF;
+  border-radius: 17px;
+  color: #0F172A;
   text-decoration: none;
   transition: color .18s ease, background-color .18s ease, box-shadow .18s ease;
 }
@@ -204,8 +192,8 @@ select {
   height: 44px;
   display: grid;
   place-items: center;
-  border-radius: 13px;
-  background: #F4F5F6;
+  border-radius: 15px;
+  background: transparent;
   color: currentColor;
   transition: background-color .18s ease, color .18s ease, box-shadow .18s ease;
 }
@@ -222,14 +210,17 @@ select {
 
 .saey-bottom-nav a.active,
 .saey-bottom-nav a[aria-current="page"] {
-  color: #FFFFFF;
+  color: #000000;
 }
 
 .saey-bottom-nav a.active .nav-icon,
 .saey-bottom-nav a[aria-current="page"] .nav-icon {
-  background: #000000 !important;
-  color: #FFFFFF;
-  box-shadow: 0 9px 16px rgba(0, 0, 0, .22);
+  width: 62px;
+  height: 50px;
+  border-radius: 19px;
+  background: #F2F2F2 !important;
+  color: #000000;
+  box-shadow: 0 8px 17px rgba(15, 23, 42, .08);
 }
 
 .saey-home .saey-bottom-nav svg {
@@ -244,7 +235,7 @@ select {
 }
 
 .saey-cart .cart-checkout-bar {
-  bottom: 90px;
+  bottom: 96px;
 }
 
 /* Make the existing interface icons use the same rounded, outlined family. */
@@ -297,25 +288,26 @@ body.saey-chats {
 
   .saey-bottom-nav {
     width: calc(100% - 20px);
-    height: 72px !important;
-    min-height: 72px;
-    margin-bottom: 8px;
+    height: 74px !important;
+    min-height: 74px;
+    margin-bottom: 10px;
     padding-right: 11px;
     padding-left: 11px;
     gap: 5px;
   }
 
   .saey-bottom-nav a {
-    width: 42px;
-    height: 42px;
-    min-width: 42px;
-    flex-basis: 42px;
+    width: 54px;
+    height: 46px;
+    min-width: 54px;
+    flex-basis: 54px;
   }
 
   .saey-bottom-nav .nav-icon { width: 40px; height: 40px; }
-  .saey-bottom-nav::after { bottom: 6px; width: 110px; height: 3px; }
+  .saey-bottom-nav a.active .nav-icon,
+  .saey-bottom-nav a[aria-current="page"] .nav-icon { width: 54px; height: 44px; }
 
   .saey-cart .cart-checkout-bar {
-    bottom: 80px;
+    bottom: 84px;
   }
 }
