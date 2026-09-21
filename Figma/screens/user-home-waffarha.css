@@ -453,24 +453,15 @@
 
 .saey-home .quick-services {
   justify-content: space-between;
-  gap: 6px;
+  gap: 10px;
 }
 
-.saey-home .section-quick-services,
 .saey-home .section-recommended,
 .saey-home .collection-section {
   margin-right: -14px;
   margin-left: -14px;
   padding: 16px 14px;
   border-radius: 20px;
-}
-
-.saey-home .section-quick-services {
-  --section-ink: #000;
-  padding: 10px;
-  border: 1px solid #e8ebef;
-  background: #fff;
-  box-shadow: 0 8px 18px rgba(15, 23, 42, .045);
 }
 
 .saey-home .section-recommended {
@@ -501,32 +492,29 @@
   justify-items: center;
   align-content: center;
   gap: 7px;
-  padding: 6px 3px;
-  border-radius: 16px;
-  color: #475569;
+  padding: 3px 2px;
+  color: #0f172a;
   text-align: center;
   text-decoration: none;
-  transition: background-color .18s ease, color .18s ease, transform .18s ease;
 }
 
 .saey-home .quick-services a > span {
-  width: 46px;
-  height: 46px;
+  width: 52px;
+  height: 52px;
   display: grid;
   place-items: center;
   border: 0;
-  border-radius: 15px;
-  background: #f3f4f6;
-  color: #000;
+  border-radius: 18px;
+  background: #f2f2f2;
+  color: #0f172a;
+  box-shadow: 0 7px 15px rgba(15, 23, 42, .05);
 }
-.saey-home .quick-services a:first-child {
-  background: #000;
-  color: #fff;
-  box-shadow: 0 8px 15px rgba(0, 0, 0, .15);
-}
-.saey-home .quick-services a:first-child > span { background: rgba(255, 255, 255, .15); color: #fff; }
-.saey-home .quick-services svg { width: 22px; height: 22px; }
-.saey-home .quick-services strong { font-size: 11px; font-weight: 850; white-space: nowrap; }
+.saey-home .quick-services svg { width: 23px; height: 23px; }
+.saey-home .quick-services strong { font-size: 10px; font-weight: 850; white-space: nowrap; }
+.saey-home .quick-services .service-offers > span { background: #000; color: #fff; box-shadow: 0 8px 17px rgba(0, 0, 0, .18); }
+.saey-home .quick-services .service-categories > span { background: #eef4ff; color: #1d4ed8; }
+.saey-home .quick-services .service-stores > span { background: #ecfdf5; color: #047857; }
+.saey-home .quick-services .service-orders > span { background: #fff1f2; color: #be123c; }
 
 .saey-home .offer-section,
 .saey-home .collection-section {
@@ -626,15 +614,128 @@
 }
 .saey-home .collection-section .section-header { margin-bottom: 12px; }
 
+.saey-home .stores-nearby-section {
+  --section-ink: #0f172a;
+  min-width: 0;
+  margin-right: -14px;
+  margin-left: -14px;
+  padding: 16px 14px;
+  border-radius: 20px;
+  background: #f1f4f6;
+}
+
+.saey-home .stores-nearby-section .section-header { margin-bottom: 12px; }
+
+.saey-home .nearby-store-row {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 1px 1px 4px;
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
+}
+.saey-home .nearby-store-row::-webkit-scrollbar { display: none; }
+
+.saey-home .nearby-store-card {
+  width: 248px;
+  min-height: 102px;
+  flex: 0 0 248px;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  border: 1px solid #e1e8f1;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 5px 14px rgba(15, 23, 42, .05);
+  color: #0f172a;
+  scroll-snap-align: start;
+  text-decoration: none;
+}
+
+.saey-home .nearby-store-card > img {
+  width: 82px;
+  min-width: 82px;
+  object-fit: cover;
+  background: #e5e7eb;
+}
+
+.saey-home .nearby-store-copy {
+  min-width: 0;
+  flex: 1;
+  display: grid;
+  align-content: center;
+  gap: 4px;
+  padding: 11px;
+}
+
+.saey-home .store-title {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.saey-home .store-title strong {
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 900;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.saey-home .store-title i {
+  flex: 0 0 auto;
+  padding: 2px 5px;
+  border-radius: 5px;
+  background: #ecfdf5;
+  color: #047857;
+  font-size: 8px;
+  font-style: normal;
+  font-weight: 850;
+}
+.saey-home .nearby-store-copy > small {
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.saey-home .store-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7px;
+  margin-top: 2px;
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 750;
+}
+.saey-home .store-meta b { color: #0f172a; font-size: 10px; }
+.saey-home .store-meta em {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: #64748b;
+  font-style: normal;
+}
+.saey-home .store-meta svg {
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 @media (max-width: 370px) {
   .saey-home .waffarha-shell { padding-right: 11px; padding-left: 11px; gap: 17px; }
-  .saey-home .section-quick-services,
   .saey-home .section-recommended,
-  .saey-home .collection-section { margin-right: -11px; margin-left: -11px; padding-right: 11px; padding-left: 11px; }
+  .saey-home .collection-section,
+  .saey-home .stores-nearby-section { margin-right: -11px; margin-left: -11px; padding-right: 11px; padding-left: 11px; }
   .saey-home .hero-copy { width: 75%; padding: 21px 18px; }
   .saey-home .hero-copy h1 { font-size: 25px; }
-  .saey-home .quick-services a { min-height: 70px; gap: 5px; }
-  .saey-home .quick-services a > span { width: 42px; height: 42px; border-radius: 14px; }
-  .saey-home .quick-services strong { font-size: 10px; }
+  .saey-home .quick-services { gap: 6px; }
+  .saey-home .quick-services a { min-height: 72px; }
+  .saey-home .quick-services a > span { width: 46px; height: 46px; border-radius: 16px; }
+  .saey-home .quick-services strong { font-size: 9px; }
   .saey-home .waffarha-product { min-width: 126px; flex-basis: 126px; }
+  .saey-home .nearby-store-card { width: 234px; flex-basis: 234px; }
 }
