@@ -12,15 +12,15 @@
     rel="stylesheet">
   <style>
     :root {
-      --primary: #1D4ED8;
+      --primary: #2563EB;
       --primary-hover: #1E40AF;
       --primary-soft: #EFF6FF;
-      --primary-text: #1D4ED8;
+      --primary-text: #2563EB;
       --accent-amber: #F59E0B;
       --accent-amber-hover: #D97706;
-      --bg-stage: #F8FAFC;
+      --bg-stage: #F7F9FC;
       --panel-bg: #FFFFFF;
-      --border: #F1F5F9;
+      --border: #E1E8F1;
       --border-soft: #F8FAFC;
       --text-main: #0F172A;
       --text-muted: #64748B;
@@ -557,6 +557,20 @@
       border-radius: 50px;
       display: block;
       overflow: hidden;
+    }
+
+    .phone-home-indicator {
+      position: absolute;
+      left: 50%;
+      bottom: 3px;
+      width: 126px;
+      height: 4px;
+      transform: translateX(-50%);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.72);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+      z-index: 25;
+      pointer-events: none;
     }
 
     /* --------------------------------------------------------------------------
@@ -2082,6 +2096,7 @@
             <div class="phone-btn-power"></div>
             <iframe id="phoneViewportIframe" class="phone-screen-iframe" src="screens/01-login.html"
               title="شاشة الموبايل"></iframe>
+            <div class="phone-home-indicator" aria-hidden="true"></div>
           </div>
           <button class="stage-arrow-btn canvas-nav-btn canvas-nav-next" onclick="nextScreen()" title="الشاشة التالية"
             aria-label="الشاشة التالية">
@@ -2695,13 +2710,43 @@
       notesEn: ['Slider, categories, products, then stores', 'Store QR is scanned outside the app', 'No delivery experience']
     });
 
+    screens.push({
+      id: 31,
+      num: '10',
+      section: 'تطبيق المستخدم',
+      sectionEn: 'Buyer Experience',
+      file: '15-account.html',
+      title: 'حسابي',
+      titleEn: 'My Account',
+      tags: ['Account', 'Settings', 'Support'],
+      desc: 'صفحة حساب المستخدم مرتبة في مجموعات للوصول السريع للطلبات والملف الشخصي والإعدادات والدعم.',
+      descEn: 'Grouped account page for orders, profile, settings, and support.',
+      notes: ['رأس الحساب والهوية', 'مجموعات إعدادات واضحة', 'تسجيل الخروج وإصدار التطبيق'],
+      notesEn: ['Account identity header', 'Clear settings groups', 'Logout and app version']
+    });
+
+    screens.push({
+      id: 32,
+      num: '11',
+      section: 'تطبيق المستخدم',
+      sectionEn: 'Buyer Experience',
+      file: '16-orders.html',
+      title: 'الطلبات وحالاتها',
+      titleEn: 'Orders & Status',
+      tags: ['Orders', 'Pickup', 'Status'],
+      desc: 'قائمة الطلبات مع حالة كل طلب وخط زمني مختصر للاستلام من المتجر.',
+      descEn: 'Order list with status and pickup progress for each order.',
+      notes: ['حالة الطلب الحالية', 'خط زمني للتأكيد والتجهيز والاستلام', 'تفاصيل الطلب والتواصل مع المتجر'],
+      notesEn: ['Current order state', 'Progress timeline to pickup', 'Order details and store contact']
+    });
+
     screens.push(
-      { id: 25, num: '10', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '09-categories.html', title: 'كل الأقسام', titleEn: 'All Categories', tags: ['Categories', 'Discovery'], desc: 'صفحة تصفح جميع أقسام سعي.', descEn: 'Browse every Saey category.', notes: ['شبكة أقسام', 'بحث في الأقسام'], notesEn: ['Category grid', 'Category search'] },
+      { id: 25, num: '11', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '09-categories.html', title: 'كل الأقسام', titleEn: 'All Categories', tags: ['Categories', 'Discovery'], desc: 'صفحة تصفح جميع أقسام سعي.', descEn: 'Browse every Saey category.', notes: ['شبكة أقسام', 'بحث في الأقسام'], notesEn: ['Category grid', 'Category search'] },
       { id: 26, num: '11', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '10-featured-products.html', title: 'منتجات مميزة', titleEn: 'Featured Products', tags: ['Products', 'Catalog'], desc: 'كتالوج للمنتجات المميزة مع السعر والتقييم.', descEn: 'Featured product catalog with prices and ratings.', notes: ['شبكة منتجات', 'سعر قبل وبعد الخصم'], notesEn: ['Product grid', 'Original and discounted price'] },
       { id: 27, num: '12', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '11-featured-stores.html', title: 'متاجر مميزة', titleEn: 'Featured Stores', tags: ['Stores', 'Discovery'], desc: 'قائمة بالمتاجر المميزة القريبة من المستخدم.', descEn: 'A list of featured stores near the user.', notes: ['بحث عن متجر', 'المسافة وحالة المتجر'], notesEn: ['Store search', 'Distance and store status'] },
       { id: 28, num: '13', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '12-product-details.html', title: 'تفاصيل المنتج', titleEn: 'Product Details', tags: ['Product', 'Pickup', 'Favorite'], desc: 'تفاصيل المنتج مع الصور والمقاس واللون والمتجر وزر الإضافة للطلب.', descEn: 'Product information, choices, store details, and add-to-order action.', notes: ['شارة خصم ومفضلة', 'اختيار المقاس واللون', 'استلام من المتجر فقط'], notesEn: ['Discount and favorite', 'Size and color choices', 'Store pickup only'] },
       { id: 29, num: '14', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '13-notifications.html', title: 'الإشعارات', titleEn: 'Notifications', tags: ['Notifications', 'Orders', 'Offers'], desc: 'إشعارات الطلبات والعروض مع إمكانية حذفها كلها.', descEn: 'Order and offer notifications with a clear-all action.', notes: ['حالات طلب الاستلام', 'عروض المتاجر', 'حالة فارغة بعد حذف الكل'], notesEn: ['Pickup order updates', 'Store offers', 'Empty state after clear all'] },
-      { id: 30, num: '15', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '14-chats.html', title: 'الدردشات', titleEn: 'Chats', tags: ['Chat', 'Stores', 'Unread'], desc: 'محادثات مباشرة مع المتاجر ببحث وفلترة للرسائل غير المقروءة.', descEn: 'Direct store conversations with search and unread filtering.', notes: ['بحث بالمتجر أو المنتج', 'حالة اتصال ورسائل غير مقروءة', 'بدء محادثة جديدة من المتجر'], notesEn: ['Search by store or product', 'Online status and unread messages', 'Start a new store conversation'] }
+      { id: 30, num: '17', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '14-chats.html', title: 'الدردشات', titleEn: 'Chats', tags: ['Chat', 'Stores', 'Search'], desc: 'قائمة محادثات مباشرة مع المتاجر مع بحث باسم المتجر أو المنتج.', descEn: 'Direct store conversations with search by store or product.', notes: ['بحث باسم المتجر أو المنتج', 'حالة قراءة ووقت آخر رسالة', 'فتح محادثة مباشرة من القائمة'], notesEn: ['Search by store or product', 'Read state and last message time', 'Open a direct conversation from the list'] }
     );
 
     // المرحلة الأولى الحالية تقتصر على شاشات التسجيل والتهيئة فقط.
@@ -2709,14 +2754,14 @@
       '00-splash.html', '00-splash-01.html', '00-splash-02.html',
       '01-login.html', '02-signup.html', '03-verify-otp.html',
       '04-account-type.html', '05-profile-setup.html',
-      '06-distributor-setup.html', '07-forgot-password.html', '08-profile-setup.html', '08-user-home.html',
-      '09-categories.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '13-notifications.html', '14-chats.html'
+      '06-distributor-setup.html', '07-forgot-password.html', '08-profile-setup.html', '08-user-home.html', '15-account.html', '16-orders.html',
+      '09-categories.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '13-notifications.html', '14-chat-conversation.html', '14-chats.html'
     ]);
     const authScreenOrder = [
       '00-splash.html', '00-splash-01.html', '00-splash-02.html',
       '01-login.html', '02-signup.html', '03-verify-otp.html',
       '05-profile-setup.html', '04-account-type.html', '08-profile-setup.html',
-      '06-distributor-setup.html', '08-user-home.html', '09-categories.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '13-notifications.html', '14-chats.html', '07-forgot-password.html'
+      '06-distributor-setup.html', '08-user-home.html', '15-account.html', '16-orders.html', '09-categories.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '13-notifications.html', '14-chat-conversation.html', '14-chats.html', '07-forgot-password.html'
     ];
     screens.splice(0, screens.length, ...screens
       .filter(screen => authScreenFiles.has(screen.file))

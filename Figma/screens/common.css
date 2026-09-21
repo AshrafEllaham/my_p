@@ -15,8 +15,8 @@
   --accent-amber-text: #B45309;
   --accent-amber-gradient: linear-gradient(135deg, #FBBF24 0%, #F59E0B 50%, #EA580C 100%);
 
-  --bg-page: #F4F6FA;
-  --bg-ambient: radial-gradient(circle at 50% -10%, rgba(29, 78, 216, 0.05) 0%, transparent 50%), #F4F6FA;
+  --bg-page: #F7F9FC;
+  --bg-ambient: radial-gradient(circle at 50% -10%, rgba(37, 99, 235, 0.05) 0%, transparent 50%), #F7F9FC;
   --card-bg: #FFFFFF;
   --card-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
   --card-border: rgba(226, 232, 240, 0.85);

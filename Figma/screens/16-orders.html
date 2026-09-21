@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>سعي — الطلبات</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="auth.css">
+  <link rel="stylesheet" href="orders.css">
+</head>
+<body class="saey-orders">
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 17 11" width="17" height="11" fill="currentColor"><path d="M1 9a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-1zm4-2.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v3.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-3.5zm4-2.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1V10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V4zm4-3a1 1 0 0 1 1 1V10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V1z"/></svg>
+      <svg viewBox="0 0 16 12" width="16" height="12" fill="currentColor"><path d="M8 10a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-3.8-3.3a5.5 5.5 0 0 1 7.6 0 .8.8 0 0 0 1.1-1.1 7 7 0 0 0-9.8 0 .8.8 0 0 0 1.1 1.1zm-2.2-2.2a8.5 8.5 0 0 1 12 0 .8.8 0 0 0 1.1-1.1 10 10 0 0 0-14.2 0 .8.8 0 0 0 1.1 1.1z"/></svg>
+      <svg viewBox="0 0 25 12" width="24" height="11" fill="none"><rect x=".75" y=".75" width="20.5" height="10.5" rx="3.25" stroke="currentColor" stroke-width="1.2" stroke-opacity=".4"/><rect x="2.5" y="2.5" width="17" height="7" rx="1.8" fill="currentColor"/><path d="M23 4v4a1.2 1.2 0 0 1-1.2 1.2H23A1.2 1.2 0 0 0 24.2 8V5.2A1.2 1.2 0 0 0 23 4Z" fill="currentColor" fill-opacity=".4"/></svg>
+    </div>
+  </div>
+
+  <main class="orders-page">
+    <header class="orders-head"><a class="orders-back" href="08-user-home.html" aria-label="العودة للرئيسية"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a><div><h1>الطلبات</h1><span>تابع طلباتك وحالة الاستلام</span></div><span></span></header>
+    <div class="orders-summary"><span class="summary-icon"><svg viewBox="0 0 24 24"><path d="M6 3h12v18H6z"/><path d="M9 7h6M9 11h6M9 15h4"/></svg></span><div><strong>٣ طلبات</strong><small>آخر تحديث منذ دقائق</small></div><span class="summary-status"><i></i>كلها من المتجر</span></div>
+
+    <section class="orders-list" aria-label="قائمة الطلبات">
+      <article class="order-card">
+        <header class="order-card-head"><div><span class="order-number">طلب #SA-1024</span><small>اليوم · 10:32 ص</small></div><span class="order-status ready">جاهز للاستلام</span></header>
+        <div class="order-store"><span class="store-mark blue">ن</span><div><strong>نقطة ستور</strong><small>مدينة نصر · استلام من المتجر</small></div></div>
+        <div class="order-product"><img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=180&q=85" alt="جاكيت جلد طبيعي"><div><strong>جاكيت جلد طبيعي رجالي</strong><small>بني · مقاس M · الكمية ١</small></div><b>٢,٨٩٠ ج.م</b></div>
+        <div class="order-timeline"><span class="done"><i>✓</i><small>تم التأكيد</small></span><span class="done"><i>✓</i><small>قيد التجهيز</small></span><span class="active"><i>●</i><small>جاهز للاستلام</small></span><span><i></i><small>تم الاستلام</small></span></div>
+        <button class="order-details-button" type="button" data-target="details1">عرض تفاصيل الحالة <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="order-details" id="details1"><p>يمكنك استلام الطلب من نقطة ستور بعد إظهار رقم الطلب للمتجر.</p><a href="14-chat-conversation.html?store=%D9%86%D9%82%D8%B7%D8%A9%20%D8%B3%D8%AA%D9%88%D8%B1">تواصل مع المتجر</a></div>
+      </article>
+
+      <article class="order-card">
+        <header class="order-card-head"><div><span class="order-number">طلب #SA-1021</span><small>أمس · 4:18 م</small></div><span class="order-status preparing">قيد التجهيز</span></header>
+        <div class="order-store"><span class="store-mark mint">ت</span><div><strong>التقنية الحديثة</strong><small>المعادي · استلام من المتجر</small></div></div>
+        <div class="order-product"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=180&q=85" alt="سماعة لاسلكية"><div><strong>سماعة لاسلكية بعزل الضوضاء</strong><small>أسود · الكمية ١</small></div><b>٢,٣٥٠ ج.م</b></div>
+        <div class="order-timeline"><span class="done"><i>✓</i><small>تم التأكيد</small></span><span class="active"><i>●</i><small>قيد التجهيز</small></span><span><i></i><small>جاهز للاستلام</small></span><span><i></i><small>تم الاستلام</small></span></div>
+        <button class="order-details-button" type="button" data-target="details2">عرض تفاصيل الحالة <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="order-details" id="details2"><p>المتجر يجهز المنتج الآن، وسيظهر لك تحديث جديد عند جاهزيته للاستلام.</p><a href="14-chat-conversation.html?store=%D8%A7%D9%84%D8%AA%D9%82%D9%86%D9%8A%D8%A9%20%D8%A7%D9%84%D8%AD%D8%AF%D9%8A%D8%AB%D8%A9">تواصل مع المتجر</a></div>
+      </article>
+
+      <article class="order-card completed-card">
+        <header class="order-card-head"><div><span class="order-number">طلب #SA-1014</span><small>١٢ مايو ٢٠٢٦</small></div><span class="order-status completed">مكتمل</span></header>
+        <div class="order-store"><span class="store-mark peach">أ</span><div><strong>أزياء الشرق</strong><small>مدينة نصر · تم الاستلام من المتجر</small></div></div>
+        <div class="order-product"><img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=180&q=85" alt="فستان نسائي أنيق"><div><strong>فستان نسائي أنيق</strong><small>وردي · مقاس L · الكمية ١</small></div><b>١٩٠ ج.م</b></div>
+        <div class="completed-note"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg><span>تم استلام الطلب بنجاح</span></div>
+        <button class="order-details-button" type="button" data-target="details3">عرض تفاصيل الطلب <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="order-details" id="details3"><p>تم استلام الطلب من المتجر بتاريخ ١٢ مايو ٢٠٢٦.</p><a href="12-product-details.html">إعادة شراء المنتج</a></div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    document.querySelectorAll('.order-details-button').forEach(button => button.addEventListener('click', () => {
+      const details = document.getElementById(button.dataset.target);
+      const isOpen = details.classList.toggle('visible');
+      button.classList.toggle('open', isOpen);
+    }));
+  </script>
+</body>
+</html>
