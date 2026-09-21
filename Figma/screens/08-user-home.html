@@ -1,61 +1,191 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>سعي — الرئيسية</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="auth.css"><link rel="stylesheet" href="user-home.css"><link rel="stylesheet" href="user-home-layout.css"><link rel="stylesheet" href="user-home-structure.css"><link rel="stylesheet" href="user-home-professional.css"><link rel="stylesheet" href="user-home-polish.css"><script src="user-home-slider.js" defer></script>  <link rel="stylesheet" href="uber-ui.css">
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>سعي — الرئيسية</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="auth.css">
+  <link rel="stylesheet" href="user-home.css">
+  <link rel="stylesheet" href="user-home-layout.css">
+  <link rel="stylesheet" href="user-home-structure.css">
+  <link rel="stylesheet" href="user-home-professional.css">
+  <link rel="stylesheet" href="user-home-polish.css">
+  <link rel="stylesheet" href="uber-ui.css">
+  <link rel="stylesheet" href="user-home-waffarha.css">
 </head>
 <body class="saey-home">
   <div class="status-bar">
     <span class="status-time">9:41</span>
     <div class="status-icons">
-      <svg class="status-icon-cellular" viewBox="0 0 17 11" width="17" height="11" fill="currentColor"><path d="M1 9a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-1zm4-2.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v3.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-3.5zm4-2.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1V10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V4zm4-3a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1V10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V1z"/></svg>
-      <svg class="status-icon-wifi" viewBox="0 0 16 12" width="16" height="12" fill="currentColor"><path d="M8 10a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-3.8-3.3a5.5 5.5 0 0 1 7.6 0 .8.8 0 0 0 1.1-1.1 7 7 0 0 0-9.8 0 .8.8 0 0 0 1.1 1.1zm-2.2-2.2a8.5 8.5 0 0 1 12 0 .8.8 0 0 0 1.1-1.1 10 10 0 0 0-14.2 0 .8.8 0 0 0 1.1 1.1z"/></svg>
-      <svg class="status-icon-battery" viewBox="0 0 25 12" width="24" height="11" fill="none"><rect x="0.75" y="0.75" width="20.5" height="10.5" rx="3.25" stroke="currentColor" stroke-width="1.2" stroke-opacity=".4"/><rect x="2.5" y="2.5" width="17" height="7" rx="1.8" fill="currentColor"/><path d="M23 4v4a1.2 1.2 0 0 0 1.2-1.2v-1.6A1.2 1.2 0 0 0 23 4z" fill="currentColor" fill-opacity=".4"/></svg>
+      <svg viewBox="0 0 17 11" width="17" height="11" fill="currentColor"><path d="M1 9a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-1zm4-2.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v3.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-3.5zm4-2.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1V10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V4zm4-3a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1V10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V1z"/></svg>
+      <svg viewBox="0 0 16 12" width="16" height="12" fill="currentColor"><path d="M8 10a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-3.8-3.3a5.5 5.5 0 0 1 7.6 0 .8.8 0 0 0 1.1-1.1 7 7 0 0 0-9.8 0 .8.8 0 0 0 1.1 1.1zm-2.2-2.2a8.5 8.5 0 0 1 12 0 .8.8 0 0 0 1.1-1.1 10 10 0 0 0-14.2 0 .8.8 0 0 0 1.1 1.1z"/></svg>
+      <svg viewBox="0 0 25 12" width="24" height="11" fill="none"><rect x=".75" y=".75" width="20.5" height="10.5" rx="3.25" stroke="currentColor" stroke-width="1.2" stroke-opacity=".4"/><rect x="2.5" y="2.5" width="17" height="7" rx="1.8" fill="currentColor"/><path d="M23 4v4a1.2 1.2 0 0 0 1.2-1.2V5.2A1.2 1.2 0 0 0 23 4z" fill="currentColor" fill-opacity=".4"/></svg>
     </div>
   </div>
-  <main class="home-page">
-    <header class="market-header"><a class="user-identity" href="15-account.html"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=85" alt="صورة محمد"><span><strong>محمد</strong><small>id: ABC45678</small></span></a><div class="market-header-actions"><a class="market-header-btn" href="14-chats.html" aria-label="الدردشة"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg><i>2</i></a><a class="market-header-btn" href="13-notifications.html" aria-label="الإشعارات"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><i>2</i></a></div></header>
-    <div class="market-search"><input type="search" placeholder="ابحث عن منتجات أو موزعين..."><button type="button" aria-label="بحث"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button></div>
-    <section class="market-banner"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=85" alt="عروض سعي"><div class="banner-overlay"></div><div class="banner-copy"><span>اختيار سعي</span><h2>اختيارات مميزة<br>تستاهل تشوفها</h2><p>عروض حصرية من موزعين موثوقين</p></div><div class="banner-dots"><i class="active"></i><i></i><i></i></div></section>
-    <section class="market-section"><div class="market-section-head"><h2>الأقسام الرئيسية</h2><a href="09-categories.html">عرض الكل</a></div><div class="market-categories"><a class="selected" href="#"><span class="market-category-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg></span><span>ملابس</span></a><a href="#"><span class="market-category-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="3" ry="3"/><path d="M12 18h.01"/></svg></span><span>إلكترونيات</span></a><a href="#"><span class="market-category-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span><span>المنزل</span></a><a href="09-categories.html"><span class="market-category-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1.5"/><rect width="7" height="7" x="14" y="3" rx="1.5"/><rect width="7" height="7" x="14" y="14" rx="1.5"/><rect width="7" height="7" x="3" y="14" rx="1.5"/></svg></span><span>كل الأقسام</span></a></div></section>
-    <section class="market-section recommended-section"><div class="market-section-head"><h2>مقترح لك</h2><a href="10-featured-products.html">عرض الكل</a></div><div class="market-product-grid"><a class="market-product" href="12-product-details.html"><span class="market-product-image"><img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=500&q=85" alt="جاكيت جلد طبيعي"><i class="product-favorite" aria-label="أضف للمفضلة"><svg viewBox="0 0 24 24"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3C14.7 3 13.5 3.5 12 5 10.5 3.5 9.3 3 7.5 3A5.5 5.5 0 0 0 2 8.5C2 10.8 3.5 12.5 5 14l7 7Z"/></svg></i></span><strong>جاكيت جلد طبيعي رجالي</strong><span class="market-price"><b>٢,٨٩٠ ج.م</b></span><span class="product-meta-row"><span class="market-product-category">ملابس</span><small class="product-rating-only">4.9 <i>★</i></small></span></a><a class="market-product" href="12-product-details.html"><span class="market-product-image"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=500&q=85" alt="سماعة لاسلكية"><i class="product-favorite" aria-label="أضف للمفضلة"><svg viewBox="0 0 24 24"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3C14.7 3 13.5 3.5 12 5 10.5 3.5 9.3 3 7.5 3A5.5 5.5 0 0 0 2 8.5C2 10.8 3.5 12.5 5 14l7 7Z"/></svg></i></span><strong>سماعة لاسلكية بعزل الضوضاء</strong><span class="market-price"><b>٢,٣٥٠ ج.م</b></span><span class="product-meta-row"><span class="market-product-category">إلكترونيات</span><small class="product-rating-only">4.9 <i>★</i></small></span></a><a class="market-product" href="12-product-details.html"><span class="market-product-image"><img src="https://images.unsplash.com/photo-1523381294911-8d3cead13475?auto=format&fit=crop&w=500&q=85" alt="حقيبة يد"><em>مختار لك</em><i class="product-favorite" aria-label="أضف للمفضلة"><svg viewBox="0 0 24 24"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3C14.7 3 13.5 3.5 12 5 10.5 3.5 9.3 3 7.5 3A5.5 5.5 0 0 0 2 8.5C2 10.8 3.5 12.5 5 14l7 7Z"/></svg></i></span><strong>حقيبة يد عملية وأنيقة</strong><span class="market-price"><b>١,١٩٠ ج.م</b></span><span class="product-meta-row"><span class="market-product-category">إكسسوارات</span><small class="product-rating-only">4.8 <i>★</i></small></span></a></div></section>
-    <section class="market-section category-section"><div class="market-section-head"><h2>ملابس وأزياء</h2><a href="10-featured-products.html">عرض الكل</a></div><div class="market-product-grid"><a class="market-product" href="12-product-details.html"><span class="market-product-image"><img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=500&q=85" alt="فستان نسائي"><em>خصم ٢٥٪</em></span><strong>فستان نسائي أنيق</strong><span class="market-price"><b>١٩٠ ج.م</b></span><span class="product-meta-row"><span class="market-product-category">أزياء الشرق</span><small class="product-rating-only">4.8 <i>★</i></small></span></a><a class="market-product" href="12-product-details.html"><span class="market-product-image"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=500&q=85" alt="حذاء رياضي"></span><strong>حذاء رياضي يومي مريح</strong><span class="market-price"><b>٩٥٠ ج.م</b></span><span class="product-meta-row"><span class="market-product-category">ملابس رياضية</span><small class="product-rating-only">4.7 <i>★</i></small></span></a></div></section>
-    <section class="market-section category-section"><div class="market-section-head"><h2>إلكترونيات</h2><a href="10-featured-products.html">عرض الكل</a></div><div class="market-product-grid"><a class="market-product" href="12-product-details.html"><span class="market-product-image"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=500&q=85" alt="ساعة ذكية"></span><strong>ساعة ذكية للمتابعة اليومية</strong><span class="market-price"><b>١,٨٥٠ ج.م</b></span><span class="product-meta-row"><span class="market-product-category">ساعات ذكية</span><small class="product-rating-only">4.9 <i>★</i></small></span></a><a class="market-product" href="12-product-details.html"><span class="market-product-image"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=500&q=85" alt="سماعة لاسلكية"><em>الأكثر طلبًا</em></span><strong>سماعة لاسلكية بعزل الضوضاء</strong><span class="market-price"><b>٢,٣٥٠ ج.م</b></span><span class="product-meta-row"><span class="market-product-category">صوتيات</span><small class="product-rating-only">4.9 <i>★</i></small></span></a></div></section>
-    <section class="market-section category-section"><div class="market-section-head"><h2>المنزل والمفروشات</h2><a href="10-featured-products.html">عرض الكل</a></div><div class="market-product-grid"><a class="market-product" href="12-product-details.html"><span class="market-product-image"><img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=500&q=85" alt="كنبة منزلية"></span><strong>كنبة مريحة بتصميم عصري</strong><span class="market-price"><b>٨,٩٥٠ ج.م</b></span><span class="product-meta-row"><span class="market-product-category">غرفة المعيشة</span><small class="product-rating-only">4.8 <i>★</i></small></span></a><a class="market-product" href="12-product-details.html"><span class="market-product-image"><img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=500&q=85" alt="طاولة طعام"></span><strong>طاولة طعام خشب طبيعي</strong><span class="market-price"><b>٤,٦٠٠ ج.م</b></span><span class="product-meta-row"><span class="market-product-category">مفروشات</span><small class="product-rating-only">4.7 <i>★</i></small></span></a></div></section>
-    <section class="market-section category-section"><div class="market-section-head"><h2>العناية والجمال</h2><a href="10-featured-products.html">عرض الكل</a></div><div class="market-product-grid"><a class="market-product" href="12-product-details.html"><span class="market-product-image"><img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=500&q=85" alt="عناية بالبشرة"></span><strong>مجموعة عناية يومية بالبشرة</strong><span class="market-price"><b>٤٨٠ ج.م</b></span><span class="product-meta-row"><span class="market-product-category">عناية شخصية</span><small class="product-rating-only">4.8 <i>★</i></small></span></a><a class="market-product" href="12-product-details.html"><span class="market-product-image"><img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=500&q=85" alt="مستحضرات تجميل"></span><strong>مجموعة ألوان أساسية</strong><span class="market-price"><b>٦٢٠ ج.م</b></span><span class="product-meta-row"><span class="market-product-category">تجميل</span><small class="product-rating-only">4.7 <i>★</i></small></span></a></div></section>
-    <section class="market-section distributors"><div class="market-section-head"><h2>متاجر مميزة</h2><a href="11-featured-stores.html">كل المتاجر</a></div><div class="distributor-row"><a href="11-featured-stores.html"><span class="distributor-logo logo-one"><img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=120&q=85" alt="النجم الساطع"></span><span class="store-card-copy"><strong>النجم الساطع</strong><small>4.9 <i>★</i> · ملابس رجالية</small><em>متجر موثوق</em></span><svg class="store-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></a><a href="11-featured-stores.html"><span class="distributor-logo logo-two"><img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=120&q=85" alt="التقنية الحديثة"></span><span class="store-card-copy"><strong>التقنية الحديثة</strong><small>4.8 <i>★</i> · إلكترونيات</small><em>متجر موثوق</em></span><svg class="store-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></a><a href="11-featured-stores.html"><span class="distributor-logo logo-three"><img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=120&q=85" alt="أزياء الشرق"></span><span class="store-card-copy"><strong>أزياء الشرق</strong><small>4.9 <i>★</i> · أزياء نسائية</small><em>متجر موثوق</em></span><svg class="store-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></a></div></section>
+
+  <main class="home-page waffarha-shell">
+    <header class="waffarha-topbar">
+      <a class="saey-brand" href="15-account.html" aria-label="حسابي">
+        <span class="saey-brand-mark"><img src="saey-mark.svg" alt=""></span>
+        <span><small>أهلاً بك في</small><strong>سعي</strong></span>
+      </a>
+      <div class="topbar-actions">
+        <a class="top-icon-button" href="14-chats.html" aria-label="الدردشات">
+          <svg viewBox="0 0 24 24"><path d="M20 15a4 4 0 0 1-4 4H8l-4 3v-7a4 4 0 0 1-2-3.5V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/><path d="M7 10h.01M12 10h.01M17 10h.01"/></svg>
+          <i>2</i>
+        </a>
+        <a class="top-icon-button" href="13-notifications.html" aria-label="الإشعارات">
+          <svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          <i>2</i>
+        </a>
+      </div>
+    </header>
+
+    <label class="waffarha-search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg>
+      <input type="search" placeholder="ابحث عن منتج أو متجر">
+      <button class="home-open-filters" type="button" aria-label="فتح الفلاتر" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2m4 0h10M14 12h6M4 12h2"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/><circle cx="8" cy="12" r="2"/></svg></button>
+    </label>
+
+    <section class="waffarha-hero" aria-label="عروض اليوم">
+      <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=900&q=85" alt="">
+      <div class="hero-shade"></div>
+      <div class="hero-copy">
+        <span>عروض اليوم</span>
+        <h1>وفّر أكتر<br>من كل طلب</h1>
+        <p>خصومات مختارة من متاجر موثوقة في سعي</p>
+        <a href="10-featured-products.html">اكتشف العروض <svg viewBox="0 0 24 24"><path d="m14 6-6 6 6 6"/></svg></a>
+      </div>
+      <div class="hero-pager" aria-label="مؤشر العروض"><i class="active"></i><i></i><i></i></div>
+    </section>
+
+    <section class="quick-services section-quick-services" aria-label="اختصارات">
+      <a href="10-featured-products.html"><span><svg viewBox="0 0 24 24"><path d="m20.5 13.5-7 7a2.1 2.1 0 0 1-3 0l-7-7V3.5h10l7 7a2.1 2.1 0 0 1 0 3Z"/><circle cx="8" cy="8" r="1"/></svg></span><strong>عروض اليوم</strong></a>
+      <a href="09-categories.html"><span><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span><strong>الأقسام</strong></a>
+      <a href="11-featured-stores.html"><span><svg viewBox="0 0 24 24"><path d="M3 9h18l-1 12H4L3 9Z"/><path d="M2 9 4 3h16l2 6M9 13v4M15 13v4"/></svg></span><strong>المتاجر</strong></a>
+      <a href="16-orders.html"><span><svg viewBox="0 0 24 24"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V2h6v2M9 11h6M9 15h4"/></svg></span><strong>طلباتي</strong></a>
+    </section>
+
+    <section class="offer-section recommended-section section-recommended">
+      <div class="section-header"><div><small>اختيارات على ذوقك</small><h2>مقترح لك</h2></div><a href="10-featured-products.html">عرض الكل <svg viewBox="0 0 24 24"><path d="m14 6-6 6 6 6"/></svg></a></div>
+      <div class="waffarha-product-row">
+        <a class="waffarha-product" href="12-product-details.html"><span class="product-photo"><img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=520&q=85" alt="جاكيت جلد طبيعي"><em>خصم ٢٠٪</em></span><strong>جاكيت جلد طبيعي</strong><small>أزياء الشرق</small><b>٢,٨٩٠ ج.م</b><span class="rating">4.9 <i>★</i></span></a>
+        <a class="waffarha-product" href="12-product-details.html"><span class="product-photo"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=520&q=85" alt="سماعة لاسلكية"></span><strong>سماعة بعزل الضوضاء</strong><small>التقنية الحديثة</small><b>٢,٣٥٠ ج.م</b><span class="rating">4.9 <i>★</i></span></a>
+        <a class="waffarha-product" href="12-product-details.html"><span class="product-photo"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=520&q=85" alt="ساعة ذكية"><em>الأكثر طلبًا</em></span><strong>ساعة ذكية</strong><small>سمارت زون</small><b>١,٨٥٠ ج.م</b><span class="rating">4.8 <i>★</i></span></a>
+      </div>
+    </section>
+
+    <section class="collection-section section-fashion">
+      <div class="section-header"><div><h2>ملابس وأزياء</h2></div><a href="10-featured-products.html">عرض الكل <svg viewBox="0 0 24 24"><path d="m14 6-6 6 6 6"/></svg></a></div>
+      <div class="waffarha-product-row">
+        <a class="waffarha-product" href="12-product-details.html"><span class="product-photo"><img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=520&q=85" alt="فستان نسائي"><em>خصم ٢٥٪</em></span><strong>فستان أنيق</strong><small>أزياء الشرق</small><b>١,٩٠٠ ج.م</b><span class="rating">4.8 <i>★</i></span></a>
+        <a class="waffarha-product" href="12-product-details.html"><span class="product-photo"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=520&q=85" alt="حذاء رياضي"></span><strong>حذاء رياضي يومي</strong><small>سبورت لاين</small><b>٩٥٠ ج.م</b><span class="rating">4.7 <i>★</i></span></a>
+        <a class="waffarha-product" href="12-product-details.html"><span class="product-photo"><img src="https://images.unsplash.com/photo-1523381294911-8d3cead13475?auto=format&fit=crop&w=520&q=85" alt="حقيبة عملية"></span><strong>حقيبة عملية</strong><small>ستايل هب</small><b>١,١٩٠ ج.م</b><span class="rating">4.8 <i>★</i></span></a>
+      </div>
+    </section>
+
+    <section class="collection-section section-electronics">
+      <div class="section-header"><div><h2>إلكترونيات</h2></div><a href="10-featured-products.html">عرض الكل <svg viewBox="0 0 24 24"><path d="m14 6-6 6 6 6"/></svg></a></div>
+      <div class="waffarha-product-row">
+        <a class="waffarha-product" href="12-product-details.html"><span class="product-photo"><img src="https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&w=520&q=85" alt="لابتوب"></span><strong>لابتوب للعمل والدراسة</strong><small>التقنية الحديثة</small><b>٢٤,٩٠٠ ج.م</b><span class="rating">4.9 <i>★</i></span></a>
+        <a class="waffarha-product" href="12-product-details.html"><span class="product-photo"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=520&q=85" alt="هاتف ذكي"><em>عرض خاص</em></span><strong>هاتف ذكي</strong><small>موبايل بوينت</small><b>١٥,٥٠٠ ج.م</b><span class="rating">4.8 <i>★</i></span></a>
+        <a class="waffarha-product" href="12-product-details.html"><span class="product-photo"><img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=520&q=85" alt="كاميرا"></span><strong>كاميرا احترافية</strong><small>فوتو هب</small><b>١٢,٤٠٠ ج.م</b><span class="rating">4.7 <i>★</i></span></a>
+      </div>
+    </section>
+
+    <section class="collection-section section-home">
+      <div class="section-header"><div><h2>المنزل والمفروشات</h2></div><a href="10-featured-products.html">عرض الكل <svg viewBox="0 0 24 24"><path d="m14 6-6 6 6 6"/></svg></a></div>
+      <div class="waffarha-product-row">
+        <a class="waffarha-product" href="12-product-details.html"><span class="product-photo"><img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=520&q=85" alt="كنبة منزلية"></span><strong>كنبة عصرية مريحة</strong><small>بيتك أجمل</small><b>٨,٩٥٠ ج.م</b><span class="rating">4.8 <i>★</i></span></a>
+        <a class="waffarha-product" href="12-product-details.html"><span class="product-photo"><img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=520&q=85" alt="طاولة طعام"></span><strong>طاولة خشب طبيعي</strong><small>دار الأثاث</small><b>٤,٦٠٠ ج.م</b><span class="rating">4.7 <i>★</i></span></a>
+        <a class="waffarha-product" href="12-product-details.html"><span class="product-photo"><img src="https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&w=520&q=85" alt="مصباح أرضي"></span><strong>مصباح أرضي</strong><small>نور هوم</small><b>١,٣٥٠ ج.م</b><span class="rating">4.8 <i>★</i></span></a>
+      </div>
+    </section>
   </main>
+
+  <div class="home-filter-sheet-backdrop" id="homeFilterSheet" aria-hidden="true">
+    <section class="home-filter-sheet" role="dialog" aria-modal="true" aria-labelledby="homeFilterTitle">
+      <div class="home-sheet-handle"></div>
+      <header>
+        <h2 id="homeFilterTitle">فلترة المنتجات</h2>
+        <button class="home-close-sheet" type="button" aria-label="إغلاق">
+          <svg viewBox="0 0 24 24"><path d="m18 6-12 12M6 6l12 12"/></svg>
+        </button>
+      </header>
+
+      <p class="home-filter-label">القسم</p>
+      <div class="home-filter-scroller" role="group" aria-label="اختيار القسم">
+        <button class="home-filter-chip selected" type="button">الكل</button>
+        <button class="home-filter-chip" type="button">ملابس وأزياء</button>
+        <button class="home-filter-chip" type="button">إلكترونيات</button>
+        <button class="home-filter-chip" type="button">المنزل</button>
+        <button class="home-filter-chip" type="button">العناية والجمال</button>
+      </div>
+
+      <label class="home-filter-label" for="homeGovernorate">المحافظة</label>
+      <div class="home-sheet-select">
+        <select id="homeGovernorate">
+          <option value="all">كل المحافظات</option>
+          <option value="cairo" selected>القاهرة</option>
+          <option value="giza">الجيزة</option>
+          <option value="alexandria">الإسكندرية</option>
+          <option value="dakahlia">الدقهلية</option>
+        </select>
+        <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+      </div>
+
+      <p class="home-filter-label">الترتيب حسب</p>
+      <div class="home-sort-options" role="group" aria-label="ترتيب المنتجات">
+        <button class="home-sort-option selected" type="button">الأكثر طلبًا</button>
+        <button class="home-sort-option" type="button">الأعلى تقييمًا</button>
+        <button class="home-sort-option" type="button">مضاف حديثًا</button>
+      </div>
+
+      <button class="home-apply-filters" type="button">عرض النتائج</button>
+    </section>
+  </div>
+
   <nav class="saey-bottom-nav market-nav" aria-label="التنقل الرئيسي">
-    <a class="active" href="08-user-home.html" aria-current="page">
-      <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
-      <span>الرئيسية</span>
-    </a>
-    <a href="09-categories.html">
-      <span class="nav-icon"><svg viewBox="0 0 24 24"><rect width="7" height="7" x="3" y="3" rx="1.5"/><rect width="7" height="7" x="14" y="3" rx="1.5"/><rect width="7" height="7" x="14" y="14" rx="1.5"/><rect width="7" height="7" x="3" y="14" rx="1.5"/></svg></span>
-      <span>الأقسام</span>
-    </a>
-    <a href="16-orders.html">
-      <span class="nav-icon"><svg viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4M9 10h6"/></svg></span>
-      <span>الطلبات</span>
-    </a>
-    <a href="15-account.html">
-      <span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></span>
-      <span>حسابي</span>
-    </a>
+    <a class="active" href="08-user-home.html" aria-current="page"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span><span>الرئيسية</span></a>
+    <a href="09-categories.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><rect width="7" height="7" x="3" y="3" rx="1.5"/><rect width="7" height="7" x="14" y="3" rx="1.5"/><rect width="7" height="7" x="14" y="14" rx="1.5"/><rect width="7" height="7" x="3" y="14" rx="1.5"/></svg></span><span>الأقسام</span></a>
+    <a href="16-orders.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4M9 10h6"/></svg></span><span>الطلبات</span></a>
+    <a href="15-account.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></span><span>حسابي</span></a>
   </nav>
   <script>
-    document.querySelectorAll('.product-favorite').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        btn.classList.toggle('saved');
-        const svg = btn.querySelector('svg');
-        if (btn.classList.contains('saved')) {
-          svg.setAttribute('fill', '#EF4444');
-          svg.setAttribute('stroke', '#EF4444');
-        } else {
-          svg.setAttribute('fill', 'none');
-          svg.setAttribute('stroke', 'currentColor');
-        }
+    (() => {
+      const sheet = document.getElementById('homeFilterSheet');
+      const open = document.querySelector('.home-open-filters');
+      const close = () => {
+        sheet.classList.remove('is-open');
+        sheet.setAttribute('aria-hidden', 'true');
+        open.setAttribute('aria-expanded', 'false');
+      };
+      open.addEventListener('click', () => {
+        sheet.classList.add('is-open');
+        sheet.setAttribute('aria-hidden', 'false');
+        open.setAttribute('aria-expanded', 'true');
       });
-    });
+      sheet.addEventListener('click', event => {
+        if (event.target === sheet || event.target.closest('.home-close-sheet')) close();
+      });
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && sheet.classList.contains('is-open')) close();
+      });
+      document.querySelectorAll('.home-filter-chip, .home-sort-option').forEach(option => {
+        option.addEventListener('click', () => {
+          const selector = option.classList.contains('home-filter-chip') ? '.home-filter-chip' : '.home-sort-option';
+          option.parentElement.querySelectorAll(selector).forEach(item => item.classList.remove('selected'));
+          option.classList.add('selected');
+        });
+      });
+      document.querySelector('.home-apply-filters').addEventListener('click', () => {
+        open.classList.add('has-filters');
+        close();
+      });
+    })();
   </script>
 </body>
 </html>
