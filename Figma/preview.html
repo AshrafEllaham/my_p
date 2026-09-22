@@ -2809,6 +2809,36 @@
       notesEn: ['Available balance', 'Deposit and withdraw actions', 'Recent wallet transactions']
     });
 
+    screens.push({
+      id: 34,
+      num: '19',
+      section: 'تطبيق المستخدم',
+      sectionEn: 'Buyer Experience',
+      file: '18-wallet-transactions.html',
+      title: 'كل العمليات',
+      titleEn: 'All Transactions',
+      tags: ['Wallet', 'Transactions', 'History'],
+      desc: 'سجل كامل لعمليات المحفظة مع فلترة الإضافة والشراء والاسترداد والتحويل.',
+      descEn: 'Full wallet transaction history with filters for deposits, purchases, refunds, and transfers.',
+      notes: ['ملخص الرصيد الحالي', 'فلترة العمليات حسب النوع', 'سجل مرتب من الأحدث إلى الأقدم'],
+      notesEn: ['Current balance summary', 'Transaction type filters', 'Newest-first transaction history']
+    });
+
+    screens.push({
+      id: 35,
+      num: '20',
+      section: 'تطبيق المستخدم',
+      sectionEn: 'Buyer Experience',
+      file: '19-store-details.html',
+      title: 'تفاصيل المتجر',
+      titleEn: 'Store Details',
+      tags: ['Stores', 'Store Profile', 'Products'],
+      desc: 'صفحة تعريفية بالمتجر تعرض بياناته وتقييمه وموقعه وأبرز منتجاته.',
+      descEn: 'Store profile with contact details, rating, location, and featured products.',
+      notes: ['غلاف وهوية المتجر', 'التقييم والمسافة وحالة الفتح', 'منتجات المتجر والتواصل المباشر'],
+      notesEn: ['Store cover and identity', 'Rating, distance, and open status', 'Store products and direct contact']
+    });
+
     screens.push(
       { id: 25, num: '12', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '09-categories.html', title: 'كل الأقسام', titleEn: 'All Categories', tags: ['Categories', 'Discovery'], desc: 'صفحة تصفح جميع أقسام سعي.', descEn: 'Browse every Saey category.', notes: ['شبكة أقسام', 'بحث في الأقسام'], notesEn: ['Category grid', 'Category search'] },
       { id: 26, num: '13', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '10-featured-products.html', title: 'منتجات مميزة', titleEn: 'Featured Products', tags: ['Products', 'Catalog'], desc: 'كتالوج للمنتجات المميزة مع السعر والتقييم.', descEn: 'Featured product catalog with prices and ratings.', notes: ['شبكة منتجات', 'سعر قبل وبعد الخصم'], notesEn: ['Product grid', 'Original and discounted price'] },
@@ -2824,13 +2854,13 @@
       '01-login.html', '02-signup.html', '03-verify-otp.html',
       '04-account-type.html', '05-profile-setup.html',
       '06-distributor-setup.html', '07-forgot-password.html', '08-profile-setup.html', '08-user-home.html', '15-account.html', '16-orders.html',
-      '09-categories.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '17-wallet.html', '13-notifications.html', '14-chat-conversation.html', '14-chats.html'
+      '09-categories.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '17-wallet.html', '18-wallet-transactions.html', '19-store-details.html', '13-notifications.html', '14-chat-conversation.html', '14-chats.html'
     ]);
     const authScreenOrder = [
       '00-splash.html', '00-splash-01.html', '00-splash-02.html',
       '01-login.html', '02-signup.html', '03-verify-otp.html',
       '05-profile-setup.html', '04-account-type.html', '08-profile-setup.html',
-      '06-distributor-setup.html', '08-user-home.html', '15-account.html', '16-orders.html', '17-wallet.html', '09-categories.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '13-notifications.html', '14-chat-conversation.html', '14-chats.html', '07-forgot-password.html'
+      '06-distributor-setup.html', '08-user-home.html', '15-account.html', '16-orders.html', '17-wallet.html', '18-wallet-transactions.html', '19-store-details.html', '09-categories.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '13-notifications.html', '14-chat-conversation.html', '14-chats.html', '07-forgot-password.html'
     ];
     screens.splice(0, screens.length, ...screens
       .filter(screen => authScreenFiles.has(screen.file))

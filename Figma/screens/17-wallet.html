@@ -24,7 +24,7 @@
     <header class="wallet-header">
       <a class="wallet-back" href="08-user-home.html" aria-label="العودة للرئيسية"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a>
       <h1>المحفظة</h1>
-      <a class="wallet-history" href="#transactions">سجل العمليات</a>
+      <a class="wallet-history" href="18-wallet-transactions.html">سجل العمليات</a>
     </header>
     <section class="wallet-balance-card" aria-label="رصيد المحفظة">
       <span class="wallet-balance-label">الرصيد المتاح</span>
@@ -36,11 +36,11 @@
         <button class="wallet-action transfer" type="button" id="transferButton"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 19a6 6 0 0 1 12 0M16 8h5M18.5 5.5 21 8l-2.5 2.5"/></svg>تحويل لصديق</button>
       </div>
     </section>
-    <div class="wallet-section-head" id="transactions"><h2>آخر العمليات</h2><a href="#transactions">عرض الكل</a></div>
+    <div class="wallet-section-head" id="transactions"><h2>آخر العمليات</h2><a href="18-wallet-transactions.html">عرض الكل</a></div>
     <section class="wallet-list" aria-label="آخر العمليات">
-      <article class="wallet-transaction"><span class="wallet-transaction-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><div class="wallet-transaction-copy"><strong>شحن من البطاقة</strong><small>اليوم، 10:24 ص</small></div><b class="wallet-transaction-amount in">+ ٥٠٠ ج.م</b></article>
-      <article class="wallet-transaction"><span class="wallet-transaction-icon out"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><div class="wallet-transaction-copy"><strong>شراء جاكيت جلد طبيعي</strong><small>أمس، 6:40 م</small></div><b class="wallet-transaction-amount out">- ٢,٨٩٠ ج.م</b></article>
-      <article class="wallet-transaction"><span class="wallet-transaction-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><div class="wallet-transaction-copy"><strong>استرداد طلب</strong><small>١٢ يونيو، 2:15 م</small></div><b class="wallet-transaction-amount in">+ ٣٦٠ ج.م</b></article>
+      <article class="wallet-transaction transaction-profit"><div class="wallet-transaction-main"><strong>أرباح</strong><b>٢,٥٠٠ ج.م</b></div><div class="wallet-transaction-meta"><small>#7A3D6D</small><time>2025/12/01, 4:50م</time></div><span class="wallet-transaction-chevron"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></span></article>
+      <article class="wallet-transaction transaction-pending"><div class="wallet-transaction-main"><strong>طلب سحب قيد المراجعة</strong><b>٢,٥٠٠ ج.م</b></div><div class="wallet-transaction-meta"><small>#7A3D6D</small><time>2025/12/01, 4:50م</time></div><span class="wallet-transaction-chevron"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></span></article>
+      <article class="wallet-transaction transaction-approved"><div class="wallet-transaction-main"><strong>طلب سحب مقبول</strong><b>٢,٥٠٠ ج.م</b></div><div class="wallet-transaction-meta"><small>#7A3D6D</small><time>2025/12/01, 4:50م</time></div><span class="wallet-transaction-chevron"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></span></article>
     </section>
     <p class="wallet-note">يمكنك استخدام رصيد المحفظة عند تأكيد طلبك من أي متجر على سعي.</p>
   </main>

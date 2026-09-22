@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>سعي — تفاصيل المتجر</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="auth.css">
+  <link rel="stylesheet" href="catalog.css">
+  <link rel="stylesheet" href="store-details.css">
+  <link rel="stylesheet" href="uber-ui.css">
+</head>
+<body class="saey-store-details">
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 17 11" width="17" height="11" fill="currentColor"><path d="M1 9a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-1zm4-2.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v3.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-3.5zm4-2.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1V10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V4zm4-3a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1V10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V1z"/></svg>
+      <svg viewBox="0 0 16 12" width="16" height="12" fill="currentColor"><path d="M8 10a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-3.8-3.3a5.5 5.5 0 0 1 7.6 0 .8.8 0 0 0 1.1-1.1 7 7 0 0 0-9.8 0 .8.8 0 0 0 1.1 1.1zm-2.2-2.2a8.5 8.5 0 0 1 12 0 .8.8 0 0 0 1.1-1.1 10 10 0 0 0-14.2 0 .8.8 0 0 0 1.1 1.1z"/></svg>
+      <svg viewBox="0 0 25 12" width="24" height="11" fill="none"><rect x=".75" y=".75" width="20.5" height="10.5" rx="3.25" stroke="currentColor" stroke-width="1.2" stroke-opacity=".4"/><rect x="2.5" y="2.5" width="17" height="7" rx="1.8" fill="currentColor"/><path d="M23 4v4a1.2 1.2 0 0 0 1.2 1.2v-1.6A1.2 1.2 0 0 0 23 4z" fill="currentColor" fill-opacity=".4"/></svg>
+    </div>
+  </div>
+  <main class="store-details-page">
+    <header class="store-details-top">
+      <a class="store-details-back" href="11-featured-stores.html" aria-label="العودة للمتاجر"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a>
+      <span>تفاصيل المتجر</span>
+      <button class="store-icon-button" id="shareStore" type="button" aria-label="مشاركة المتجر"><svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg></button>
+    </header>
+    <section class="store-hero">
+      <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85" alt="واجهة متجر النجم الساطع">
+      <span class="store-hero-shade"></span>
+      <span class="store-hero-status"><i></i>مفتوح الآن</span>
+    </section>
+    <section class="store-profile-card">
+      <div class="store-profile-head">
+        <div class="store-logo-large">ن</div>
+        <div class="store-profile-copy"><h1>النجم الساطع <i>موثّق</i></h1><p>أزياء رجالية · القاهرة</p></div>
+        <button class="store-icon-button favorite-store" id="favoriteStore" type="button" aria-label="إضافة المتجر للمفضلة"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+      </div>
+      <div class="store-stats"><span><b>4.9</b><small>التقييم</small></span><span><b>١.٢ كم</b><small>المسافة</small></span><span><b>+١٢٠</b><small>منتج</small></span></div>
+      <div class="store-actions"><a class="store-action primary" href="tel:+201000000000"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>اتصال</a><a class="store-action" href="14-chats.html"><svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>دردشة</a></div>
+    </section>
+    <section class="store-info-block"><h2>عن المتجر</h2><p>النجم الساطع متجر متخصص في الأزياء الرجالية المختارة بعناية. نساعدك تلاقي قطع عملية وأنيقة مع إمكانية الاستلام مباشرة من المتجر.</p><div class="store-location"><span class="store-info-icon"><svg viewBox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span><span><b>موقع المتجر</b><small>شارع عباس العقاد، مدينة نصر، القاهرة</small></span><a href="#" aria-label="فتح موقع المتجر"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a></div></section>
+    <div class="store-section-head"><h2>منتجات المتجر</h2><a href="10-featured-products.html">عرض الكل</a></div>
+    <section class="store-products">
+      <a class="store-product-card" href="12-product-details.html"><span class="store-product-image"><img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=400&q=85" alt="جاكيت جلد طبيعي"><em>خصم ١٠٪</em></span><strong>جاكيت جلد طبيعي</strong><small>٢,٨٩٠ ج.م</small></a>
+      <a class="store-product-card" href="12-product-details.html"><span class="store-product-image"><img src="https://images.unsplash.com/photo-1548883354-7622d03aca27?auto=format&fit=crop&w=400&q=85" alt="جاكيت شتوي"><em>خصم ٢٠٪</em></span><strong>جاكيت شتوي أنيق</strong><small>٢,٣٠٠ ج.م</small></a>
+      <a class="store-product-card" href="12-product-details.html"><span class="store-product-image"><img src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=400&q=85" alt="قميص قطني"><em>الأكثر طلبًا</em></span><strong>قميص قطني عملي</strong><small>٦٢٠ ج.م</small></a>
+    </section>
+  </main>
+  <nav class="saey-bottom-nav" aria-label="التنقل الرئيسي">
+    <a href="08-user-home.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22v-9h6v9"/></svg></span><span>الرئيسية</span></a>
+    <a class="active" href="09-categories.html" aria-current="page"><span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg></span><span>الأقسام</span></a>
+    <a href="16-orders.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="m9 13 2 2 4-4"/></svg></span><span>الطلبات</span></a>
+    <a href="15-account.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></span><span>حسابي</span></a>
+  </nav>
+  <script>
+    document.getElementById('favoriteStore').addEventListener('click', (event) => event.currentTarget.classList.toggle('saved'));
+    document.getElementById('shareStore').addEventListener('click', async () => { try { await navigator.share?.({ title:'النجم الساطع', url:location.href }); } catch (e) {} });
+  </script>
+</body>
+</html>
