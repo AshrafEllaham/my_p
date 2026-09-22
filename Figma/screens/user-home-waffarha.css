@@ -556,6 +556,7 @@
 .saey-home .waffarha-product-row::-webkit-scrollbar { display: none; }
 
 .saey-home .waffarha-product {
+  position: relative;
   min-width: 133px;
   flex: 0 0 133px;
   display: grid;
@@ -738,4 +739,420 @@
   .saey-home .quick-services strong { font-size: 9px; }
   .saey-home .waffarha-product { min-width: 126px; flex-basis: 126px; }
   .saey-home .nearby-store-card { width: 234px; flex-basis: 234px; }
+}
+
+/* Product bands: full-bleed, calm surfaces with editorial headers and swipeable cards. */
+.saey-home .section-recommended,
+.saey-home .collection-section {
+  margin-right: -14px;
+  margin-left: -14px;
+  padding: 26px 14px 30px;
+  border-radius: 0;
+}
+
+.saey-home .section-recommended { background: #edf4fb; }
+.saey-home .section-fashion { background: #fff1f3; }
+.saey-home .section-electronics { background: #eef8ff; }
+.saey-home .section-home { background: #f2f8e9; }
+
+.saey-home .section-header {
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.saey-home .section-header > div {
+  width: 100%;
+  gap: 7px;
+}
+
+.saey-home .section-title-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  direction: rtl;
+}
+
+.saey-home .section-header h2 {
+  color: #0f172a;
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1.25;
+  letter-spacing: -.25px;
+}
+
+.saey-home .section-header small {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.saey-home .section-action {
+  width: auto;
+  height: 34px;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 0;
+  background: transparent;
+  color: #0f172a;
+  box-shadow: none;
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.saey-home .section-header a.section-action svg {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  flex: 0 0 34px;
+  display: block;
+  box-sizing: border-box;
+  padding: 8px;
+  border-radius: 50%;
+  background: #000;
+  color: #fff;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.1;
+}
+
+.saey-home .waffarha-product-row {
+  gap: 12px;
+  padding: 1px 1px 7px;
+  scroll-snap-type: x proximity;
+  touch-action: pan-x;
+}
+
+.saey-home .waffarha-product {
+  min-width: min(76vw, 280px);
+  flex: 0 0 min(76vw, 280px);
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 9px;
+  border: 1px solid rgba(226, 232, 240, .9);
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, .07);
+}
+
+.saey-home .product-photo {
+  height: 190px;
+  flex: 0 0 190px;
+  border-radius: 16px;
+  background: #f1f5f9;
+}
+
+.saey-home .product-photo img { object-fit: cover; }
+
+.saey-home .product-photo em {
+  top: 10px;
+  right: 10px;
+  padding: 5px 8px;
+  border-radius: 8px;
+  background: #000;
+  font-size: 10px;
+}
+
+.saey-home .waffarha-product > strong {
+  min-height: 40px;
+  margin-top: 14px;
+  color: #0f172a;
+  font-size: 15px;
+  font-weight: 850;
+  line-height: 1.45;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.saey-home .waffarha-product > small {
+  margin-top: 4px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.saey-home .waffarha-product > b {
+  margin-top: auto;
+  padding-top: 16px;
+  color: #0f172a;
+  font-size: 17px;
+}
+
+.saey-home .rating {
+  position: absolute;
+  top: 177px;
+  right: 18px;
+  padding: 4px 7px;
+  border-radius: 7px;
+  background: #0f172a;
+  color: #fff;
+  font-size: 11px;
+}
+
+.saey-home .rating i { color: #fff; }
+
+@media (min-width: 768px) {
+  .saey-home .section-recommended,
+  .saey-home .collection-section {
+    margin-right: -32px;
+    margin-left: -32px;
+    padding-right: 32px;
+    padding-left: 32px;
+  }
+
+  .saey-home .waffarha-product {
+    min-width: 320px;
+    flex-basis: 320px;
+  }
+}
+
+@media (max-width: 370px) {
+  .saey-home .section-recommended,
+  .saey-home .collection-section {
+    margin-right: -11px;
+    margin-left: -11px;
+    padding-right: 11px;
+    padding-left: 11px;
+  }
+
+  .saey-home .section-header h2 { font-size: 18px; }
+  .saey-home .section-action { height: 32px; }
+  .saey-home .section-header a.section-action svg {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    flex-basis: 32px;
+    padding: 7px;
+  }
+  .saey-home .waffarha-product { min-width: 76vw; flex-basis: 76vw; min-height: 340px; }
+  .saey-home .product-photo { height: 174px; flex-basis: 174px; }
+  .saey-home .rating { top: 161px; }
+}
+
+/* Compact product cards: keep the section airy while fitting 2–3 cards on screen. */
+.saey-home .waffarha-product-row { gap: 10px; }
+
+.saey-home .waffarha-product {
+  min-width: 128px;
+  flex-basis: 128px;
+  width: 128px;
+  height: 184px;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 15px;
+  font-family: var(--ui-font, "Inter", "Cairo", sans-serif);
+  box-shadow: 0 5px 14px rgba(15, 23, 42, .06);
+}
+
+.saey-home .product-photo {
+  height: 86px;
+  flex-basis: 86px;
+  order: 1;
+  width: 100%;
+  border-radius: 15px 15px 0 0;
+}
+
+.saey-home .product-photo img {
+  object-position: center;
+}
+
+.saey-home .product-photo::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  top: 7px;
+  right: 7px;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(226, 232, 240, .95);
+  border-radius: 50%;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230f172a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z'/%3E%3C/svg%3E") center/17px 17px no-repeat;
+  box-shadow: 0 3px 8px rgba(15, 23, 42, .14);
+}
+
+.saey-home .product-photo em {
+  z-index: 3;
+  top: 0;
+  right: auto;
+  left: 7px;
+  min-width: 28px;
+  max-width: 34px;
+  min-height: 36px;
+  display: grid;
+  place-items: center;
+  padding: 3px 3px 5px;
+  border-radius: 0 0 6px 6px;
+  background: #f12f43;
+  clip-path: polygon(0 0, 100% 0, 100% 88%, 50% 100%, 0 88%);
+  box-shadow: 0 3px 7px rgba(190, 24, 45, .24);
+  color: #fff;
+  font-size: 9.5px;
+  font-weight: 900;
+  line-height: 1.08;
+  text-align: center;
+  text-shadow: 0 1px 1px rgba(127, 29, 29, .18);
+}
+
+.saey-home .product-photo em.discount-ribbon {
+  left: 6px;
+  width: 26px;
+  min-width: 26px;
+  max-width: 26px;
+  height: 35px;
+  min-height: 35px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 1px 2px 4px;
+  border-radius: 0 0 5px 5px;
+  clip-path: polygon(0 0, 100% 0, 100% 84%, 50% 100%, 0 84%);
+  direction: ltr;
+  font-family: "Inter", system-ui, sans-serif;
+  font-style: normal;
+  letter-spacing: 0;
+}
+
+.saey-home .discount-ribbon span:first-child {
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.saey-home .discount-ribbon span:last-child {
+  font-size: 10.5px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.saey-home .waffarha-product > strong {
+  order: 3;
+  overflow: hidden;
+  min-height: 33px;
+  margin: 2px 8px 0;
+  color: #0f172a;
+  font-size: 11.5px;
+  font-weight: 900;
+  line-height: 1.38;
+}
+
+.saey-home .waffarha-product > small {
+  order: 2;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin: 8px 8px 0;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.saey-home .waffarha-product > b {
+  order: 4;
+  margin-top: auto;
+  padding: 7px 8px 10px;
+  color: #0f172a;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.saey-home .rating {
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  direction: ltr;
+  top: 70px;
+  right: 6px;
+  padding: 3px 5px;
+  border-radius: 6px;
+  background: #111827;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.saey-home .rating i { color: #fbbf24; }
+
+@media (max-width: 370px) {
+  .saey-home .waffarha-product {
+    min-width: 120px;
+    flex-basis: 120px;
+    width: 120px;
+    height: 178px;
+    min-height: 0;
+  }
+
+  .saey-home .product-photo {
+    height: 80px;
+    flex-basis: 80px;
+  }
+
+  .saey-home .rating { top: 64px; }
+}
+
+@media (min-width: 768px) {
+  .saey-home .waffarha-product {
+    min-width: 180px;
+    flex-basis: 180px;
+    width: 180px;
+    height: 232px;
+  }
+
+  .saey-home .product-photo { height: 126px; flex-basis: 126px; }
+  .saey-home .rating { top: 108px; }
+}
+
+/* Compact section header with a plain directional arrow. */
+.saey-home .section-recommended,
+.saey-home .collection-section {
+  padding-top: 22px;
+  padding-bottom: 26px;
+}
+
+.saey-home .offer-section .section-header,
+.saey-home .collection-section .section-header {
+  margin-bottom: 12px;
+}
+
+.saey-home .offer-section .section-header h2,
+.saey-home .collection-section .section-header h2 {
+  font-size: 18px;
+  line-height: 1.25;
+}
+
+.saey-home .offer-section .section-header small,
+.saey-home .collection-section .section-header small {
+  font-size: 11px;
+}
+
+.saey-home .offer-section .section-action,
+.saey-home .collection-section .section-action {
+  height: 24px;
+  gap: 4px;
+  font-size: 10.5px;
+}
+
+.saey-home .offer-section .section-header a.section-action svg,
+.saey-home .collection-section .section-header a.section-action svg {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  flex: 0 0 16px;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #0f172a;
+  fill: none;
+  stroke: #0f172a;
+  stroke-width: 2.2;
 }
