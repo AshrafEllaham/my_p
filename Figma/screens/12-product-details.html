@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="auth.css">
-  <link rel="stylesheet" href="product-details.css?v=4">
+  <link rel="stylesheet" href="product-details.css?v=5">
   <link rel="stylesheet" href="uber-ui.css">
 </head>
 <body class="saey-product-details">
@@ -25,6 +25,7 @@
       <a href="10-featured-products.html" aria-label="رجوع">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
       </a>
+      <strong class="details-top-title">تفاصيل المنتج</strong>
       <div class="details-actions">
         <button id="report" class="report-product" type="button" aria-label="إبلاغ عن المنتج">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
@@ -160,6 +161,10 @@
   </footer>
   <script>
     const f = document.getElementById('favorite');
+    const detailsPage = document.querySelector('.details-page');
+    detailsPage.addEventListener('scroll', () => {
+      detailsPage.classList.toggle('has-scrolled', detailsPage.scrollTop > 24);
+    }, { passive: true });
     f.addEventListener('click', () => {
       f.classList.toggle('saved');
     });

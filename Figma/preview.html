@@ -2794,6 +2794,21 @@
       notesEn: ['Current order state', 'Progress timeline to pickup', 'Order details and store contact']
     });
 
+    screens.push({
+      id: 33,
+      num: '18',
+      section: 'تطبيق المستخدم',
+      sectionEn: 'Buyer Experience',
+      file: '17-wallet.html',
+      title: 'المحفظة',
+      titleEn: 'Wallet',
+      tags: ['Wallet', 'Balance', 'Transactions'],
+      desc: 'محفظة المستخدم لعرض الرصيد ومتابعة عمليات الشحن والشراء والاسترداد.',
+      descEn: 'User wallet for balance, top-ups, purchases, and refunds.',
+      notes: ['الرصيد المتاح', 'شحن وسحب الرصيد', 'آخر العمليات المالية'],
+      notesEn: ['Available balance', 'Deposit and withdraw actions', 'Recent wallet transactions']
+    });
+
     screens.push(
       { id: 25, num: '12', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '09-categories.html', title: 'كل الأقسام', titleEn: 'All Categories', tags: ['Categories', 'Discovery'], desc: 'صفحة تصفح جميع أقسام سعي.', descEn: 'Browse every Saey category.', notes: ['شبكة أقسام', 'بحث في الأقسام'], notesEn: ['Category grid', 'Category search'] },
       { id: 26, num: '13', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '10-featured-products.html', title: 'منتجات مميزة', titleEn: 'Featured Products', tags: ['Products', 'Catalog'], desc: 'كتالوج للمنتجات المميزة مع السعر والتقييم.', descEn: 'Featured product catalog with prices and ratings.', notes: ['شبكة منتجات', 'سعر قبل وبعد الخصم'], notesEn: ['Product grid', 'Original and discounted price'] },
@@ -2809,13 +2824,13 @@
       '01-login.html', '02-signup.html', '03-verify-otp.html',
       '04-account-type.html', '05-profile-setup.html',
       '06-distributor-setup.html', '07-forgot-password.html', '08-profile-setup.html', '08-user-home.html', '15-account.html', '16-orders.html',
-      '09-categories.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '13-notifications.html', '14-chat-conversation.html', '14-chats.html'
+      '09-categories.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '17-wallet.html', '13-notifications.html', '14-chat-conversation.html', '14-chats.html'
     ]);
     const authScreenOrder = [
       '00-splash.html', '00-splash-01.html', '00-splash-02.html',
       '01-login.html', '02-signup.html', '03-verify-otp.html',
       '05-profile-setup.html', '04-account-type.html', '08-profile-setup.html',
-      '06-distributor-setup.html', '08-user-home.html', '15-account.html', '16-orders.html', '09-categories.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '13-notifications.html', '14-chat-conversation.html', '14-chats.html', '07-forgot-password.html'
+      '06-distributor-setup.html', '08-user-home.html', '15-account.html', '16-orders.html', '17-wallet.html', '09-categories.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '13-notifications.html', '14-chat-conversation.html', '14-chats.html', '07-forgot-password.html'
     ];
     screens.splice(0, screens.length, ...screens
       .filter(screen => authScreenFiles.has(screen.file))
@@ -2871,6 +2886,13 @@
     function toggleDarkMode() {
       applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
     }
+
+    window.addEventListener('message', (event) => {
+      const iframe = document.getElementById('phoneViewportIframe');
+      if (event.source === iframe?.contentWindow && event.data?.type === 'SET_THEME_FROM_SCREEN') {
+        applyTheme(event.data.theme === 'dark' ? 'dark' : 'light');
+      }
+    });
 
     // Active Screen Bridge — invoked on selection only to keep sidebar hover smooth.
     function notifyAiHover(screen, action = 'hover') {
