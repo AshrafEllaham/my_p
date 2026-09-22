@@ -560,6 +560,53 @@
       overflow: hidden;
     }
 
+    .phone-loading {
+      position: absolute;
+      inset: 0;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      border-radius: 50px;
+      background: rgba(248, 250, 252, 0.86);
+      color: #64748B;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease;
+    }
+
+    .phone-loading.is-visible { opacity: 1; }
+
+    .phone-loading-content {
+      display: grid;
+      justify-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .phone-loading-spinner {
+      width: 28px;
+      height: 28px;
+      border: 3px solid #E2E8F0;
+      border-top-color: #000000;
+      border-radius: 50%;
+      animation: phone-loading-spin 0.75s linear infinite;
+    }
+
+    @keyframes phone-loading-spin { to { transform: rotate(360deg); } }
+
+    [data-theme="dark"] .phone-loading,
+    body.dark-mode .phone-loading {
+      background: rgba(8, 12, 20, 0.86);
+      color: #CBD5E1;
+    }
+
+    [data-theme="dark"] .phone-loading-spinner,
+    body.dark-mode .phone-loading-spinner {
+      border-color: #334155;
+      border-top-color: #FFFFFF;
+    }
+
     .phone-home-indicator {
       position: absolute;
       left: 50%;
@@ -2097,6 +2144,12 @@
             <div class="phone-btn-power"></div>
             <iframe id="phoneViewportIframe" class="phone-screen-iframe" src="screens/01-login.html"
               title="شاشة الموبايل"></iframe>
+            <div class="phone-loading" id="phoneLoading" aria-hidden="true">
+              <div class="phone-loading-content">
+                <span class="phone-loading-spinner" aria-hidden="true"></span>
+                <span id="phoneLoadingText">جاري تحميل الشاشة…</span>
+              </div>
+            </div>
             <div class="phone-home-indicator" aria-hidden="true"></div>
           </div>
           <button class="stage-arrow-btn canvas-nav-btn canvas-nav-next" onclick="nextScreen()" title="الشاشة التالية"
@@ -2482,7 +2535,7 @@
       },
       {
         id: 14,
-        num: '14',
+        num: '18',
         section: 'تطبيق المستخدم',
         sectionEn: 'Buyer Experience',
         file: '14-chat-conversation.html',
@@ -2742,11 +2795,11 @@
     });
 
     screens.push(
-      { id: 25, num: '11', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '09-categories.html', title: 'كل الأقسام', titleEn: 'All Categories', tags: ['Categories', 'Discovery'], desc: 'صفحة تصفح جميع أقسام سعي.', descEn: 'Browse every Saey category.', notes: ['شبكة أقسام', 'بحث في الأقسام'], notesEn: ['Category grid', 'Category search'] },
-      { id: 26, num: '11', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '10-featured-products.html', title: 'منتجات مميزة', titleEn: 'Featured Products', tags: ['Products', 'Catalog'], desc: 'كتالوج للمنتجات المميزة مع السعر والتقييم.', descEn: 'Featured product catalog with prices and ratings.', notes: ['شبكة منتجات', 'سعر قبل وبعد الخصم'], notesEn: ['Product grid', 'Original and discounted price'] },
-      { id: 27, num: '12', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '11-featured-stores.html', title: 'متاجر مميزة', titleEn: 'Featured Stores', tags: ['Stores', 'Discovery'], desc: 'قائمة بالمتاجر المميزة القريبة من المستخدم.', descEn: 'A list of featured stores near the user.', notes: ['بحث عن متجر', 'المسافة وحالة المتجر'], notesEn: ['Store search', 'Distance and store status'] },
-      { id: 28, num: '13', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '12-product-details.html', title: 'تفاصيل المنتج', titleEn: 'Product Details', tags: ['Product', 'Pickup', 'Favorite'], desc: 'تفاصيل المنتج مع الصور والمقاس واللون والمتجر وزر الإضافة للطلب.', descEn: 'Product information, choices, store details, and add-to-order action.', notes: ['شارة خصم ومفضلة', 'اختيار المقاس واللون', 'استلام من المتجر فقط'], notesEn: ['Discount and favorite', 'Size and color choices', 'Store pickup only'] },
-      { id: 29, num: '14', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '13-notifications.html', title: 'الإشعارات', titleEn: 'Notifications', tags: ['Notifications', 'Orders', 'Offers'], desc: 'إشعارات الطلبات والعروض مع إمكانية حذفها كلها.', descEn: 'Order and offer notifications with a clear-all action.', notes: ['حالات طلب الاستلام', 'عروض المتاجر', 'حالة فارغة بعد حذف الكل'], notesEn: ['Pickup order updates', 'Store offers', 'Empty state after clear all'] },
+      { id: 25, num: '12', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '09-categories.html', title: 'كل الأقسام', titleEn: 'All Categories', tags: ['Categories', 'Discovery'], desc: 'صفحة تصفح جميع أقسام سعي.', descEn: 'Browse every Saey category.', notes: ['شبكة أقسام', 'بحث في الأقسام'], notesEn: ['Category grid', 'Category search'] },
+      { id: 26, num: '13', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '10-featured-products.html', title: 'منتجات مميزة', titleEn: 'Featured Products', tags: ['Products', 'Catalog'], desc: 'كتالوج للمنتجات المميزة مع السعر والتقييم.', descEn: 'Featured product catalog with prices and ratings.', notes: ['شبكة منتجات', 'سعر قبل وبعد الخصم'], notesEn: ['Product grid', 'Original and discounted price'] },
+      { id: 27, num: '14', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '11-featured-stores.html', title: 'متاجر مميزة', titleEn: 'Featured Stores', tags: ['Stores', 'Discovery'], desc: 'قائمة بالمتاجر المميزة القريبة من المستخدم.', descEn: 'A list of featured stores near the user.', notes: ['بحث عن متجر', 'المسافة وحالة المتجر'], notesEn: ['Store search', 'Distance and store status'] },
+      { id: 28, num: '15', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '12-product-details.html', title: 'تفاصيل المنتج', titleEn: 'Product Details', tags: ['Product', 'Pickup', 'Favorite'], desc: 'تفاصيل المنتج مع الصور والمقاس واللون والمتجر وزر الإضافة للطلب.', descEn: 'Product information, choices, store details, and add-to-order action.', notes: ['شارة خصم ومفضلة', 'اختيار المقاس واللون', 'استلام من المتجر فقط'], notesEn: ['Discount and favorite', 'Size and color choices', 'Store pickup only'] },
+      { id: 29, num: '16', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '13-notifications.html', title: 'الإشعارات', titleEn: 'Notifications', tags: ['Notifications', 'Orders', 'Offers'], desc: 'إشعارات الطلبات والعروض مع إمكانية حذفها كلها.', descEn: 'Order and offer notifications with a clear-all action.', notes: ['حالات طلب الاستلام', 'عروض المتاجر', 'حالة فارغة بعد حذف الكل'], notesEn: ['Pickup order updates', 'Store offers', 'Empty state after clear all'] },
       { id: 30, num: '17', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '14-chats.html', title: 'الدردشات', titleEn: 'Chats', tags: ['Chat', 'Stores', 'Search'], desc: 'قائمة محادثات مباشرة مع المتاجر مع بحث باسم المتجر أو المنتج.', descEn: 'Direct store conversations with search by store or product.', notes: ['بحث باسم المتجر أو المنتج', 'حالة قراءة ووقت آخر رسالة', 'فتح محادثة مباشرة من القائمة'], notesEn: ['Search by store or product', 'Read state and last message time', 'Open a direct conversation from the list'] }
     );
 
@@ -2807,6 +2860,12 @@
           iframe.contentWindow.postMessage({ type: 'SET_THEME', theme: theme }, '*');
         } catch (e) { }
       }
+      // Reload the active screen so the preview theme is applied after its document is ready.
+      if (iframe && screens[currentIndex] && iframe.getAttribute('data-loaded-file') === screens[currentIndex].file) {
+        setPhoneLoading(true);
+        iframe.src = `screens/${screens[currentIndex].file}?lang=${currentLang}&theme=${currentTheme}&v=${Date.now()}`;
+      }
+      syncIframeTheme();
     }
 
     function toggleDarkMode() {
@@ -2847,6 +2906,110 @@
     let canvasPanY = 0;
     let spacePressed = false;
 
+    function setPhoneLoading(isLoading) {
+      const loader = document.getElementById('phoneLoading');
+      const iframe = document.getElementById('phoneViewportIframe');
+      if (loader) {
+        loader.classList.toggle('is-visible', isLoading);
+        loader.setAttribute('aria-hidden', String(!isLoading));
+      }
+      if (iframe) iframe.setAttribute('aria-busy', String(isLoading));
+    }
+
+    function syncIframeTheme() {
+      const iframe = document.getElementById('phoneViewportIframe');
+      if (!iframe) return;
+
+      try {
+        const doc = iframe.contentDocument;
+        if (doc && doc.body) {
+          const isDark = currentTheme === 'dark';
+          doc.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+          doc.body.classList.toggle('dark-mode', isDark);
+          doc.body.classList.toggle('preview-dark-mode', isDark);
+
+          let style = doc.getElementById('previewThemeOverrides');
+          if (!style) {
+            style = doc.createElement('style');
+            style.id = 'previewThemeOverrides';
+            doc.head.appendChild(style);
+          }
+          style.textContent = isDark ? `
+            body.preview-dark-mode { background: #0F172A !important; color: #F8FAFC !important; }
+            body.preview-dark-mode .account-list,
+            body.preview-dark-mode .account-row,
+            body.preview-dark-mode .account-icon-button,
+            body.preview-dark-mode .language-sheet,
+            body.preview-dark-mode .language-option,
+            body.preview-dark-mode .ui-card,
+            body.preview-dark-mode .product-card,
+            body.preview-dark-mode .order-card,
+            body.preview-dark-mode .chat-row,
+            body.preview-dark-mode .notification-item,
+            body.preview-dark-mode input,
+            body.preview-dark-mode textarea,
+            body.preview-dark-mode select { background: #111827 !important; color: #F8FAFC !important; border-color: #334155 !important; }
+            body.preview-dark-mode h1,
+            body.preview-dark-mode h2,
+            body.preview-dark-mode h3,
+            body.preview-dark-mode h4,
+            body.preview-dark-mode strong,
+            body.preview-dark-mode label { color: #F8FAFC !important; }
+            body.preview-dark-mode p,
+            body.preview-dark-mode small,
+            body.preview-dark-mode .account-greeting,
+            body.preview-dark-mode .account-profile span { color: #CBD5E1 !important; }
+            body.preview-dark-mode .account-row:hover { background: #1E293B !important; }
+            body.preview-dark-mode .onboarding-wordmark,
+            body.preview-dark-mode .onboarding-copy h1,
+            body.preview-dark-mode .onboarding-note a,
+            body.preview-dark-mode .onboarding-action { color: #F8FAFC !important; }
+            body.preview-dark-mode .onboarding-action { background: #000000 !important; }
+            body.preview-dark-mode .onboarding-note { color: #CBD5E1 !important; }
+            body.preview-dark-mode .hero-orbit { background: #111827 !important; border-color: #334155 !important; }
+            body.preview-dark-mode .hero-orbit::before,
+            body.preview-dark-mode .hero-orbit::after { border-color: #475569 !important; }
+            body.preview-dark-mode .orbit-chip { background: #1E293B !important; border-color: #475569 !important; color: #F8FAFC !important; }
+            body.preview-dark-mode.barq-auth-body {
+              --barq-bg: #0F172A !important;
+              --barq-ink: #F8FAFC !important;
+              --barq-slate: #CBD5E1 !important;
+              --barq-muted: #94A3B8 !important;
+              --barq-light: #64748B !important;
+              --barq-line: #334155 !important;
+              --barq-line-strong: #475569 !important;
+              --barq-field-surface: #111827 !important;
+              --barq-card: #111827 !important;
+              --barq-blue-soft: #1E293B !important;
+            }
+            body.preview-dark-mode .barq-social-btn,
+            body.preview-dark-mode .barq-input-card,
+            body.preview-dark-mode .barq-input-inner,
+            body.preview-dark-mode .barq-switch,
+            body.preview-dark-mode .barq-country-menu { background: #111827 !important; color: #F8FAFC !important; border-color: #334155 !important; }
+            body.preview-dark-mode .barq-switch button.active { background: #334155 !important; color: #FFFFFF !important; }
+            body.preview-dark-mode .barq-brand-text,
+            body.preview-dark-mode .barq-forgot-link,
+            body.preview-dark-mode .barq-footer,
+            body.preview-dark-mode .barq-footer a { color: #F8FAFC !important; }
+          ` : '';
+        }
+        iframe.contentWindow.postMessage({ type: 'SET_THEME', theme: currentTheme }, '*');
+      } catch (e) {
+        // Keep the preview usable if iframe inspection is unavailable.
+      }
+    }
+
+    function bindPhoneFrame() {
+      const iframe = document.getElementById('phoneViewportIframe');
+      if (!iframe || iframe.dataset.previewBound === 'true') return;
+      iframe.dataset.previewBound = 'true';
+      iframe.addEventListener('load', () => {
+        setPhoneLoading(false);
+        syncIframeTheme();
+      });
+    }
+
     function updateCanvasTransform() {
       const content = document.getElementById('canvasContent');
       const label = document.getElementById('zoomLabel');
@@ -2869,6 +3032,7 @@
     function initCanvas() {
       const viewport = document.getElementById('canvasViewport');
       if (!viewport) return;
+      bindPhoneFrame();
       document.getElementById('zoomInBtn')?.addEventListener('click', () => setCanvasZoom(canvasZoom + 0.1));
       document.getElementById('zoomOutBtn')?.addEventListener('click', () => setCanvasZoom(canvasZoom - 0.1));
       document.getElementById('zoomLabel')?.addEventListener('click', resetCanvas);
@@ -3105,6 +3269,7 @@
     function reloadActiveScreen(showToast = false) {
       const s = screens[currentIndex];
       const iframe = document.getElementById('phoneViewportIframe');
+      setPhoneLoading(true);
       iframe.src = `screens/${s.file}?lang=${currentLang}&theme=${currentTheme}&v=${Date.now()}`;
       iframe.setAttribute('data-loaded-file', s.file);
 
@@ -3139,13 +3304,17 @@
       const targetSrc = `screens/${s.file}?lang=${currentLang}&theme=${currentTheme}&v=${Date.now()}`;
 
       // If same file, postMessage is instantaneous; else load src
+      bindPhoneFrame();
       if (iframe.getAttribute('data-loaded-file') === s.file) {
         try {
           iframe.contentWindow.postMessage({ type: 'SET_LANG', lang: currentLang }, '*');
+          syncIframeTheme();
         } catch (e) {
+          setPhoneLoading(true);
           iframe.src = targetSrc;
         }
       } else {
+        setPhoneLoading(true);
         iframe.src = targetSrc;
         iframe.setAttribute('data-loaded-file', s.file);
       }

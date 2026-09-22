@@ -153,10 +153,10 @@ select {
 .saey-bottom-nav {
   position: relative;
   width: calc(min(100%, 440px) - 28px);
-  height: 82px !important;
-  min-height: 82px;
-  margin: 0 auto 14px;
-  padding: 10px 23px;
+  height: 68px !important;
+  min-height: 68px;
+  margin: 0 auto 10px;
+  padding: 6px 18px;
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -171,10 +171,10 @@ select {
 }
 
 .saey-bottom-nav a {
-  width: 62px;
-  height: 52px;
-  min-width: 62px;
-  flex: 0 0 62px;
+  width: 58px;
+  height: 48px;
+  min-width: 58px;
+  flex: 0 0 58px;
   display: grid;
   align-items: center;
   justify-content: center;
@@ -189,7 +189,7 @@ select {
 
 .saey-bottom-nav .nav-icon {
   width: 44px;
-  height: 44px;
+  height: 42px;
   display: grid;
   place-items: center;
   border-radius: 15px;
@@ -215,9 +215,9 @@ select {
 
 .saey-bottom-nav a.active .nav-icon,
 .saey-bottom-nav a[aria-current="page"] .nav-icon {
-  width: 62px;
-  height: 50px;
-  border-radius: 19px;
+  width: 58px;
+  height: 44px;
+  border-radius: 17px;
   background: #F2F2F2 !important;
   color: #000000;
   box-shadow: 0 8px 17px rgba(15, 23, 42, .08);
@@ -288,11 +288,11 @@ body.saey-chats {
 
   .saey-bottom-nav {
     width: calc(100% - 20px);
-    height: 74px !important;
-    min-height: 74px;
+    height: 64px !important;
+    min-height: 64px;
     margin-bottom: 10px;
-    padding-right: 11px;
-    padding-left: 11px;
+    padding-right: 9px;
+    padding-left: 9px;
     gap: 5px;
   }
 

@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="auth.css">
-  <link rel="stylesheet" href="product-details.css">
+  <link rel="stylesheet" href="product-details.css?v=4">
   <link rel="stylesheet" href="uber-ui.css">
 </head>
 <body class="saey-product-details">
@@ -43,7 +43,7 @@
         <img src="https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504?auto=format&fit=crop&w=800&q=85" alt="تفاصيل جاكيت جلدي">
         <img src="https://images.unsplash.com/photo-1610652492500-ded49ceeb378?auto=format&fit=crop&w=800&q=85" alt="جاكيت رجالي أنيق">
       </div>
-      <span class="details-discount">خصم ١٠٪</span>
+      <em class="details-discount discount-ribbon"><span>10</span><span>%</span></em>
       <button class="gallery-arrow next" type="button" aria-label="الصورة التالية">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
       </button>
@@ -79,21 +79,6 @@
       <div class="details-divider"></div>
       <h2 class="details-section-title">وصف المنتج</h2>
       <p class="details-description">جاكيت جلدي عملي بتصميم أنيق وخامة مريحة، مناسب للاستخدام اليومي والمناسبات. تم اختياره بعناية ليمنحك مظهرًا مرتبًا في كل وقت.</p>
-      <div class="details-divider"></div>
-      <h2 class="details-section-title">المقاس</h2>
-      <div class="choice-row">
-        <button class="choice" type="button">S</button>
-        <button class="choice selected" type="button">M</button>
-        <button class="choice" type="button">L</button>
-        <button class="choice" type="button">XL</button>
-      </div>
-      <div class="details-divider"></div>
-      <h2 class="details-section-title">اللون</h2>
-      <div class="choice-row">
-        <button class="choice color-choice selected" type="button" aria-label="بني"><i></i></button>
-        <button class="choice color-choice" type="button" aria-label="أسود"><i></i></button>
-        <button class="choice color-choice" type="button" aria-label="رمادي"><i></i></button>
-      </div>
       <div class="details-divider"></div>
       <section class="seller-card">
         <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=85" alt="صورة موزع نقطة ستور">
@@ -136,12 +121,24 @@
         </div>
         <div class="similar-products">
           <a href="12-product-details.html">
-            <img src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=300&q=85" alt="قميص قطني">
+            <span class="similar-product-image">
+              <img src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=300&q=85" alt="قميص قطني">
+              <button class="similar-product-favorite" type="button" aria-label="إضافة قميص قطني للمفضلة">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+              </button>
+              <span class="similar-product-rating"><i>★</i> 4.8</span>
+            </span>
             <strong>قميص قطني عملي</strong>
             <span>٦٢٠ ج.م</span>
           </a>
           <a href="12-product-details.html">
-            <img src="https://images.unsplash.com/photo-1548883354-7622d03aca27?auto=format&fit=crop&w=300&q=85" alt="جاكيت أسود">
+            <span class="similar-product-image">
+              <img src="https://images.unsplash.com/photo-1548883354-7622d03aca27?auto=format&fit=crop&w=300&q=85" alt="جاكيت أسود">
+              <button class="similar-product-favorite" type="button" aria-label="إضافة جاكيت شتوي للمفضلة">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+              </button>
+              <span class="similar-product-rating"><i>★</i> 4.7</span>
+            </span>
             <strong>جاكيت شتوي أنيق</strong>
             <span>٢,٣٠٠ ج.م</span>
           </a>
@@ -166,10 +163,10 @@
     f.addEventListener('click', () => {
       f.classList.toggle('saved');
     });
-    document.querySelectorAll('.choice').forEach(b => b.addEventListener('click', () => {
-      const g = b.parentElement;
-      g.querySelectorAll('.choice').forEach(x => x.classList.remove('selected'));
-      b.classList.add('selected');
+    document.querySelectorAll('.similar-product-favorite').forEach(b => b.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      b.classList.toggle('saved');
     }));
     let q = 1, o = document.getElementById('qty');
     document.getElementById('plus').onclick = () => o.textContent = ++q;
