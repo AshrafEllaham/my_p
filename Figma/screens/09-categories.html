@@ -30,11 +30,11 @@
     </header>
     <label class="catalog-search">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-      <input type="search" placeholder="ابحث في الأقسام">
+      <input id="categorySearch" type="search" placeholder="ابحث في الأقسام">
     </label>
     <p class="catalog-subtitle">اختر القسم الذي يناسب احتياجك</p>
     <section class="catalog-grid">
-      <a class="catalog-category" href="10-featured-products.html">
+      <a class="catalog-category" href="24-category-details.html?category=أزياء%20وملابس">
         <span class="catalog-category-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/>
@@ -43,7 +43,7 @@
         أزياء وملابس
         <small>١٢٠ متجر</small>
       </a>
-      <a class="catalog-category" href="10-featured-products.html">
+      <a class="catalog-category" href="24-category-details.html?category=إلكترونيات">
         <span class="catalog-category-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
             <rect width="14" height="20" x="5" y="2" rx="3" ry="3"/>
@@ -53,7 +53,7 @@
         إلكترونيات
         <small>٨٤ متجر</small>
       </a>
-      <a class="catalog-category" href="10-featured-products.html">
+      <a class="catalog-category" href="24-category-details.html?category=المنزل%20والمفروشات">
         <span class="catalog-category-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
             <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
@@ -63,7 +63,7 @@
         المنزل والمفروشات
         <small>٦٥ متجر</small>
       </a>
-      <a class="catalog-category" href="10-featured-products.html">
+      <a class="catalog-category" href="24-category-details.html?category=العناية%20والجمال">
         <span class="catalog-category-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
             <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/>
@@ -72,7 +72,7 @@
         العناية والجمال
         <small>٤٨ متجر</small>
       </a>
-      <a class="catalog-category" href="10-featured-products.html">
+      <a class="catalog-category" href="24-category-details.html?category=هدايا%20وإكسسوارات">
         <span class="catalog-category-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="8" width="18" height="4" rx="1"/>
@@ -84,7 +84,7 @@
         هدايا وإكسسوارات
         <small>٧١ متجر</small>
       </a>
-      <a class="catalog-category" href="10-featured-products.html">
+      <a class="catalog-category" href="24-category-details.html?category=أحذية%20وحقائب">
         <span class="catalog-category-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
@@ -95,6 +95,8 @@
         أحذية وحقائب
         <small>٥٥ متجر</small>
       </a>
+      <a class="catalog-category" href="24-category-details.html?category=سيارات%20ومستلزماتها"><span class="catalog-category-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M5 17h14l1-5-3-5H7l-3 5 1 5Z"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg></span>سيارات ومستلزماتها<small>٢٢ متجر</small></a>
+      <a class="catalog-category" href="24-category-details.html?category=صيدليات%20موثقة"><span class="catalog-category-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6Z"/></svg></span>صيدليات موثقة<small>للمتاجر المرخصة فقط</small></a>
     </section>
   </main>
   <nav class="saey-bottom-nav" aria-label="التنقل الرئيسي">
@@ -103,5 +105,6 @@
     <a href="16-orders.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="m9 13 2 2 4-4"/></svg></span><span>الطلبات</span></a>
     <a href="15-account.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></span><span>حسابي</span></a>
   </nav>
+  <script>const categorySearch=document.getElementById('categorySearch'),categories=[...document.querySelectorAll('.catalog-category')];categorySearch.addEventListener('input',()=>{const q=categorySearch.value.trim();categories.forEach(item=>item.hidden=q&&!item.textContent.includes(q));});</script>
 </body>
 </html>

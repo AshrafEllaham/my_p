@@ -2848,19 +2848,29 @@
       { id: 30, num: '17', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '14-chats.html', title: 'الدردشات', titleEn: 'Chats', tags: ['Chat', 'Stores', 'Search'], desc: 'قائمة محادثات مباشرة مع المتاجر مع بحث باسم المتجر أو المنتج.', descEn: 'Direct store conversations with search by store or product.', notes: ['بحث باسم المتجر أو المنتج', 'حالة قراءة ووقت آخر رسالة', 'فتح محادثة مباشرة من القائمة'], notesEn: ['Search by store or product', 'Read state and last message time', 'Open a direct conversation from the list'] }
     );
 
-    // المرحلة الأولى الحالية تقتصر على شاشات التسجيل والتهيئة فقط.
+    screens.push(
+      { id: 40, num: '21', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '20-checkout.html', title: 'تأكيد الطلب والدفع', titleEn: 'Checkout & Wallet Payment', tags: ['Checkout', 'Wallet', 'Direct Purchase'], desc: 'شراء مباشر لمنتج واحد والدفع من المحفظة بدون سلة.', descEn: 'Direct single-product purchase paid from the wallet without a cart.', notes: ['مراجعة المنتج والإجمالي', 'فحص الرصيد', 'إنشاء الطلب بعد الدفع'], notesEn: ['Review product and total', 'Balance validation', 'Order creation after payment'] },
+      { id: 41, num: '22', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '21-order-details.html', title: 'تفاصيل الطلب', titleEn: 'Order Details', tags: ['Orders', 'Tracking', 'Support'], desc: 'تفاصيل الطلب والتتبع والدردشة والإلغاء أو الاسترداد.', descEn: 'Order details, tracking, chat, cancellation, and refund actions.', notes: ['كود الطلب', 'حالة الاستلام', 'إجراءات ما بعد الطلب'], notesEn: ['Order code', 'Pickup state', 'Post-order actions'] },
+      { id: 42, num: '23', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '22-rate-order.html', title: 'تقييم المنتج', titleEn: 'Rate Product', tags: ['Reviews', 'Completed Order'], desc: 'إرسال تقييم موثق بعد اكتمال الطلب.', descEn: 'Submit a verified review after order completion.', notes: ['نجوم وتعليق', 'يظهر بعد الاكتمال فقط'], notesEn: ['Stars and comment', 'Shown only after completion'] },
+      { id: 43, num: '24', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '23-search-results.html', title: 'نتائج البحث', titleEn: 'Search Results', tags: ['Search', 'Products', 'Stores'], desc: 'نتائج بحث عامة للمنتجات والمتاجر مع تبويبات وحالة فارغة.', descEn: 'Global product and store search with tabs and empty state.', notes: ['بحث عام', 'فلترة نوع النتيجة'], notesEn: ['Global search', 'Result-type filtering'] },
+      { id: 44, num: '25', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '24-category-details.html', title: 'تفاصيل القسم', titleEn: 'Category Details', tags: ['Category', 'Sponsored', 'Discovery'], desc: 'بحث وإعلان ممول وأفضل المنتجات والمتاجر داخل القسم.', descEn: 'Category search, sponsored placement, top products, and stores.', notes: ['إعلان واضح', 'الأكثر شراءً', 'الأعلى تقييمًا'], notesEn: ['Clearly labeled ad', 'Most purchased', 'Top rated'] },
+      { id: 45, num: '26', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '25-product-reviews.html', title: 'تقييمات المنتج', titleEn: 'Product Reviews', tags: ['Reviews', 'Product'], desc: 'عرض كامل لتقييمات المنتج الموثقة.', descEn: 'Full list of verified product reviews.', notes: ['ملخص التقييم', 'آراء العملاء'], notesEn: ['Rating summary', 'Customer reviews'] },
+      { id: 46, num: '07.1', section: 'الدخول', sectionEn: 'Auth & Onboarding', file: '07-reset-password.html', title: 'كلمة مرور جديدة', titleEn: 'New Password', tags: ['Password', 'Recovery'], desc: 'استكمال استعادة الحساب بعد OTP.', descEn: 'Complete account recovery after OTP.', notes: ['كلمة جديدة', 'تأكيد التطابق'], notesEn: ['New password', 'Match validation'] }
+    );
+
+    // الشاشات الحالية المعتمدة في العارض.
     const authScreenFiles = new Set([
       '00-splash.html', '00-splash-01.html', '00-splash-02.html',
       '01-login.html', '02-signup.html', '03-verify-otp.html',
       '04-account-type.html', '05-profile-setup.html',
-      '06-distributor-setup.html', '07-forgot-password.html', '08-profile-setup.html', '08-user-home.html', '15-account.html', '16-orders.html',
-      '09-categories.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '17-wallet.html', '18-wallet-transactions.html', '19-store-details.html', '13-notifications.html', '14-chat-conversation.html', '14-chats.html'
+      '06-distributor-setup.html', '07-forgot-password.html', '07-reset-password.html', '08-profile-setup.html', '08-user-home.html', '15-account.html', '16-orders.html',
+      '09-categories.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '17-wallet.html', '18-wallet-transactions.html', '19-store-details.html', '13-notifications.html', '14-chat-conversation.html', '14-chats.html', '20-checkout.html', '21-order-details.html', '22-rate-order.html', '23-search-results.html', '24-category-details.html', '25-product-reviews.html'
     ]);
     const authScreenOrder = [
       '00-splash.html', '00-splash-01.html', '00-splash-02.html',
       '01-login.html', '02-signup.html', '03-verify-otp.html',
       '05-profile-setup.html', '04-account-type.html', '08-profile-setup.html',
-      '06-distributor-setup.html', '08-user-home.html', '15-account.html', '16-orders.html', '17-wallet.html', '18-wallet-transactions.html', '19-store-details.html', '09-categories.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '13-notifications.html', '14-chat-conversation.html', '14-chats.html', '07-forgot-password.html'
+      '06-distributor-setup.html', '08-user-home.html', '15-account.html', '16-orders.html', '20-checkout.html', '21-order-details.html', '22-rate-order.html', '17-wallet.html', '18-wallet-transactions.html', '19-store-details.html', '09-categories.html', '24-category-details.html', '23-search-results.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '25-product-reviews.html', '13-notifications.html', '14-chat-conversation.html', '14-chats.html', '07-forgot-password.html', '07-reset-password.html'
     ];
     screens.splice(0, screens.length, ...screens
       .filter(screen => authScreenFiles.has(screen.file))

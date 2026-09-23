@@ -46,7 +46,7 @@
     <section class="account-section" aria-labelledby="manageTitle">
       <h2 id="manageTitle">إدارة الحساب</h2>
       <div class="account-list">
-        <a class="account-row" href="17-wallet.html"><span class="row-icon mint"><svg viewBox="0 0 24 24"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H20v14H5.5A2.5 2.5 0 0 1 3 16.5Z"/><path d="M3 8h16M16 13h.01"/></svg></span><span>المحفظة</span><small>٢,٤٥٠ ج.م</small><svg class="row-arrow" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a>
+        <a class="account-row" href="17-wallet.html"><span class="row-icon mint"><svg viewBox="0 0 24 24"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H20v14H5.5A2.5 2.5 0 0 1 3 16.5Z"/><path d="M3 8h16M16 13h.01"/></svg></span><span>المحفظة</span><small id="accountWalletBalance">٤,٥٠٠ ج.م</small><svg class="row-arrow" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a>
         <a class="account-row" href="account-profile.html"><span class="row-icon violet"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><span>الملف الشخصي</span><svg class="row-arrow" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a>
         <a class="account-row" href="account-pickup.html"><span class="row-icon blue"><svg viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span><span>موقع الاستلام</span><small>القاهرة</small><svg class="row-arrow" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a>
       </div>
@@ -140,6 +140,7 @@
       closeThemeSheet();
     });
     applyAccountTheme(selectedTheme, false);
+    document.getElementById('accountWalletBalance').textContent = `${Number(localStorage.getItem('saey_wallet_balance') || 4500).toLocaleString('ar-EG')} ج.م`;
     document.getElementById('logoutButton').addEventListener('click', () => {
       window.location.href = '01-login.html';
     });

@@ -29,36 +29,40 @@
       <button class="orders-tab active" id="current-orders-tab" type="button" role="tab" aria-selected="true" aria-controls="current-orders" data-tab="current-orders">الحالية <span>٢</span></button>
       <button class="orders-tab" id="past-orders-tab" type="button" role="tab" aria-selected="false" aria-controls="past-orders" data-tab="past-orders">السابقة <span>١</span></button>
     </div>
+    <div class="orders-filters" aria-label="فلترة الطلبات"><select id="orderStatusFilter" aria-label="الحالة"><option value="all">كل الحالات</option><option value="confirmed">تم التأكيد</option><option value="preparing">قيد التجهيز</option><option value="ready">جاهز للاستلام</option><option value="completed">مكتمل</option></select><input id="orderDateFilter" type="date" aria-label="تاريخ الطلب"><button id="clearOrderFilters" type="button">مسح</button></div>
 
     <section class="orders-list" id="current-orders" role="tabpanel" aria-labelledby="current-orders-tab" aria-label="الطلبات الحالية">
-      <article class="order-card" data-order-group="current">
+      <article class="order-card" data-order-group="current" data-status="ready" data-date="2026-09-23">
         <header class="order-card-head"><div><span class="order-number">طلب #SA-1024</span><small>اليوم · 10:32 ص</small></div><span class="order-status ready">جاهز للاستلام</span></header>
         <div class="order-store"><span class="store-mark blue">ن</span><div><strong>نقطة ستور</strong><small>مدينة نصر · استلام من المتجر</small></div></div>
         <div class="order-product"><img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=180&q=85" alt="جاكيت جلد طبيعي"><div><strong>جاكيت جلد طبيعي رجالي</strong><small>بني · مقاس M · الكمية ١</small></div><b>٢,٨٩٠ ج.م</b></div>
         <div class="order-timeline"><span class="done"><i>✓</i><small>تم التأكيد</small></span><span class="done"><i>✓</i><small>قيد التجهيز</small></span><span class="active"><i>●</i><small>جاهز للاستلام</small></span><span><i></i><small>تم الاستلام</small></span></div>
         <button class="order-details-button" type="button" data-target="details1">عرض تفاصيل الحالة <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
         <div class="order-details" id="details1"><p>يمكنك استلام الطلب من نقطة ستور بعد إظهار رقم الطلب للمتجر.</p><a href="14-chat-conversation.html?store=%D9%86%D9%82%D8%B7%D8%A9%20%D8%B3%D8%AA%D9%88%D8%B1">تواصل مع المتجر</a></div>
+        <a class="order-open-link" href="21-order-details.html?code=SA-1024">تفاصيل الطلب كاملة</a>
       </article>
 
-      <article class="order-card" data-order-group="current">
+      <article class="order-card" data-order-group="current" data-status="preparing" data-date="2026-09-22">
         <header class="order-card-head"><div><span class="order-number">طلب #SA-1021</span><small>أمس · 4:18 م</small></div><span class="order-status preparing">قيد التجهيز</span></header>
         <div class="order-store"><span class="store-mark mint">ت</span><div><strong>التقنية الحديثة</strong><small>المعادي · استلام من المتجر</small></div></div>
         <div class="order-product"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=180&q=85" alt="سماعة لاسلكية"><div><strong>سماعة لاسلكية بعزل الضوضاء</strong><small>أسود · الكمية ١</small></div><b>٢,٣٥٠ ج.م</b></div>
         <div class="order-timeline"><span class="done"><i>✓</i><small>تم التأكيد</small></span><span class="active"><i>●</i><small>قيد التجهيز</small></span><span><i></i><small>جاهز للاستلام</small></span><span><i></i><small>تم الاستلام</small></span></div>
         <button class="order-details-button" type="button" data-target="details2">عرض تفاصيل الحالة <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
         <div class="order-details" id="details2"><p>المتجر يجهز المنتج الآن، وسيظهر لك تحديث جديد عند جاهزيته للاستلام.</p><a href="14-chat-conversation.html?store=%D8%A7%D9%84%D8%AA%D9%82%D9%86%D9%8A%D8%A9%20%D8%A7%D9%84%D8%AD%D8%AF%D9%8A%D8%AB%D8%A9">تواصل مع المتجر</a></div>
+        <a class="order-open-link" href="21-order-details.html?code=SA-1021">تفاصيل الطلب كاملة</a>
       </article>
 
     </section>
 
     <section class="orders-list" id="past-orders" role="tabpanel" aria-labelledby="past-orders-tab" aria-label="الطلبات السابقة" hidden>
-      <article class="order-card completed-card" data-order-group="past">
+      <article class="order-card completed-card" data-order-group="past" data-status="completed" data-date="2026-05-12">
         <header class="order-card-head"><div><span class="order-number">طلب #SA-1014</span><small>١٢ مايو ٢٠٢٦</small></div><span class="order-status completed">مكتمل</span></header>
         <div class="order-store"><span class="store-mark peach">أ</span><div><strong>أزياء الشرق</strong><small>مدينة نصر · تم الاستلام من المتجر</small></div></div>
         <div class="order-product"><img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=180&q=85" alt="فستان نسائي أنيق"><div><strong>فستان نسائي أنيق</strong><small>وردي · مقاس L · الكمية ١</small></div><b>١٩٠ ج.م</b></div>
         <div class="completed-note"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg><span>تم استلام الطلب بنجاح</span></div>
         <button class="order-details-button" type="button" data-target="details3">عرض تفاصيل الطلب <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
         <div class="order-details" id="details3"><p>تم استلام الطلب من المتجر بتاريخ ١٢ مايو ٢٠٢٦.</p><a href="12-product-details.html">إعادة شراء المنتج</a></div>
+        <a class="order-open-link" href="21-order-details.html?code=SA-1014&state=completed">تفاصيل الطلب والتقييم</a>
       </article>
     </section>
   </main>
@@ -79,6 +83,29 @@
     const tabs = document.querySelectorAll('.orders-tab');
     const panels = document.querySelectorAll('.orders-list[role="tabpanel"]');
     const summaryCount = document.querySelector('.orders-summary strong');
+    const statusFilter = document.getElementById('orderStatusFilter');
+    const dateFilter = document.getElementById('orderDateFilter');
+
+    const applyOrderFilters = () => {
+      document.querySelectorAll('.order-card').forEach(card => {
+        const statusMatches = statusFilter.value === 'all' || card.dataset.status === statusFilter.value;
+        const dateMatches = !dateFilter.value || card.dataset.date === dateFilter.value;
+        card.classList.toggle('filter-hidden', !statusMatches || !dateMatches);
+      });
+    };
+    statusFilter.addEventListener('change', applyOrderFilters);
+    dateFilter.addEventListener('change', applyOrderFilters);
+    document.getElementById('clearOrderFilters').addEventListener('click', () => { statusFilter.value = 'all'; dateFilter.value = ''; applyOrderFilters(); });
+
+    try {
+      const latest = JSON.parse(localStorage.getItem('saey_latest_order'));
+      if (latest && !document.querySelector(`[data-code="${latest.code}"]`)) {
+        const card = document.createElement('article');
+        card.className = 'order-card'; card.dataset.status = 'confirmed'; card.dataset.date = latest.date.slice(0, 10); card.dataset.code = latest.code;
+        card.innerHTML = `<header class="order-card-head"><div><span class="order-number">طلب #${latest.code}</span><small>الآن</small></div><span class="order-status preparing">تم التأكيد</span></header><div class="order-store"><span class="store-mark blue">ن</span><div><strong>${latest.store}</strong><small>استلام من المتجر</small></div></div><div class="order-product"><img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=180&q=85" alt="${latest.product}"><div><strong>${latest.product}</strong><small>طلب جديد</small></div><b>${latest.total.toLocaleString('ar-EG')} ج.م</b></div><a class="order-open-link" href="21-order-details.html?code=${latest.code}">تفاصيل الطلب كاملة</a>`;
+        document.getElementById('current-orders').prepend(card);
+      }
+    } catch (error) {}
 
     tabs.forEach(tab => tab.addEventListener('click', () => {
       const targetId = tab.dataset.tab;

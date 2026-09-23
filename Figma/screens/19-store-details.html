@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="auth.css">
   <link rel="stylesheet" href="catalog.css">
   <link rel="stylesheet" href="store-details.css">
+  <link rel="stylesheet" href="sponsored-ads.css">
   <link rel="stylesheet" href="uber-ui.css">
 </head>
 <body class="saey-store-details">
@@ -41,8 +42,10 @@
       <div class="store-stats"><span><b>4.9</b><small>التقييم</small></span><span><b>١.٢ كم</b><small>المسافة</small></span><span><b>+١٢٠</b><small>منتج</small></span></div>
       <div class="store-actions"><a class="store-action primary" href="tel:+201000000000"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>اتصال</a><a class="store-action" href="14-chats.html"><svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>دردشة</a></div>
     </section>
+    <section class="youtube-ad-section store-ads" aria-label="إعلانات المتجر"><div class="youtube-ad-section-head"><h2>إعلانات المتجر</h2><span>عروض مميزة</span></div><article class="youtube-ad compact"><a class="youtube-ad-media" href="12-product-details.html"><img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=900&q=85" alt="عرض جاكيت جلد طبيعي"><span class="youtube-ad-shade"></span><span class="youtube-ad-badge">إعلان المتجر</span><span class="youtube-ad-duration">0:12</span><span class="youtube-ad-play"><svg viewBox="0 0 24 24"><path d="m8 5 11 7-11 7Z"/></svg></span></a><div class="youtube-ad-body"><div class="youtube-ad-meta"><span class="youtube-ad-avatar">ن</span><span class="youtube-ad-copy"><strong>خصم ١٠٪ على تشكيلة الجاكيتات الجديدة</strong><small>النجم الساطع · عرض لفترة محدودة</small></span><button class="youtube-ad-menu" type="button" aria-label="خيارات الإعلان">⋮</button></div><div class="youtube-ad-actions"><a class="youtube-ad-cta" href="12-product-details.html">عرض المنتج</a><a class="youtube-ad-chat" href="14-chat-conversation.html?store=النجم%20الساطع">اسأل المتجر</a></div></div></article><div class="youtube-ad-pager" aria-label="مؤشر إعلانات المتجر"><i class="active"></i><i></i><i></i></div></section>
     <section class="store-info-block"><h2>عن المتجر</h2><p>النجم الساطع متجر متخصص في الأزياء الرجالية المختارة بعناية. نساعدك تلاقي قطع عملية وأنيقة مع إمكانية الاستلام مباشرة من المتجر.</p><div class="store-location"><span class="store-info-icon"><svg viewBox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span><span><b>موقع المتجر</b><small>شارع عباس العقاد، مدينة نصر، القاهرة</small></span><a href="#" aria-label="فتح موقع المتجر"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a></div></section>
     <div class="store-section-head"><h2>منتجات المتجر</h2><a href="10-featured-products.html">عرض الكل</a></div>
+    <label class="store-product-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg><input id="storeProductSearch" type="search" placeholder="ابحث داخل المتجر"></label>
     <section class="store-products">
       <a class="store-product-card" href="12-product-details.html"><span class="store-product-image"><img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=400&q=85" alt="جاكيت جلد طبيعي"><em>خصم ١٠٪</em></span><strong>جاكيت جلد طبيعي</strong><small>٢,٨٩٠ ج.م</small></a>
       <a class="store-product-card" href="12-product-details.html"><span class="store-product-image"><img src="https://images.unsplash.com/photo-1548883354-7622d03aca27?auto=format&fit=crop&w=400&q=85" alt="جاكيت شتوي"><em>خصم ٢٠٪</em></span><strong>جاكيت شتوي أنيق</strong><small>٢,٣٠٠ ج.م</small></a>
@@ -58,6 +61,8 @@
   <script>
     document.getElementById('favoriteStore').addEventListener('click', (event) => event.currentTarget.classList.toggle('saved'));
     document.getElementById('shareStore').addEventListener('click', async () => { try { await navigator.share?.({ title:'النجم الساطع', url:location.href }); } catch (e) {} });
+    document.getElementById('storeProductSearch').addEventListener('input', event => { const q=event.currentTarget.value.trim(); document.querySelectorAll('.store-product-card').forEach(card => card.hidden=q&&!card.textContent.includes(q)); });
   </script>
+  <script src="sponsored-ads.js"></script>
 </body>
 </html>

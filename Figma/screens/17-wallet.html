@@ -28,7 +28,7 @@
     </header>
     <section class="wallet-balance-card" aria-label="رصيد المحفظة">
       <div class="wallet-balance-top"><span class="wallet-balance-label">الرصيد المتاح</span><span class="wallet-secure"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>آمن</span></div>
-      <strong class="wallet-balance">٢,٤٥٠ ج.م</strong>
+      <strong class="wallet-balance" id="walletBalanceValue">٢,٤٥٠ ج.م</strong>
       <div class="wallet-balance-meta"><span>آخر تحديث منذ دقائق</span><strong>متاح للاستخدام</strong></div>
       <div class="wallet-actions">
         <button class="wallet-action primary" type="button" id="depositButton"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>شحن المحفظة</button>
@@ -74,6 +74,8 @@
       <button class="wallet-sheet-secondary" id="editTransfer" type="button">تعديل البيانات</button>
     </div>
   </section>
+  <div class="wallet-sheet-backdrop" id="depositBackdrop" hidden></div>
+  <section class="wallet-bottom-sheet" id="depositSheet" role="dialog" aria-modal="true" aria-labelledby="depositSheetTitle" hidden><button class="wallet-sheet-close" id="closeDepositSheet" type="button" aria-label="إغلاق"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button><div class="wallet-sheet-handle"></div><div class="wallet-sheet-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div><h2 id="depositSheetTitle">شحن المحفظة</h2><p class="wallet-sheet-description">أدخل المبلغ الذي تريد إضافته إلى رصيدك التجريبي.</p><form id="depositForm"><label class="wallet-field-label" for="depositAmount">مبلغ الشحن</label><div class="wallet-amount-field"><input class="wallet-field" id="depositAmount" type="number" min="1" inputmode="decimal" placeholder="0" required><span>ج.م</span></div><p class="wallet-form-error" id="depositError" hidden></p><button class="wallet-sheet-primary" type="submit">تأكيد الشحن</button></form></section>
   <div class="wallet-sheet-backdrop" id="withdrawBackdrop" hidden></div>
   <section class="wallet-bottom-sheet" id="withdrawSheet" role="dialog" aria-modal="true" aria-labelledby="withdrawSheetTitle" hidden>
     <button class="wallet-sheet-close" id="closeWithdrawSheet" type="button" aria-label="إغلاق"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
@@ -99,7 +101,11 @@
   </nav>
   <script>
     const walletToast = (button, text, initialText) => { button.textContent = text; setTimeout(() => { button.textContent = initialText; }, 1400); };
-    document.getElementById('depositButton').addEventListener('click', (event) => walletToast(event.currentTarget, 'تم فتح الشحن', 'شحن المحفظة'));
+    const formatMoney = value => `${Number(value).toLocaleString('ar-EG')} ج.م`;
+    let currentBalance = Number(localStorage.getItem('saey_wallet_balance') || 4500);
+    const addTransaction = (type, amount) => { const list = JSON.parse(localStorage.getItem('saey_wallet_transactions') || '[]'); list.unshift({ type, amount, date: new Date().toISOString() }); localStorage.setItem('saey_wallet_transactions', JSON.stringify(list.slice(0, 20))); };
+    const updateBalance = value => { currentBalance = value; localStorage.setItem('saey_wallet_balance', String(value)); document.getElementById('walletBalanceValue').textContent = formatMoney(value); };
+    updateBalance(currentBalance);
 
     const transferButton = document.getElementById('transferButton');
     const withdrawButton = document.getElementById('withdrawButton');
@@ -154,12 +160,13 @@
     withdrawForm.addEventListener('submit', (event) => {
       event.preventDefault();
       const amount = Number(withdrawAmount.value);
-      if (!amount || amount < 1 || amount > 2450) {
-        withdrawError.textContent = 'أدخل مبلغًا من ١ إلى ٢,٤٥٠ ج.م.';
+      if (!amount || amount < 1 || amount > currentBalance) {
+        withdrawError.textContent = `أدخل مبلغًا من ١ إلى ${formatMoney(currentBalance)}.`;
         withdrawError.hidden = false;
         return;
       }
       closeWithdrawSheet();
+      updateBalance(currentBalance - amount); addTransaction('طلب سحب', -amount);
       walletToast(withdrawButton, 'تم إرسال طلب السحب', 'سحب الرصيد');
       withdrawForm.reset();
     });
@@ -169,8 +176,8 @@
       const recipient = recipientInput.value.trim();
       const amount = Number(transferAmount.value);
       const validRecipient = recipient.length >= 6 && (recipient.includes('@') || /\d/.test(recipient));
-      if (!validRecipient || !amount || amount < 1 || amount > 2450) {
-        transferError.textContent = !validRecipient ? 'اكتب رقم هاتف أو بريدًا إلكترونيًا صحيحًا.' : 'أدخل مبلغًا من ١ إلى ٢,٤٥٠ ج.م.';
+      if (!validRecipient || !amount || amount < 1 || amount > currentBalance) {
+        transferError.textContent = !validRecipient ? 'اكتب رقم هاتف أو بريدًا إلكترونيًا صحيحًا.' : `أدخل مبلغًا من ١ إلى ${formatMoney(currentBalance)}.`;
         transferError.hidden = false;
         return;
       }
@@ -187,10 +194,17 @@
     });
 
     document.getElementById('confirmTransfer').addEventListener('click', () => {
+      const amount = Number(transferAmount.value); updateBalance(currentBalance - amount); addTransaction('تحويل لصديق', -amount);
       closeTransferSheet();
       walletToast(transferButton, 'تم التحويل بنجاح', 'تحويل لصديق');
       transferForm.reset();
     });
+
+    const depositSheet=document.getElementById('depositSheet'),depositBackdrop=document.getElementById('depositBackdrop'),depositAmount=document.getElementById('depositAmount');
+    const closeDeposit=()=>{depositSheet.hidden=true;depositBackdrop.hidden=true;};
+    document.getElementById('depositButton').onclick=()=>{depositSheet.hidden=false;depositBackdrop.hidden=false;requestAnimationFrame(()=>depositAmount.focus());};
+    document.getElementById('closeDepositSheet').onclick=closeDeposit;depositBackdrop.onclick=closeDeposit;
+    document.getElementById('depositForm').onsubmit=event=>{event.preventDefault();const amount=Number(depositAmount.value);if(!amount||amount<1){const error=document.getElementById('depositError');error.textContent='أدخل مبلغ شحن صحيحًا.';error.hidden=false;return;}updateBalance(currentBalance+amount);addTransaction('شحن المحفظة',amount);closeDeposit();walletToast(document.getElementById('depositButton'),'تم شحن المحفظة','شحن المحفظة');event.currentTarget.reset();};
   </script>
 </body>
 </html>

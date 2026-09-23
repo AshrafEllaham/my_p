@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="user-home-polish.css">
   <link rel="stylesheet" href="uber-ui.css">
   <link rel="stylesheet" href="user-home-waffarha.css">
+  <link rel="stylesheet" href="sponsored-ads.css">
 </head>
 <body class="saey-home">
   <div class="status-bar">
@@ -46,7 +47,7 @@
 
     <label class="waffarha-search">
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg>
-      <input type="search" placeholder="ابحث عن منتج أو متجر">
+      <input id="globalSearch" type="search" placeholder="ابحث عن منتج أو متجر">
       <button class="home-open-filters" type="button" aria-label="فتح الفلاتر" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2m4 0h10M14 12h6M4 12h2"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/><circle cx="8" cy="12" r="2"/></svg></button>
     </label>
 
@@ -60,6 +61,11 @@
         <a href="10-featured-products.html">اكتشف العروض <svg viewBox="0 0 24 24"><path d="m14 6-6 6 6 6"/></svg></a>
       </div>
       <div class="hero-pager" aria-label="مؤشر العروض"><i class="active"></i><i></i><i></i></div>
+    </section>
+
+    <section class="youtube-ad-section" aria-label="إعلانات ممولة">
+      <div class="youtube-ad-section-head"><h2>إعلانات ممولة</h2><span>مقترحة لك</span></div>
+      <article class="youtube-ad"><a class="youtube-ad-media" href="19-store-details.html"><img src="https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&w=900&q=85" alt="عرض إلكترونيات من التقنية الحديثة"><span class="youtube-ad-shade"></span><span class="youtube-ad-badge">إعلان</span><span class="youtube-ad-duration">0:15</span><span class="youtube-ad-play"><svg viewBox="0 0 24 24"><path d="m8 5 11 7-11 7Z"/></svg></span></a><div class="youtube-ad-body"><div class="youtube-ad-meta"><span class="youtube-ad-avatar">ت</span><span class="youtube-ad-copy"><strong>خصم حتى ٢٠٪ على أحدث الإلكترونيات</strong><small><b>مموّل</b> · التقنية الحديثة</small></span><button class="youtube-ad-menu" type="button" aria-label="خيارات الإعلان">⋮</button></div><div class="youtube-ad-actions"><a class="youtube-ad-cta" href="19-store-details.html">تسوّق الآن</a><a class="youtube-ad-chat" href="14-chat-conversation.html?store=التقنية%20الحديثة">دردشة</a></div></div></article>
     </section>
 
     <section class="quick-services" aria-label="اختصارات">
@@ -203,7 +209,11 @@
         open.classList.add('has-filters');
         close();
       });
+      document.getElementById('globalSearch').addEventListener('keydown', event => {
+        if (event.key === 'Enter' && event.currentTarget.value.trim()) location.href = `23-search-results.html?q=${encodeURIComponent(event.currentTarget.value.trim())}`;
+      });
     })();
   </script>
+  <script src="sponsored-ads.js"></script>
 </body>
 </html>

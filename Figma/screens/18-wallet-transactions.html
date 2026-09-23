@@ -29,7 +29,7 @@
     </header>
 
     <section class="transactions-summary" aria-label="ملخص المحفظة">
-      <div><span>الرصيد الحالي</span><strong>٢,٤٥٠ ج.م</strong></div>
+      <div><span>الرصيد الحالي</span><strong id="transactionsBalance">٤,٥٠٠ ج.م</strong></div>
       <div><span>عمليات هذا الشهر</span><strong>٦ عمليات</strong></div>
     </section>
 
@@ -58,11 +58,12 @@
   </nav>
   <script>
     const filters = document.querySelectorAll('.wallet-filter');
-    const transactions = document.querySelectorAll('.wallet-transaction[data-type]');
+    document.getElementById('transactionsBalance').textContent = `${Number(localStorage.getItem('saey_wallet_balance') || 4500).toLocaleString('ar-EG')} ج.م`;
+    try { const saved=JSON.parse(localStorage.getItem('saey_wallet_transactions')||'[]'); const list=document.querySelector('.wallet-transactions-list'); saved.forEach((item,index)=>{const article=document.createElement('article');article.className=`wallet-transaction ${item.amount>0?'transaction-profit':'transaction-approved'}`;article.dataset.type=item.amount>0?'profit':'approved';article.innerHTML=`<div class="wallet-transaction-main"><strong>${item.type}</strong><b>${Math.abs(item.amount).toLocaleString('ar-EG')} ج.م</b></div><div class="wallet-transaction-meta"><small>#LOCAL${index+1}</small><time>${new Date(item.date).toLocaleString('ar-EG')}</time></div>`;list.prepend(article);}); } catch(error) {}
     filters.forEach((filter) => filter.addEventListener('click', () => {
       const selected = filter.dataset.filter;
       filters.forEach((item) => { const active = item === filter; item.classList.toggle('is-active', active); item.setAttribute('aria-selected', String(active)); });
-      transactions.forEach((item) => item.classList.toggle('is-hidden', selected !== 'all' && item.dataset.type !== selected));
+      document.querySelectorAll('.wallet-transaction[data-type]').forEach((item) => item.classList.toggle('is-hidden', selected !== 'all' && item.dataset.type !== selected));
     }));
   </script>
 </body>
