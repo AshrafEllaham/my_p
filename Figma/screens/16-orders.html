@@ -23,10 +23,15 @@
 
   <main class="orders-page">
     <header class="orders-head"><a class="orders-back" href="08-user-home.html" aria-label="العودة للرئيسية"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a><div><h1>الطلبات</h1><span>تابع طلباتك وحالة الاستلام</span></div><span></span></header>
-    <div class="orders-summary"><span class="summary-icon"><svg viewBox="0 0 24 24"><path d="M6 3h12v18H6z"/><path d="M9 7h6M9 11h6M9 15h4"/></svg></span><div><strong>٣ طلبات</strong><small>آخر تحديث منذ دقائق</small></div><span class="summary-status"><i></i>كلها من المتجر</span></div>
+    <div class="orders-summary"><span class="summary-icon"><svg viewBox="0 0 24 24"><path d="M6 3h12v18H6z"/><path d="M9 7h6M9 11h6M9 15h4"/></svg></span><div><strong>طلبان</strong><small>آخر تحديث منذ دقائق</small></div><span class="summary-status"><i></i>كلها من المتجر</span></div>
 
-    <section class="orders-list" aria-label="قائمة الطلبات">
-      <article class="order-card">
+    <div class="orders-tabs" role="tablist" aria-label="تصنيف الطلبات">
+      <button class="orders-tab active" id="current-orders-tab" type="button" role="tab" aria-selected="true" aria-controls="current-orders" data-tab="current-orders">الحالية <span>٢</span></button>
+      <button class="orders-tab" id="past-orders-tab" type="button" role="tab" aria-selected="false" aria-controls="past-orders" data-tab="past-orders">السابقة <span>١</span></button>
+    </div>
+
+    <section class="orders-list" id="current-orders" role="tabpanel" aria-labelledby="current-orders-tab" aria-label="الطلبات الحالية">
+      <article class="order-card" data-order-group="current">
         <header class="order-card-head"><div><span class="order-number">طلب #SA-1024</span><small>اليوم · 10:32 ص</small></div><span class="order-status ready">جاهز للاستلام</span></header>
         <div class="order-store"><span class="store-mark blue">ن</span><div><strong>نقطة ستور</strong><small>مدينة نصر · استلام من المتجر</small></div></div>
         <div class="order-product"><img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=180&q=85" alt="جاكيت جلد طبيعي"><div><strong>جاكيت جلد طبيعي رجالي</strong><small>بني · مقاس M · الكمية ١</small></div><b>٢,٨٩٠ ج.م</b></div>
@@ -35,7 +40,7 @@
         <div class="order-details" id="details1"><p>يمكنك استلام الطلب من نقطة ستور بعد إظهار رقم الطلب للمتجر.</p><a href="14-chat-conversation.html?store=%D9%86%D9%82%D8%B7%D8%A9%20%D8%B3%D8%AA%D9%88%D8%B1">تواصل مع المتجر</a></div>
       </article>
 
-      <article class="order-card">
+      <article class="order-card" data-order-group="current">
         <header class="order-card-head"><div><span class="order-number">طلب #SA-1021</span><small>أمس · 4:18 م</small></div><span class="order-status preparing">قيد التجهيز</span></header>
         <div class="order-store"><span class="store-mark mint">ت</span><div><strong>التقنية الحديثة</strong><small>المعادي · استلام من المتجر</small></div></div>
         <div class="order-product"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=180&q=85" alt="سماعة لاسلكية"><div><strong>سماعة لاسلكية بعزل الضوضاء</strong><small>أسود · الكمية ١</small></div><b>٢,٣٥٠ ج.م</b></div>
@@ -44,7 +49,10 @@
         <div class="order-details" id="details2"><p>المتجر يجهز المنتج الآن، وسيظهر لك تحديث جديد عند جاهزيته للاستلام.</p><a href="14-chat-conversation.html?store=%D8%A7%D9%84%D8%AA%D9%82%D9%86%D9%8A%D8%A9%20%D8%A7%D9%84%D8%AD%D8%AF%D9%8A%D8%AB%D8%A9">تواصل مع المتجر</a></div>
       </article>
 
-      <article class="order-card completed-card">
+    </section>
+
+    <section class="orders-list" id="past-orders" role="tabpanel" aria-labelledby="past-orders-tab" aria-label="الطلبات السابقة" hidden>
+      <article class="order-card completed-card" data-order-group="past">
         <header class="order-card-head"><div><span class="order-number">طلب #SA-1014</span><small>١٢ مايو ٢٠٢٦</small></div><span class="order-status completed">مكتمل</span></header>
         <div class="order-store"><span class="store-mark peach">أ</span><div><strong>أزياء الشرق</strong><small>مدينة نصر · تم الاستلام من المتجر</small></div></div>
         <div class="order-product"><img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=180&q=85" alt="فستان نسائي أنيق"><div><strong>فستان نسائي أنيق</strong><small>وردي · مقاس L · الكمية ١</small></div><b>١٩٠ ج.م</b></div>
@@ -66,6 +74,25 @@
       const details = document.getElementById(button.dataset.target);
       const isOpen = details.classList.toggle('visible');
       button.classList.toggle('open', isOpen);
+    }));
+
+    const tabs = document.querySelectorAll('.orders-tab');
+    const panels = document.querySelectorAll('.orders-list[role="tabpanel"]');
+    const summaryCount = document.querySelector('.orders-summary strong');
+
+    tabs.forEach(tab => tab.addEventListener('click', () => {
+      const targetId = tab.dataset.tab;
+      tabs.forEach(item => {
+        const isActive = item === tab;
+        item.classList.toggle('active', isActive);
+        item.setAttribute('aria-selected', String(isActive));
+      });
+      panels.forEach(panel => {
+        panel.hidden = panel.id !== targetId;
+      });
+      const count = document.querySelectorAll(`#${targetId} .order-card`).length;
+      const arabicCount = String(count).replace(/\d/g, digit => '٠١٢٣٤٥٦٧٨٩'[digit]);
+      summaryCount.textContent = count === 1 ? 'طلب واحد' : count === 2 ? 'طلبان' : `${arabicCount} طلبات`;
     }));
   </script>
 </body>

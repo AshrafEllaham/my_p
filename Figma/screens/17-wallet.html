@@ -45,6 +45,52 @@
     </section>
     <p class="wallet-note">يمكنك استخدام رصيد المحفظة عند تأكيد طلبك من أي متجر على سعي.</p>
   </main>
+  <div class="wallet-sheet-backdrop" id="transferBackdrop" hidden></div>
+  <section class="wallet-bottom-sheet" id="transferSheet" role="dialog" aria-modal="true" aria-labelledby="transferSheetTitle" hidden>
+    <button class="wallet-sheet-close" id="closeTransferSheet" type="button" aria-label="إغلاق"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+    <div class="wallet-sheet-handle" aria-hidden="true"></div>
+    <div class="transfer-step" id="transferFormStep">
+      <div class="wallet-sheet-icon"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 19a6 6 0 0 1 12 0M16 8h5M18.5 5.5 21 8l-2.5 2.5"/></svg></div>
+      <h2 id="transferSheetTitle">تحويل إلى صديق</h2>
+      <p class="wallet-sheet-description">أدخل رقم الهاتف أو البريد الإلكتروني للشخص الذي تريد التحويل إليه.</p>
+      <form id="transferForm" novalidate>
+        <label class="wallet-field-label" for="recipientInput">رقم الهاتف أو البريد الإلكتروني</label>
+        <input class="wallet-field" id="recipientInput" name="recipient" type="text" inputmode="email" dir="ltr" autocomplete="off" placeholder="01012345678 أو friend@email.com" required>
+        <label class="wallet-field-label" for="transferAmount">مبلغ التحويل</label>
+        <div class="wallet-amount-field"><input class="wallet-field" id="transferAmount" name="amount" type="number" inputmode="decimal" min="1" max="2450" dir="ltr" placeholder="0" required><span>ج.م</span></div>
+        <p class="wallet-form-error" id="transferError" role="alert" hidden></p>
+        <button class="wallet-sheet-primary" type="submit">متابعة التحويل</button>
+      </form>
+    </div>
+    <div class="transfer-step" id="transferConfirmStep" hidden>
+      <div class="wallet-sheet-icon confirm"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <h2>تأكيد التحويل</h2>
+      <p class="wallet-sheet-description">راجع البيانات قبل تنفيذ التحويل من رصيد محفظتك.</p>
+      <div class="transfer-review">
+        <div><span>المستلم</span><strong id="reviewRecipient"></strong></div>
+        <div><span>المبلغ</span><strong id="reviewAmount"></strong></div>
+      </div>
+      <button class="wallet-sheet-primary" id="confirmTransfer" type="button">تأكيد التحويل</button>
+      <button class="wallet-sheet-secondary" id="editTransfer" type="button">تعديل البيانات</button>
+    </div>
+  </section>
+  <div class="wallet-sheet-backdrop" id="withdrawBackdrop" hidden></div>
+  <section class="wallet-bottom-sheet" id="withdrawSheet" role="dialog" aria-modal="true" aria-labelledby="withdrawSheetTitle" hidden>
+    <button class="wallet-sheet-close" id="closeWithdrawSheet" type="button" aria-label="إغلاق"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+    <div class="wallet-sheet-handle" aria-hidden="true"></div>
+    <div class="transfer-step" id="withdrawFormStep">
+      <div class="wallet-sheet-icon withdraw"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12h14"/><path d="M5 19h14"/></svg></div>
+      <h2 id="withdrawSheetTitle">سحب من المحفظة</h2>
+      <p class="wallet-sheet-description">أدخل المبلغ الذي تريد سحبه. سيتم إرسال الطلب للمراجعة.</p>
+      <form id="withdrawForm" novalidate>
+        <div class="withdraw-available"><span>الرصيد المتاح</span><strong>٢,٤٥٠ ج.م</strong></div>
+        <label class="wallet-field-label" for="withdrawAmount">مبلغ السحب</label>
+        <div class="wallet-amount-field"><input class="wallet-field" id="withdrawAmount" name="amount" type="number" inputmode="decimal" min="1" max="2450" dir="ltr" placeholder="0" required><span>ج.م</span></div>
+        <p class="wallet-form-error" id="withdrawError" role="alert" hidden></p>
+        <button class="wallet-sheet-primary" type="submit">تأكيد طلب السحب</button>
+      </form>
+    </div>
+  </section>
   <nav class="saey-bottom-nav" aria-label="التنقل الرئيسي">
     <a href="08-user-home.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22v-9h6v9"/></svg></span><span>الرئيسية</span></a>
     <a href="09-categories.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg></span><span>الأقسام</span></a>
@@ -54,8 +100,97 @@
   <script>
     const walletToast = (button, text, initialText) => { button.textContent = text; setTimeout(() => { button.textContent = initialText; }, 1400); };
     document.getElementById('depositButton').addEventListener('click', (event) => walletToast(event.currentTarget, 'تم فتح الشحن', 'شحن المحفظة'));
-    document.getElementById('withdrawButton').addEventListener('click', (event) => walletToast(event.currentTarget, 'تم فتح السحب', 'سحب الرصيد'));
-    document.getElementById('transferButton').addEventListener('click', (event) => walletToast(event.currentTarget, 'تم فتح التحويل', 'تحويل لصديق'));
+
+    const transferButton = document.getElementById('transferButton');
+    const withdrawButton = document.getElementById('withdrawButton');
+    const transferSheet = document.getElementById('transferSheet');
+    const transferBackdrop = document.getElementById('transferBackdrop');
+    const transferForm = document.getElementById('transferForm');
+    const transferFormStep = document.getElementById('transferFormStep');
+    const transferConfirmStep = document.getElementById('transferConfirmStep');
+    const recipientInput = document.getElementById('recipientInput');
+    const transferAmount = document.getElementById('transferAmount');
+    const transferError = document.getElementById('transferError');
+
+    const closeTransferSheet = () => {
+      transferSheet.hidden = true;
+      transferBackdrop.hidden = true;
+      document.body.classList.remove('wallet-sheet-open');
+    };
+
+    const openTransferSheet = () => {
+      transferSheet.hidden = false;
+      transferBackdrop.hidden = false;
+      transferFormStep.hidden = false;
+      transferConfirmStep.hidden = true;
+      transferError.hidden = true;
+      requestAnimationFrame(() => recipientInput.focus());
+    };
+
+    transferButton.addEventListener('click', openTransferSheet);
+    document.getElementById('closeTransferSheet').addEventListener('click', closeTransferSheet);
+    transferBackdrop.addEventListener('click', closeTransferSheet);
+    document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && !transferSheet.hidden) closeTransferSheet(); });
+
+    const withdrawSheet = document.getElementById('withdrawSheet');
+    const withdrawBackdrop = document.getElementById('withdrawBackdrop');
+    const withdrawForm = document.getElementById('withdrawForm');
+    const withdrawError = document.getElementById('withdrawError');
+    const withdrawAmount = document.getElementById('withdrawAmount');
+    const closeWithdrawSheet = () => {
+      withdrawSheet.hidden = true;
+      withdrawBackdrop.hidden = true;
+    };
+    const openWithdrawSheet = () => {
+      withdrawSheet.hidden = false;
+      withdrawBackdrop.hidden = false;
+      withdrawError.hidden = true;
+      requestAnimationFrame(() => withdrawAmount.focus());
+    };
+    withdrawButton.addEventListener('click', openWithdrawSheet);
+    document.getElementById('closeWithdrawSheet').addEventListener('click', closeWithdrawSheet);
+    withdrawBackdrop.addEventListener('click', closeWithdrawSheet);
+    document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && !withdrawSheet.hidden) closeWithdrawSheet(); });
+    withdrawForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const amount = Number(withdrawAmount.value);
+      if (!amount || amount < 1 || amount > 2450) {
+        withdrawError.textContent = 'أدخل مبلغًا من ١ إلى ٢,٤٥٠ ج.م.';
+        withdrawError.hidden = false;
+        return;
+      }
+      closeWithdrawSheet();
+      walletToast(withdrawButton, 'تم إرسال طلب السحب', 'سحب الرصيد');
+      withdrawForm.reset();
+    });
+
+    transferForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const recipient = recipientInput.value.trim();
+      const amount = Number(transferAmount.value);
+      const validRecipient = recipient.length >= 6 && (recipient.includes('@') || /\d/.test(recipient));
+      if (!validRecipient || !amount || amount < 1 || amount > 2450) {
+        transferError.textContent = !validRecipient ? 'اكتب رقم هاتف أو بريدًا إلكترونيًا صحيحًا.' : 'أدخل مبلغًا من ١ إلى ٢,٤٥٠ ج.م.';
+        transferError.hidden = false;
+        return;
+      }
+      document.getElementById('reviewRecipient').textContent = recipient;
+      document.getElementById('reviewAmount').textContent = `${amount.toLocaleString('ar-EG')} ج.م`;
+      transferFormStep.hidden = true;
+      transferConfirmStep.hidden = false;
+    });
+
+    document.getElementById('editTransfer').addEventListener('click', () => {
+      transferConfirmStep.hidden = true;
+      transferFormStep.hidden = false;
+      recipientInput.focus();
+    });
+
+    document.getElementById('confirmTransfer').addEventListener('click', () => {
+      closeTransferSheet();
+      walletToast(transferButton, 'تم التحويل بنجاح', 'تحويل لصديق');
+      transferForm.reset();
+    });
   </script>
 </body>
 </html>

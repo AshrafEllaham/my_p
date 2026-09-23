@@ -45,3 +45,38 @@ body.dark-mode.saey-wallet .wallet-transaction-meta small, body.dark-mode.saey-w
 }
 
 .saey-wallet .wallet-list { overflow:visible; border:0; background:transparent; box-shadow:none; }
+
+.wallet-sheet-backdrop[hidden],
+.wallet-bottom-sheet[hidden],
+.transfer-step[hidden] { display:none; }
+
+.wallet-sheet-backdrop { position:fixed; inset:0; z-index:80; background:rgba(15,23,42,.42); backdrop-filter:blur(3px); }
+.wallet-bottom-sheet { position:fixed; right:50%; bottom:0; z-index:81; width:min(100%,440px); padding:18px 18px 28px; border-radius:24px 24px 0 0; background:#FFF; color:var(--wallet-ink); box-shadow:0 -12px 34px rgba(15,23,42,.18); transform:translateX(50%); animation:wallet-sheet-up .22s ease-out; }
+.wallet-sheet-handle { width:38px; height:4px; margin:-7px auto 17px; border-radius:99px; background:#CBD5E1; }
+.wallet-sheet-close { position:absolute; top:15px; left:16px; width:34px; height:34px; display:grid; place-items:center; border:1px solid #E2E8F0; border-radius:10px; background:#FFF; color:var(--wallet-ink); cursor:pointer; }
+.wallet-sheet-close svg { width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; }
+.wallet-sheet-icon { width:46px; height:46px; display:grid; place-items:center; margin:0 auto 10px; border-radius:14px; background:#F2F2F2; color:#000; }
+.wallet-sheet-icon.confirm { background:#ECFDF5; color:#059669; }
+.wallet-sheet-icon.withdraw { background:#F2F2F2; color:#000; }
+.wallet-sheet-icon svg { width:23px; height:23px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.wallet-bottom-sheet h2 { margin:0; text-align:center; font-size:18px; font-weight:900; }
+.wallet-sheet-description { max-width:310px; margin:4px auto 18px; color:var(--wallet-muted); text-align:center; font-size:11px; line-height:1.7; }
+.wallet-field-label { display:block; margin:0 2px 6px; color:var(--wallet-ink); font-size:11px; font-weight:800; }
+.wallet-field { width:100%; height:48px; padding:0 13px; border:1px solid #E1E8F1; border-radius:10px; outline:0; background:#FFF; color:var(--wallet-ink); font:600 13px var(--ui-font); }
+.wallet-field:focus { border-color:#000; box-shadow:0 0 0 3px rgba(0,0,0,.08); }
+.wallet-field::placeholder { color:#94A3B8; font-weight:500; }
+.wallet-amount-field { position:relative; margin-top:0; }
+.wallet-amount-field .wallet-field { padding-right:48px; }
+.wallet-amount-field > span { position:absolute; top:50%; right:14px; transform:translateY(-50%); color:var(--wallet-muted); font-size:11px; font-weight:800; pointer-events:none; }
+.wallet-form-error { margin:7px 2px 0; color:#DC2626; font-size:10px; font-weight:700; }
+.wallet-sheet-primary, .wallet-sheet-secondary { width:100%; height:48px; margin-top:16px; border-radius:10px; font:800 14px var(--ui-font); cursor:pointer; }
+.wallet-sheet-primary { border:0; background:#000; color:#FFF; box-shadow:0 8px 18px rgba(0,0,0,.18); }
+.wallet-sheet-secondary { height:40px; margin-top:7px; border:0; background:transparent; color:var(--wallet-muted); font-size:12px; }
+.transfer-review { display:grid; gap:8px; padding:4px 13px; border:1px solid #E7ECF2; border-radius:14px; background:#F8FAFC; }
+.transfer-review div { display:flex; align-items:center; justify-content:space-between; gap:12px; min-height:38px; }
+.transfer-review div + div { border-top:1px solid #E7ECF2; }
+.transfer-review span { color:var(--wallet-muted); font-size:11px; }
+.transfer-review strong { max-width:65%; overflow:hidden; color:var(--wallet-ink); font-size:12px; text-overflow:ellipsis; white-space:nowrap; }
+.withdraw-available { display:flex; align-items:center; justify-content:space-between; margin-bottom:13px; padding:10px 12px; border:1px solid #E7ECF2; border-radius:11px; background:#F8FAFC; color:var(--wallet-muted); font-size:10px; }
+.withdraw-available strong { color:var(--wallet-ink); font-size:12px; font-weight:900; }
+@keyframes wallet-sheet-up { from { opacity:0; transform:translate(50%, 18px); } to { opacity:1; transform:translate(50%, 0); } }
