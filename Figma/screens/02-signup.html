@@ -76,7 +76,7 @@
     <div class="barq-input-card">
       <label class="barq-input-label">البريد الإلكتروني</label>
       <div class="barq-input-inner">
-        <input type="email" placeholder="example@mail.com">
+        <input id="signupEmail" type="email" placeholder="example@mail.com">
         <div class="barq-input-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
         </div>
@@ -87,7 +87,7 @@
     <div class="barq-input-card">
       <label class="barq-input-label">كلمة المرور</label>
       <div class="barq-input-inner">
-        <input type="password" placeholder="••••••••">
+        <input id="signupPassword" type="password" placeholder="••••••••">
         <div class="barq-input-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         </div>
@@ -98,14 +98,15 @@
     <div class="barq-input-card">
       <label class="barq-input-label">تأكيد كلمة المرور</label>
       <div class="barq-input-inner">
-        <input type="password" placeholder="أعد كتابة كلمة المرور">
+        <input id="signupConfirmPassword" type="password" placeholder="أعد كتابة كلمة المرور">
         <div class="barq-input-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         </div>
       </div>
     </div>
 
-    <a class="barq-btn-primary" href="03-verify-otp.html">متابعة</a>
+    <p class="auth-form-error" id="signupError" hidden></p>
+    <button class="barq-btn-primary" id="signupButton" type="button">متابعة</button>
 
     <div class="barq-footer">
       لديك حساب بالفعل؟ <a href="01-login.html">تسجيل الدخول</a>
@@ -146,6 +147,12 @@
         signupPhoneCountry.classList.remove('open');
         signupCountryTrigger.setAttribute('aria-expanded', 'false');
       }
+    });
+    document.getElementById('signupButton').addEventListener('click', () => {
+      const phone=document.getElementById('signupPhone').value.replace(/\D/g,''),email=document.getElementById('signupEmail').value.trim(),password=document.getElementById('signupPassword').value,confirm=document.getElementById('signupConfirmPassword').value,error=document.getElementById('signupError'),button=document.getElementById('signupButton');
+      const validEmail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      if(phone.length<9||!validEmail||password.length<8||password!==confirm){error.textContent=phone.length<9?'اكتب رقم هاتف صحيحًا.':!validEmail?'اكتب بريدًا إلكترونيًا صحيحًا.':password.length<8?'كلمة المرور يجب ألا تقل عن ٨ أحرف.':'كلمتا المرور غير متطابقتين.';error.hidden=false;return;}
+      error.hidden=true;button.disabled=true;button.textContent='جارٍ إنشاء الحساب…';localStorage.setItem('saey_signup_draft',JSON.stringify({phone:`${signupCountryDial.textContent}${phone}`,email,date:new Date().toISOString()}));setTimeout(()=>location.href='03-verify-otp.html',500);
     });
   </script>
 </body>

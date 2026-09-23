@@ -78,5 +78,6 @@ body.dark-mode.saey-wallet .wallet-transaction-meta small, body.dark-mode.saey-w
 .transfer-review span { color:var(--wallet-muted); font-size:11px; }
 .transfer-review strong { max-width:65%; overflow:hidden; color:var(--wallet-ink); font-size:12px; text-overflow:ellipsis; white-space:nowrap; }
 .withdraw-available { display:flex; align-items:center; justify-content:space-between; margin-bottom:13px; padding:10px 12px; border:1px solid #E7ECF2; border-radius:11px; background:#F8FAFC; color:var(--wallet-muted); font-size:10px; }
+.wallet-bottom-sheet select.wallet-field{appearance:auto;margin-bottom:12px}.wallet-bottom-sheet input.wallet-field+ .wallet-field-label{margin-top:12px}.recipient-verified{color:#059669!important}
 .withdraw-available strong { color:var(--wallet-ink); font-size:12px; font-weight:900; }
 @keyframes wallet-sheet-up { from { opacity:0; transform:translate(50%, 18px); } to { opacity:1; transform:translate(50%, 0); } }

@@ -26,6 +26,7 @@
       <a class="conversation-back" href="14-chats.html" aria-label="العودة للدردشات"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a>
       <span class="conversation-avatar"><img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=120&q=85" alt="نقطة ستور"><i></i></span>
       <div class="conversation-identity"><strong id="storeName">نقطة ستور</strong><span><i></i>متصل الآن</span></div>
+      <button class="conversation-menu" id="conversationMenu" type="button" aria-label="خيارات المحادثة">⋮</button>
     </header>
 
     <section class="conversation-product" aria-label="المنتج المرتبط بالمحادثة">
@@ -47,6 +48,7 @@
     <input id="messageInput" type="text" placeholder="اكتب رسالتك..." autocomplete="off">
     <button class="send-button" type="submit" aria-label="إرسال الرسالة"><svg viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></button>
   </form>
+  <dialog class="conversation-actions" id="conversationActions"><form method="dialog"><h2>خيارات المحادثة</h2><button value="block" id="blockConversation">حظر المتجر</button><button value="report" id="reportConversation">الإبلاغ عن المحادثة</button><button value="cancel">إلغاء</button></form></dialog>
 
   <script>
     const params = new URLSearchParams(window.location.search);
@@ -56,17 +58,24 @@
     const composer = document.getElementById('messageComposer');
     const input = document.getElementById('messageInput');
     const messages = document.querySelector('.messages');
+    const storageKey = `saey_chat_${storeName || 'نقطة ستور'}`;
+    const savedMessages = JSON.parse(localStorage.getItem(storageKey) || '[]');
+    savedMessages.forEach(saved => { const message=document.createElement('div');message.className=`message outgoing${saved.failed?' failed':''}`;message.dataset.local='true';message.innerHTML=`<p>${saved.text}</p><time>${saved.failed?'تعذر الإرسال <button class="retry-message" type="button">إعادة</button>':'تم الإرسال <b>✓✓</b>'}</time>`;messages.appendChild(message); });
+    const saveMessages = () => localStorage.setItem(storageKey, JSON.stringify([...messages.querySelectorAll('.message.outgoing[data-local]')].map(message=>({text:message.querySelector('p').textContent,failed:message.classList.contains('failed')}))));
     composer.addEventListener('submit', (event) => {
       event.preventDefault();
       const value = input.value.trim();
       if (!value) return;
       const message = document.createElement('div');
-      message.className = 'message outgoing';
-      message.innerHTML = `<p>${value.replace(/[&<>]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[char]))}</p><time>الآن <b>✓</b></time>`;
+      message.className = 'message outgoing sending'; message.dataset.local = 'true';
+      message.innerHTML = `<p>${value.replace(/[&<>]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[char]))}</p><time>جارٍ الإرسال…</time>`;
       messages.appendChild(message);
       input.value = '';
       message.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      setTimeout(() => { const shouldFail=params.get('send')==='error'&&!sessionStorage.getItem('saey_chat_retry');message.classList.remove('sending');message.classList.toggle('failed',shouldFail);message.querySelector('time').innerHTML=shouldFail?'تعذر الإرسال <button class="retry-message" type="button">إعادة</button>':'تم الإرسال <b>✓✓</b>';saveMessages(); }, 550);
     });
+    messages.addEventListener('click', event => { const retry=event.target.closest('.retry-message');if(!retry)return;const message=retry.closest('.message');sessionStorage.setItem('saey_chat_retry','1');message.classList.remove('failed');message.classList.add('sending');message.querySelector('time').textContent='جارٍ إعادة الإرسال…';setTimeout(()=>{message.classList.remove('sending');message.querySelector('time').innerHTML='تم الإرسال <b>✓✓</b>';saveMessages();},500); });
+    const actions=document.getElementById('conversationActions');document.getElementById('conversationMenu').onclick=()=>actions.showModal();document.getElementById('blockConversation').onclick=()=>{localStorage.setItem(`saey_chat_blocked_${storeName||'store'}`,'true');composer.hidden=true;};document.getElementById('reportConversation').onclick=()=>localStorage.setItem(`saey_chat_reported_${storeName||'store'}`,'true');
   </script>
 </body>
 </html>

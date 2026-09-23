@@ -160,20 +160,18 @@
     <button class="buy-now" id="buyNow" type="button">شراء الآن</button>
   </footer>
   <dialog class="product-report-dialog" id="reportDialog"><form method="dialog"><div class="report-sheet-handle" aria-hidden="true"></div><button class="report-close" value="cancel" aria-label="إغلاق">×</button><h2>الإبلاغ عن المنتج</h2><p>اختر سبب البلاغ، وسيقوم فريق سعي بمراجعته.</p><label><input type="radio" name="reason" value="wrong" required> معلومات أو سعر غير صحيح</label><label><input type="radio" name="reason" value="forbidden"> منتج مخالف أو غير مسموح</label><label><input type="radio" name="reason" value="fake"> منتج مقلّد</label><button class="report-submit" id="submitReport" value="default">إرسال البلاغ</button></form></dialog>
+  <script src="user-state.js"></script>
   <script>
     const f = document.getElementById('favorite');
+    const currentProduct = { id:'jacket-natural-01', name:'جاكيت جلد طبيعي رجالي', store:'نقطة ستور', price:2890, image:'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=500&q=85', href:'12-product-details.html' };
+    f.classList.toggle('saved', SaeyState.isFavorite(currentProduct.id));
     const detailsPage = document.querySelector('.details-page');
     detailsPage.addEventListener('scroll', () => {
       detailsPage.classList.toggle('has-scrolled', detailsPage.scrollTop > 24);
     }, { passive: true });
-    f.addEventListener('click', () => {
-      f.classList.toggle('saved');
-    });
-    document.querySelectorAll('.similar-product-favorite').forEach(b => b.addEventListener('click', e => {
-      e.preventDefault();
-      e.stopPropagation();
-      b.classList.toggle('saved');
-    }));
+    f.addEventListener('click', () => f.classList.toggle('saved', SaeyState.toggleFavorite(currentProduct)));
+    const similarProducts = [{ id:'cotton-shirt-01', name:'قميص قطني عملي', store:'نقطة ستور', price:620, image:'https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=500&q=85', href:'12-product-details.html' },{ id:'winter-jacket-01', name:'جاكيت شتوي أنيق', store:'نقطة ستور', price:2300, image:'https://images.unsplash.com/photo-1548883354-7622d03aca27?auto=format&fit=crop&w=500&q=85', href:'12-product-details.html' }];
+    document.querySelectorAll('.similar-product-favorite').forEach((b,index) => { b.classList.toggle('saved', SaeyState.isFavorite(similarProducts[index].id)); b.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); b.classList.toggle('saved', SaeyState.toggleFavorite(similarProducts[index])); }); });
     let q = 1, o = document.getElementById('qty');
     document.getElementById('plus').onclick = () => o.textContent = ++q;
     document.getElementById('minus').onclick = () => o.textContent = Math.max(1, --q);

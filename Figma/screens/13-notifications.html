@@ -37,7 +37,7 @@
       <section>
         <p class="notification-date"><span>اليوم</span><i></i></p>
         <div class="notification-list">
-          <article class="notification-item unread">
+          <article class="notification-item unread" data-id="order-ready-1024" data-href="21-order-details.html?code=SA-1024" role="link" tabindex="0">
             <span class="notification-icon success">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10"/>
@@ -51,7 +51,7 @@
             </div>
             <i class="unread-dot"></i>
           </article>
-          <article class="notification-item unread">
+          <article class="notification-item unread" data-id="offer-point-store" data-href="12-product-details.html" role="link" tabindex="0">
             <span class="notification-icon offer">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"/>
@@ -70,7 +70,7 @@
       <section>
         <p class="notification-date"><span>أمس</span><i></i></p>
         <div class="notification-list">
-          <article class="notification-item">
+          <article class="notification-item" data-id="order-confirmed-1021" data-href="21-order-details.html?code=SA-1021" role="link" tabindex="0">
             <span class="notification-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
@@ -97,15 +97,31 @@
       <p>سنخبرك هنا بكل جديد يخص طلباتك ومتاجرك.</p>
     </section>
   </main>
+  <script src="user-state.js"></script>
   <script>
     const page = document.getElementById('notificationsPage'),
           clear = document.getElementById('clearAll'),
-          empty = document.getElementById('emptyState');
+          empty = document.getElementById('emptyState'),
+          titleCount = document.querySelector('.notification-title span'),
+          items = [...document.querySelectorAll('.notification-item')];
+    const refreshNotifications = () => {
+      const state = SaeyState.notificationState();
+      items.forEach(item => {
+        item.hidden = state.cleared.includes(item.dataset.id);
+        item.classList.toggle('unread', !state.read.includes(item.dataset.id) && !state.cleared.includes(item.dataset.id));
+      });
+      document.querySelectorAll('.notification-groups > section').forEach(group => group.hidden = !group.querySelector('.notification-item:not([hidden])'));
+      const visible = items.filter(item => !item.hidden), unread = visible.filter(item => item.classList.contains('unread')).length;
+      page.classList.toggle('is-empty', visible.length === 0); empty.classList.toggle('is-visible', visible.length === 0); clear.style.visibility = visible.length ? 'visible' : 'hidden';
+      titleCount.textContent = unread ? `لديك ${String(unread).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d])} إشعارات جديدة` : 'اطلعت على كل الإشعارات';
+    };
+    const openNotification = item => { SaeyState.markNotificationRead(item.dataset.id); location.href = item.dataset.href; };
+    items.forEach(item => { item.onclick = () => openNotification(item); item.onkeydown = event => { if (['Enter',' '].includes(event.key)) { event.preventDefault(); openNotification(item); } }; });
     clear.addEventListener('click', () => {
-      page.classList.add('is-empty');
-      empty.classList.add('is-visible');
-      clear.style.visibility = 'hidden';
+      SaeyState.clearNotifications(items.filter(item => !item.hidden).map(item => item.dataset.id));
+      refreshNotifications();
     });
+    refreshNotifications();
   </script>
 </body>
 </html>

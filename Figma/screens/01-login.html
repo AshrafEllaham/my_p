@@ -154,7 +154,8 @@
 
     <a class="barq-forgot-link" href="07-forgot-password.html">نسيت كلمة المرور؟</a>
 
-    <a class="barq-btn-primary" href="08-user-home.html">تسجيل الدخول</a>
+    <p class="auth-form-error" id="loginError" hidden></p>
+    <button class="barq-btn-primary" id="loginButton" type="button">تسجيل الدخول</button>
 
     <div class="barq-footer">
       ليس لديك حساب؟ <a href="02-signup.html">إنشاء حساب جديد</a>
@@ -252,6 +253,19 @@
           ? `03-verify-otp.html?source=${provider}`
           : `08-user-home.html?provider=${provider}`;
       });
+    });
+    const loginButton = document.getElementById('loginButton');
+    const loginError = document.getElementById('loginError');
+    loginButton.addEventListener('click', () => {
+      const identity = identityInput.value.trim(), password = passwordInput.value;
+      const validIdentity = identityInput.type === 'email' ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identity) : identity.replace(/\D/g, '').length >= 9;
+      if (!validIdentity || password.length < 6) {
+        loginError.textContent = !validIdentity ? 'اكتب بريدًا إلكترونيًا أو رقم هاتف صحيحًا.' : 'كلمة المرور يجب ألا تقل عن ٦ أحرف.';
+        loginError.hidden = false;
+        return;
+      }
+      loginError.hidden = true; loginButton.disabled = true; loginButton.textContent = 'جارٍ تسجيل الدخول…';
+      setTimeout(() => { localStorage.setItem('saey_session', JSON.stringify({ identity, date:new Date().toISOString() })); location.href = '08-user-home.html'; }, 500);
     });
   </script>
 </body>
