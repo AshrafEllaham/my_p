@@ -572,7 +572,7 @@ body:not(.saey-home) .status-bar { width:min(100%,393px); height:30px; margin:0 
 @media(max-width:360px){.merchant-order-details-shell{padding-inline:11px}.merchant-order-product-detail{grid-template-columns:62px minmax(0,1fr)}.merchant-order-product-detail img{width:62px;height:62px}.merchant-order-product-detail>b{grid-column:2;margin-top:-3px}.order-progress span{font-size:10px}.merchant-order-detail-actions{padding-inline:11px}}
 
 /* Merchant ads — lively, aligned campaign manager */
-.ads-manager .home-page { gap:12px; padding-bottom:28px; }
+.ads-manager .home-page { gap:12px; padding-bottom:96px; }
 .ads-topbar { min-height:50px !important; flex-shrink:0; }
 .ads-topbar .saey-brand { gap:7px; }
 .ads-topbar .saey-brand-mark { width:38px; height:38px; border-radius:11px; }
@@ -626,7 +626,6 @@ body:not(.saey-home) .status-bar { width:min(100%,393px); height:30px; margin:0 
   right: 12px;
   height: 22px;
   display: inline-flex;
-  flex-direction: row;          /* LTR داخلي ثابت — الدوت على اليسار دايمًا */
   align-items: center;
   gap: 5px;
   padding: 0 8px;
@@ -639,7 +638,6 @@ body:not(.saey-home) .status-bar { width:min(100%,393px); height:30px; margin:0 
   font-weight: 800;
   letter-spacing: .3px;
   border: 1px solid rgba(16,185,129,.25);
-  direction: ltr;               /* نجبر الدوت يجي يسار النص */
 }
 .ads-manager .ad-status-badge::before {
   content: '';
@@ -660,6 +658,15 @@ body:not(.saey-home) .status-bar { width:min(100%,393px); height:30px; margin:0 
   border-color: rgba(148,163,184,.2);
 }
 .ads-manager .campaign-ended .ad-status-badge::before {
+  background: #94A3B8;
+  animation: none;
+}
+.ads-manager .campaign-draft .ad-status-badge {
+  background: rgba(241,245,249,.92);
+  color: #64748B;
+  border-color: rgba(148,163,184,.2);
+}
+.ads-manager .campaign-draft .ad-status-badge::before {
   background: #94A3B8;
   animation: none;
 }

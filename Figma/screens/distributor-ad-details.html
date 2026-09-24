@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>سعي — تفاصيل الإعلان</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="auth.css">
   <link rel="stylesheet" href="user-home.css">
   <link rel="stylesheet" href="user-home-layout.css">
@@ -18,7 +21,8 @@
     .ad-details-shell {
       display: flex;
       flex-direction: column;
-      height: 100%;
+      flex: 1;
+      min-height: 0;
       background: #F7F9FC;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
@@ -49,9 +53,9 @@
       text-decoration: none;
     }
     .ad-details-header a svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    .ad-details-header-copy { flex: 1; }
-    .ad-details-header-copy small { display: block; font-size: 10px; color: #94A3B8; font-weight: 600; }
-    .ad-details-header-copy h1 { font-size: 16px; font-weight: 800; color: #0F172A; }
+    .ad-details-header-copy { flex: 1; min-width: 0; }
+    .ad-details-header-copy small { display: block; font-size: 10px; color: #94A3B8; font-weight: 700; }
+    .ad-details-header-copy h1 { font-size: 16px; font-weight: 900; color: #0F172A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .ad-status-chip {
       padding: 4px 10px;
       border-radius: 20px;
@@ -60,13 +64,14 @@
       display: inline-flex;
       align-items: center;
       gap: 5px;
+      flex-shrink: 0;
     }
     .ad-status-chip::before {
       content: '';
       width: 6px; height: 6px;
       border-radius: 50%;
       background: currentColor;
-      opacity: .8;
+      opacity: .85;
     }
     .ad-status-chip.active { background: #ECFDF5; color: #047857; }
     .ad-status-chip.ended  { background: #F1F5F9; color: #64748B; }
@@ -83,12 +88,12 @@
     .ad-creative-hero img {
       width: 100%; height: 100%;
       object-fit: cover;
-      opacity: .82;
+      opacity: .85;
     }
     .ad-creative-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,.72) 0%, rgba(0,0,0,.1) 55%);
+      background: linear-gradient(to top, rgba(0,0,0,.78) 0%, rgba(0,0,0,.15) 55%);
     }
     .ad-creative-title {
       position: absolute;
@@ -100,28 +105,32 @@
       display: block;
       color: #fff;
       font-size: 16px;
-      font-weight: 800;
+      font-weight: 900;
+      text-shadow: 0 1px 3px rgba(0,0,0,.4);
     }
     .ad-creative-title small {
-      color: rgba(255,255,255,.7);
+      color: rgba(255,255,255,.8);
       font-size: 11px;
       margin-top: 3px;
       display: block;
+      font-weight: 600;
     }
     .ad-creative-placement {
       position: absolute;
       top: 12px;
       right: 12px;
-      background: rgba(0,0,0,.45);
+      background: rgba(0,0,0,.55);
       color: #fff;
       font-size: 10px;
-      font-weight: 700;
-      padding: 3px 10px;
+      font-weight: 800;
+      padding: 4px 10px;
       border-radius: 20px;
-      backdrop-filter: blur(6px);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,.2);
     }
 
-    /* ── Tabs (reuse product-details-tabs) ── */
+    /* ── Tabs ── */
     .ad-tabs-wrap { padding: 12px 14px 0; }
 
     /* ── Tab Panels ── */
@@ -130,11 +139,12 @@
 
     /* ── Details panel ── */
     .ad-info-card {
-      margin: 12px 14px 0;
+      margin: 12px 14px 20px;
       background: #fff;
       border: 1px solid #E1E8F1;
       border-radius: 16px;
       overflow: hidden;
+      box-shadow: 0 4px 16px rgba(15,23,42,.03);
     }
     .ad-info-card-head {
       padding: 13px 16px 10px;
@@ -143,13 +153,13 @@
       align-items: center;
       gap: 8px;
     }
-    .ad-info-card-head svg { width: 15px; height: 15px; fill: none; stroke: #94A3B8; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .ad-info-card-head svg { width: 16px; height: 16px; fill: none; stroke: #64748B; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
     .ad-info-card-head h2 { font-size: 13px; font-weight: 800; color: #0F172A; }
     .ad-info-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 11px 16px;
+      padding: 12px 16px;
       border-bottom: 1px solid #F8FAFC;
       gap: 8px;
     }
@@ -157,17 +167,16 @@
     .ad-info-row-label {
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 8px;
       color: #64748B;
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
       flex-shrink: 0;
     }
-    .ad-info-row-label svg { width: 14px; height: 14px; fill: none; stroke: #CBD5E1; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-    .ad-info-row-value { font-size: 12px; font-weight: 700; color: #0F172A; text-align: left; }
+    .ad-info-row-label svg { width: 15px; height: 15px; fill: none; stroke: #94A3B8; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .ad-info-row-value { font-size: 12px; font-weight: 800; color: #0F172A; text-align: left; }
     .ad-info-row-value.green { color: #047857; }
     .ad-info-row-value.blue  { color: #0284C7; }
-    .ad-info-row-value.purple{ color: #7C3AED; }
 
     /* ── 3-dots button in header ── */
     .ad-menu-btn {
@@ -179,17 +188,17 @@
       flex-shrink: 0;
       cursor: pointer;
       color: #0F172A;
-      font-size: 18px;
-      font-weight: 900;
-      letter-spacing: 1px;
-      line-height: 1;
+      padding: 0;
+      transition: background .15s;
     }
+    .ad-menu-btn:active { background: #F1F5F9; }
+    .ad-menu-btn svg { width: 18px; height: 18px; fill: currentColor; }
 
     /* ── Bottom sheet ── */
     .ad-sheet-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,.45);
+      background: rgba(0,0,0,.48);
       z-index: 100;
       opacity: 0;
       pointer-events: none;
@@ -207,17 +216,17 @@
       margin: 0 auto;
       background: #fff;
       border-radius: 22px 22px 0 0;
-      padding: 8px 0 32px;
+      padding: 10px 0 24px;
       z-index: 101;
       transform: translateY(100%);
       transition: transform .28s cubic-bezier(.32,1,.4,1);
-      box-shadow: 0 -8px 32px rgba(15,23,42,.12);
+      box-shadow: 0 -8px 32px rgba(15,23,42,.14);
     }
     .ad-sheet-backdrop.open .ad-sheet {
       transform: translateY(0);
     }
     .ad-sheet-handle {
-      width: 36px; height: 4px;
+      width: 38px; height: 4px;
       border-radius: 20px;
       background: #E1E8F1;
       margin: 0 auto 12px;
@@ -233,7 +242,7 @@
       display: flex;
       align-items: center;
       gap: 14px;
-      padding: 15px 20px;
+      padding: 14px 20px;
       cursor: pointer;
       border: none;
       background: none;
@@ -257,6 +266,13 @@
     }
     .ad-sheet-item.danger { color: #EF4444; }
     .ad-sheet-item.danger svg { stroke: #EF4444; }
+    .ad-sheet-cancel {
+      display: block; width: calc(100% - 32px); margin: 12px auto 0;
+      height: 44px; border-radius: 12px; border: 1px solid #E1E8F1;
+      background: #F8FAFC; color: #475569; font: 800 13px 'Cairo', sans-serif;
+      cursor: pointer;
+    }
+    .ad-sheet-cancel:active { background: #EEF2F6; }
 
     /* ── Stats panel ── */
     .ad-kpi-row {
@@ -283,9 +299,9 @@
       margin-bottom: 4px;
     }
     .ad-kpi-card .kpi-icon svg { width: 14px; height: 14px; fill: none; stroke: #0F172A; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-    .ad-kpi-card small { font-size: 9px; color: #94A3B8; font-weight: 600; }
-    .ad-kpi-card strong { font-size: 18px; font-weight: 900; color: #0F172A; }
-    .ad-kpi-card em { font-size: 10px; color: #10B981; font-weight: 700; font-style: normal; }
+    .ad-kpi-card small { font-size: 10px; color: #94A3B8; font-weight: 700; }
+    .ad-kpi-card strong { font-size: 18px; font-weight: 900; color: #0F172A; font-family: 'Inter', 'Cairo', sans-serif; }
+    .ad-kpi-card em { font-size: 10px; color: #10B981; font-weight: 800; font-style: normal; }
 
     /* ── Chart card ── */
     .ad-perf-card {
@@ -302,36 +318,45 @@
       margin-bottom: 12px;
     }
     .ad-perf-card-head h2 { font-size: 14px; font-weight: 800; color: #0F172A; }
-    .ad-perf-card-head p  { font-size: 11px; color: #94A3B8; margin-top: 1px; }
+    .ad-perf-card-head p  { font-size: 11px; color: #94A3B8; margin-top: 1px; font-weight: 600; }
     .ad-perf-total { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-    .ad-perf-total strong { font-size: 22px; font-weight: 900; color: #0F172A; }
-    .ad-perf-total span   { font-size: 11px; background: #ECFDF5; color: #059669; padding: 2px 8px; border-radius: 10px; font-weight: 700; }
+    .ad-perf-total strong { font-size: 22px; font-weight: 900; color: #0F172A; font-family: 'Inter', 'Cairo', sans-serif; }
+    .ad-perf-total span   { font-size: 11px; background: #ECFDF5; color: #059669; padding: 2px 8px; border-radius: 10px; font-weight: 800; }
     .ad-chart-wrap svg { width: 100%; height: 90px; display: block; }
     .ad-chart-grid { fill: none; stroke: #E1E8F1; stroke-width: .7; }
     .ad-chart-area { fill: url(#adFill); }
     .ad-chart-line { fill: none; stroke: #000; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .ad-chart-dot { fill: #000; }
-    .ad-chart-days { display: flex; justify-content: space-between; margin-top: 6px; }
-    .ad-chart-days span { font-size: 9px; color: #94A3B8; font-weight: 600; }
+    .ad-chart-days { display: flex; justify-content: space-between; margin-top: 8px; }
+    .ad-chart-days span { font-size: 10px; color: #94A3B8; font-weight: 700; }
 
     /* ── Funnel ── */
     .ad-funnel-card {
-      margin: 12px 14px 0;
+      margin: 12px 14px 20px;
       background: #fff;
       border: 1px solid #E1E8F1;
       border-radius: 16px;
       padding: 16px;
     }
-    .ad-funnel-card h2 { font-size: 14px; font-weight: 800; color: #0F172A; margin-bottom: 3px; }
-    .ad-funnel-card p  { font-size: 11px; color: #94A3B8; margin-bottom: 14px; }
-    .ad-funnel-step { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .ad-funnel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+    .ad-funnel-head h2 { font-size: 14px; font-weight: 800; color: #0F172A; }
+    .ad-funnel-head p  { font-size: 11px; color: #94A3B8; margin-top: 2px; font-weight: 600; }
+    .ad-funnel-badge { font-size: 10px; font-weight: 800; color: #047857; background: #ECFDF5; padding: 3px 8px; border-radius: 8px; }
+    .ad-funnel-step { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
     .ad-funnel-step:last-child { margin-bottom: 0; }
-    .ad-funnel-label { width: 68px; font-size: 11px; color: #64748B; font-weight: 600; flex-shrink: 0; }
-    .ad-funnel-bar-wrap { flex: 1; height: 8px; background: #F1F5F9; border-radius: 20px; overflow: hidden; }
-    .ad-funnel-bar { height: 100%; background: #000; border-radius: 20px; }
-    .ad-funnel-count { width: 38px; text-align: left; font-size: 11px; font-weight: 800; color: #0F172A; }
+    .ad-funnel-info { width: 95px; flex-shrink: 0; }
+    .ad-funnel-label { display: block; font-size: 12px; color: #0F172A; font-weight: 800; }
+    .ad-funnel-rate { display: block; font-size: 9.5px; color: #64748B; font-weight: 600; margin-top: 1px; }
+    .ad-funnel-bar-wrap { flex: 1; height: 10px; background: #F1F5F9; border-radius: 20px; overflow: hidden; }
+    .ad-funnel-bar { height: 100%; background: #000; border-radius: 20px; transition: width .4s ease; }
+    .ad-funnel-count { width: 44px; text-align: left; font-size: 12px; font-weight: 900; color: #0F172A; font-family: 'Inter', 'Cairo', sans-serif; }
 
-    .ad-bottom-spacer { height: 90px; }
+    .ad-bottom-spacer { height: 110px; }
   </style>
 </head>
 <body class="saey-home trader-app ad-details-page">
@@ -341,7 +366,7 @@
 
     <!-- ── Header ── -->
     <header class="ad-details-header">
-      <a href="19-distributor-ads.html" aria-label="رجوع">
+      <a href="19-distributor-ads.html" aria-label="الرجوع إلى إعلاناتي">
         <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
       </a>
       <div class="ad-details-header-copy">
@@ -349,7 +374,9 @@
         <h1>تفاصيل الإعلان</h1>
       </div>
       <span class="ad-status-chip active" id="headerChip">نشط</span>
-      <button class="ad-menu-btn" type="button" id="adMenuBtn" aria-label="خيارات">⋮</button>
+      <button class="ad-menu-btn" type="button" id="adMenuBtn" aria-label="خيارات الإعلان">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+      </button>
     </header>
 
     <!-- ── Creative Hero ── -->
@@ -429,7 +456,7 @@
             <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             حالة الإعلان
           </span>
-          <span class="ad-info-row-value green">نشط · قيد التشغيل</span>
+          <span class="ad-info-row-value green" id="rowStatusValue">نشط · قيد التشغيل</span>
         </div>
         <div class="ad-info-row">
           <span class="ad-info-row-label">
@@ -439,9 +466,6 @@
           <span class="ad-info-row-value">ظهور مميز · ٧ أيام</span>
         </div>
       </div>
-
-      <!-- الزراير اتنقلوا للـ bottom sheet -->
-
     </div><!-- /panelDetails -->
 
     <!-- ══════════════════════════════════════════
@@ -484,20 +508,20 @@
             <h2>أداء الحملة</h2>
             <p>المشاهدات اليومية خلال فترة الإعلان</p>
           </div>
-          <button type="button" style="font-size:11px;font-weight:700;border:1px solid #E1E8F1;border-radius:8px;padding:4px 10px;background:#fff;color:#0F172A;cursor:pointer;">
+          <span style="font-size:11px;font-weight:700;border:1px solid #E1E8F1;border-radius:8px;padding:4px 10px;background:#F8FAFC;color:#0F172A;">
             ٧ أيام
-            <svg viewBox="0 0 24 24" style="width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:2.5;vertical-align:middle;"><path d="m7 10 5 5 5-5"/></svg>
-          </button>
+          </span>
         </div>
         <div class="ad-perf-total">
           <strong>١٨,٤٢٠</strong>
-          <span>+٣١٪</span>
+          <span>+٣١٪ نمو مستمر</span>
         </div>
         <div class="ad-chart-wrap">
-          <svg viewBox="0 0 340 90" preserveAspectRatio="none">
+          <!-- Scaled horizontally to properly progress from Day 1 on the right to Today on the left in RTL -->
+          <svg viewBox="0 0 340 90" preserveAspectRatio="none" style="transform: scaleX(-1);">
             <defs>
               <linearGradient id="adFill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#000" stop-opacity=".13"/>
+                <stop offset="0" stop-color="#000" stop-opacity=".15"/>
                 <stop offset="1" stop-color="#000" stop-opacity="0"/>
               </linearGradient>
             </defs>
@@ -523,28 +547,49 @@
         </div>
       </div>
 
-      <!-- Funnel -->
+      <!-- Funnel with accurate marketing metrics -->
       <div class="ad-funnel-card">
-        <h2>رحلة العميل عبر الإعلان</h2>
-        <p>من مشاهدة الإعلان حتى التواصل مع المتجر</p>
+        <div class="ad-funnel-head">
+          <div>
+            <h2>رحلة العميل عبر الإعلان</h2>
+            <p>معدل الانتقال من المشاهدة حتى التواصل</p>
+          </div>
+          <span class="ad-funnel-badge">أداء ممتاز</span>
+        </div>
+
         <div class="ad-funnel-step">
-          <span class="ad-funnel-label">مشاهدة</span>
+          <div class="ad-funnel-info">
+            <span class="ad-funnel-label">مشاهدة</span>
+            <span class="ad-funnel-rate">١٠٠٪ الحجم الكامل</span>
+          </div>
           <div class="ad-funnel-bar-wrap"><div class="ad-funnel-bar" style="width:100%"></div></div>
           <span class="ad-funnel-count">١٨,٤٢٠</span>
         </div>
+
         <div class="ad-funnel-step">
-          <span class="ad-funnel-label">نقر</span>
-          <div class="ad-funnel-bar-wrap"><div class="ad-funnel-bar" style="width:68%"></div></div>
+          <div class="ad-funnel-info">
+            <span class="ad-funnel-label">نقر</span>
+            <span class="ad-funnel-rate">٦.٩٪ معدل النقر</span>
+          </div>
+          <div class="ad-funnel-bar-wrap"><div class="ad-funnel-bar" style="width:55%"></div></div>
           <span class="ad-funnel-count">١,٢٨٠</span>
         </div>
+
         <div class="ad-funnel-step">
-          <span class="ad-funnel-label">تواصل</span>
-          <div class="ad-funnel-bar-wrap"><div class="ad-funnel-bar" style="width:38%"></div></div>
+          <div class="ad-funnel-info">
+            <span class="ad-funnel-label">تواصل</span>
+            <span class="ad-funnel-rate">٢٩.٧٪ من النقرات</span>
+          </div>
+          <div class="ad-funnel-bar-wrap"><div class="ad-funnel-bar" style="width:34%"></div></div>
           <span class="ad-funnel-count">٣٨٠</span>
         </div>
+
         <div class="ad-funnel-step">
-          <span class="ad-funnel-label">عميل جديد</span>
-          <div class="ad-funnel-bar-wrap"><div class="ad-funnel-bar" style="width:18%"></div></div>
+          <div class="ad-funnel-info">
+            <span class="ad-funnel-label">عميل جديد</span>
+            <span class="ad-funnel-rate">٢٩.٥٪ تحويل فعلي</span>
+          </div>
+          <div class="ad-funnel-bar-wrap"><div class="ad-funnel-bar" style="width:20%"></div></div>
           <span class="ad-funnel-count">١١٢</span>
         </div>
       </div>
@@ -567,13 +612,15 @@
 
       <button class="ad-sheet-item" type="button" id="sheetPause">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 9h6v6H9z"/></svg>
-        إيقاف الإعلان
+        <span id="sheetPauseText">إيقاف الإعلان مؤقتًا</span>
       </button>
 
       <button class="ad-sheet-item danger" type="button" id="sheetDelete">
         <svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
         حذف الإعلان
       </button>
+
+      <button class="ad-sheet-cancel" type="button" onclick="closeSheet()">إلغاء</button>
     </div>
   </div>
 
@@ -615,14 +662,30 @@
     menuBtn.addEventListener('click', openSheet);
     backdrop.addEventListener('click', e => { if (e.target === backdrop) closeSheet(); });
 
-    // إيقاف الإعلان
-    document.getElementById('sheetPause').addEventListener('click', () => {
-      closeSheet();
+    // إيقاف / إعادة تفعيل الإعلان
+    let isAdActive = true;
+    function toggleAdState() {
+      isAdActive = !isAdActive;
       const chip = document.getElementById('headerChip');
-      chip.textContent = 'موقوف';
-      chip.className = 'ad-status-chip ended';
-      const statusVal = document.querySelector('.ad-info-row-value.green');
-      if (statusVal) { statusVal.textContent = 'موقوف'; statusVal.className = 'ad-info-row-value'; }
+      const statusVal = document.getElementById('rowStatusValue');
+      const sheetPauseText = document.getElementById('sheetPauseText');
+
+      if (isAdActive) {
+        chip.textContent = 'نشط';
+        chip.className = 'ad-status-chip active';
+        if (statusVal) { statusVal.textContent = 'نشط · قيد التشغيل'; statusVal.className = 'ad-info-row-value green'; }
+        if (sheetPauseText) sheetPauseText.textContent = 'إيقاف الإعلان مؤقتًا';
+      } else {
+        chip.textContent = 'موقوف';
+        chip.className = 'ad-status-chip ended';
+        if (statusVal) { statusVal.textContent = 'موقوف مؤقتًا'; statusVal.className = 'ad-info-row-value'; }
+        if (sheetPauseText) sheetPauseText.textContent = 'إعادة تفعيل الإعلان';
+      }
+    }
+
+    document.getElementById('sheetPause').addEventListener('click', () => {
+      toggleAdState();
+      closeSheet();
     });
 
     // حذف الإعلان
