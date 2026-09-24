@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>سعي — تفاصيل طلب المتجر</title>
+  <link rel="stylesheet" href="auth.css">
+  <link rel="stylesheet" href="user-home.css">
+  <link rel="stylesheet" href="user-home-layout.css">
+  <link rel="stylesheet" href="user-home-structure.css">
+  <link rel="stylesheet" href="user-home-professional.css">
+  <link rel="stylesheet" href="user-home-polish.css">
+  <link rel="stylesheet" href="uber-ui.css">
+  <link rel="stylesheet" href="user-home-waffarha.css">
+  <link rel="stylesheet" href="trader.css">
+</head>
+<body class="saey-home trader-app merchant-order-details-page">
+  <div class="status-bar"><span class="status-time">9:41</span><div class="status-icons"><svg viewBox="0 0 17 11" width="17"><path d="M1 9h3v2H1zm4-3h3v5H5zm4-3h3v8H9zm4-3h3v11h-3z"/></svg><svg viewBox="0 0 16 12" width="16"><path d="M8 10a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M2 5a8.5 8.5 0 0 1 12 0l-1.1 1.1a7 7 0 0 0-9.8 0z"/></svg><svg viewBox="0 0 25 12" width="24"><rect x="1" y="1" width="20" height="10" rx="3" fill="none" stroke="currentColor"/><rect x="3" y="3" width="16" height="6" rx="1.5"/></svg></div></div>
+
+  <main class="merchant-order-details-shell">
+    <header class="merchant-order-details-header">
+      <a href="21-distributor-orders.html" aria-label="العودة إلى الطلبات"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a>
+      <div><small>إدارة الطلب</small><h1>تفاصيل الطلب</h1></div>
+      <span aria-hidden="true"></span>
+    </header>
+
+    <section class="order-details-hero">
+      <div class="order-details-hero-head"><span id="orderStatusBadge">طلب جديد</span><time id="orderDate">اليوم، 10:32 ص</time></div>
+      <small>رقم الطلب</small>
+      <strong id="orderCode" dir="ltr">#SA-10928</strong>
+      <div class="order-details-hero-meta"><div><span>العميل</span><b id="heroCustomer">سارة أحمد</b></div><div><span>إجمالي الطلب</span><b id="heroTotal">١,٨٥٠ ج.م</b></div></div>
+    </section>
+
+    <section class="merchant-order-detail-card order-progress-card">
+      <header><div><h2>حالة الطلب</h2><p>تابع مراحل تجهيز الطلب والاستلام</p></div><span id="progressCaption">بانتظار التأكيد</span></header>
+      <div class="order-progress" id="orderProgress">
+        <div data-step="1"><i><svg viewBox="0 0 24 24"><path d="m6 12 4 4 8-8"/></svg></i><span>تم التأكيد</span></div>
+        <div data-step="2"><i><svg viewBox="0 0 24 24"><path d="m6 12 4 4 8-8"/></svg></i><span>قيد التجهيز</span></div>
+        <div data-step="3"><i><svg viewBox="0 0 24 24"><path d="m6 12 4 4 8-8"/></svg></i><span>جاهز</span></div>
+        <div data-step="4"><i><svg viewBox="0 0 24 24"><path d="m6 12 4 4 8-8"/></svg></i><span>تم الاستلام</span></div>
+      </div>
+    </section>
+
+    <section class="merchant-order-detail-card">
+      <header><div><h2>المنتج</h2><p>تفاصيل المنتج المطلوب</p></div><span class="detail-count">منتج واحد</span></header>
+      <div class="merchant-order-product-detail"><img id="orderProductImage" src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=500&q=86" alt="جاكيت جلد طبيعي"><div><small id="orderProductCategory">ملابس رجالي</small><strong id="orderProductName">جاكيت جلد طبيعي</strong><p id="orderProductMeta">الكمية: ١ · المقاس: M</p></div><b id="orderProductPrice">١,٨٥٠ ج.م</b></div>
+    </section>
+
+    <section class="merchant-order-detail-card">
+      <header><div><h2>بيانات العميل</h2><p>معلومات التواصل والاستلام</p></div></header>
+      <div class="order-customer-detail"><span class="order-customer-avatar" id="customerAvatar">س</span><div><strong id="customerName">سارة أحمد</strong><small id="customerPhone" dir="ltr">+20 100 245 8391</small></div><a id="customerChat" href="14-chat-conversation.html" aria-label="دردشة العميل"><svg viewBox="0 0 24 24"><path d="M20 15a4 4 0 0 1-4 4H8l-4 3v-7a4 4 0 0 1-2-3.5V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg></a></div>
+      <div class="order-detail-rows"><div><span>طريقة الاستلام</span><strong>استلام من المتجر</strong></div><div><span>موعد الاستلام المتوقع</span><strong id="pickupTime">اليوم من 5:00 إلى 7:00 م</strong></div><div><span>ملاحظة العميل</span><strong id="customerNote">يرجى تجهيز الطلب قبل الوصول</strong></div></div>
+    </section>
+
+    <section class="merchant-order-detail-card payment-summary-card">
+      <header><div><h2>ملخص الدفع</h2><p>تفاصيل المبلغ المدفوع</p></div><span class="payment-paid">مدفوع</span></header>
+      <div class="order-detail-rows"><div><span>سعر المنتج</span><strong id="subtotal">١,٨٥٠ ج.م</strong></div><div><span>الخصم</span><strong id="discountValue">٠ ج.م</strong></div><div class="order-payment-total"><span>الإجمالي</span><strong id="paymentTotal">١,٨٥٠ ج.م</strong></div></div>
+    </section>
+  </main>
+
+  <footer class="merchant-order-detail-actions"><a id="detailChatAction" href="14-chat-conversation.html"><svg viewBox="0 0 24 24"><path d="M20 15a4 4 0 0 1-4 4H8l-4 3v-7a4 4 0 0 1-2-3.5V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg>دردشة العميل</a><button id="advanceOrderAction" type="button">تأكيد الطلب</button></footer>
+
+  <script>
+    const orders = {
+      'SA-10928': { state:'new', status:'طلب جديد', date:'اليوم، 10:32 ص', customer:'سارة أحمد', avatar:'س', phone:'+20 100 245 8391', total:'١,٨٥٠ ج.م', category:'ملابس رجالي', product:'جاكيت جلد طبيعي', meta:'الكمية: ١ · المقاس: M', image:'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=500&q=86', pickup:'اليوم من 5:00 إلى 7:00 م', note:'يرجى تجهيز الطلب قبل الوصول', discount:'٠ ج.م' },
+      'SA-10914': { state:'preparing', status:'قيد التجهيز', date:'اليوم، 9:05 ص', customer:'محمود علي', avatar:'م', phone:'+20 112 640 2874', total:'٢,٤٠٠ ج.م', category:'إلكترونيات', product:'ساعة رياضية ذكية', meta:'الكمية: ١ · اللون: أسود', image:'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=500&q=86', pickup:'اليوم من 7:00 إلى 9:00 م', note:'لا توجد ملاحظات', discount:'٠ ج.م' },
+      'SA-10886': { state:'ready', status:'جاهز للاستلام', date:'أمس، 6:40 م', customer:'نورهان حسن', avatar:'ن', phone:'+20 101 582 9036', total:'٦٨٠ ج.م', category:'إكسسوارات', product:'حقيبة ظهر عملية', meta:'الكمية: ١', image:'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=500&q=86', pickup:'اليوم قبل 6:00 م', note:'التواصل عند اكتمال التجهيز', discount:'٠ ج.م' }
+    };
+    const code = new URLSearchParams(location.search).get('order') || 'SA-10928';
+    const order = orders[code] || orders['SA-10928'];
+    let currentState = order.state;
+    const stateConfig = {
+      new: { status:'طلب جديد', stage:0, caption:'بانتظار التأكيد', action:'تأكيد الطلب', next:'preparing', className:'new' },
+      preparing: { status:'قيد التجهيز', stage:2, caption:'الطلب قيد التجهيز', action:'جاهز للاستلام', next:'ready', className:'preparing' },
+      ready: { status:'جاهز للاستلام', stage:3, caption:'بانتظار وصول العميل', action:'تأكيد الاستلام', next:'completed', className:'ready' },
+      completed: { status:'تم الاستلام', stage:4, caption:'اكتمل الطلب بنجاح', action:'تم إكمال الطلب', next:null, className:'completed' }
+    };
+    const setText = (id, value) => { document.getElementById(id).textContent = value; };
+    setText('orderCode', `#${code}`); setText('orderDate', order.date); setText('heroCustomer', order.customer); setText('heroTotal', order.total);
+    setText('orderProductCategory', order.category); setText('orderProductName', order.product); setText('orderProductMeta', order.meta); setText('orderProductPrice', order.total);
+    setText('customerAvatar', order.avatar); setText('customerName', order.customer); setText('customerPhone', order.phone); setText('pickupTime', order.pickup); setText('customerNote', order.note);
+    setText('subtotal', order.total); setText('discountValue', order.discount); setText('paymentTotal', order.total);
+    document.getElementById('orderProductImage').src = order.image; document.getElementById('orderProductImage').alt = order.product;
+    const chatHref = `14-chat-conversation.html?store=${encodeURIComponent(order.customer)}`; document.getElementById('customerChat').href = chatHref; document.getElementById('detailChatAction').href = chatHref;
+    const renderState = () => {
+      const config = stateConfig[currentState];
+      const badge = document.getElementById('orderStatusBadge'); badge.textContent = config.status; badge.className = config.className;
+      setText('progressCaption', config.caption); setText('advanceOrderAction', config.action);
+      document.querySelectorAll('#orderProgress [data-step]').forEach((item) => item.classList.toggle('done', Number(item.dataset.step) <= config.stage));
+      document.getElementById('advanceOrderAction').disabled = !config.next;
+    };
+    document.getElementById('advanceOrderAction').addEventListener('click', () => { const next = stateConfig[currentState].next; if (next) { currentState = next; renderState(); } });
+    renderState();
+  </script>
+</body>
+</html>

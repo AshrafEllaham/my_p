@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>سعي — بيانات المتجر</title>
+  <link rel="stylesheet" href="auth.css"><link rel="stylesheet" href="account-view.css"><link rel="stylesheet" href="uber-ui.css">
+</head>
+<body class="saey-account-view merchant-store-profile">
+  <div class="status-bar"><span class="status-time">9:41</span><div class="status-icons"><svg viewBox="0 0 17 11" width="17"><path d="M1 9h3v2H1zm4-3h3v5H5zm4-3h3v8H9zm4-3h3v11h-3z"/></svg><svg viewBox="0 0 16 12" width="16"><path d="M8 10a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M2 5a8.5 8.5 0 0 1 12 0l-1.1 1.1a7 7 0 0 0-9.8 0z"/></svg><svg viewBox="0 0 25 12" width="24"><rect x="1" y="1" width="20" height="10" rx="3" fill="none" stroke="currentColor"/><rect x="3" y="3" width="16" height="6" rx="1.5"/></svg></div></div>
+  <main class="view-page store-profile-page">
+    <header class="view-head"><a class="view-back" href="20-distributor-account.html" aria-label="العودة إلى الحساب"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a><h1>بيانات المتجر</h1><span class="store-profile-state">نشط</span></header>
+    <p class="view-intro">حدّث المعلومات والصور التي تظهر لعملائك داخل سعي.</p>
+    <section class="store-identity-editor">
+      <label class="store-cover-editor"><input type="file" accept="image/png,image/jpeg"><img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=900&q=80" alt="غلاف نقطة ستور"><span><svg viewBox="0 0 24 24"><path d="M4 7h4l2-2h4l2 2h4v12H4Z"/><circle cx="12" cy="13" r="3"/></svg>تغيير الغلاف</span></label>
+      <label class="store-logo-editor"><input type="file" accept="image/png,image/jpeg"><b>ن</b><span><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></label>
+      <div><strong>نقطة ستور</strong><small>متجر موثّق · ملابس وأزياء</small></div>
+    </section>
+    <section class="view-card">
+      <h2 class="view-card-title">المعلومات الأساسية</h2>
+      <div class="view-field"><label class="view-label" for="storeName">اسم المتجر</label><input class="view-input" id="storeName" value="نقطة ستور"></div>
+      <div class="view-field"><label class="view-label" for="storeCategory">القسم الرئيسي</label><div class="locked-store-field"><input class="view-input" id="storeCategory" value="ملابس وأزياء" readonly><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div><small class="view-help">القسم مرتبط بتسجيل المتجر. تواصل مع الدعم لتغييره.</small></div>
+      <div class="view-field"><label class="view-label" for="storeDescription">وصف المتجر</label><textarea class="view-textarea" id="storeDescription">اختيارات عصرية بجودة عالية وأسعار مناسبة، جاهزة للاستلام من المتجر.</textarea></div>
+    </section>
+    <section class="view-card">
+      <h2 class="view-card-title">التواصل والموقع</h2>
+      <div class="view-field"><label class="view-label" for="storePhone">رقم الهاتف</label><input class="view-input" id="storePhone" value="010 1234 5678" type="tel" dir="ltr"></div>
+      <div class="view-field"><label class="view-label" for="storeAddress">عنوان المتجر</label><input class="view-input" id="storeAddress" value="مدينة نصر، القاهرة"></div>
+      <div class="view-field"><label class="view-label" for="storeHours">ساعات العمل</label><select class="view-select" id="storeHours"><option>يوميًا · ١٠ ص إلى ١٠ م</option><option>السبت إلى الخميس · ١٠ ص إلى ٩ م</option><option>تحديد ساعات مخصصة</option></select></div>
+    </section>
+    <button class="view-button" id="saveStoreProfile" type="button">حفظ التغييرات</button><p class="store-save-feedback" id="storeSaveFeedback" role="status"></p>
+  </main>
+  <script>const savedStoreName=localStorage.getItem('saey_store_name');if(savedStoreName)document.getElementById('storeName').value=savedStoreName;document.getElementById('saveStoreProfile').addEventListener('click',()=>{localStorage.setItem('saey_store_name',document.getElementById('storeName').value.trim()||'نقطة ستور');document.getElementById('storeSaveFeedback').textContent='تم حفظ بيانات المتجر بنجاح';document.getElementById('saveStoreProfile').textContent='تم الحفظ ✓'});</script>
+</body>
+</html>
