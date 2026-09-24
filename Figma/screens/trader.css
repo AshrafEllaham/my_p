@@ -584,7 +584,7 @@ body:not(.saey-home) .status-bar { width:min(100%,393px); height:30px; margin:0 
 .add-ad-top span { white-space:nowrap; }
 .ads-overview { display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); gap:8px; flex-shrink:0; }
 .ads-overview-main { min-height:108px; display:flex; align-items:center; gap:10px; padding:13px; border-radius:17px; background:#000; color:#FFF; box-shadow:0 10px 22px rgba(15,23,42,.14); }
-.ads-overview-icon { width:38px; height:38px; display:grid; place-items:center; flex:0 0 38px; border-radius:11px; background:rgba(255,255,255,.11); }
+.ads-overview-icon { width:38px; height:38px; display:grid; place-items:center; flex:0 0 38px; align-self:center; border-radius:11px; background:rgba(255,255,255,.11); }
 .ads-overview-icon svg { width:19px; height:19px; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
 .ads-overview-main > div { min-width:0; }
 .ads-overview-main small { display:block; color:rgba(255,255,255,.66); font-size:11px; font-weight:700; white-space:nowrap; }
@@ -609,18 +609,60 @@ body:not(.saey-home) .status-bar { width:min(100%,393px); height:30px; margin:0 
 .ads-list-heading button svg { width:13px; height:13px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; }
 .ads-campaign-list { display:grid; gap:10px; }
 .ads-manager .ad-card { margin:0; overflow:hidden; border:1px solid #DDE5ED; border-radius:16px; background:#FFF; box-shadow:0 6px 16px rgba(15,23,42,.05); }
-.ads-manager .ad-art { position:relative; height:104px; display:flex; align-items:flex-end; justify-content:space-between; padding:14px; overflow:hidden; color:#FFF; }
+.ads-manager .ad-art { position:relative; height:116px; display:flex; align-items:flex-end; justify-content:space-between; padding:14px; overflow:hidden; color:#FFF; }
 .ads-manager .ad-art::after { content:''; position:absolute; width:150px; height:150px; left:-48px; bottom:-92px; border:18px solid rgba(255,255,255,.1); border-radius:50%; }
 .ads-manager .fashion-ad { background:#000; }
 .ads-manager .store-ad { background:#1E293B; }
 .ads-manager .shoe-ad { background:#475569; }
-.ads-manager .ad-art > div { position:relative; z-index:2; min-width:0; }
+.ads-manager .ad-art > div { position:relative; z-index:2; min-width:0; max-width:calc(100% - 54px); }
 .ads-manager .ad-art small { display:block; color:rgba(255,255,255,.68); font-size:11px; font-weight:700; }
-.ads-manager .ad-art strong { display:block; max-width:260px; margin-top:3px; font-size:15px; line-height:1.5; font-weight:900; }
-.ads-manager .ad-art > i { position:relative; z-index:2; width:38px; height:38px; display:grid; place-items:center; flex:0 0 38px; border-radius:11px; background:rgba(255,255,255,.13); }
-.ads-manager .ad-art > i svg { width:19px; height:19px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
-.ads-manager .ad-status-badge { position:absolute; z-index:3; top:11px; right:11px; min-height:24px; display:flex; align-items:center; padding:0 8px; border-radius:7px; background:#ECFDF5; color:#047857; font-size:11px; font-weight:900; }
-.ads-manager .campaign-ended .ad-status-badge { background:#F2F2F2; color:#475569; }
+.ads-manager .ad-art strong { display:block; max-width:100%; margin-top:3px; font-size:14px; line-height:1.4; font-weight:900; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ads-manager .ad-art > i { position:relative; z-index:2; width:36px; height:36px; display:grid; place-items:center; flex:0 0 36px; border-radius:10px; background:rgba(255,255,255,.13); align-self:flex-end; }
+.ads-manager .ad-art > i svg { width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.ads-manager .ad-status-badge {
+  position: absolute;
+  z-index: 3;
+  top: 10px;
+  right: 12px;
+  height: 22px;
+  display: inline-flex;
+  flex-direction: row;          /* LTR داخلي ثابت — الدوت على اليسار دايمًا */
+  align-items: center;
+  gap: 5px;
+  padding: 0 8px;
+  border-radius: 20px;
+  background: rgba(236,253,245,.92);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: #047857;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .3px;
+  border: 1px solid rgba(16,185,129,.25);
+  direction: ltr;               /* نجبر الدوت يجي يسار النص */
+}
+.ads-manager .ad-status-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10B981;
+  flex-shrink: 0;
+  animation: badgePulse 2s ease-in-out infinite;
+}
+@keyframes badgePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: .55; transform: scale(.75); }
+}
+.ads-manager .campaign-ended .ad-status-badge {
+  background: rgba(241,245,249,.92);
+  color: #64748B;
+  border-color: rgba(148,163,184,.2);
+}
+.ads-manager .campaign-ended .ad-status-badge::before {
+  background: #94A3B8;
+  animation: none;
+}
 .ads-manager .ad-body { padding:11px 12px 12px; }
 .ads-manager .ad-meta { display:flex; align-items:center; justify-content:space-between; gap:9px; margin-bottom:10px; }
 .ads-manager .ad-meta > span { min-width:0; display:flex; align-items:center; gap:5px; color:#475569; font-size:11px; font-weight:800; }
@@ -691,7 +733,18 @@ body:not(.saey-home) .status-bar { width:min(100%,393px); height:30px; margin:0 
 .ad-editor-actions a svg,.ad-review-button svg { width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; }
 .ad-review-button { cursor:pointer; }
 .ad-editor-feedback { min-height:22px; margin:7px 2px 0; text-align:center; font-size:11px; font-weight:800; }.ad-editor-feedback.success{color:#047857}.ad-editor-feedback.error{color:#DC2626}.ad-upload-zone.has-file{border-style:solid;border-color:#10B981;background:#ECFDF5}.ad-upload-zone.has-file>span{color:#047857}
-.campaign-draft .ad-status-badge{background:#F2F2F2;color:#475569}.ads-manager .draft-ad{background:#64748B}.resume-ad-draft{height:40px;display:flex;align-items:center;justify-content:center;border:1px solid #DDE5ED;border-radius:10px;background:#FFF;color:#0F172A;text-decoration:none;font-size:12px;font-weight:900}
+.campaign-draft .ad-status-badge {
+  background: rgba(255,251,235,.92);
+  color: #B45309;
+  border: 1px solid rgba(245,158,11,.25);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.campaign-draft .ad-status-badge::before {
+  background: #F59E0B;
+  animation: none;
+}
+.ads-manager .draft-ad{background:#64748B}.resume-ad-draft{height:40px;display:flex;align-items:center;justify-content:center;border:1px solid #DDE5ED;border-radius:10px;background:#FFF;color:#0F172A;text-decoration:none;font-size:12px;font-weight:900}
 .orders-empty-state{grid-column:1/-1;display:grid;justify-items:center;gap:5px;padding:28px 15px;border:1px dashed #CBD5E1;border-radius:16px;background:#FFF;text-align:center}.orders-empty-state[hidden]{display:none}.orders-empty-state svg{width:30px;height:30px;fill:none;stroke:#64748B;stroke-width:1.7}.orders-empty-state strong{font-size:14px}.orders-empty-state span{color:#64748B;font-size:11px}.order-primary.completed-action{border-color:#DDE5ED;background:#F2F2F2;color:#64748B;box-shadow:none}
 
 /* Advertisement review and payment */

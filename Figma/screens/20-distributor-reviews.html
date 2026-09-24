@@ -1,1 +1,542 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>سعي — تقييماتي</title><link rel="stylesheet" href="trader.css"></head><body><div class="status-bar"><b>9:41</b><div class="status-icons">▮▮▮ ◔ ▰</div></div><main class="trader-page"><header class="trader-top compact"><a class="trader-back" href="20-distributor-account.html"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a><div><h1>تقييماتي</h1><p>آراء العملاء عن متجرك</p></div><span style="width:38px"></span></header><section class="trader-banner" style="min-height:96px"><small>متوسط تقييم المتجر</small><h2>٤٫٨ <span style="font-size:13px;color:#F59E0B">★★★★★</span></h2><p>من ٨٦ تقييمًا موثقًا من العملاء</p></section><div class="product-tabs"><button class="active">كل التقييمات</button><button>هذا الشهر</button><button>٥ نجوم</button></div><article class="review"><div class="review-head"><strong>سارة أحمد</strong><span class="rating-row"><b>★★★★★</b> 5.0</span></div><p>الخامة ممتازة والطلب كان جاهز في نفس اليوم. تجربة موفقة جدًا.</p><time>منذ ساعتين · جاكيت جلد طبيعي</time></article><article class="review"><div class="review-head"><strong>محمود علي</strong><span class="rating-row"><b>★★★★☆</b> 4.0</span></div><p>منتج مطابق للصور والتواصل مع المتجر كان سريعًا.</p><time>أمس · حذاء رياضي</time></article><article class="review"><div class="review-head"><strong>نورهان حسن</strong><span class="rating-row"><b>★★★★★</b> 5.0</span></div><p>المنتج وصل بحالة ممتازة والتعامل راقٍ.</p><time>منذ ٣ أيام · حقيبة ظهر</time></article></main></body></html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>سعي — تقييماتي</title>
+  <link rel="stylesheet" href="auth.css">
+  <link rel="stylesheet" href="user-home.css">
+  <link rel="stylesheet" href="user-home-layout.css">
+  <link rel="stylesheet" href="user-home-structure.css">
+  <link rel="stylesheet" href="user-home-professional.css">
+  <link rel="stylesheet" href="user-home-polish.css">
+  <link rel="stylesheet" href="uber-ui.css">
+  <link rel="stylesheet" href="user-home-waffarha.css">
+  <link rel="stylesheet" href="trader.css">
+  <style>
+    /* ── Shell ── */
+    .reviews-shell {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background: #F7F9FC;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .reviews-shell::-webkit-scrollbar { display: none; }
+
+    /* ── Header ── */
+    .reviews-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px 10px;
+      background: #fff;
+      border-bottom: 1px solid #E1E8F1;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .reviews-header a {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid #E1E8F1;
+      background: #fff;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      color: #0F172A;
+      text-decoration: none;
+    }
+    .reviews-header a svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .reviews-header-copy { flex: 1; }
+    .reviews-header-copy small { display: block; font-size: 10px; color: #94A3B8; font-weight: 600; }
+    .reviews-header-copy h1 { font-size: 16px; font-weight: 800; color: #0F172A; }
+
+    /* ── Rating summary hero ── */
+    .reviews-summary {
+      margin: 14px 14px 0;
+      background: #fff;
+      border: 1px solid #E1E8F1;
+      border-radius: 18px;
+      padding: 18px 16px;
+    }
+    .reviews-summary-top {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .reviews-big-score {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 64px;
+    }
+    .reviews-big-score strong {
+      font-size: 42px;
+      font-weight: 900;
+      color: #0F172A;
+      line-height: 1;
+    }
+    .reviews-big-score .stars-row {
+      color: #F59E0B;
+      font-size: 13px;
+      margin: 4px 0 2px;
+      letter-spacing: 1px;
+    }
+    .reviews-big-score small {
+      font-size: 10px;
+      color: #94A3B8;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .reviews-bars { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+    .reviews-bar-row { display: flex; align-items: center; gap: 6px; }
+    .reviews-bar-row span { font-size: 10px; color: #64748B; font-weight: 700; width: 12px; text-align: center; }
+    .reviews-bar-track { flex: 1; height: 6px; background: #F1F5F9; border-radius: 20px; overflow: hidden; }
+    .reviews-bar-fill  { height: 100%; background: #F59E0B; border-radius: 20px; }
+    .reviews-bar-row small { font-size: 10px; color: #94A3B8; font-weight: 600; width: 22px; text-align: left; }
+    .reviews-summary-sub {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid #F1F5F9;
+    }
+    .reviews-sub-stat {
+      flex: 1;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+    .reviews-sub-stat strong { font-size: 16px; font-weight: 900; color: #0F172A; }
+    .reviews-sub-stat small  { font-size: 10px; color: #94A3B8; font-weight: 600; }
+    .reviews-sub-divider {
+      width: 1px;
+      background: #E1E8F1;
+      align-self: stretch;
+    }
+
+    /* ── Date filter ── */
+    .reviews-filter-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 14px 0;
+    }
+    .reviews-filter-row label { font-size: 11px; color: #64748B; font-weight: 700; flex-shrink: 0; }
+    .reviews-date-input {
+      flex: 1;
+      height: 38px;
+      border: 1px solid #E1E8F1;
+      border-radius: 10px;
+      background: #fff;
+      padding: 0 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #0F172A;
+      font-family: inherit;
+      direction: ltr;
+      text-align: right;
+    }
+    .reviews-date-input:focus { outline: none; border-color: #000; }
+    .reviews-filter-sep { font-size: 11px; color: #94A3B8; flex-shrink: 0; }
+    .reviews-filter-btn {
+      height: 38px;
+      padding: 0 14px;
+      border-radius: 10px;
+      background: #000;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    /* ── Stars filter tabs ── */
+    .reviews-star-tabs {
+      display: flex;
+      gap: 6px;
+      padding: 10px 14px 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .reviews-star-tabs::-webkit-scrollbar { display: none; }
+    .reviews-star-tab {
+      flex-shrink: 0;
+      height: 32px;
+      padding: 0 12px;
+      border-radius: 20px;
+      border: 1px solid #E1E8F1;
+      background: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748B;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all .15s;
+    }
+    .reviews-star-tab.active {
+      background: #000;
+      border-color: #000;
+      color: #fff;
+    }
+    .reviews-star-tab .star-color { color: #F59E0B; }
+
+    /* ── Count label ── */
+    .reviews-count-label {
+      padding: 10px 14px 6px;
+      font-size: 12px;
+      color: #94A3B8;
+      font-weight: 600;
+    }
+
+    /* ── Review cards ── */
+    .review-card {
+      margin: 0 14px 10px;
+      background: #fff;
+      border: 1px solid #E1E8F1;
+      border-radius: 14px;
+      padding: 14px;
+    }
+    .review-card-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .review-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #F1F5F9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      color: #0F172A;
+      flex-shrink: 0;
+    }
+    .review-card-meta { flex: 1; }
+    .review-card-meta strong { display: block; font-size: 13px; font-weight: 800; color: #0F172A; }
+    .review-card-meta .review-stars { color: #F59E0B; font-size: 12px; letter-spacing: 1px; }
+    .review-card-meta time { display: block; font-size: 10px; color: #94A3B8; font-weight: 600; margin-top: 1px; }
+    .review-product-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #F8FAFC;
+      border: 1px solid #E1E8F1;
+      border-radius: 8px;
+      padding: 3px 8px;
+      font-size: 10px;
+      color: #64748B;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+    .review-product-chip svg { width: 10px; height: 10px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .review-card p {
+      font-size: 12px;
+      color: #334155;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+    .review-verified {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      color: #059669;
+      font-weight: 700;
+    }
+    .review-verified svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── Empty state ── */
+    .reviews-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+      text-align: center;
+      color: #94A3B8;
+    }
+    .reviews-empty svg { width: 40px; height: 40px; fill: none; stroke: #CBD5E1; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; margin-bottom: 12px; }
+    .reviews-empty strong { display: block; font-size: 14px; color: #64748B; margin-bottom: 4px; }
+    .reviews-empty p { font-size: 12px; }
+
+    .reviews-bottom-spacer { height: 90px; }
+  </style>
+</head>
+<body class="saey-home trader-app reviews-page">
+  <div class="status-bar"><span class="status-time">9:41</span><div class="status-icons"><svg viewBox="0 0 17 11" width="17"><path d="M1 9h3v2H1zm4-3h3v5H5zm4-3h3v8H9zm4-3h3v11h-3z"/></svg><svg viewBox="0 0 16 12" width="16"><path d="M8 10a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M2 5a8.5 8.5 0 0 1 12 0l-1.1 1.1a7 7 0 0 0-9.8 0z"/></svg><svg viewBox="0 0 25 12" width="24"><rect x="1" y="1" width="20" height="10" rx="3" fill="none" stroke="currentColor"/><rect x="3" y="3" width="16" height="6" rx="1.5"/></svg></div></div>
+
+  <main class="reviews-shell">
+
+    <!-- Header -->
+    <header class="reviews-header">
+      <a href="20-distributor-account.html" aria-label="العودة إلى حسابي">
+        <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+      </a>
+      <div class="reviews-header-copy">
+        <small>آراء العملاء</small>
+        <h1>تقييماتي</h1>
+      </div>
+    </header>
+
+    <!-- Rating Summary -->
+    <div class="reviews-summary">
+      <div class="reviews-summary-top">
+        <div class="reviews-big-score">
+          <strong>٤٫٨</strong>
+          <div class="stars-row">★★★★★</div>
+          <small>من ٨٦ تقييم</small>
+        </div>
+        <div class="reviews-bars">
+          <div class="reviews-bar-row">
+            <span>٥</span>
+            <div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:82%"></div></div>
+            <small>٧١</small>
+          </div>
+          <div class="reviews-bar-row">
+            <span>٤</span>
+            <div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:12%"></div></div>
+            <small>١٠</small>
+          </div>
+          <div class="reviews-bar-row">
+            <span>٣</span>
+            <div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:4%"></div></div>
+            <small>٣</small>
+          </div>
+          <div class="reviews-bar-row">
+            <span>٢</span>
+            <div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:2%"></div></div>
+            <small>٢</small>
+          </div>
+          <div class="reviews-bar-row">
+            <span>١</span>
+            <div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:0%"></div></div>
+            <small>٠</small>
+          </div>
+        </div>
+      </div>
+      <div class="reviews-summary-sub">
+        <div class="reviews-sub-stat">
+          <strong>٨٦</strong>
+          <small>إجمالي التقييمات</small>
+        </div>
+        <div class="reviews-sub-divider"></div>
+        <div class="reviews-sub-stat">
+          <strong>٩٤٪</strong>
+          <small>تقييم إيجابي</small>
+        </div>
+        <div class="reviews-sub-divider"></div>
+        <div class="reviews-sub-stat">
+          <strong>+١٢</strong>
+          <small>هذا الشهر</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Date Filter -->
+    <div class="reviews-filter-row">
+      <label for="reviewsFrom">من</label>
+      <input class="reviews-date-input" type="date" id="reviewsFrom" value="2026-05-01">
+      <span class="reviews-filter-sep">—</span>
+      <input class="reviews-date-input" type="date" id="reviewsTo" value="2026-05-24">
+      <button class="reviews-filter-btn" type="button" id="applyFilter">تطبيق</button>
+    </div>
+
+    <!-- Stars Filter -->
+    <div class="reviews-star-tabs" role="tablist">
+      <button class="reviews-star-tab active" data-stars="all" type="button">الكل <b id="countAll">٨٦</b></button>
+      <button class="reviews-star-tab" data-stars="5" type="button"><span class="star-color">★</span> ٥ نجوم <b>٧١</b></button>
+      <button class="reviews-star-tab" data-stars="4" type="button"><span class="star-color">★</span> ٤ نجوم <b>١٠</b></button>
+      <button class="reviews-star-tab" data-stars="3" type="button"><span class="star-color">★</span> ٣ نجوم <b>٣</b></button>
+      <button class="reviews-star-tab" data-stars="2" type="button"><span class="star-color">★</span> ٢ نجوم <b>٢</b></button>
+    </div>
+
+    <!-- Count -->
+    <p class="reviews-count-label" id="reviewsCountLabel">عرض ٨٦ تقييمًا</p>
+
+    <!-- Reviews List -->
+    <div id="reviewsList">
+
+      <article class="review-card" data-stars="5">
+        <div class="review-card-head">
+          <div class="review-avatar">س</div>
+          <div class="review-card-meta">
+            <strong>سارة أحمد</strong>
+            <div class="review-stars">★★★★★</div>
+            <time>منذ ساعتين</time>
+          </div>
+        </div>
+        <div class="review-product-chip">
+          <svg viewBox="0 0 24 24"><path d="M6 2h12l2 5-2 15H6L4 7l2-5Z"/><path d="M9 10a3 3 0 0 0 6 0"/></svg>
+          جاكيت جلد طبيعي
+        </div>
+        <p style="margin-top:8px">الخامة ممتازة والطلب كان جاهز في نفس اليوم. تجربة موفقة جدًا وسأرجع للشراء مرة أخرى بالتأكيد.</p>
+        <div class="review-verified">
+          <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>
+          شراء موثق
+        </div>
+      </article>
+
+      <article class="review-card" data-stars="4">
+        <div class="review-card-head">
+          <div class="review-avatar">م</div>
+          <div class="review-card-meta">
+            <strong>محمود علي</strong>
+            <div class="review-stars">★★★★☆</div>
+            <time>أمس</time>
+          </div>
+        </div>
+        <div class="review-product-chip">
+          <svg viewBox="0 0 24 24"><path d="M6 2h12l2 5-2 15H6L4 7l2-5Z"/><path d="M9 10a3 3 0 0 0 6 0"/></svg>
+          حذاء رياضي أبيض
+        </div>
+        <p style="margin-top:8px">منتج مطابق للصور والتواصل مع المتجر كان سريعًا. نقصت نجمة لأن المقاس كان أكبر قليلًا من المتوقع.</p>
+        <div class="review-verified">
+          <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>
+          شراء موثق
+        </div>
+      </article>
+
+      <article class="review-card" data-stars="5">
+        <div class="review-card-head">
+          <div class="review-avatar">ن</div>
+          <div class="review-card-meta">
+            <strong>نورهان حسن</strong>
+            <div class="review-stars">★★★★★</div>
+            <time>منذ ٣ أيام</time>
+          </div>
+        </div>
+        <div class="review-product-chip">
+          <svg viewBox="0 0 24 24"><path d="M6 2h12l2 5-2 15H6L4 7l2-5Z"/><path d="M9 10a3 3 0 0 0 6 0"/></svg>
+          حقيبة ظهر عملية
+        </div>
+        <p style="margin-top:8px">المنتج وصل بحالة ممتازة والتعامل راقٍ من أول لحظة. شكراً جزيلًا.</p>
+        <div class="review-verified">
+          <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>
+          شراء موثق
+        </div>
+      </article>
+
+      <article class="review-card" data-stars="5">
+        <div class="review-card-head">
+          <div class="review-avatar">أ</div>
+          <div class="review-card-meta">
+            <strong>أحمد سامي</strong>
+            <div class="review-stars">★★★★★</div>
+            <time>منذ ٥ أيام</time>
+          </div>
+        </div>
+        <div class="review-product-chip">
+          <svg viewBox="0 0 24 24"><path d="M6 2h12l2 5-2 15H6L4 7l2-5Z"/><path d="M9 10a3 3 0 0 0 6 0"/></svg>
+          جاكيت جلد طبيعي
+        </div>
+        <p style="margin-top:8px">من أجود المتاجر اللي تعاملت معها في التطبيق. الجودة تستاهل السعر تمامًا.</p>
+        <div class="review-verified">
+          <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>
+          شراء موثق
+        </div>
+      </article>
+
+      <article class="review-card" data-stars="3">
+        <div class="review-card-head">
+          <div class="review-avatar">ر</div>
+          <div class="review-card-meta">
+            <strong>رنا خالد</strong>
+            <div class="review-stars">★★★☆☆</div>
+            <time>منذ أسبوع</time>
+          </div>
+        </div>
+        <div class="review-product-chip">
+          <svg viewBox="0 0 24 24"><path d="M6 2h12l2 5-2 15H6L4 7l2-5Z"/><path d="M9 10a3 3 0 0 0 6 0"/></svg>
+          حذاء رياضي أبيض
+        </div>
+        <p style="margin-top:8px">المنتج معقول لكن كان ممكن يكون أحسن في التغليف.</p>
+        <div class="review-verified">
+          <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>
+          شراء موثق
+        </div>
+      </article>
+
+      <article class="review-card" data-stars="2">
+        <div class="review-card-head">
+          <div class="review-avatar">ك</div>
+          <div class="review-card-meta">
+            <strong>كريم ناصر</strong>
+            <div class="review-stars">★★☆☆☆</div>
+            <time>منذ أسبوعين</time>
+          </div>
+        </div>
+        <div class="review-product-chip">
+          <svg viewBox="0 0 24 24"><path d="M6 2h12l2 5-2 15H6L4 7l2-5Z"/><path d="M9 10a3 3 0 0 0 6 0"/></svg>
+          حقيبة ظهر عملية
+        </div>
+        <p style="margin-top:8px">الخامة كانت أقل مما توقعت بالنسبة للسعر، لكن المتجر كان متجاوباً في التواصل.</p>
+        <div class="review-verified">
+          <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>
+          شراء موثق
+        </div>
+      </article>
+
+    </div>
+
+    <div class="reviews-bottom-spacer"></div>
+  </main>
+
+  <!-- Bottom Nav -->
+  <nav class="saey-bottom-nav market-nav">
+    <a href="17-distributor-dashboard.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22v-9h6v9"/></svg></span><span>الرئيسية</span></a>
+    <a href="18-distributor-products.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><rect width="7" height="7" x="3" y="3" rx="1.5"/><rect width="7" height="7" x="14" y="3" rx="1.5"/><rect width="7" height="7" x="14" y="14" rx="1.5"/><rect width="7" height="7" x="3" y="14" rx="1.5"/></svg></span><span>منتجاتي</span></a>
+    <a href="21-distributor-orders.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4M9 10h6"/></svg></span><span>الطلبات</span></a>
+    <a href="19-distributor-ads.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="m4 12 15-7v14L4 12Z"/><path d="M4 12v5a2 2 0 0 0 2 2M19 10h2a2 2 0 0 1 0 4h-2"/></svg></span><span>إعلاناتي</span></a>
+    <a class="active" aria-current="page" href="20-distributor-account.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></span><span>حسابي</span></a>
+  </nav>
+
+  <script>
+    // Stars filter
+    const starTabs = document.querySelectorAll('.reviews-star-tab');
+    const reviewCards = document.querySelectorAll('#reviewsList .review-card');
+    const countLabel = document.getElementById('reviewsCountLabel');
+
+    function filterByStars(stars) {
+      let count = 0;
+      reviewCards.forEach(card => {
+        const show = stars === 'all' || card.dataset.stars === stars;
+        card.hidden = !show;
+        if (show) count++;
+      });
+      countLabel.textContent = `عرض ${count.toLocaleString('ar-EG')} تقييمًا`;
+    }
+
+    starTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        starTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        filterByStars(tab.dataset.stars);
+      });
+    });
+
+    // Date filter (UI interaction only)
+    document.getElementById('applyFilter').addEventListener('click', () => {
+      const from = document.getElementById('reviewsFrom').value;
+      const to   = document.getElementById('reviewsTo').value;
+      if (from && to) {
+        countLabel.textContent = 'جاري التصفية…';
+        setTimeout(() => {
+          filterByStars(document.querySelector('.reviews-star-tab.active').dataset.stars);
+        }, 300);
+      }
+    });
+  </script>
+</body>
+</html>
