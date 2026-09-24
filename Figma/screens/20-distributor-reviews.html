@@ -59,32 +59,55 @@
     .reviews-header-copy small { display: block; font-size: 10px; color: #94A3B8; font-weight: 700; }
     .reviews-header-copy h1 { font-size: 16px; font-weight: 900; color: #0F172A; }
 
+    /* ── Global SVG Star overrides to prevent uber-ui stroke overriding ── */
+    .reviews-shell svg polygon {
+      stroke: none !important;
+    }
+    .reviews-shell .stars-row svg,
+    .reviews-shell .review-stars-wrap svg {
+      width: 14px;
+      height: 14px;
+      fill: #F59E0B !important;
+      stroke: none !important;
+      display: inline-block;
+    }
+    .reviews-shell .stars-row svg polygon,
+    .reviews-shell .review-stars-wrap svg polygon {
+      fill: #F59E0B !important;
+      stroke: none !important;
+    }
+    .reviews-shell .review-stars-wrap svg.empty,
+    .reviews-shell .review-stars-wrap svg.empty polygon {
+      fill: #E2E8F0 !important;
+      stroke: none !important;
+    }
+
     /* ── Rating summary hero ── */
     .reviews-summary {
       margin: 12px 14px 0;
       background: #fff;
       border: 1px solid #E1E8F1;
       border-radius: 18px;
-      padding: 18px 16px 14px;
+      padding: 16px 16px 14px;
       box-shadow: 0 4px 16px rgba(15,23,42,.03);
     }
     .reviews-summary-top {
       display: flex;
       align-items: center;
-      gap: 18px;
+      gap: 16px;
     }
     .reviews-big-score {
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-width: 80px;
+      min-width: 82px;
       flex-shrink: 0;
     }
     .reviews-big-score strong {
-      font-size: 40px;
+      font-size: 42px;
       font-weight: 900;
       color: #0F172A;
-      font-family: 'Inter', 'Cairo', sans-serif;
+      font-family: 'Inter', sans-serif;
       line-height: 1;
       letter-spacing: -0.5px;
     }
@@ -92,10 +115,7 @@
       display: flex;
       align-items: center;
       gap: 2px;
-      margin: 6px 0 3px;
-    }
-    .reviews-big-score .stars-row svg {
-      width: 14px; height: 14px; fill: #F59E0B;
+      margin: 6px 0 4px;
     }
     .reviews-big-score small {
       font-size: 10.5px;
@@ -103,13 +123,28 @@
       font-weight: 700;
       white-space: nowrap;
     }
-    .reviews-bars { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    .reviews-bars { flex: 1; display: flex; flex-direction: column; gap: 5px; }
     .reviews-bar-row { display: flex; align-items: center; gap: 8px; }
-    .reviews-bar-row span { font-size: 11px; color: #64748B; font-weight: 800; width: 12px; text-align: center; font-family: 'Inter', sans-serif; }
-    .reviews-bar-track { flex: 1; height: 7px; background: #F1F5F9; border-radius: 20px; overflow: hidden; }
-    .reviews-bar-fill  { height: 100%; background: #0F172A; border-radius: 20px; transition: width .4s ease; }
-    .reviews-bar-fill.gold { background: #F59E0B; }
+    .reviews-bar-row span { font-size: 11px; color: #64748B; font-weight: 800; width: 26px; text-align: right; font-family: 'Inter', 'Cairo', sans-serif; }
+    .reviews-bar-track {
+      flex: 1;
+      height: 7px;
+      background: #F1F5F9;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      direction: rtl;
+    }
+    .reviews-bar-fill {
+      height: 100%;
+      background: #F59E0B;
+      border-radius: 20px;
+      transition: width .4s ease;
+      margin-right: 0;
+      margin-left: auto;
+    }
     .reviews-bar-row small { font-size: 10.5px; color: #94A3B8; font-weight: 700; width: 22px; text-align: left; font-family: 'Inter', sans-serif; }
+    
     .reviews-summary-sub {
       display: flex;
       align-items: center;
@@ -126,8 +161,8 @@
       gap: 2px;
     }
     .reviews-sub-stat strong { font-size: 16px; font-weight: 900; color: #0F172A; font-family: 'Inter', 'Cairo', sans-serif; }
-    .reviews-sub-stat small  { font-size: 10.5px; color: #94A3B8; font-weight: 700; }
     .reviews-sub-stat strong.green { color: #059669; }
+    .reviews-sub-stat small  { font-size: 10.5px; color: #94A3B8; font-weight: 700; }
     .reviews-sub-divider {
       width: 1px;
       height: 24px;
@@ -135,49 +170,23 @@
       align-self: center;
     }
 
-    /* ── Period selector ── */
-    .reviews-period-bar {
-      display: flex;
-      gap: 6px;
-      padding: 12px 14px 0;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .reviews-period-bar::-webkit-scrollbar { display: none; }
-    .reviews-period-chip {
-      flex-shrink: 0;
-      height: 32px;
-      padding: 0 12px;
-      border-radius: 10px;
-      border: 1px solid #E1E8F1;
-      background: #fff;
-      font: 800 11px 'Cairo', sans-serif;
-      color: #64748B;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: all .15s;
-    }
-    .reviews-period-chip:hover { border-color: #000; color: #000; }
-    .reviews-period-chip.active {
-      background: #000;
-      border-color: #000;
-      color: #fff;
-      box-shadow: 0 4px 12px rgba(0,0,0,.12);
-    }
-
     /* ── Stars filter tabs ── */
     .reviews-star-tabs {
       display: flex;
-      gap: 6px;
-      padding: 10px 14px 0;
+      flex-shrink: 0;
+      gap: 8px;
+      padding: 14px 14px 2px;
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
+      position: relative;
+      z-index: 5;
     }
     .reviews-star-tabs::-webkit-scrollbar { display: none; }
     .reviews-star-tab {
       flex-shrink: 0;
       height: 34px;
-      padding: 0 10px;
+      padding: 0 11px;
       border-radius: 10px;
       border: 1px solid #E1E8F1;
       background: #fff;
@@ -217,22 +226,45 @@
       line-height: 1;
     }
 
-    /* ── Count & status ── */
+    /* ── Count & period filter row ── */
     .reviews-count-header {
       display: flex;
+      flex-shrink: 0;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 14px 8px;
+      gap: 10px;
+      padding: 12px 14px 6px;
+      position: relative;
+      z-index: 5;
     }
     .reviews-count-label {
       font-size: 12px;
       color: #64748B;
       font-weight: 800;
+      white-space: nowrap;
     }
-    .reviews-sort-hint {
-      font-size: 11px;
-      color: #94A3B8;
-      font-weight: 700;
+    .reviews-period-selector {
+      display: flex;
+      gap: 4px;
+      background: #ECEFF3;
+      padding: 3px;
+      border-radius: 9px;
+    }
+    .period-pill {
+      border: none;
+      background: transparent;
+      padding: 3px 8px;
+      border-radius: 7px;
+      font: 800 10.5px 'Cairo', sans-serif;
+      color: #64748B;
+      cursor: pointer;
+      transition: all .15s;
+      white-space: nowrap;
+    }
+    .period-pill.active {
+      background: #fff;
+      color: #0F172A;
+      box-shadow: 0 2px 6px rgba(15,23,42,.08);
     }
 
     /* ── Review cards ── */
@@ -253,7 +285,7 @@
       display: flex;
       align-items: flex-start;
       gap: 10px;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .review-avatar {
       width: 38px;
@@ -281,7 +313,7 @@
       gap: 8px;
     }
     .review-card-top-row strong {
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 800;
       color: #0F172A;
       white-space: nowrap;
@@ -289,7 +321,7 @@
       text-overflow: ellipsis;
     }
     .review-card-top-row time {
-      font-size: 10px;
+      font-size: 10.5px;
       color: #94A3B8;
       font-weight: 700;
       flex-shrink: 0;
@@ -298,10 +330,8 @@
       display: flex;
       align-items: center;
       gap: 2px;
-      margin-top: 2px;
+      margin-top: 3px;
     }
-    .review-stars-wrap svg { width: 12px; height: 12px; fill: #F59E0B; }
-    .review-stars-wrap svg.empty { fill: #E2E8F0; }
 
     .review-product-chip {
       display: inline-flex;
@@ -362,17 +392,25 @@
     /* ── Merchant reply block ── */
     .merchant-reply-block {
       margin-top: 10px;
-      padding: 10px 12px;
+      padding: 10px 14px;
       background: #F8FAFC;
       border-radius: 12px;
+      border: 1px solid #E2E8F0;
       border-right: 3px solid #000;
     }
-    .merchant-reply-block small {
-      display: block;
-      font-size: 10px;
+    .merchant-reply-block .reply-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10.5px;
       font-weight: 800;
       color: #0F172A;
-      margin-bottom: 3px;
+      margin-bottom: 4px;
+    }
+    .merchant-reply-block .reply-badge svg {
+      width: 12px; height: 12px;
+      fill: none; stroke: currentColor;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
     }
     .merchant-reply-block p {
       margin: 0;
@@ -490,99 +528,95 @@
             <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
             <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           </div>
-          <small>من ٨٦ تقييمًا</small>
+          <small>من 86 تقييمًا</small>
         </div>
         <div class="reviews-bars">
           <div class="reviews-bar-row">
-            <span>5</span>
-            <div class="reviews-bar-track"><div class="reviews-bar-fill gold" style="width:82%"></div></div>
-            <small>٧١</small>
+            <span>5 ★</span>
+            <div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:82%"></div></div>
+            <small>71</small>
           </div>
           <div class="reviews-bar-row">
-            <span>4</span>
+            <span>4 ★</span>
             <div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:12%"></div></div>
-            <small>١٠</small>
+            <small>10</small>
           </div>
           <div class="reviews-bar-row">
-            <span>3</span>
+            <span>3 ★</span>
             <div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:4%"></div></div>
-            <small>٣</small>
+            <small>3</small>
           </div>
           <div class="reviews-bar-row">
-            <span>2</span>
+            <span>2 ★</span>
             <div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:2%"></div></div>
-            <small>٢</small>
+            <small>2</small>
           </div>
           <div class="reviews-bar-row">
-            <span>1</span>
+            <span>1 ★</span>
             <div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:0%"></div></div>
-            <small>٠</small>
+            <small>0</small>
           </div>
         </div>
       </div>
       <div class="reviews-summary-sub">
         <div class="reviews-sub-stat">
-          <strong>٨٦</strong>
+          <strong>86</strong>
           <small>إجمالي التقييمات</small>
         </div>
         <div class="reviews-sub-divider"></div>
         <div class="reviews-sub-stat">
-          <strong class="green">٩٤٪</strong>
+          <strong class="green"><span dir="ltr">94%</span></strong>
           <small>رضا العملاء</small>
         </div>
         <div class="reviews-sub-divider"></div>
         <div class="reviews-sub-stat">
-          <strong>+١٢</strong>
+          <strong class="green"><span dir="ltr">+12</span></strong>
           <small>هذا الشهر</small>
         </div>
       </div>
-    </div>
-
-    <!-- Period Selector -->
-    <div class="reviews-period-bar" role="tablist" aria-label="تصفية حسب الفترة">
-      <button class="reviews-period-chip active" type="button" data-period="all">الكل</button>
-      <button class="reviews-period-chip" type="button" data-period="month">آخر ٣٠ يومًا</button>
-      <button class="reviews-period-chip" type="button" data-period="week">هذا الأسبوع</button>
-      <button class="reviews-period-chip" type="button" data-period="recent">الأحدث</button>
     </div>
 
     <!-- Stars Filter Tabs -->
     <div class="reviews-star-tabs" role="tablist" aria-label="تصفية حسب النجوم">
       <button class="reviews-star-tab active" data-stars="all" type="button">
         <span>الكل</span>
-        <b id="countAll">٨٦</b>
+        <b id="countAll">86</b>
       </button>
       <button class="reviews-star-tab" data-stars="5" type="button">
         <span class="star-color">★</span>
-        <span>٥ نجوم</span>
-        <b>٧١</b>
+        <span>5 نجوم</span>
+        <b>71</b>
       </button>
       <button class="reviews-star-tab" data-stars="4" type="button">
         <span class="star-color">★</span>
-        <span>٤ نجوم</span>
-        <b>١٠</b>
+        <span>4 نجوم</span>
+        <b>10</b>
       </button>
       <button class="reviews-star-tab" data-stars="3" type="button">
         <span class="star-color">★</span>
-        <span>٣ نجوم</span>
-        <b>٣</b>
+        <span>3 نجوم</span>
+        <b>3</b>
       </button>
       <button class="reviews-star-tab" data-stars="2" type="button">
         <span class="star-color">★</span>
-        <span>نجمتان</span>
-        <b>٢</b>
+        <span>2 نجوم</span>
+        <b>2</b>
       </button>
       <button class="reviews-star-tab" data-stars="1" type="button">
         <span class="star-color">★</span>
-        <span>نجمة</span>
-        <b>٠</b>
+        <span>1 نجمة</span>
+        <b>0</b>
       </button>
     </div>
 
-    <!-- Count Header -->
+    <!-- Count & period row -->
     <div class="reviews-count-header">
-      <span class="reviews-count-label" id="reviewsCountLabel">عرض ٨٦ تقييمًا</span>
-      <span class="reviews-sort-hint">مرتبة حسب الأحدث</span>
+      <span class="reviews-count-label" id="reviewsCountLabel">عرض 86 تقييمًا</span>
+      <div class="reviews-period-selector" role="tablist" aria-label="فترة التقييمات">
+        <button type="button" class="period-pill active" data-period="all">الكل</button>
+        <button type="button" class="period-pill" data-period="month">آخر ٣٠ يومًا</button>
+        <button type="button" class="period-pill" data-period="week">هذا الأسبوع</button>
+      </div>
     </div>
 
     <!-- Reviews List -->
@@ -612,7 +646,10 @@
         </div>
         <p>الخامة ممتازة جدًا والطلب كان جاهزًا للاستلام في نفس اليوم. تعامل راقٍ ومتجر يستحق كل التقدير.</p>
         <div class="merchant-reply-block">
-          <small>رد المتجر · نقطة ستور</small>
+          <div class="reply-badge">
+            <svg viewBox="0 0 24 24"><path d="m3 10 7-7v4c8 0 11 6 12 12-3-4-7-5-12-5v4z"/></svg>
+            رد المتجر · نقطة ستور
+          </div>
           <p>شكرًا لكِ يا سارة، نسعد دائمًا بخدمتك وننتظر زيارتك القادمة بكل ترحيب!</p>
         </div>
         <div class="review-card-footer">
@@ -682,7 +719,10 @@
         </div>
         <p>الشنطة ممتازة وخامتها متينة وتتحمل الاستخدام اليومي. التغليف كان أنيقًا والاستلام كان سهلًا.</p>
         <div class="merchant-reply-block">
-          <small>رد المتجر · نقطة ستور</small>
+          <div class="reply-badge">
+            <svg viewBox="0 0 24 24"><path d="m3 10 7-7v4c8 0 11 6 12 12-3-4-7-5-12-5v4z"/></svg>
+            رد المتجر · نقطة ستور
+          </div>
           <p>أهلًا بكِ نورهان، سعداء جدًا بإعجابك بالمنتج وحرصنا دائمًا على تقديم أفضل جودة.</p>
         </div>
         <div class="review-card-footer">
@@ -787,7 +827,10 @@
         </div>
         <p>الخامة كانت خفيفة بالنسبة لتوقعاتي، ولكن المتجر كان متعاوناً واستجاب لاستفساراتي بسرعة.</p>
         <div class="merchant-reply-block">
-          <small>رد المتجر · نقطة ستور</small>
+          <div class="reply-badge">
+            <svg viewBox="0 0 24 24"><path d="m3 10 7-7v4c8 0 11 6 12 12-3-4-7-5-12-5v4z"/></svg>
+            رد المتجر · نقطة ستور
+          </div>
           <p>نعتذر لك يا كريم عن أي تقصير، ورضاك يهمنا جدًا. تم تحديث المواصفات وتوفير بدائل أفضل في المخزون.</p>
         </div>
         <div class="review-card-footer">
@@ -837,7 +880,7 @@
 
   <script>
     const starTabs = document.querySelectorAll('.reviews-star-tab');
-    const periodChips = document.querySelectorAll('.reviews-period-chip');
+    const periodPills = document.querySelectorAll('.period-pill');
     const reviewCards = document.querySelectorAll('#reviewsList .review-card');
     const countLabel = document.getElementById('reviewsCountLabel');
     const emptyState = document.getElementById('reviewsEmpty');
@@ -849,14 +892,14 @@
       let visibleCount = 0;
       reviewCards.forEach(card => {
         const starMatch = (currentStars === 'all' || card.dataset.stars === currentStars);
-        const periodMatch = (currentPeriod === 'all' || card.dataset.period === currentPeriod || currentPeriod === 'recent');
+        const periodMatch = (currentPeriod === 'all' || card.dataset.period === currentPeriod);
         const isShown = starMatch && periodMatch;
 
         card.hidden = !isShown;
         if (isShown) visibleCount++;
       });
 
-      countLabel.textContent = `عرض ${visibleCount.toLocaleString('ar-EG')} تقييمًا`;
+      countLabel.textContent = `عرض ${visibleCount} تقييمًا`;
       emptyState.classList.toggle('is-visible', visibleCount === 0);
     }
 
@@ -869,11 +912,11 @@
       });
     });
 
-    periodChips.forEach(chip => {
-      chip.addEventListener('click', () => {
-        periodChips.forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
-        currentPeriod = chip.dataset.period;
+    periodPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        periodPills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        currentPeriod = pill.dataset.period;
         applyFilters();
       });
     });
@@ -882,7 +925,6 @@
     const replyBackdrop = document.getElementById('replyBackdrop');
     const replyTitle = document.getElementById('replyTitle');
     const replyText = document.getElementById('replyText');
-    let currentReplyingCard = null;
 
     function openReplySheet(userName) {
       replyTitle.textContent = `الرد على تقييم ${userName}`;
