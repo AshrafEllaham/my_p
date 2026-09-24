@@ -2609,13 +2609,13 @@
         file: '17-distributor-dashboard.html',
         title: 'لوحة تشغيل البائع',
         titleEn: 'Pilot Seller Dashboard',
-        tags: ['Pilot Operations', 'Pending Review', 'Orders', 'Support'],
-        desc: 'لوحة بسيطة لمتابعة الطلبات والمنتجات قيد المراجعة أثناء التشغيل التجريبي، بدون أرباح أو سحب أو إعلانات.',
-        descEn: 'Pilot seller workspace for orders and review status, without payouts, wallets, or ads.',
+        tags: ['Dashboard', 'Sales KPIs', 'Quick Actions'],
+        desc: 'لوحة تشغيل التاجر: ملخص المبيعات والأرباح والتقييمات، مع اختصارات إضافة منتج وإعلان.',
+        descEn: 'Merchant dashboard with sales, earnings, ratings, and quick product or ad actions.',
         notes: [
-          'مؤشرات تشغيلية للطلبات والمنتجات قيد المراجعة',
-          'إشعارات بالطلبات الجديدة واحتياجها للتأكيد أو التجهيز',
-          'رابط مباشر للدعم والسياسات أثناء التجربة'
+          'بطاقة أداء واضحة ومباشرة',
+          'تمييز الإيراد والطلبات والمشاهدات والتقييم',
+          'وصول سريع للمنتجات والإعلانات والمحفظة'
         ],
         notesEn: [
           'Instant KPI metric cards for revenue, orders, and ratings',
@@ -2653,13 +2653,13 @@
         file: '19-distributor-ads.html',
         title: 'الإعلانات والباقات — مؤجلة',
         titleEn: 'Ads & Packages — Deferred',
-        tags: ['Deferred Feature', 'Pilot Scope', 'Fair Ranking'],
-        desc: 'شاشة توضح أن الإعلانات والباقات مؤجلة حتى تثبت دورة الطلب والتوصيل ويتم اعتماد نموذج العمولة والتسويات.',
-        descEn: 'Explains that ads and packages are deferred until ordering, delivery, commission, and settlement rules are validated.',
+        tags: ['Sponsored Ads', 'Campaign Analytics', 'Packages'],
+        desc: 'إدارة الإعلانات المدفوعة على التطبيق أو القسم، مع عرض إعلانات صفحة المتجر المجانية وإحصائيات الأداء.',
+        descEn: 'Manage paid app or category ads alongside free storefront placements and performance analytics.',
         notes: [
-          'لا توجد محفظة أو رسوم إعلان في التشغيل التجريبي',
-          'ترتيب عادل حسب القسم والتوفر وجودة المحتوى',
-          'تفعيل الباقات لاحقًا بعد مراجعة النتائج والسياسات'
+          'إظهار مكان الظهور وحالة الإعلان بوضوح',
+          'مشاهدات ونقرات وعملاء مستقطبون',
+          'اختصار لإنشاء إعلان جديد'
         ],
         notesEn: [
           'Integrated wallet balance card with fast top-up options',
@@ -2858,15 +2858,26 @@
       { id: 46, num: '07.1', section: 'الدخول', sectionEn: 'Auth & Onboarding', file: '07-reset-password.html', title: 'كلمة مرور جديدة', titleEn: 'New Password', tags: ['Password', 'Recovery'], desc: 'استكمال استعادة الحساب بعد OTP.', descEn: 'Complete account recovery after OTP.', notes: ['كلمة جديدة', 'تأكيد التطابق'], notesEn: ['New password', 'Match validation'] }
     );
 
+    // شاشات بوابة التاجر الجديدة وفق نموذج الإعلانات والعمولة والمحفظة.
+    screens.push(
+      { id: 51, num: '28', section: 'الموزع', sectionEn: 'Distributor Portal', file: '18-distributor-products.html', title: 'منتجاتي', titleEn: 'My Products', tags: ['Product Catalog', 'Search', 'Filters'], desc: 'كتالوج منتجات التاجر مع البحث والتصفية حسب حالة المنتج، وزر واضح لإضافة منتج جديد.', descEn: 'Merchant catalog with search, status filters, and a clear add-product action.', notes: ['حالات منشور وقيد المراجعة ومسودة', 'السعر والقسم وآخر تحديث', 'زر إضافة منتج مثبت أسفل الشاشة'], notesEn: ['Published, review, and draft states', 'Price, category, and update time', 'Sticky add-product action'] },
+      { id: 52, num: '29', section: 'الموزع', sectionEn: 'Distributor Portal', file: '19-add-ad.html', title: 'إضافة إعلان', titleEn: 'Create Ad', tags: ['Ad Placement', 'Scheduling', 'Wallet Payment'], desc: 'إنشاء إعلان بعنوان وصورة أو فيديو، واختيار مكان الظهور والباقة والجدولة قبل الدفع من المحفظة.', descEn: 'Create an ad, select placement, package, schedule, and review wallet payment.', notes: ['التطبيق كله أو القسم أو صفحة المتجر', 'توضيح المجاني والمدفوع', 'جدولة تاريخ ووقت البداية'], notesEn: ['App-wide, category, or storefront placement', 'Free versus paid visibility', 'Start date and time scheduling'] },
+      { id: 55, num: '32', section: 'الموزع', sectionEn: 'Distributor Portal', file: '20-distributor-account.html', title: 'حساب التاجر', titleEn: 'Merchant Account', tags: ['Store Profile', 'Wallet', 'Reviews'], desc: 'إدارة بيانات المتجر والوصول السريع للمحفظة والتقييمات والدردشات والمساعدة.', descEn: 'Manage store profile with quick access to wallet, reviews, chats, and help.', notes: ['بيانات المتجر الأساسية', 'روابط المحفظة والتقييمات', 'شريط تنقل خاص بالتاجر'], notesEn: ['Core store details', 'Wallet and review links', 'Merchant-specific navigation'] },
+      { id: 56, num: '33', section: 'الموزع', sectionEn: 'Distributor Portal', file: '20-distributor-reviews.html', title: 'تقييماتي', titleEn: 'My Reviews', tags: ['Reviews', 'Rating Filter'], desc: 'عرض تقييمات العملاء مع متوسط التقييم وفلاتر الفترة والنجوم.', descEn: 'Customer reviews with rating summary and time or star filters.', notes: ['متوسط التقييم', 'فلترة سريعة', 'تقييمات موثقة مرتبطة بالمنتج'], notesEn: ['Rating average', 'Quick filters', 'Verified product-linked reviews'] },
+      { id: 57, num: '34', section: 'الموزع', sectionEn: 'Distributor Portal', file: '21-distributor-orders.html', title: 'طلبات المتجر', titleEn: 'Merchant Orders', tags: ['Orders', 'Fulfillment', 'Pickup'], desc: 'إدارة طلبات المتجر حسب الحالة مع بيانات العميل والمنتج وإجراءات التأكيد والتجهيز والاستلام.', descEn: 'Manage merchant orders by status with customer, product, confirmation, preparation, and pickup actions.', notes: ['ملخص طلبات ومبيعات اليوم', 'فلترة حسب حالة الطلب', 'إجراءات مباشرة لكل مرحلة'], notesEn: ['Daily order and sales summary', 'Status filters', 'Actions for each fulfillment stage'] },
+      { id: 58, num: '35', section: 'الموزع', sectionEn: 'Distributor Portal', file: '18-distributor-product-details.html', title: 'تحليل أداء المنتج', titleEn: 'Product Performance', tags: ['Product Analytics', 'Conversion', 'Reviews'], desc: 'صفحة شاملة تساعد التاجر على تقييم نجاح المنتج من المبيعات والطلبات والتحويل والتقييمات وصحة المخزون.', descEn: 'A complete product analytics view covering sales, orders, conversion, reviews, and inventory health.', notes: ['مؤشر نجاح واضح من 100', 'رحلة العميل ومعدل التحويل', 'التقييمات وصحة المخزون'], notesEn: ['Clear success score out of 100', 'Customer funnel and conversion', 'Ratings and inventory health'] }
+    );
+
     // الشاشات الحالية المعتمدة في العارض.
     const authScreenFiles = new Set([
       '00-splash.html', '00-splash-01.html', '00-splash-02.html',
       '01-login.html', '02-signup.html', '03-verify-otp.html',
       '04-account-type.html', '05-profile-setup.html',
       '06-distributor-setup.html', '07-forgot-password.html', '07-reset-password.html', '08-profile-setup.html', '08-user-home.html', '15-account.html', '16-orders.html',
-      '09-categories.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '17-wallet.html', '18-wallet-transactions.html', '19-store-details.html', '13-notifications.html', '14-chat-conversation.html', '14-chats.html', '20-checkout.html', '21-order-details.html', '22-rate-order.html', '23-search-results.html', '24-category-details.html', '25-product-reviews.html'
+      '09-categories.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '17-wallet.html', '18-wallet-transactions.html', '19-store-details.html', '13-notifications.html', '14-chat-conversation.html', '14-chats.html', '20-checkout.html', '21-order-details.html', '22-rate-order.html', '23-search-results.html', '24-category-details.html', '25-product-reviews.html', '17-distributor-dashboard.html', '18-distributor-products.html', '18-distributor-product-details.html', '18-add-product.html', '19-distributor-ads.html', '19-add-ad.html', '20-distributor-account.html', '20-distributor-reviews.html', '21-distributor-orders.html'
     ]);
     const authScreenOrder = [
+      '17-distributor-dashboard.html', '18-distributor-products.html', '18-distributor-product-details.html', '21-distributor-orders.html', '19-distributor-ads.html', '18-add-product.html', '19-add-ad.html', '20-distributor-account.html', '20-distributor-reviews.html',
       '00-splash.html', '00-splash-01.html', '00-splash-02.html',
       '01-login.html', '02-signup.html', '03-verify-otp.html',
       '05-profile-setup.html', '04-account-type.html', '08-profile-setup.html',

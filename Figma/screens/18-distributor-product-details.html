@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>سعي — أداء المنتج</title>
+  <link rel="stylesheet" href="auth.css">
+  <link rel="stylesheet" href="user-home.css">
+  <link rel="stylesheet" href="user-home-layout.css">
+  <link rel="stylesheet" href="user-home-structure.css">
+  <link rel="stylesheet" href="user-home-professional.css">
+  <link rel="stylesheet" href="user-home-polish.css">
+  <link rel="stylesheet" href="uber-ui.css">
+  <link rel="stylesheet" href="user-home-waffarha.css">
+  <link rel="stylesheet" href="trader.css">
+</head>
+<body class="saey-home trader-app merchant-product-details-page">
+  <div class="status-bar"><span class="status-time">9:41</span><div class="status-icons"><svg viewBox="0 0 17 11" width="17"><path d="M1 9h3v2H1zm4-3h3v5H5zm4-3h3v8H9zm4-3h3v11h-3z"/></svg><svg viewBox="0 0 16 12" width="16"><path d="M8 10a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M2 5a8.5 8.5 0 0 1 12 0l-1.1 1.1a7 7 0 0 0-9.8 0z"/></svg><svg viewBox="0 0 25 12" width="24"><rect x="1" y="1" width="20" height="10" rx="3" fill="none" stroke="currentColor"/><rect x="3" y="3" width="16" height="6" rx="1.5"/></svg></div></div>
+
+  <main class="product-insights-shell">
+    <header class="product-insights-header"><a href="18-distributor-products.html" aria-label="العودة إلى المنتجات"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a><div><small>تحليل المنتج</small><h1>تفاصيل وأداء المنتج</h1></div><button type="button" id="productActionsToggle" aria-label="خيارات المنتج" aria-expanded="false" aria-controls="productActionsMenu">•••</button>
+      <div class="product-header-actions-menu" id="productActionsMenu" hidden>
+        <a href="18-add-product.html?mode=edit"><svg viewBox="0 0 24 24"><path d="m4 16-.8 4.8L8 20l11-11-4-4L4 16Z"/><path d="m13.5 6.5 4 4"/></svg><span><strong>تعديل المنتج</strong><small>تعديل البيانات والسعر والصور</small></span></a>
+        <button type="button" id="hideProductAction"><svg viewBox="0 0 24 24"><path d="M3 3l18 18M10.6 10.6a2 2 0 0 0 2.8 2.8M9.9 4.2A10.8 10.8 0 0 1 12 4c6.5 0 10 8 10 8a16 16 0 0 1-2.1 3.2M6.2 6.2C3.5 8.2 2 12 2 12s3.5 8 10 8a9.8 9.8 0 0 0 4-.8"/></svg><span><strong>إخفاء المنتج</strong><small>لن يظهر للعملاء في المتجر</small></span></button>
+        <button type="button" id="showProductAction"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg><span><strong>إظهار المنتج</strong><small>إعادة نشره وظهوره للعملاء</small></span></button>
+      </div>
+    </header>
+
+    <section class="insights-product-hero">
+      <div class="insights-product-photo"><img id="insightProductImage" src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=700&q=88" alt="جاكيت جلد طبيعي"><span id="insightProductStatus">منشور</span></div>
+      <div class="insights-product-copy"><small id="insightProductCategory">ملابس رجالي</small><h2 id="insightProductName">جاكيت جلد طبيعي</h2><strong id="insightProductPrice">١,٨٥٠ ج.م</strong><div><span id="insightProductSku">SKU: JK-1042</span><span id="insightProductStock">المخزون ١٨</span></div></div>
+    </section>
+
+    <nav class="product-details-tabs" aria-label="أقسام صفحة المنتج" role="tablist">
+      <button type="button" class="active" id="detailsTab" role="tab" aria-selected="true" aria-controls="detailsPanel" data-product-tab="details">
+        <svg viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>
+        التفاصيل
+      </button>
+      <button type="button" id="performanceTab" role="tab" aria-selected="false" aria-controls="performancePanel" data-product-tab="performance">
+        <svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg>
+        الإحصائيات والأداء
+      </button>
+    </nav>
+
+    <div class="product-tab-panel active" id="detailsPanel" role="tabpanel" aria-labelledby="detailsTab" data-product-panel="details">
+
+    <section class="insights-card product-specs-card">
+      <header class="insights-section-head"><div><h2>بيانات المنتج</h2><p>المعلومات التي تظهر للعملاء في صفحة المنتج</p></div></header>
+      <div class="product-description-block"><strong>وصف المنتج</strong><p id="productFullDescription">جاكيت رجالي من الجلد الطبيعي، بتصميم عملي مناسب للاستخدام اليومي ومبطن من الداخل لراحة أفضل.</p></div>
+      <div class="product-specs-grid"><article><span>القسم</span><strong id="productDetailCategory">ملابس رجالي</strong></article><article><span>حالة النشر</span><strong id="productDetailStatus">منشور</strong></article><article><span>السعر قبل الخصم</span><strong id="productOriginalPrice">٢,٠٥٠ ج.م</strong></article><article><span>الخصم الحالي</span><strong id="productDiscount">١٠٪ حتى ٣٠ سبتمبر</strong></article></div>
+      <div class="product-features-block"><strong>مميزات المنتج</strong><ul id="productFeatures"><li>جلد طبيعي عالي الجودة</li><li>بطانة داخلية مريحة</li><li>مقاوم للهواء</li></ul></div>
+    </section>
+    </div>
+
+    <div class="product-tab-panel" id="performancePanel" role="tabpanel" aria-labelledby="performanceTab" data-product-panel="performance" hidden>
+    <section class="product-success-card">
+      <div class="success-score-ring" id="successScoreRing" style="--score:82"><span><strong id="successScore">٨٢</strong><small>من ١٠٠</small></span></div>
+      <div class="success-score-copy"><span class="success-label"><i></i><b id="successLabel">منتج ناجح</b></span><h2 id="successHeadline">أداؤه أعلى من متوسط متجرك</h2><p id="successDescription">الطلب والتقييم ممتازان، وأفضل فرصة للنمو هي رفع معدل التحويل من المشاهدة للشراء.</p></div>
+    </section>
+
+    <section class="product-kpi-grid">
+      <article><span class="kpi-mini-icon"><svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg></span><small>إجمالي المبيعات</small><strong id="productRevenue">٦٢,٩٠٠ ج.م</strong><em>+١٨٪ هذا الشهر</em></article>
+      <article><span class="kpi-mini-icon"><svg viewBox="0 0 24 24"><path d="M6 2h12l2 5-2 15H6L4 7l2-5Z"/><path d="M9 10a3 3 0 0 0 6 0"/></svg></span><small>الطلبات</small><strong id="productOrders">٣٤</strong><em>+٦ طلبات</em></article>
+      <article><span class="kpi-mini-icon"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/></svg></span><small>المشاهدات</small><strong id="productViews">١.٨K</strong><em>+٢٤٪</em></article>
+      <article><span class="kpi-mini-icon"><svg viewBox="0 0 24 24"><path d="M4 17 10 11l4 4 6-8"/><path d="M15 7h5v5"/></svg></span><small>معدل التحويل</small><strong id="productConversion">١.٩٪</strong><em class="needs-work">يحتاج تحسينًا</em></article>
+    </section>
+
+    <section class="insights-card product-sales-performance">
+      <header class="insights-section-head"><div><h2>أداء المبيعات</h2><p>قيمة المبيعات خلال آخر ٣٠ يومًا</p></div><button type="button">٣٠ يومًا <svg viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></svg></button></header>
+      <div class="insights-chart-total"><div><small>إجمالي الفترة</small><strong>١٨,٥٠٠ ج.م</strong></div><span>+١٨٪</span></div>
+      <div class="product-performance-chart">
+        <svg viewBox="0 0 350 130" preserveAspectRatio="none"><defs><linearGradient id="productChartFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#111" stop-opacity=".16"/><stop offset="1" stop-color="#111" stop-opacity="0"/></linearGradient></defs><path class="product-chart-grid" d="M0 25H350M0 65H350M0 105H350"/><path class="product-chart-area" d="M0 110C35 105 48 86 78 90S120 62 152 70s43 4 64-18 53-3 73-22 42-10 61-21V130H0Z"/><path class="product-chart-line" d="M0 110C35 105 48 86 78 90S120 62 152 70s43 4 64-18 53-3 73-22 42-10 61-21"/><g><circle cx="0" cy="110" r="4"/><circle cx="78" cy="90" r="4"/><circle cx="152" cy="70" r="4"/><circle cx="216" cy="52" r="4"/><circle cx="289" cy="30" r="4"/><circle cx="350" cy="9" r="5"/></g></svg>
+        <div><span>الأسبوع ١</span><span>الأسبوع ٢</span><span>الأسبوع ٣</span><span>الأسبوع ٤</span></div>
+      </div>
+    </section>
+
+    <section class="insights-card conversion-funnel-card">
+      <header class="insights-section-head"><div><h2>رحلة العميل</h2><p>من مشاهدة المنتج حتى إتمام الطلب</p></div></header>
+      <div class="conversion-funnel"><div><span>مشاهدة</span><strong>١,٨٠٠</strong><i style="--width:100%"></i></div><div><span>فتح التفاصيل</span><strong>٦٢٠</strong><i style="--width:72%"></i></div><div><span>بدء الشراء</span><strong>٧٨</strong><i style="--width:39%"></i></div><div><span>طلب مكتمل</span><strong>٣٤</strong><i style="--width:22%"></i></div></div>
+    </section>
+
+    <section class="insights-card rating-insights-card">
+      <header class="insights-section-head"><div><h2>التقييمات</h2><p>آراء العملاء المشترين للمنتج</p></div><a href="20-distributor-reviews.html">عرض الكل</a></header>
+      <div class="rating-overview"><div class="rating-number"><strong id="productRating">٤.٨</strong><span>★★★★★</span><small id="productRatingCount">من ٢٦ تقييمًا</small></div><div class="rating-bars"><div><span>٥</span><i><b style="--rating-width:84%"></b></i><small>٢١</small></div><div><span>٤</span><i><b style="--rating-width:12%"></b></i><small>٣</small></div><div><span>٣</span><i><b style="--rating-width:7%"></b></i><small>٢</small></div><div><span>٢</span><i><b style="--rating-width:0%"></b></i><small>٠</small></div><div><span>١</span><i><b style="--rating-width:0%"></b></i><small>٠</small></div></div></div>
+      <div class="product-latest-review"><header><strong>سارة أحمد</strong><span>★★★★★</span></header><p>الخامة ممتازة والمقاس مضبوط، والمنتج كان جاهزًا للاستلام في نفس اليوم.</p><small>منذ ساعتين · شراء موثق</small></div>
+    </section>
+
+    <section class="insights-card inventory-health-card">
+      <header class="insights-section-head"><div><h2>صحة المخزون</h2><p>التوفر المتوقع حسب معدل البيع الحالي</p></div></header>
+      <div class="inventory-health-row"><span class="inventory-icon"><svg viewBox="0 0 24 24"><path d="m4 8 8-4 8 4-8 4-8-4Z"/><path d="M4 8v8l8 4 8-4V8M12 12v8"/></svg></span><div><strong>١٨ قطعة متاحة</strong><small>تكفي تقريبًا لمدة ١٦ يومًا</small></div><span class="inventory-good">جيد</span></div>
+      <div class="inventory-progress"><i></i></div>
+    </section>
+    </div>
+  </main>
+
+  <script>
+    const products = {
+      jacket: { name:'جاكيت جلد طبيعي', category:'ملابس رجالي', price:'١,٨٥٠ ج.م', originalPrice:'٢,٠٥٠ ج.م', discount:'١٠٪ حتى ٣٠ سبتمبر', sku:'SKU: JK-1042', stock:'المخزون ١٨', status:'منشور', fullDescription:'جاكيت رجالي من الجلد الطبيعي، بتصميم عملي مناسب للاستخدام اليومي ومبطن من الداخل لراحة أفضل.', features:['جلد طبيعي عالي الجودة','بطانة داخلية مريحة','مقاوم للهواء'], image:'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=700&q=88', score:82, label:'منتج ناجح', headline:'أداؤه أعلى من متوسط متجرك', description:'الطلب والتقييم ممتازان، وأفضل فرصة للنمو هي رفع معدل التحويل من المشاهدة للشراء.', revenue:'٦٢,٩٠٠ ج.م', orders:'٣٤', views:'١.٨K', conversion:'١.٩٪', rating:'٤.٨', ratings:'من ٢٦ تقييمًا' },
+      shoe: { name:'حذاء رياضي أبيض', category:'أحذية', price:'٩٥٠ ج.م', originalPrice:'٩٥٠ ج.م', discount:'لا يوجد خصم', sku:'SKU: SH-2081', stock:'متبقي ٣', status:'منشور', fullDescription:'حذاء رياضي خفيف ومريح للمشي والاستخدام اليومي، بنعل مرن وخامة سهلة التنظيف.', features:['نعل مرن ومريح','خامة خفيفة','مناسب للاستخدام اليومي'], image:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=88', score:76, label:'أداء جيد', headline:'المنتج مطلوب لكن المخزون منخفض', description:'معدل الطلب جيد جدًا. إعادة تعبئة المخزون الآن تمنع خسارة مبيعات متوقعة خلال الأيام القادمة.', revenue:'١٩,٩٥٠ ج.م', orders:'٢١', views:'١.٢K', conversion:'١.٨٪', rating:'٤.٧', ratings:'من ١٨ تقييمًا' },
+      backpack: { name:'حقيبة ظهر عملية', category:'إكسسوارات', price:'٦٨٠ ج.م', originalPrice:'٦٨٠ ج.م', discount:'غير مفعّل', sku:'SKU: BG-3014', stock:'المخزون ٢٤', status:'قيد المراجعة', fullDescription:'حقيبة ظهر عملية متعددة الجيوب مناسبة للعمل والدراسة والتنقل اليومي.', features:['جيب مبطن للابتوب','خامة مقاومة للماء','أحزمة كتف مريحة'], image:'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=700&q=88', score:42, label:'بيانات أولية', headline:'المنتج لم يبدأ البيع بعد', description:'أكمل المراجعة وانشر المنتج لجمع بيانات كافية عن المشاهدات والطلبات والتقييمات.', revenue:'٠ ج.م', orders:'٠', views:'—', conversion:'—', rating:'—', ratings:'لا توجد تقييمات بعد' },
+      watch: { name:'ساعة رياضية ذكية', category:'إلكترونيات', price:'٢,٤٠٠ ج.م', originalPrice:'٢,٤٠٠ ج.م', discount:'غير مفعّل', sku:'SKU: WT-4072', stock:'غير منشور', status:'مسودة', fullDescription:'ساعة ذكية لمتابعة النشاط اليومي ومعدل نبض القلب والإشعارات.', features:['متابعة النشاط اليومي','مقاومة للماء','بطارية تدوم عدة أيام'], image:'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=88', score:18, label:'غير جاهز للتقييم', headline:'انشر المنتج لبدء قياس نجاحه', description:'لا توجد بيانات أداء حتى الآن. أكمل الصور والوصف ثم انشر المنتج ليظهر للعملاء.', revenue:'٠ ج.م', orders:'٠', views:'—', conversion:'—', rating:'—', ratings:'لا توجد تقييمات بعد' }
+    };
+    const product = products[new URLSearchParams(location.search).get('product')] || products.jacket;
+    const setText = (id, value) => { document.getElementById(id).textContent = value; };
+    document.getElementById('insightProductImage').src = product.image;
+    document.getElementById('insightProductImage').alt = product.name;
+    setText('insightProductStatus', product.status);
+    setText('insightProductCategory', product.category);
+    setText('insightProductName', product.name);
+    setText('insightProductPrice', product.price);
+    setText('insightProductSku', product.sku);
+    setText('insightProductStock', product.stock);
+    document.getElementById('successScoreRing').style.setProperty('--score', product.score);
+    setText('successScore', product.score.toLocaleString('ar-EG'));
+    setText('successLabel', product.label);
+    setText('successHeadline', product.headline);
+    setText('successDescription', product.description);
+    setText('productFullDescription', product.fullDescription);
+    setText('productDetailCategory', product.category);
+    setText('productDetailStatus', product.status);
+    setText('productOriginalPrice', product.originalPrice);
+    setText('productDiscount', product.discount);
+    document.getElementById('productFeatures').innerHTML = product.features.map((feature) => `<li>${feature}</li>`).join('');
+    setText('productRevenue', product.revenue);
+    setText('productOrders', product.orders);
+    setText('productViews', product.views);
+    setText('productConversion', product.conversion);
+    setText('productRating', product.rating);
+    setText('productRatingCount', product.ratings);
+
+    const tabButtons = [...document.querySelectorAll('[data-product-tab]')];
+    const tabPanels = [...document.querySelectorAll('[data-product-panel]')];
+    const activateTab = (tabName) => {
+      tabButtons.forEach((button) => {
+        const isActive = button.dataset.productTab === tabName;
+        button.classList.toggle('active', isActive);
+        button.setAttribute('aria-selected', String(isActive));
+      });
+      tabPanels.forEach((panel) => {
+        const isActive = panel.dataset.productPanel === tabName;
+        panel.classList.toggle('active', isActive);
+        panel.hidden = !isActive;
+      });
+      document.querySelector('.product-insights-shell').scrollTo({ top: 0, behavior: 'smooth' });
+    };
+    tabButtons.forEach((button) => button.addEventListener('click', () => activateTab(button.dataset.productTab)));
+    if (new URLSearchParams(location.search).get('tab') === 'performance') activateTab('performance');
+
+    const actionsToggle = document.getElementById('productActionsToggle');
+    const actionsMenu = document.getElementById('productActionsMenu');
+    const closeActionsMenu = () => {
+      actionsMenu.hidden = true;
+      actionsToggle.setAttribute('aria-expanded', 'false');
+    };
+    actionsToggle.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const shouldOpen = actionsMenu.hidden;
+      actionsMenu.hidden = !shouldOpen;
+      actionsToggle.setAttribute('aria-expanded', String(shouldOpen));
+    });
+    actionsMenu.addEventListener('click', (event) => event.stopPropagation());
+    document.addEventListener('click', closeActionsMenu);
+    document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeActionsMenu(); });
+
+    const updateProductVisibility = (isVisible) => {
+      const status = isVisible ? 'منشور' : 'مخفي';
+      setText('insightProductStatus', status);
+      setText('productDetailStatus', status);
+      document.getElementById('insightProductStatus').classList.toggle('is-hidden', !isVisible);
+      closeActionsMenu();
+    };
+    document.getElementById('hideProductAction').addEventListener('click', () => updateProductVisibility(false));
+    document.getElementById('showProductAction').addEventListener('click', () => updateProductVisibility(true));
+    if (new URLSearchParams(location.search).get('menu') === 'open') actionsToggle.click();
+  </script>
+</body>
+</html>

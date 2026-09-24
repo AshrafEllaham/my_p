@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>سعي — إضافة منتج</title>
+  <link rel="stylesheet" href="auth.css">
+  <link rel="stylesheet" href="user-home.css">
+  <link rel="stylesheet" href="user-home-layout.css">
+  <link rel="stylesheet" href="user-home-structure.css">
+  <link rel="stylesheet" href="user-home-professional.css">
+  <link rel="stylesheet" href="user-home-polish.css">
+  <link rel="stylesheet" href="uber-ui.css">
+  <link rel="stylesheet" href="user-home-waffarha.css">
+  <link rel="stylesheet" href="trader.css">
+</head>
+<body class="saey-home trader-app product-editor-page">
+  <div class="status-bar"><span class="status-time">9:41</span><div class="status-icons"><svg viewBox="0 0 17 11" width="17"><path d="M1 9h3v2H1zm4-3h3v5H5zm4-3h3v8H9zm4-3h3v11h-3z"/></svg><svg viewBox="0 0 16 12" width="16"><path d="M8 10a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M2 5a8.5 8.5 0 0 1 12 0l-1.1 1.1a7 7 0 0 0-9.8 0z"/></svg><svg viewBox="0 0 25 12" width="24"><rect x="1" y="1" width="20" height="10" rx="3" fill="none" stroke="currentColor"/><rect x="3" y="3" width="16" height="6" rx="1.5"/></svg></div></div>
+
+  <main class="product-editor-shell">
+    <header class="product-editor-header">
+      <a class="product-editor-back" href="18-distributor-products.html" aria-label="العودة إلى المنتجات"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a>
+      <div><small id="editorEyebrow">منتج جديد</small><h1 id="editorTitle">إضافة منتج</h1></div>
+      <span class="editor-save-state"><i></i> محفوظ تلقائيًا</span>
+    </header>
+
+    <section class="editor-progress" aria-label="خطوات إضافة المنتج"><span class="active"></span><span class="active"></span><span></span></section>
+
+    <form class="product-editor-form" id="productForm">
+      <section class="editor-card media-editor-card">
+        <div class="editor-section-heading"><div><h2>صور المنتج</h2><p>الصورة الأولى ستكون غلاف المنتج</p></div><span id="imageCount">٠ / ٦</span></div>
+        <div class="product-media-grid" id="mediaGrid">
+          <label class="primary-upload" for="productImages"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg><strong>إضافة صور</strong><small>JPG أو PNG</small></label>
+          <span class="empty-media"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="m7 16 3-3 2 2 3-4 3 5"/></svg></span>
+          <span class="empty-media"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="m7 16 3-3 2 2 3-4 3 5"/></svg></span>
+          <input id="productImages" type="file" accept="image/*" multiple hidden>
+        </div>
+      </section>
+
+      <section class="editor-card">
+        <div class="editor-section-heading"><div><h2>بيانات المنتج</h2><p>أضف المعلومات الأساسية التي ستظهر للعميل</p></div><span class="required-note">* مطلوب</span></div>
+
+        <label class="editor-field" for="productName"><span>اسم المنتج *</span><div class="editor-control"><svg viewBox="0 0 24 24"><path d="m4 8 8-4 8 4-8 4-8-4Z"/><path d="M4 8v8l8 4 8-4V8M12 12v8"/></svg><input id="productName" required placeholder="مثال: جاكيت جلد طبيعي"></div></label>
+
+        <label class="editor-field" for="subCategory"><span>القسم *</span><div class="editor-control select-control"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h7"/></svg><select id="subCategory" required aria-describedby="subCategoryHint"></select><svg class="select-chevron" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></svg></div><small id="subCategoryHint">اختر القسم المناسب للمنتج</small></label>
+
+        <label class="editor-field" for="productDescription"><span>وصف المنتج *</span><div class="editor-textarea"><textarea id="productDescription" maxlength="300" required placeholder="اكتب وصفًا واضحًا للمنتج، خامته واستخدامه..."></textarea><small><b id="descriptionCount">٠</b> / ٣٠٠</small></div></label>
+
+        <div class="features-editor">
+          <div class="features-editor-head"><div><strong>مميزات المنتج</strong><small>أضف كل ميزة في عنصر منفصل</small></div><span id="featuresCount" dir="ltr">١ / ٨</span></div>
+          <div class="features-list" id="featuresList"></div>
+          <button class="add-feature-button" type="button" id="addFeature"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>إضافة ميزة أخرى</button>
+        </div>
+      </section>
+
+      <section class="editor-card">
+        <div class="editor-section-heading"><div><h2>السعر والمخزون</h2><p>حدد السعر والكمية المتاحة للبيع</p></div></div>
+        <div class="editor-fields-row">
+          <label class="editor-field" for="productPrice"><span>السعر *</span><div class="editor-control"><input id="productPrice" type="number" min="0" required placeholder="٠٫٠٠"><b>ج.م</b></div></label>
+          <label class="editor-field" for="productStock"><span>الكمية *</span><div class="editor-control"><input id="productStock" type="number" min="0" required placeholder="٠"><b>قطعة</b></div></label>
+        </div>
+        <label class="discount-switch"><span><strong>إضافة خصم</strong><small>اعرض سعرًا مخفضًا لفترة محددة</small></span><input id="discountToggle" type="checkbox"><i></i></label>
+        <div class="discount-fields" id="discountFields">
+          <label class="editor-field" for="discountValue"><span>نسبة الخصم</span><div class="editor-control"><input id="discountValue" type="number" min="1" max="90" placeholder="١٠"><b>%</b></div></label>
+          <label class="editor-field" for="discountEnd"><span>ينتهي في</span><div class="editor-control"><input id="discountEnd" type="text" inputmode="numeric" placeholder="يوم / شهر / سنة" maxlength="10"><svg class="date-field-icon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg></div></label>
+        </div>
+      </section>
+
+      <section class="editor-card compact-editor-card">
+        <label class="publish-row"><span class="publish-icon"><svg viewBox="0 0 24 24"><path d="M4 12.5 9 17l11-11"/></svg></span><span><strong>نشر المنتج مباشرة</strong><small>يمكنك إخفاؤه لاحقًا من صفحة منتجاتي</small></span><input id="publishToggle" type="checkbox" checked><i></i></label>
+      </section>
+    </form>
+  </main>
+
+  <footer class="product-editor-actions"><button class="save-draft-button" type="button" id="saveDraft">حفظ كمسودة</button><button class="publish-product-button" type="submit" form="productForm" id="publishProduct"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span>حفظ ونشر المنتج</span></button></footer>
+
+  <script>
+    const categoryMap = {
+      'أجهزة وإلكترونيات': ['موبايلات', 'لابتوبات', 'سماعات', 'ساعات ذكية', 'إكسسوارات إلكترونية'],
+      'مواد غذائية وتوزيع': ['مشروبات', 'بقالة', 'حلويات', 'ألبان', 'مجمدات'],
+      'أزياء وملابس': ['ملابس رجالي', 'ملابس حريمي', 'أحذية', 'حقائب وإكسسوارات', 'ملابس أطفال'],
+      'عناية ومنظفات': ['عناية شخصية', 'عناية بالبشرة', 'عناية بالشعر', 'منظفات منزلية', 'عطور'],
+      'أدوات منزلية ومكتبية': ['أدوات مطبخ', 'ديكور', 'أدوات مكتبية', 'تخزين وتنظيم', 'مفروشات'],
+      'قطع غيار ومعدات': ['قطع غيار سيارات', 'معدات صناعية', 'أدوات يدوية', 'مستلزمات صيانة', 'إطارات وبطاريات']
+    };
+
+    const params = new URLSearchParams(location.search);
+    const isEditMode = params.get('mode') === 'edit';
+    const storeCategory = localStorage.getItem('saeyStoreCategory') || 'أزياء وملابس';
+    const subCategories = categoryMap[storeCategory] || categoryMap['أزياء وملابس'];
+    const subCategorySelect = document.getElementById('subCategory');
+
+    subCategorySelect.innerHTML = `<option value="">اختر القسم</option>${subCategories.map((category) => `<option value="${category}">${category}</option>`).join('')}`;
+
+    if (isEditMode) {
+      document.title = 'سعي — تعديل المنتج';
+      document.getElementById('editorEyebrow').textContent = 'تحديث بيانات المنتج';
+      document.getElementById('editorTitle').textContent = 'تعديل المنتج';
+      document.getElementById('publishProduct').querySelector('span').textContent = 'حفظ التعديلات';
+      document.getElementById('productName').value = 'جاكيت جلد طبيعي';
+      document.getElementById('productDescription').value = 'جاكيت رجالي من الجلد الطبيعي، بتصميم عملي مناسب للاستخدام اليومي.';
+      document.getElementById('productPrice').value = '1850';
+      document.getElementById('productStock').value = '18';
+      subCategorySelect.value = subCategories.includes('ملابس رجالي') ? 'ملابس رجالي' : subCategories[0];
+    }
+
+    const featuresList = document.getElementById('featuresList');
+    const featuresCount = document.getElementById('featuresCount');
+    const editFeatures = ['جلد طبيعي عالي الجودة', 'بطانة داخلية مريحة', 'مقاوم للهواء'];
+
+    const updateFeaturesCount = () => {
+      const count = featuresList.querySelectorAll('.feature-item').length;
+      featuresCount.textContent = `${count.toLocaleString('ar-EG')} / ٨`;
+      document.getElementById('addFeature').disabled = count >= 8;
+      featuresList.querySelectorAll('.feature-item').forEach((item, index) => {
+        item.querySelector('.feature-number').textContent = (index + 1).toLocaleString('ar-EG');
+        item.querySelector('.remove-feature').disabled = count === 1;
+      });
+    };
+
+    const addFeatureItem = (value = '') => {
+      if (featuresList.children.length >= 8) return;
+      const item = document.createElement('div');
+      item.className = 'feature-item';
+      item.innerHTML = `<span class="feature-number"></span><input type="text" maxlength="80" placeholder="مثال: خامة عالية الجودة" value="${value}"><button class="remove-feature" type="button" aria-label="حذف الميزة"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 15H6L5 6M10 11v5M14 11v5"/></svg></button>`;
+      item.querySelector('.remove-feature').addEventListener('click', () => {
+        if (featuresList.children.length > 1) item.remove();
+        updateFeaturesCount();
+      });
+      featuresList.appendChild(item);
+      updateFeaturesCount();
+    };
+
+    (isEditMode ? editFeatures : ['']).forEach(addFeatureItem);
+    document.getElementById('addFeature').addEventListener('click', () => addFeatureItem());
+
+    const description = document.getElementById('productDescription');
+    const updateDescriptionCount = () => { document.getElementById('descriptionCount').textContent = description.value.length.toLocaleString('ar-EG'); };
+    description.addEventListener('input', updateDescriptionCount);
+    updateDescriptionCount();
+
+    const discountToggle = document.getElementById('discountToggle');
+    discountToggle.addEventListener('change', () => document.getElementById('discountFields').classList.toggle('visible', discountToggle.checked));
+
+    document.getElementById('productImages').addEventListener('change', (event) => {
+      const files = [...event.target.files].slice(0, 6);
+      document.getElementById('imageCount').textContent = `${files.length.toLocaleString('ar-EG')} / ٦`;
+      document.querySelectorAll('.media-preview').forEach((preview) => preview.remove());
+      files.slice(0, 2).forEach((file) => {
+        const preview = document.createElement('span');
+        preview.className = 'media-preview';
+        preview.style.backgroundImage = `url('${URL.createObjectURL(file)}')`;
+        document.getElementById('mediaGrid').insertBefore(preview, document.getElementById('productImages'));
+      });
+    });
+
+    document.querySelectorAll('.product-editor-form input,.product-editor-form textarea,.product-editor-form select').forEach((control) => {
+      control.addEventListener('change', () => {
+        const saveState = document.querySelector('.editor-save-state');
+        saveState.lastChild.textContent = ' تم الحفظ';
+      });
+    });
+
+    document.getElementById('saveDraft').addEventListener('click', () => location.href = '18-distributor-products.html');
+    document.getElementById('productForm').addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (event.currentTarget.reportValidity()) location.href = '18-distributor-products.html';
+    });
+  </script>
+</body>
+</html>

@@ -279,7 +279,9 @@
 
     document.querySelectorAll('#categoryMenu .barq-dropdown-item').forEach(item => {
       item.addEventListener('click', () => {
-        categoryValue.textContent = item.textContent;
+        const selectedCategory = item.dataset.cat || item.textContent.trim();
+        categoryValue.textContent = selectedCategory;
+        localStorage.setItem('saeyStoreCategory', selectedCategory);
         categoryValue.classList.remove('placeholder');
         categoryMenu.classList.remove('open');
         categoryBox.setAttribute('aria-expanded', 'false');
