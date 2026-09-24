@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>سعي — تقييماتي</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="auth.css">
   <link rel="stylesheet" href="user-home.css">
   <link rel="stylesheet" href="user-home-layout.css">
@@ -18,7 +21,8 @@
     .reviews-shell {
       display: flex;
       flex-direction: column;
-      height: 100%;
+      flex: 1;
+      min-height: 0;
       background: #F7F9FC;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
@@ -30,15 +34,15 @@
     .reviews-header {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       padding: 14px 16px 10px;
       background: #fff;
       border-bottom: 1px solid #E1E8F1;
       position: sticky;
       top: 0;
-      z-index: 10;
+      z-index: 20;
     }
-    .reviews-header a {
+    .reviews-header a.back-btn {
       width: 36px; height: 36px;
       border-radius: 50%;
       border: 1px solid #E1E8F1;
@@ -47,58 +51,68 @@
       flex-shrink: 0;
       color: #0F172A;
       text-decoration: none;
+      transition: background .15s;
     }
-    .reviews-header a svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    .reviews-header-copy { flex: 1; }
-    .reviews-header-copy small { display: block; font-size: 10px; color: #94A3B8; font-weight: 600; }
-    .reviews-header-copy h1 { font-size: 16px; font-weight: 800; color: #0F172A; }
+    .reviews-header a.back-btn:active { background: #F1F5F9; }
+    .reviews-header a.back-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .reviews-header-copy { flex: 1; min-width: 0; }
+    .reviews-header-copy small { display: block; font-size: 10px; color: #94A3B8; font-weight: 700; }
+    .reviews-header-copy h1 { font-size: 16px; font-weight: 900; color: #0F172A; }
 
     /* ── Rating summary hero ── */
     .reviews-summary {
-      margin: 14px 14px 0;
+      margin: 12px 14px 0;
       background: #fff;
       border: 1px solid #E1E8F1;
       border-radius: 18px;
-      padding: 18px 16px;
+      padding: 18px 16px 14px;
+      box-shadow: 0 4px 16px rgba(15,23,42,.03);
     }
     .reviews-summary-top {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 18px;
     }
     .reviews-big-score {
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-width: 64px;
+      min-width: 80px;
+      flex-shrink: 0;
     }
     .reviews-big-score strong {
-      font-size: 42px;
+      font-size: 40px;
       font-weight: 900;
       color: #0F172A;
+      font-family: 'Inter', 'Cairo', sans-serif;
       line-height: 1;
+      letter-spacing: -0.5px;
     }
     .reviews-big-score .stars-row {
-      color: #F59E0B;
-      font-size: 13px;
-      margin: 4px 0 2px;
-      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      margin: 6px 0 3px;
+    }
+    .reviews-big-score .stars-row svg {
+      width: 14px; height: 14px; fill: #F59E0B;
     }
     .reviews-big-score small {
-      font-size: 10px;
+      font-size: 10.5px;
       color: #94A3B8;
-      font-weight: 600;
+      font-weight: 700;
       white-space: nowrap;
     }
-    .reviews-bars { flex: 1; display: flex; flex-direction: column; gap: 5px; }
-    .reviews-bar-row { display: flex; align-items: center; gap: 6px; }
-    .reviews-bar-row span { font-size: 10px; color: #64748B; font-weight: 700; width: 12px; text-align: center; }
-    .reviews-bar-track { flex: 1; height: 6px; background: #F1F5F9; border-radius: 20px; overflow: hidden; }
-    .reviews-bar-fill  { height: 100%; background: #F59E0B; border-radius: 20px; }
-    .reviews-bar-row small { font-size: 10px; color: #94A3B8; font-weight: 600; width: 22px; text-align: left; }
+    .reviews-bars { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    .reviews-bar-row { display: flex; align-items: center; gap: 8px; }
+    .reviews-bar-row span { font-size: 11px; color: #64748B; font-weight: 800; width: 12px; text-align: center; font-family: 'Inter', sans-serif; }
+    .reviews-bar-track { flex: 1; height: 7px; background: #F1F5F9; border-radius: 20px; overflow: hidden; }
+    .reviews-bar-fill  { height: 100%; background: #0F172A; border-radius: 20px; transition: width .4s ease; }
+    .reviews-bar-fill.gold { background: #F59E0B; }
+    .reviews-bar-row small { font-size: 10.5px; color: #94A3B8; font-weight: 700; width: 22px; text-align: left; font-family: 'Inter', sans-serif; }
     .reviews-summary-sub {
       display: flex;
-      gap: 8px;
+      align-items: center;
       margin-top: 14px;
       padding-top: 12px;
       border-top: 1px solid #F1F5F9;
@@ -111,49 +125,44 @@
       align-items: center;
       gap: 2px;
     }
-    .reviews-sub-stat strong { font-size: 16px; font-weight: 900; color: #0F172A; }
-    .reviews-sub-stat small  { font-size: 10px; color: #94A3B8; font-weight: 600; }
+    .reviews-sub-stat strong { font-size: 16px; font-weight: 900; color: #0F172A; font-family: 'Inter', 'Cairo', sans-serif; }
+    .reviews-sub-stat small  { font-size: 10.5px; color: #94A3B8; font-weight: 700; }
+    .reviews-sub-stat strong.green { color: #059669; }
     .reviews-sub-divider {
       width: 1px;
+      height: 24px;
       background: #E1E8F1;
-      align-self: stretch;
+      align-self: center;
     }
 
-    /* ── Date filter ── */
-    .reviews-filter-row {
+    /* ── Period selector ── */
+    .reviews-period-bar {
       display: flex;
-      align-items: center;
-      gap: 8px;
+      gap: 6px;
       padding: 12px 14px 0;
+      overflow-x: auto;
+      scrollbar-width: none;
     }
-    .reviews-filter-row label { font-size: 11px; color: #64748B; font-weight: 700; flex-shrink: 0; }
-    .reviews-date-input {
-      flex: 1;
-      height: 38px;
-      border: 1px solid #E1E8F1;
-      border-radius: 10px;
-      background: #fff;
-      padding: 0 10px;
-      font-size: 11px;
-      font-weight: 600;
-      color: #0F172A;
-      font-family: inherit;
-      direction: ltr;
-      text-align: right;
-    }
-    .reviews-date-input:focus { outline: none; border-color: #000; }
-    .reviews-filter-sep { font-size: 11px; color: #94A3B8; flex-shrink: 0; }
-    .reviews-filter-btn {
-      height: 38px;
-      padding: 0 14px;
-      border-radius: 10px;
-      background: #000;
-      color: #fff;
-      font-size: 12px;
-      font-weight: 700;
-      border: none;
-      cursor: pointer;
+    .reviews-period-bar::-webkit-scrollbar { display: none; }
+    .reviews-period-chip {
       flex-shrink: 0;
+      height: 32px;
+      padding: 0 12px;
+      border-radius: 10px;
+      border: 1px solid #E1E8F1;
+      background: #fff;
+      font: 800 11px 'Cairo', sans-serif;
+      color: #64748B;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .15s;
+    }
+    .reviews-period-chip:hover { border-color: #000; color: #000; }
+    .reviews-period-chip.active {
+      background: #000;
+      border-color: #000;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,.12);
     }
 
     /* ── Stars filter tabs ── */
@@ -167,42 +176,78 @@
     .reviews-star-tabs::-webkit-scrollbar { display: none; }
     .reviews-star-tab {
       flex-shrink: 0;
-      height: 32px;
-      padding: 0 12px;
-      border-radius: 20px;
+      height: 34px;
+      padding: 0 10px;
+      border-radius: 10px;
       border: 1px solid #E1E8F1;
       background: #fff;
-      font-size: 11px;
-      font-weight: 700;
+      font: 800 11px 'Cairo', sans-serif;
       color: #64748B;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
       transition: all .15s;
     }
+    .reviews-star-tab b {
+      min-width: 20px;
+      height: 20px;
+      display: grid;
+      place-items: center;
+      padding: 0 4px;
+      border-radius: 6px;
+      background: #F1F5F9;
+      color: #64748B;
+      font: 800 10px 'Inter', sans-serif;
+    }
+    .reviews-star-tab:hover { border-color: #CBD5E1; color: #0F172A; }
     .reviews-star-tab.active {
       background: #000;
       border-color: #000;
       color: #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,.12);
     }
-    .reviews-star-tab .star-color { color: #F59E0B; }
+    .reviews-star-tab.active b {
+      background: rgba(255,255,255,.18);
+      color: #fff;
+    }
+    .reviews-star-tab .star-color {
+      color: #F59E0B;
+      font-size: 13px;
+      line-height: 1;
+    }
 
-    /* ── Count label ── */
+    /* ── Count & status ── */
+    .reviews-count-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 14px 8px;
+    }
     .reviews-count-label {
-      padding: 10px 14px 6px;
       font-size: 12px;
+      color: #64748B;
+      font-weight: 800;
+    }
+    .reviews-sort-hint {
+      font-size: 11px;
       color: #94A3B8;
-      font-weight: 600;
+      font-weight: 700;
     }
 
     /* ── Review cards ── */
+    .reviews-list-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
     .review-card {
-      margin: 0 14px 10px;
+      margin: 0 14px;
       background: #fff;
       border: 1px solid #E1E8F1;
-      border-radius: 14px;
-      padding: 14px;
+      border-radius: 16px;
+      padding: 14px 16px;
+      box-shadow: 0 4px 16px rgba(15,23,42,.03);
     }
     .review-card-head {
       display: flex;
@@ -211,67 +256,210 @@
       margin-bottom: 8px;
     }
     .review-avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
       background: #F1F5F9;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 13px;
-      font-weight: 800;
+      font-size: 14px;
+      font-weight: 900;
       color: #0F172A;
       flex-shrink: 0;
     }
-    .review-card-meta { flex: 1; }
-    .review-card-meta strong { display: block; font-size: 13px; font-weight: 800; color: #0F172A; }
-    .review-card-meta .review-stars { color: #F59E0B; font-size: 12px; letter-spacing: 1px; }
-    .review-card-meta time { display: block; font-size: 10px; color: #94A3B8; font-weight: 600; margin-top: 1px; }
+    .review-avatar.purple { background: #F3E8FF; color: #7E22CE; }
+    .review-avatar.blue   { background: #EFF6FF; color: #1D4ED8; }
+    .review-avatar.green  { background: #ECFDF5; color: #047857; }
+    .review-avatar.amber  { background: #FEF3C7; color: #B45309; }
+
+    .review-card-meta { flex: 1; min-width: 0; }
+    .review-card-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .review-card-top-row strong {
+      font-size: 13px;
+      font-weight: 800;
+      color: #0F172A;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .review-card-top-row time {
+      font-size: 10px;
+      color: #94A3B8;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .review-stars-wrap {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      margin-top: 2px;
+    }
+    .review-stars-wrap svg { width: 12px; height: 12px; fill: #F59E0B; }
+    .review-stars-wrap svg.empty { fill: #E2E8F0; }
+
     .review-product-chip {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
       background: #F8FAFC;
       border: 1px solid #E1E8F1;
       border-radius: 8px;
       padding: 3px 8px;
-      font-size: 10px;
-      color: #64748B;
-      font-weight: 600;
-      margin-top: 2px;
+      font-size: 10.5px;
+      color: #475569;
+      font-weight: 700;
+      margin-top: 6px;
     }
-    .review-product-chip svg { width: 10px; height: 10px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .review-product-chip svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
     .review-card p {
-      font-size: 12px;
+      font-size: 12.5px;
       color: #334155;
       line-height: 1.6;
-      margin-bottom: 8px;
+      margin: 8px 0;
+    }
+
+    .review-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid #F8FAFC;
     }
     .review-verified {
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      font-size: 10px;
+      font-size: 10.5px;
       color: #059669;
-      font-weight: 700;
+      font-weight: 800;
     }
-    .review-verified svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    .review-verified svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    .review-reply-btn {
+      border: 1px solid #E1E8F1;
+      background: #F8FAFC;
+      border-radius: 8px;
+      padding: 4px 10px;
+      font: 800 11px 'Cairo', sans-serif;
+      color: #0F172A;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all .15s;
+    }
+    .review-reply-btn:hover { background: #000; color: #fff; border-color: #000; }
+    .review-reply-btn svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── Merchant reply block ── */
+    .merchant-reply-block {
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: #F8FAFC;
+      border-radius: 12px;
+      border-right: 3px solid #000;
+    }
+    .merchant-reply-block small {
+      display: block;
+      font-size: 10px;
+      font-weight: 800;
+      color: #0F172A;
+      margin-bottom: 3px;
+    }
+    .merchant-reply-block p {
+      margin: 0;
+      font-size: 11.5px;
+      color: #475569;
+      line-height: 1.5;
+    }
 
     /* ── Empty state ── */
     .reviews-empty {
-      display: flex;
+      display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 48px 24px;
+      padding: 48px 20px;
       text-align: center;
       color: #94A3B8;
+      margin: 0 14px;
+      background: #fff;
+      border: 1px dashed #CBD5E1;
+      border-radius: 16px;
     }
-    .reviews-empty svg { width: 40px; height: 40px; fill: none; stroke: #CBD5E1; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; margin-bottom: 12px; }
-    .reviews-empty strong { display: block; font-size: 14px; color: #64748B; margin-bottom: 4px; }
-    .reviews-empty p { font-size: 12px; }
+    .reviews-empty.is-visible { display: flex; }
+    .reviews-empty-icon {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: #F1F5F9;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 10px;
+      color: #64748B;
+    }
+    .reviews-empty-icon svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .reviews-empty strong { display: block; font-size: 13px; font-weight: 800; color: #0F172A; margin-bottom: 4px; }
+    .reviews-empty p { font-size: 11px; margin: 0; }
 
-    .reviews-bottom-spacer { height: 90px; }
+    /* ── Bottom spacer ── */
+    .reviews-bottom-spacer { height: 110px; }
+
+    /* ── Reply Bottom Sheet ── */
+    .reply-sheet-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.48);
+      z-index: 100;
+      opacity: 0; pointer-events: none;
+      transition: opacity .22s;
+    }
+    .reply-sheet-backdrop.open { opacity: 1; pointer-events: all; }
+    .reply-sheet {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      max-width: 440px; margin: 0 auto;
+      background: #fff;
+      border-radius: 22px 22px 0 0;
+      padding: 12px 16px 28px;
+      z-index: 101;
+      transform: translateY(100%);
+      transition: transform .28s cubic-bezier(.32,1,.4,1);
+      box-shadow: 0 -8px 32px rgba(15,23,42,.14);
+    }
+    .reply-sheet-backdrop.open .reply-sheet { transform: translateY(0); }
+    .reply-sheet-handle { width: 38px; height: 4px; border-radius: 20px; background: #E1E8F1; margin: 0 auto 12px; }
+    .reply-sheet h2 { font-size: 14px; font-weight: 900; color: #0F172A; margin-bottom: 4px; }
+    .reply-sheet p  { font-size: 11px; color: #94A3B8; margin-bottom: 12px; }
+    .reply-sheet textarea {
+      width: 100%;
+      height: 90px;
+      border: 1px solid #E1E8F1;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font: 600 12px 'Cairo', sans-serif;
+      color: #0F172A;
+      box-sizing: border-box;
+      resize: none;
+      outline: none;
+      margin-bottom: 10px;
+    }
+    .reply-sheet textarea:focus { border-color: #000; }
+    .reply-sheet-actions { display: flex; gap: 8px; }
+    .reply-submit-btn {
+      flex: 1; height: 42px; border-radius: 10px; border: none;
+      background: #000; color: #fff; font: 800 12px 'Cairo', sans-serif;
+      cursor: pointer;
+    }
+    .reply-cancel-btn {
+      height: 42px; padding: 0 16px; border-radius: 10px; border: 1px solid #E1E8F1;
+      background: #F8FAFC; color: #475569; font: 800 12px 'Cairo', sans-serif;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body class="saey-home trader-app reviews-page">
@@ -281,7 +469,7 @@
 
     <!-- Header -->
     <header class="reviews-header">
-      <a href="20-distributor-account.html" aria-label="العودة إلى حسابي">
+      <a class="back-btn" href="20-distributor-account.html" aria-label="العودة إلى حسابي">
         <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
       </a>
       <div class="reviews-header-copy">
@@ -290,37 +478,43 @@
       </div>
     </header>
 
-    <!-- Rating Summary -->
+    <!-- Rating Summary Hero -->
     <div class="reviews-summary">
       <div class="reviews-summary-top">
         <div class="reviews-big-score">
-          <strong>٤٫٨</strong>
-          <div class="stars-row">★★★★★</div>
-          <small>من ٨٦ تقييم</small>
+          <strong>4.8</strong>
+          <div class="stars-row" aria-label="تقييم 4.8 من 5">
+            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <small>من ٨٦ تقييمًا</small>
         </div>
         <div class="reviews-bars">
           <div class="reviews-bar-row">
-            <span>٥</span>
-            <div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:82%"></div></div>
+            <span>5</span>
+            <div class="reviews-bar-track"><div class="reviews-bar-fill gold" style="width:82%"></div></div>
             <small>٧١</small>
           </div>
           <div class="reviews-bar-row">
-            <span>٤</span>
+            <span>4</span>
             <div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:12%"></div></div>
             <small>١٠</small>
           </div>
           <div class="reviews-bar-row">
-            <span>٣</span>
+            <span>3</span>
             <div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:4%"></div></div>
             <small>٣</small>
           </div>
           <div class="reviews-bar-row">
-            <span>٢</span>
+            <span>2</span>
             <div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:2%"></div></div>
             <small>٢</small>
           </div>
           <div class="reviews-bar-row">
-            <span>١</span>
+            <span>1</span>
             <div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:0%"></div></div>
             <small>٠</small>
           </div>
@@ -333,8 +527,8 @@
         </div>
         <div class="reviews-sub-divider"></div>
         <div class="reviews-sub-stat">
-          <strong>٩٤٪</strong>
-          <small>تقييم إيجابي</small>
+          <strong class="green">٩٤٪</strong>
+          <small>رضا العملاء</small>
         </div>
         <div class="reviews-sub-divider"></div>
         <div class="reviews-sub-stat">
@@ -344,154 +538,293 @@
       </div>
     </div>
 
-    <!-- Date Filter -->
-    <div class="reviews-filter-row">
-      <label for="reviewsFrom">من</label>
-      <input class="reviews-date-input" type="date" id="reviewsFrom" value="2026-05-01">
-      <span class="reviews-filter-sep">—</span>
-      <input class="reviews-date-input" type="date" id="reviewsTo" value="2026-05-24">
-      <button class="reviews-filter-btn" type="button" id="applyFilter">تطبيق</button>
+    <!-- Period Selector -->
+    <div class="reviews-period-bar" role="tablist" aria-label="تصفية حسب الفترة">
+      <button class="reviews-period-chip active" type="button" data-period="all">الكل</button>
+      <button class="reviews-period-chip" type="button" data-period="month">آخر ٣٠ يومًا</button>
+      <button class="reviews-period-chip" type="button" data-period="week">هذا الأسبوع</button>
+      <button class="reviews-period-chip" type="button" data-period="recent">الأحدث</button>
     </div>
 
-    <!-- Stars Filter -->
-    <div class="reviews-star-tabs" role="tablist">
-      <button class="reviews-star-tab active" data-stars="all" type="button">الكل <b id="countAll">٨٦</b></button>
-      <button class="reviews-star-tab" data-stars="5" type="button"><span class="star-color">★</span> ٥ نجوم <b>٧١</b></button>
-      <button class="reviews-star-tab" data-stars="4" type="button"><span class="star-color">★</span> ٤ نجوم <b>١٠</b></button>
-      <button class="reviews-star-tab" data-stars="3" type="button"><span class="star-color">★</span> ٣ نجوم <b>٣</b></button>
-      <button class="reviews-star-tab" data-stars="2" type="button"><span class="star-color">★</span> ٢ نجوم <b>٢</b></button>
+    <!-- Stars Filter Tabs -->
+    <div class="reviews-star-tabs" role="tablist" aria-label="تصفية حسب النجوم">
+      <button class="reviews-star-tab active" data-stars="all" type="button">
+        <span>الكل</span>
+        <b id="countAll">٨٦</b>
+      </button>
+      <button class="reviews-star-tab" data-stars="5" type="button">
+        <span class="star-color">★</span>
+        <span>٥ نجوم</span>
+        <b>٧١</b>
+      </button>
+      <button class="reviews-star-tab" data-stars="4" type="button">
+        <span class="star-color">★</span>
+        <span>٤ نجوم</span>
+        <b>١٠</b>
+      </button>
+      <button class="reviews-star-tab" data-stars="3" type="button">
+        <span class="star-color">★</span>
+        <span>٣ نجوم</span>
+        <b>٣</b>
+      </button>
+      <button class="reviews-star-tab" data-stars="2" type="button">
+        <span class="star-color">★</span>
+        <span>نجمتان</span>
+        <b>٢</b>
+      </button>
+      <button class="reviews-star-tab" data-stars="1" type="button">
+        <span class="star-color">★</span>
+        <span>نجمة</span>
+        <b>٠</b>
+      </button>
     </div>
 
-    <!-- Count -->
-    <p class="reviews-count-label" id="reviewsCountLabel">عرض ٨٦ تقييمًا</p>
+    <!-- Count Header -->
+    <div class="reviews-count-header">
+      <span class="reviews-count-label" id="reviewsCountLabel">عرض ٨٦ تقييمًا</span>
+      <span class="reviews-sort-hint">مرتبة حسب الأحدث</span>
+    </div>
 
     <!-- Reviews List -->
-    <div id="reviewsList">
+    <div class="reviews-list-wrap" id="reviewsList">
 
-      <article class="review-card" data-stars="5">
+      <!-- Review 1 -->
+      <article class="review-card" data-stars="5" data-period="week">
         <div class="review-card-head">
-          <div class="review-avatar">س</div>
+          <div class="review-avatar purple">س</div>
           <div class="review-card-meta">
-            <strong>سارة أحمد</strong>
-            <div class="review-stars">★★★★★</div>
-            <time>منذ ساعتين</time>
+            <div class="review-card-top-row">
+              <strong>سارة أحمد</strong>
+              <time>منذ ساعتين</time>
+            </div>
+            <div class="review-stars-wrap">
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
           </div>
         </div>
         <div class="review-product-chip">
           <svg viewBox="0 0 24 24"><path d="M6 2h12l2 5-2 15H6L4 7l2-5Z"/><path d="M9 10a3 3 0 0 0 6 0"/></svg>
           جاكيت جلد طبيعي
         </div>
-        <p style="margin-top:8px">الخامة ممتازة والطلب كان جاهز في نفس اليوم. تجربة موفقة جدًا وسأرجع للشراء مرة أخرى بالتأكيد.</p>
-        <div class="review-verified">
-          <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>
-          شراء موثق
+        <p>الخامة ممتازة جدًا والطلب كان جاهزًا للاستلام في نفس اليوم. تعامل راقٍ ومتجر يستحق كل التقدير.</p>
+        <div class="merchant-reply-block">
+          <small>رد المتجر · نقطة ستور</small>
+          <p>شكرًا لكِ يا سارة، نسعد دائمًا بخدمتك وننتظر زيارتك القادمة بكل ترحيب!</p>
+        </div>
+        <div class="review-card-footer">
+          <div class="review-verified">
+            <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>
+            شراء موثق
+          </div>
         </div>
       </article>
 
-      <article class="review-card" data-stars="4">
+      <!-- Review 2 -->
+      <article class="review-card" data-stars="4" data-period="week">
         <div class="review-card-head">
-          <div class="review-avatar">م</div>
+          <div class="review-avatar blue">م</div>
           <div class="review-card-meta">
-            <strong>محمود علي</strong>
-            <div class="review-stars">★★★★☆</div>
-            <time>أمس</time>
+            <div class="review-card-top-row">
+              <strong>محمود علي</strong>
+              <time>أمس</time>
+            </div>
+            <div class="review-stars-wrap">
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="empty" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
           </div>
         </div>
         <div class="review-product-chip">
           <svg viewBox="0 0 24 24"><path d="M6 2h12l2 5-2 15H6L4 7l2-5Z"/><path d="M9 10a3 3 0 0 0 6 0"/></svg>
           حذاء رياضي أبيض
         </div>
-        <p style="margin-top:8px">منتج مطابق للصور والتواصل مع المتجر كان سريعًا. نقصت نجمة لأن المقاس كان أكبر قليلًا من المتوقع.</p>
-        <div class="review-verified">
-          <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>
-          شراء موثق
+        <p>المنتج مطابق للصور وسريع في التجهيز. المقاس كان مريحًا وجودة النعل جيدة جدًا مقارنة بالسعر.</p>
+        <div class="review-card-footer">
+          <div class="review-verified">
+            <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>
+            شراء موثق
+          </div>
+          <button class="review-reply-btn" type="button" onclick="openReplySheet('محمود علي')">
+            <svg viewBox="0 0 24 24"><path d="m3 10 7-7v4c8 0 11 6 12 12-3-4-7-5-12-5v4z"/></svg>
+            رد على التقييم
+          </button>
         </div>
       </article>
 
-      <article class="review-card" data-stars="5">
+      <!-- Review 3 -->
+      <article class="review-card" data-stars="5" data-period="week">
         <div class="review-card-head">
-          <div class="review-avatar">ن</div>
+          <div class="review-avatar green">ن</div>
           <div class="review-card-meta">
-            <strong>نورهان حسن</strong>
-            <div class="review-stars">★★★★★</div>
-            <time>منذ ٣ أيام</time>
+            <div class="review-card-top-row">
+              <strong>نورهان حسن</strong>
+              <time>منذ ٣ أيام</time>
+            </div>
+            <div class="review-stars-wrap">
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
           </div>
         </div>
         <div class="review-product-chip">
           <svg viewBox="0 0 24 24"><path d="M6 2h12l2 5-2 15H6L4 7l2-5Z"/><path d="M9 10a3 3 0 0 0 6 0"/></svg>
           حقيبة ظهر عملية
         </div>
-        <p style="margin-top:8px">المنتج وصل بحالة ممتازة والتعامل راقٍ من أول لحظة. شكراً جزيلًا.</p>
-        <div class="review-verified">
-          <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>
-          شراء موثق
+        <p>الشنطة ممتازة وخامتها متينة وتتحمل الاستخدام اليومي. التغليف كان أنيقًا والاستلام كان سهلًا.</p>
+        <div class="merchant-reply-block">
+          <small>رد المتجر · نقطة ستور</small>
+          <p>أهلًا بكِ نورهان، سعداء جدًا بإعجابك بالمنتج وحرصنا دائمًا على تقديم أفضل جودة.</p>
+        </div>
+        <div class="review-card-footer">
+          <div class="review-verified">
+            <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>
+            شراء موثق
+          </div>
         </div>
       </article>
 
-      <article class="review-card" data-stars="5">
+      <!-- Review 4 -->
+      <article class="review-card" data-stars="5" data-period="month">
         <div class="review-card-head">
-          <div class="review-avatar">أ</div>
+          <div class="review-avatar amber">أ</div>
           <div class="review-card-meta">
-            <strong>أحمد سامي</strong>
-            <div class="review-stars">★★★★★</div>
-            <time>منذ ٥ أيام</time>
+            <div class="review-card-top-row">
+              <strong>أحمد سامي</strong>
+              <time>منذ أسبوع</time>
+            </div>
+            <div class="review-stars-wrap">
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
           </div>
         </div>
         <div class="review-product-chip">
           <svg viewBox="0 0 24 24"><path d="M6 2h12l2 5-2 15H6L4 7l2-5Z"/><path d="M9 10a3 3 0 0 0 6 0"/></svg>
           جاكيت جلد طبيعي
         </div>
-        <p style="margin-top:8px">من أجود المتاجر اللي تعاملت معها في التطبيق. الجودة تستاهل السعر تمامًا.</p>
-        <div class="review-verified">
-          <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>
-          شراء موثق
+        <p>من أفضل المتاجر اللي تعاملت معها على التطبيق. الجودة تستحق السعر تمامًا.</p>
+        <div class="review-card-footer">
+          <div class="review-verified">
+            <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>
+            شراء موثق
+          </div>
+          <button class="review-reply-btn" type="button" onclick="openReplySheet('أحمد سامي')">
+            <svg viewBox="0 0 24 24"><path d="m3 10 7-7v4c8 0 11 6 12 12-3-4-7-5-12-5v4z"/></svg>
+            رد على التقييم
+          </button>
         </div>
       </article>
 
-      <article class="review-card" data-stars="3">
+      <!-- Review 5 -->
+      <article class="review-card" data-stars="3" data-period="month">
         <div class="review-card-head">
-          <div class="review-avatar">ر</div>
+          <div class="review-avatar purple">ر</div>
           <div class="review-card-meta">
-            <strong>رنا خالد</strong>
-            <div class="review-stars">★★★☆☆</div>
-            <time>منذ أسبوع</time>
+            <div class="review-card-top-row">
+              <strong>رنا خالد</strong>
+              <time>منذ أسبوعين</time>
+            </div>
+            <div class="review-stars-wrap">
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="empty" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="empty" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
           </div>
         </div>
         <div class="review-product-chip">
           <svg viewBox="0 0 24 24"><path d="M6 2h12l2 5-2 15H6L4 7l2-5Z"/><path d="M9 10a3 3 0 0 0 6 0"/></svg>
           حذاء رياضي أبيض
         </div>
-        <p style="margin-top:8px">المنتج معقول لكن كان ممكن يكون أحسن في التغليف.</p>
-        <div class="review-verified">
-          <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>
-          شراء موثق
+        <p>المنتج جيد لكن كان ممكن التغليف يكون أفضل لحماية الحذاء وقت النقل.</p>
+        <div class="review-card-footer">
+          <div class="review-verified">
+            <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>
+            شراء موثق
+          </div>
+          <button class="review-reply-btn" type="button" onclick="openReplySheet('رنا خالد')">
+            <svg viewBox="0 0 24 24"><path d="m3 10 7-7v4c8 0 11 6 12 12-3-4-7-5-12-5v4z"/></svg>
+            رد على التقييم
+          </button>
         </div>
       </article>
 
-      <article class="review-card" data-stars="2">
+      <!-- Review 6 -->
+      <article class="review-card" data-stars="2" data-period="month">
         <div class="review-card-head">
-          <div class="review-avatar">ك</div>
+          <div class="review-avatar blue">ك</div>
           <div class="review-card-meta">
-            <strong>كريم ناصر</strong>
-            <div class="review-stars">★★☆☆☆</div>
-            <time>منذ أسبوعين</time>
+            <div class="review-card-top-row">
+              <strong>كريم ناصر</strong>
+              <time>منذ شهر</time>
+            </div>
+            <div class="review-stars-wrap">
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="empty" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="empty" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="empty" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
           </div>
         </div>
         <div class="review-product-chip">
           <svg viewBox="0 0 24 24"><path d="M6 2h12l2 5-2 15H6L4 7l2-5Z"/><path d="M9 10a3 3 0 0 0 6 0"/></svg>
           حقيبة ظهر عملية
         </div>
-        <p style="margin-top:8px">الخامة كانت أقل مما توقعت بالنسبة للسعر، لكن المتجر كان متجاوباً في التواصل.</p>
-        <div class="review-verified">
-          <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>
-          شراء موثق
+        <p>الخامة كانت خفيفة بالنسبة لتوقعاتي، ولكن المتجر كان متعاوناً واستجاب لاستفساراتي بسرعة.</p>
+        <div class="merchant-reply-block">
+          <small>رد المتجر · نقطة ستور</small>
+          <p>نعتذر لك يا كريم عن أي تقصير، ورضاك يهمنا جدًا. تم تحديث المواصفات وتوفير بدائل أفضل في المخزون.</p>
+        </div>
+        <div class="review-card-footer">
+          <div class="review-verified">
+            <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>
+            شراء موثق
+          </div>
         </div>
       </article>
 
+    </div>
+
+    <!-- Empty State -->
+    <div class="reviews-empty" id="reviewsEmpty">
+      <div class="reviews-empty-icon">
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <strong>لا توجد تقييمات مطابقة</strong>
+      <p>لم يقم أي عميل بتقييم هذا التصنيف حتى الآن.</p>
     </div>
 
     <div class="reviews-bottom-spacer"></div>
   </main>
+
+  <!-- ── Reply Modal / Sheet ── -->
+  <div class="reply-sheet-backdrop" id="replyBackdrop" role="dialog" aria-modal="true" aria-labelledby="replyTitle">
+    <div class="reply-sheet">
+      <div class="reply-sheet-handle"></div>
+      <h2 id="replyTitle">الرد على تقييم سارة</h2>
+      <p>سيظهر ردك علنًا أسفل تقييم العميل لجميع زوار المتجر.</p>
+      <textarea id="replyText" placeholder="اكتب ردك اللبق والموجز هنا..."></textarea>
+      <div class="reply-sheet-actions">
+        <button class="reply-submit-btn" type="button" id="submitReply">إرسال الرد</button>
+        <button class="reply-cancel-btn" type="button" onclick="closeReplySheet()">إلغاء</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Bottom Nav -->
   <nav class="saey-bottom-nav market-nav">
@@ -503,38 +836,75 @@
   </nav>
 
   <script>
-    // Stars filter
     const starTabs = document.querySelectorAll('.reviews-star-tab');
+    const periodChips = document.querySelectorAll('.reviews-period-chip');
     const reviewCards = document.querySelectorAll('#reviewsList .review-card');
     const countLabel = document.getElementById('reviewsCountLabel');
+    const emptyState = document.getElementById('reviewsEmpty');
 
-    function filterByStars(stars) {
-      let count = 0;
+    let currentStars = 'all';
+    let currentPeriod = 'all';
+
+    function applyFilters() {
+      let visibleCount = 0;
       reviewCards.forEach(card => {
-        const show = stars === 'all' || card.dataset.stars === stars;
-        card.hidden = !show;
-        if (show) count++;
+        const starMatch = (currentStars === 'all' || card.dataset.stars === currentStars);
+        const periodMatch = (currentPeriod === 'all' || card.dataset.period === currentPeriod || currentPeriod === 'recent');
+        const isShown = starMatch && periodMatch;
+
+        card.hidden = !isShown;
+        if (isShown) visibleCount++;
       });
-      countLabel.textContent = `عرض ${count.toLocaleString('ar-EG')} تقييمًا`;
+
+      countLabel.textContent = `عرض ${visibleCount.toLocaleString('ar-EG')} تقييمًا`;
+      emptyState.classList.toggle('is-visible', visibleCount === 0);
     }
 
     starTabs.forEach(tab => {
       tab.addEventListener('click', () => {
         starTabs.forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
-        filterByStars(tab.dataset.stars);
+        currentStars = tab.dataset.stars;
+        applyFilters();
       });
     });
 
-    // Date filter (UI interaction only)
-    document.getElementById('applyFilter').addEventListener('click', () => {
-      const from = document.getElementById('reviewsFrom').value;
-      const to   = document.getElementById('reviewsTo').value;
-      if (from && to) {
-        countLabel.textContent = 'جاري التصفية…';
-        setTimeout(() => {
-          filterByStars(document.querySelector('.reviews-star-tab.active').dataset.stars);
-        }, 300);
+    periodChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        periodChips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        currentPeriod = chip.dataset.period;
+        applyFilters();
+      });
+    });
+
+    // ── Reply Sheet ──
+    const replyBackdrop = document.getElementById('replyBackdrop');
+    const replyTitle = document.getElementById('replyTitle');
+    const replyText = document.getElementById('replyText');
+    let currentReplyingCard = null;
+
+    function openReplySheet(userName) {
+      replyTitle.textContent = `الرد على تقييم ${userName}`;
+      replyText.value = '';
+      replyBackdrop.classList.add('open');
+    }
+
+    function closeReplySheet() {
+      replyBackdrop.classList.remove('open');
+    }
+
+    replyBackdrop.addEventListener('click', (e) => {
+      if (e.target === replyBackdrop) closeReplySheet();
+    });
+
+    document.getElementById('submitReply').addEventListener('click', () => {
+      const text = replyText.value.trim();
+      if (text) {
+        alert('تم إرسال ردك بنجاح وسيظهر للعميل!');
+        closeReplySheet();
+      } else {
+        alert('يرجى كتابة نص الرد قبل الإرسال.');
       }
     });
   </script>
