@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="auth.css">
   <link rel="stylesheet" href="product-details.css?v=5">
   <link rel="stylesheet" href="uber-ui.css">
+  <link rel="stylesheet" href="user-experience.css">
 </head>
 <body class="saey-product-details">
   <div class="status-bar">
@@ -66,6 +67,7 @@
         <del>٣,٢٥٠ ج.م</del>
         <span class="details-saving">وفّرت ٣٦٠ ج.م</span>
       </div>
+      <button class="product-policy-shortcut" id="productPolicyShortcut" type="button"><svg viewBox="0 0 24 24"><path d="M9 7H4v5"/><path d="M4 12a8 8 0 1 0 2-5M4 12l5-5"/></svg><span><strong id="policyShortcutTitle">استرجاع واستلام مضمونان</strong><small id="policyShortcutMeta">اطّلع على سياسات المتجر قبل الشراء</small></span><svg class="shortcut-arrow" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
       <div class="details-quick-info">
         <span><b>القسم</b> أزياء وملابس</span>
         <span><b>مضاف منذ</b> يومين</span>
@@ -99,6 +101,7 @@
           دردشة
         </a>
       </div>
+      <section class="product-policy-card" id="productPoliciesSection"><h2>سياسات الشراء والاستلام</h2><div class="policy-summary" id="productPolicies"></div></section>
       <div class="details-divider"></div>
       <section class="ratings-section">
         <div class="inline-section-head">
@@ -161,8 +164,10 @@
   </footer>
   <dialog class="product-report-dialog" id="reportDialog"><form method="dialog"><div class="report-sheet-handle" aria-hidden="true"></div><button class="report-close" value="cancel" aria-label="إغلاق">×</button><h2>الإبلاغ عن المنتج</h2><p>اختر سبب البلاغ، وسيقوم فريق سعي بمراجعته.</p><label><input type="radio" name="reason" value="wrong" required> معلومات أو سعر غير صحيح</label><label><input type="radio" name="reason" value="forbidden"> منتج مخالف أو غير مسموح</label><label><input type="radio" name="reason" value="fake"> منتج مقلّد</label><button class="report-submit" id="submitReport" value="default">إرسال البلاغ</button></form></dialog>
   <script src="user-state.js"></script>
+  <script src="user-experience.js"></script>
   <script>
     const f = document.getElementById('favorite');
+    const policies=SaeyState.storePolicies();document.getElementById('productPolicies').innerHTML=`<div class="policy-row"><span><svg viewBox="0 0 24 24"><path d="M9 7H4v5"/><path d="M4 12a8 8 0 1 0 2-5M4 12l5-5"/></svg></span><div><strong>استرجاع خلال ${Number(policies.returnDays).toLocaleString('ar-EG')} يومًا</strong><small>${policies.returnTerms}</small></div></div><div class="policy-row"><span><svg viewBox="0 0 24 24"><path d="M4 10v10h16V10M3 10l2-6h14l2 6"/></svg></span><div><strong>استلام من المتجر خلال ${Number(policies.pickupHours).toLocaleString('ar-EG')} ساعة من الجاهزية</strong><small>${policies.pickupTerms}</small></div></div>`;policyShortcutTitle.textContent=`استرجاع خلال ${Number(policies.returnDays).toLocaleString('ar-EG')} يومًا`;policyShortcutMeta.textContent=`وحجز الطلب ${Number(policies.pickupHours).toLocaleString('ar-EG')} ساعة بعد الجاهزية`;productPolicyShortcut.onclick=()=>productPoliciesSection.scrollIntoView({behavior:'smooth',block:'center'});
     const currentProduct = { id:'jacket-natural-01', name:'جاكيت جلد طبيعي رجالي', store:'نقطة ستور', price:2890, image:'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=500&q=85', href:'12-product-details.html' };
     f.classList.toggle('saved', SaeyState.isFavorite(currentProduct.id));
     const detailsPage = document.querySelector('.details-page');

@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="notifications-enhanced.css">
   <link rel="stylesheet" href="notifications-polish.css">
   <link rel="stylesheet" href="uber-ui.css">
+  <link rel="stylesheet" href="user-experience.css">
 </head>
 <body class="saey-notifications">
   <div class="status-bar">
@@ -37,6 +38,7 @@
       <section>
         <p class="notification-date"><span>اليوم</span><i></i></p>
         <div class="notification-list">
+          <div id="dynamicNotifications" style="display:contents"></div>
           <article class="notification-item unread" data-id="order-ready-1024" data-href="21-order-details.html?code=SA-1024" role="link" tabindex="0">
             <span class="notification-icon success">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -65,6 +67,9 @@
             </div>
             <i class="unread-dot"></i>
           </article>
+          <article class="notification-item unread" data-id="pickup-expiry-1024" data-href="21-order-details.html?code=SA-1024" role="link" tabindex="0"><span class="notification-icon offer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div class="notification-copy"><h2>تنتهي مهلة الاستلام غدًا</h2><p>استلم طلبك من نقطة ستور قبل الساعة ١٠ مساءً.</p><span class="notification-time">منذ ساعتين</span></div><i class="unread-dot"></i></article>
+          <article class="notification-item" data-id="return-approved-1014" data-href="26-return-status.html?code=SA-1014" role="link" tabindex="0"><span class="notification-icon success"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"/><circle cx="12" cy="12" r="9"/></svg></span><div class="notification-copy"><h2>تم قبول طلب الاسترجاع</h2><p>سلّم المنتج إلى المتجر لاستكمال إعادة المبلغ.</p><span class="notification-time">منذ ٣ ساعات</span></div></article>
+          <article class="notification-item" data-id="refund-wallet-1014" data-href="18-wallet-transactions.html" role="link" tabindex="0"><span class="notification-icon success"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H20v14H5.5A2.5 2.5 0 0 1 3 16.5Z"/><path d="m9 13 2 2 4-4"/></svg></span><div class="notification-copy"><h2>أُعيد المبلغ إلى محفظتك</h2><p>تمت إضافة ١٩٠ ج.م إلى رصيد محفظة سعي.</p><span class="notification-time">منذ ٤ ساعات</span></div></article>
         </div>
       </section>
       <section>
@@ -97,8 +102,9 @@
       <p>سنخبرك هنا بكل جديد يخص طلباتك ومتاجرك.</p>
     </section>
   </main>
-  <script src="user-state.js"></script>
+  <script src="user-state.js"></script><script src="user-experience.js"></script>
   <script>
+    const dynamicRows=SaeyState.userNotifications();document.getElementById('dynamicNotifications').innerHTML=dynamicRows.map(item=>`<article class="notification-item unread" data-id="${item.id}" data-href="${item.href}" role="link" tabindex="0"><span class="notification-icon success"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg></span><div class="notification-copy"><h2>${item.title}</h2><p>${item.text}</p><span class="notification-time">الآن</span></div><i class="unread-dot"></i></article>`).join('');
     const page = document.getElementById('notificationsPage'),
           clear = document.getElementById('clearAll'),
           empty = document.getElementById('emptyState'),

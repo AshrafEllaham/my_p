@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="store-details.css">
   <link rel="stylesheet" href="sponsored-ads.css">
   <link rel="stylesheet" href="uber-ui.css">
+  <link rel="stylesheet" href="user-experience.css">
 </head>
 <body class="saey-store-details">
   <div class="status-bar">
@@ -31,7 +32,6 @@
     <section class="store-hero">
       <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85" alt="واجهة متجر النجم الساطع">
       <span class="store-hero-shade"></span>
-      <span class="store-hero-status"><i></i>مفتوح الآن</span>
     </section>
     <section class="store-profile-card">
       <div class="store-profile-head">
@@ -44,6 +44,7 @@
     </section>
     <section class="youtube-ad-section store-ads" aria-label="إعلانات المتجر"><div class="youtube-ad-section-head"><h2>إعلانات المتجر</h2><span>عروض مميزة</span></div><article class="youtube-ad compact"><a class="youtube-ad-media" href="12-product-details.html"><img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=900&q=85" alt="عرض جاكيت جلد طبيعي"><span class="youtube-ad-shade"></span><span class="youtube-ad-badge">إعلان المتجر</span><span class="youtube-ad-duration">0:12</span><span class="youtube-ad-play"><svg viewBox="0 0 24 24"><path d="m8 5 11 7-11 7Z"/></svg></span></a><div class="youtube-ad-body"><div class="youtube-ad-meta"><span class="youtube-ad-avatar">ن</span><span class="youtube-ad-copy"><strong>خصم ١٠٪ على تشكيلة الجاكيتات الجديدة</strong><small>النجم الساطع · عرض لفترة محدودة</small></span><button class="youtube-ad-menu" type="button" aria-label="خيارات الإعلان">⋮</button></div><div class="youtube-ad-actions"><a class="youtube-ad-cta" href="12-product-details.html">عرض المنتج</a><a class="youtube-ad-chat" href="14-chat-conversation.html?store=النجم%20الساطع">اسأل المتجر</a></div></div></article><div class="youtube-ad-pager" aria-label="مؤشر إعلانات المتجر"><i class="active"></i><i></i><i></i></div></section>
     <section class="store-info-block"><h2>عن المتجر</h2><p>النجم الساطع متجر متخصص في الأزياء الرجالية المختارة بعناية. نساعدك تلاقي قطع عملية وأنيقة مع إمكانية الاستلام مباشرة من المتجر.</p><div class="store-location"><span class="store-info-icon"><svg viewBox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span><span><b>موقع المتجر</b><small>شارع عباس العقاد، مدينة نصر، القاهرة</small></span><a href="https://www.google.com/maps/search/?api=1&amp;query=%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%B9%D8%A8%D8%A7%D8%B3%20%D8%A7%D9%84%D8%B9%D9%82%D8%A7%D8%AF%20%D9%85%D8%AF%D9%8A%D9%86%D8%A9%20%D9%86%D8%B5%D8%B1%20%D8%A7%D9%84%D9%82%D8%A7%D9%87%D8%B1%D8%A9" target="_blank" rel="noreferrer" aria-label="فتح موقع المتجر في الخرائط"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a></div></section>
+    <section class="store-info-block"><h2>سياسات المتجر</h2><div class="policy-summary" id="storePolicies"></div></section>
     <div class="store-section-head"><h2>منتجات المتجر</h2><a href="10-featured-products.html">عرض الكل</a></div>
     <label class="store-product-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg><input id="storeProductSearch" type="search" placeholder="ابحث داخل المتجر"></label>
     <section class="store-products">
@@ -58,8 +59,9 @@
     <a href="16-orders.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="m9 13 2 2 4-4"/></svg></span><span>الطلبات</span></a>
     <a href="15-account.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></span><span>حسابي</span></a>
   </nav>
-  <script src="user-state.js"></script>
+  <script src="user-state.js"></script><script src="user-experience.js"></script>
   <script>
+    const policies=SaeyState.storePolicies();storePolicies.innerHTML=`<div class="policy-row"><span><svg viewBox="0 0 24 24"><path d="M9 7H4v5"/><path d="M4 12a8 8 0 1 0 2-5M4 12l5-5"/></svg></span><div><strong>الاسترجاع خلال ${Number(policies.returnDays).toLocaleString('ar-EG')} يومًا</strong><small>${policies.returnTerms}</small></div></div><div class="policy-row"><span><svg viewBox="0 0 24 24"><path d="M4 10v10h16V10M3 10l2-6h14l2 6"/></svg></span><div><strong>حجز الاستلام لمدة ${Number(policies.pickupHours).toLocaleString('ar-EG')} ساعة</strong><small>${policies.pickupTerms}</small></div></div>`;
     const storeFavorite = { id:'bright-star-store', name:'النجم الساطع', category:'أزياء رجالية', rating:4.9, image:'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=500&q=85', href:'19-store-details.html' };
     const favoriteStoreButton = document.getElementById('favoriteStore');
     favoriteStoreButton.classList.toggle('saved', SaeyState.isFavoriteStore(storeFavorite.id));

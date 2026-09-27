@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="auth.css">
   <link rel="stylesheet" href="uber-ui.css">
   <link rel="stylesheet" href="merchant-operations.css">
+  <link rel="stylesheet" href="merchant-ui-states.css">
 </head>
 <body class="merchant-ops">
   <div class="status-bar"><span class="status-time">9:41</span><div class="status-icons"><svg viewBox="0 0 17 11" width="17"><path d="M1 9h3v2H1zm4-3h3v5H5zm4-3h3v8H9zm4-3h3v11h-3z"/></svg><svg viewBox="0 0 16 12" width="16"><path d="M8 10a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M2 5a8.5 8.5 0 0 1 12 0l-1.1 1.1a7 7 0 0 0-9.8 0z"/></svg><svg viewBox="0 0 25 12" width="24"><rect x="1" y="1" width="20" height="10" rx="3" fill="none" stroke="currentColor"/><rect x="3" y="3" width="16" height="6" rx="1.5"/></svg></div></div>
@@ -58,6 +59,7 @@
   <div class="ops-toast" id="toast" role="status"></div>
 
   <script src="merchant-state.js"></script>
+  <script src="merchant-ui-states.js"></script>
   <script>
     const ar=value=>Number(value).toLocaleString('ar-EG');
     const list=document.getElementById('inventoryList'), movementsList=document.getElementById('movementsList');
@@ -75,7 +77,7 @@
     document.getElementById('selectAll').onclick=()=>{const items=SaeyMerchant.inventory();if(selected.size===items.length)selected.clear();else items.forEach(item=>selected.add(item.id));renderInventory()};
     const sheet=document.getElementById('bulkSheet');document.getElementById('openBulk').onclick=()=>{document.getElementById('bulkDescription').textContent=`سيتم تطبيق التحديث على ${ar(selected.size)} منتجات محددة.`;sheet.classList.add('visible');sheet.setAttribute('aria-hidden','false')};function closeSheet(){sheet.classList.remove('visible');sheet.setAttribute('aria-hidden','true')}sheet.querySelector('[data-close-sheet]').onclick=closeSheet;sheet.onclick=e=>{if(e.target===sheet)closeSheet()};
     document.querySelectorAll('[data-mode]').forEach(button=>button.onclick=()=>{mode=button.dataset.mode;document.querySelectorAll('[data-mode]').forEach(item=>item.classList.toggle('active',item===button))});
-    document.getElementById('applyBulk').onclick=()=>{const amount=Number(document.getElementById('bulkAmount').value),error=document.getElementById('bulkError');if(!Number.isFinite(amount)||amount<0){error.textContent='أدخل كمية صحيحة.';return}SaeyMerchant.bulkUpdate([...selected],mode,amount);selected.clear();error.textContent='';closeSheet();renderInventory();renderMovements();showToast('تم تحديث المخزون بنجاح')};
+    document.getElementById('applyBulk').onclick=async()=>{const amount=Number(document.getElementById('bulkAmount').value),error=document.getElementById('bulkError');if(!Number.isFinite(amount)||amount<0){error.textContent='أدخل كمية صحيحة.';return}if(mode!=='add'){const confirmed=await SaeyUI.confirm({title:'تأكيد تحديث المخزون',message:`سيتم ${mode==='subtract'?'خصم':'تعيين'} الكمية على ${ar(selected.size)} منتجات.`,confirmLabel:'تطبيق التحديث',danger:mode==='subtract'});if(!confirmed)return}SaeyMerchant.bulkUpdate([...selected],mode,amount);selected.clear();error.textContent='';closeSheet();renderInventory();renderMovements();SaeyUI.success('تم تحديث المخزون بنجاح')};
     renderInventory();renderMovements();
   </script>
 </body>

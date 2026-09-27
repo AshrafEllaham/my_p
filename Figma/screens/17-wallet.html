@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="auth.css">
   <link rel="stylesheet" href="wallet.css">
   <link rel="stylesheet" href="uber-ui.css">
-</head>
+<link rel="stylesheet" href="user-experience.css"></head>
 <body class="saey-wallet">
   <div class="status-bar">
     <span class="status-time">9:41</span>
@@ -215,5 +215,5 @@
     document.getElementById('closeDepositSheet').onclick=closeDeposit;depositBackdrop.onclick=closeDeposit;
     document.getElementById('depositForm').onsubmit=event=>{event.preventDefault();const amount=Number(depositAmount.value),method=document.getElementById('depositMethod').value;if(!amount||amount<1){const error=document.getElementById('depositError');error.textContent='أدخل مبلغ شحن صحيحًا.';error.hidden=false;return;}updateBalance(currentBalance+amount);addTransaction(`شحن عبر ${method}`,amount);closeDeposit();walletToast(document.getElementById('depositButton'),'تم شحن المحفظة','شحن المحفظة');event.currentTarget.reset();};
   </script>
-</body>
+<script src="user-experience.js"></script></body>
 </html>

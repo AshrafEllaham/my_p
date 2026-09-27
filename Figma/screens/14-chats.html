@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="auth.css">
   <link rel="stylesheet" href="chats.css">
   <link rel="stylesheet" href="uber-ui.css">
-</head>
+<link rel="stylesheet" href="user-experience.css"></head>
 <body class="saey-chats">
   <div class="status-bar">
     <span class="status-time">9:41</span>
@@ -73,5 +73,5 @@
     document.getElementById('retryChats').onclick = () => { params.delete('state'); location.search = params.toString(); };
     if (params.get('state') === 'error') { list.hidden = true; errorState.hidden = false; } else { runRefresh(); }
   </script>
-</body>
+<script src="user-experience.js"></script></body>
 </html>

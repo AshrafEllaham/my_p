@@ -7,6 +7,7 @@
   const ORDER_STATES_KEY = 'saey_merchant_order_states_v1';
   const ORDER_EVENTS_KEY = 'saey_merchant_order_events_v1';
   const LEDGER_KEY = 'saey_merchant_ledger_v1';
+  const ACTIVITY_KEY = 'saey_merchant_activity_v1';
 
   const inventorySeed = [
     { id: 'jacket', name: 'جاكيت جلد طبيعي', sku: 'JK-1042', stock: 18, threshold: 5, image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=240&q=82' },
@@ -47,6 +48,13 @@
     { id: 'LG-1026', title: 'طلب #SA-10886', detail: 'بيع حقيبة ظهر عملية', amount: 680, type: 'sale', date: 'أمس، 6:40 م' }
   ];
 
+  const activitySeed = [
+    { id: 'AC-1', type: 'orders', title: 'تم تأكيد الطلب #SA-10928', detail: 'انتقل الطلب إلى مرحلة التجهيز', user: 'محمد حسن', time: '10:42 ص', day: 'اليوم' },
+    { id: 'AC-2', type: 'inventory', title: 'تم تحديث مخزون حذاء رياضي أبيض', detail: 'تغيرت الكمية من ٤ إلى ٣ وحدات', user: 'النظام', time: '10:42 ص', day: 'اليوم' },
+    { id: 'AC-3', type: 'finance', title: 'تم إنشاء تسوية ST-2051', detail: 'قيمة التسوية ٦٬٢١٣ ج.م', user: 'النظام', time: '9:15 ص', day: 'اليوم' },
+    { id: 'AC-4', type: 'team', title: 'تم تعديل صلاحيات آية محمود', detail: 'الوصول إلى الطلبات فقط', user: 'صاحب المتجر', time: '6:10 م', day: 'أمس' }
+  ];
+
   const clone = value => JSON.parse(JSON.stringify(value));
   const read = (key, fallback) => {
     try {
@@ -61,6 +69,8 @@
   const nowLabel = () => new Intl.DateTimeFormat('ar-EG', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }).format(new Date());
 
   const api = {
+    activity: () => read(ACTIVITY_KEY, activitySeed),
+    addActivity(entry) { const rows = api.activity(); rows.unshift({ id: `AC-${Date.now()}`, day: 'اليوم', time: nowLabel(), user: 'صاحب المتجر', ...entry }); return write(ACTIVITY_KEY, rows.slice(0, 80)); },
     inventory: () => read(INVENTORY_KEY, inventorySeed),
     movements: () => read(MOVEMENTS_KEY, movementsSeed),
     returns: () => read(RETURNS_KEY, returnsSeed),
@@ -68,6 +78,10 @@
       const items = api.returns(), item = items.find(entry => entry.id === id);
       if (!item) return items;
       item.status = status; item.note = note; item.updatedAt = nowLabel();
+      api.addActivity({ type: 'orders', title: `${status === 'rejected' ? 'تم رفض' : 'تم تحديث'} المرتجع ${item.id}`, detail: item.product });
+      const userNotices = read('saey_user_notifications', []);
+      userNotices.unshift({ id: `notice-${Date.now()}`, type: 'return', title: status === 'rejected' ? 'تم رفض طلب الاسترجاع' : status === 'approved' ? 'تم قبول طلب الاسترجاع' : 'تم تحديث طلب الاسترجاع', text: note || `تم تحديث حالة الطلب ${item.order}.`, href: `26-return-status.html?code=${item.order}`, date: new Date().toISOString() });
+      write('saey_user_notifications', userNotices.slice(0, 40));
       if (status === 'approved' && !item.restocked) {
         const product = api.inventory().find(entry => entry.id === item.productId);
         if (product) api.updateStock(item.productId, product.stock + 1, `مرتجع ${item.id}`);
@@ -88,6 +102,7 @@
     advanceOrder(code, nextState, order) {
       const states = api.orderStates(), events = read(ORDER_EVENTS_KEY, {});
       states[code] = nextState; write(ORDER_STATES_KEY, states);
+      api.addActivity({ type: 'orders', title: `تم تحديث الطلب #${code}`, detail: `الحالة الجديدة: ${nextState}` });
       if (nextState === 'preparing' && !events[`${code}:stock`]) {
         const product = api.inventory().find(item => item.id === order.productId);
         if (product) api.updateStock(order.productId, Math.max(0, product.stock - Number(order.quantity || 1)), `تأكيد الطلب #${code}`);
@@ -116,6 +131,7 @@
       const movements = api.movements();
       movements.unshift({ id: `MV-${Date.now()}`, productId: item.id, product: item.name, change: after - before, before, after, reason, time: nowLabel() });
       write(MOVEMENTS_KEY, movements.slice(0, 30));
+      api.addActivity({ type: 'inventory', title: `تم تحديث مخزون ${item.name}`, detail: `تغيرت الكمية من ${before} إلى ${after}` });
       return items;
     },
     bulkUpdate(ids, mode, amount) {
@@ -150,12 +166,14 @@
       const settlements = api.settlements();
       settlements.unshift({ id: `ST-${String(Date.now()).slice(-4)}`, date: nowLabel(), gross: value, commission: 0, net: value, status: 'pending' });
       write(SETTLEMENTS_KEY, settlements);
+      api.addActivity({ type: 'finance', title: 'تم إرسال طلب تسوية جديد', detail: `قيمة التسوية ${value} ج.م` });
       return { ok: true, finance, settlements };
     },
     saveBank(bank) {
       const finance = api.finance();
       finance.bank = { ...finance.bank, ...bank };
       write(FINANCE_KEY, finance);
+      api.addActivity({ type: 'finance', title: 'تم تحديث حساب التحويل', detail: finance.bank.bank });
       return finance;
     }
   };
