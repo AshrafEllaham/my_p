@@ -90,9 +90,9 @@ body.barq-auth-body {
 /* Page Frame Container */
 .barq-page {
   width: 100%;
-  max-width: 430px;
+  max-width: 440px;
   margin: 0 auto;
-  padding: 8px 24px 16px;
+  padding: 8px 16px 16px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -110,7 +110,7 @@ body.barq-auth-body {
 .barq-back-circle {
   width: 40px;
   height: 40px;
-  border-radius: 50%;
+  border-radius: 11px;
   background: var(--barq-card);
   border: 1px solid var(--barq-line);
   display: grid;

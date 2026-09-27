@@ -1,5 +1,207 @@
-/* Standard mobile type scale: 24/22 titles, 14 body, 12 labels, 11 supporting text. */
-.saey-home .home-greeting small { font-size:12px !important; }.saey-home .home-greeting h1 { font-size:24px !important; }.saey-home .home-location { font-size:12px !important; }.saey-home .home-search input { font-size:13px !important; }.saey-home .home-section-head h2 { font-size:16px !important; }.saey-home .home-section-head a { font-size:12px !important; }.saey-home .slider-copy span { font-size:11px !important; }.saey-home .slider-copy h2 { font-size:20px !important; }.saey-home .slider-copy a { font-size:11px !important; }.saey-home .category-chip { font-size:11px !important; }.saey-home .product-category { font-size:11px !important; }.saey-home .product-card strong { font-size:12px !important; }.saey-home .product-prices b { font-size:12px !important; }.saey-home .product-prices del { font-size:10px !important; }.saey-home .product-footer { font-size:10px !important; }.saey-home .featured-stores .store-copy h3 { font-size:13px !important; }.saey-home .featured-stores .store-copy p { font-size:11px !important; }.saey-home .featured-stores .store-meta { font-size:10px !important; }.saey-home .home-nav a { font-size:10px !important; }
-.saey-catalog .catalog-header h1 { font-size:22px !important; }.saey-catalog .catalog-search input { font-size:13px !important; }.saey-catalog .catalog-subtitle { font-size:12px !important; }.saey-catalog .catalog-category { font-size:12px !important; }.saey-catalog .catalog-category small { font-size:10px !important; }.saey-catalog .catalog-product-category { font-size:10.5px !important; }.saey-catalog .catalog-product strong { font-size:12px !important; }.saey-catalog .catalog-price b { font-size:12px !important; }.saey-catalog .catalog-price del { font-size:10px !important; }.saey-catalog .catalog-rating { font-size:10px !important; }.saey-catalog .filter-label { font-size:12px !important; }.saey-catalog .filter-chip { font-size:11px !important; }.saey-catalog .catalog-store-copy h2 { font-size:14px !important; }.saey-catalog .catalog-store-copy p { font-size:11px !important; }.saey-catalog .catalog-store-meta { font-size:10px !important; }
-.saey-product-details .details-content h1 { font-size:22px !important; }.saey-product-details .details-store { font-size:12px !important; }.saey-product-details .details-rating { font-size:12px !important; }.saey-product-details .details-section-title { font-size:15px !important; }.saey-product-details .details-description { font-size:13px !important; }.saey-product-details .details-quick-info span { font-size:11px !important; }.saey-product-details .product-features { font-size:12px !important; }.saey-product-details .choice { font-size:12px !important; }.saey-product-details .seller-card strong { font-size:12px !important; }.saey-product-details .seller-card span { font-size:10px !important; }.saey-product-details .seller-actions a { font-size:11px !important; }.saey-product-details .review-card { font-size:11px !important; }.saey-product-details .review-card p { font-size:11px !important; }.saey-product-details .similar-products strong { font-size:11px !important; }.saey-product-details .similar-products span { font-size:11px !important; }
-.saey-notifications .notification-title h1 { font-size:22px !important; }.saey-notifications .notification-title span { font-size:11px !important; }.saey-notifications .notification-date { font-size:12px !important; }.saey-notifications .notification-copy h2 { font-size:13px !important; }.saey-notifications .notification-copy p { font-size:11px !important; }.saey-notifications .notification-time { font-size:10px !important; }.saey-notifications .clear-notifications { font-size:10px !important; }
+/*
+ * Saey shared typography layer.
+ * Keep this file aligned with ../DESIGN_REFERENCE.md.
+ * It is imported by auth.css and therefore reaches every standard app screen.
+ */
+
+body:not(.sponsored-reel),
+body:not(.sponsored-reel) button,
+body:not(.sponsored-reel) input,
+body:not(.sponsored-reel) textarea,
+body:not(.sponsored-reel) select {
+  font-family: 'Inter', 'Cairo', system-ui, -apple-system, sans-serif !important;
+}
+
+/* One screen-title scale across auth, customer, merchant, and utility flows. */
+:is(
+  .barq-hero,
+  .catalog-header,
+  .notification-title,
+  .chats-head,
+  .orders-head,
+  .wallet-header,
+  .view-head,
+  .flow-head,
+  .coupons-head,
+  .trader-top,
+  .product-editor-header,
+  .merchant-order-details-header,
+  .ad-editor-header
+) h1 {
+  font-size: 24px !important;
+  line-height: 1.3 !important;
+  font-weight: 900 !important;
+}
+
+.onboarding-copy h1 { font-size:28px !important; line-height:1.3 !important; }
+.saey-home .home-greeting h1 { font-size:24px !important; }
+.saey-product-details .details-content h1 { font-size:22px !important; }
+
+/* Section titles use one compact but readable hierarchy. */
+:is(
+  .home-section-head,
+  .wallet-section-head,
+  .coupon-section-head,
+  .inline-section-head
+) h2,
+.details-section-title {
+  font-size: 18px !important;
+  line-height: 1.4 !important;
+  font-weight: 800 !important;
+}
+
+/* Home and marketplace cards. */
+.saey-home .home-greeting small,
+.saey-home .home-location,
+.saey-home .home-section-head a,
+.saey-home .slider-copy span,
+.saey-home .slider-copy a,
+.saey-home .category-chip,
+.saey-home .product-category,
+.saey-home .product-prices del,
+.saey-home .product-footer,
+.saey-home .featured-stores .store-copy p,
+.saey-home .featured-stores .store-meta,
+.saey-home .home-nav a { font-size:11px !important; }
+.saey-home .home-search input { font-size:14px !important; }
+.saey-home .slider-copy h2 { font-size:20px !important; }
+.saey-home .product-card strong,
+.saey-home .product-prices b { font-size:12px !important; }
+.saey-home .featured-stores .store-copy h3 { font-size:14px !important; }
+
+/* Catalog. */
+.saey-catalog .catalog-search input { font-size:14px !important; }
+.saey-catalog .catalog-subtitle,
+.saey-catalog .catalog-category,
+.saey-catalog .catalog-category small,
+.saey-catalog .catalog-product-category,
+.saey-catalog .catalog-price del,
+.saey-catalog .catalog-rating,
+.saey-catalog .filter-chip,
+.saey-catalog .catalog-store-copy p,
+.saey-catalog .catalog-store-meta { font-size:11px !important; }
+.saey-catalog .catalog-product strong,
+.saey-catalog .catalog-price b,
+.saey-catalog .filter-label { font-size:12px !important; }
+.saey-catalog .catalog-store-copy h2 { font-size:14px !important; }
+
+/* Product details. */
+.saey-product-details :is(
+  .details-store,
+  .details-quick-info span,
+  .seller-card span,
+  .seller-actions a,
+  .review-card,
+  .review-card p,
+  .similar-products strong,
+  .similar-products span,
+  .inline-section-head a
+) { font-size:11px !important; }
+.saey-product-details :is(
+  .details-rating,
+  .product-features,
+  .choice,
+  .seller-card strong
+) { font-size:12px !important; }
+.saey-product-details .details-description { font-size:14px !important; }
+
+/* Notifications, chats, and orders. */
+.saey-notifications :is(
+  .notification-title span,
+  .notification-copy p,
+  .notification-time,
+  .clear-notifications
+) { font-size:11px !important; }
+.saey-notifications .notification-copy h2 { font-size:14px !important; }
+
+.saey-chats :is(
+  .chat-copy small,
+  .chat-meta time,
+  .chat-meta b,
+  .chat-copy strong em
+) { font-size:11px !important; }
+.saey-chats .chat-copy strong { font-size:14px !important; }
+.saey-chats .chat-copy span { font-size:12px !important; }
+
+.saey-orders :is(
+  .summary-status,
+  .orders-tab span,
+  .order-card-head small,
+  .order-status,
+  .order-store small,
+  .order-product small,
+  .order-timeline span,
+  .order-open-link,
+  .orders-filters label,
+  .orders-filters select,
+  .orders-filters input,
+  .orders-filters button
+) { font-size:11px !important; }
+
+/* Wallets and transaction lists. */
+:is(.saey-wallet, .saey-wallet-transactions) :is(
+  .wallet-history,
+  .wallet-secure,
+  .wallet-balance-meta,
+  .wallet-insights span,
+  .wallet-insights small,
+  .wallet-section-head a,
+  .wallet-transaction-meta small,
+  .wallet-transaction-meta time,
+  .wallet-note,
+  .wallet-form-error,
+  .withdraw-available,
+  .transactions-summary span,
+  .transactions-title span
+) { font-size:11px !important; }
+
+/* Checkout and coupon flows. */
+.saey-flow :is(
+  .flow-wallet span,
+  .flow-row span,
+  .flow-note,
+  .flow-error,
+  .flow-message,
+  .coupon-help,
+  .coupon-feedback,
+  .coupon-feedback button
+) { font-size:11px !important; }
+
+.saey-coupons :is(
+  .coupon-stat small,
+  .coupon-stat > span,
+  .coupon-section-head > span,
+  .coupon-status,
+  .coupon-card-copy > small,
+  .coupon-card-footer,
+  .coupon-form-error,
+  .coupon-toggle-copy small,
+  .coupon-kpi span,
+  .coupon-kpi small,
+  .coupon-chart-item span,
+  .coupon-chart-item b,
+  .coupon-insight
+) { font-size:11px !important; }
+
+/* Inputs and primary actions share the reference scale. */
+:is(
+  .barq-input,
+  .wallet-field,
+  .view-input,
+  .view-textarea,
+  .view-select,
+  .market-input,
+  .coupon-field input,
+  .coupon-field select
+) { font-size:14px !important; }
+
+:is(
+  .btn-primary,
+  .ui-btn-primary,
+  .barq-btn-primary,
+  .flow-primary,
+  .coupon-save,
+  .buy-now,
+  .sheet-save,
+  .apply-filters
+) { font-size:14px !important; font-weight:800 !important; }

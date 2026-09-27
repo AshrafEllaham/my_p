@@ -3,9 +3,9 @@
 /* Uber-inspired UI language: compact type, restrained radius, and one line-icon family. */
 :root {
   --ui-font: 'Inter', 'Cairo', system-ui, -apple-system, sans-serif;
-  --ui-card-radius: 14px;
+  --ui-card-radius: 16px;
   --ui-control-radius: 10px;
-  --ui-card-shadow: 0 2px 10px rgba(15, 23, 42, 0.045);
+  --ui-card-shadow: 0 4px 14px rgba(15, 23, 42, 0.035);
   --ui-icon-size: 20px;
 }
 
@@ -239,7 +239,7 @@ select {
 }
 
 /* Make the existing interface icons use the same rounded, outlined family. */
-:is(.saey-home, .saey-catalog, .saey-cart, .saey-orders, .saey-chats, .saey-account, .saey-account-view, .saey-conversation, .saey-notifications, .saey-product-details) :is(a, button, .row-icon, .summary-icon, .notification-icon, .barq-input-icon, .barq-select-chevron) > svg {
+:is(.saey-home, .saey-catalog, .saey-cart, .saey-orders, .saey-chats, .saey-account, .saey-account-view, .saey-conversation, .saey-notifications, .saey-product-details, .saey-wallet, .saey-wallet-transactions, .saey-flow, .saey-coupons) :is(a, button, .row-icon, .summary-icon, .notification-icon, .barq-input-icon, .barq-select-chevron) > svg {
   fill: none;
   stroke: currentColor;
   stroke-width: 1.8;
@@ -247,7 +247,7 @@ select {
   stroke-linejoin: round;
 }
 
-:is(.saey-home, .saey-catalog, .saey-cart, .saey-orders, .saey-chats, .saey-account, .saey-account-view, .saey-conversation, .saey-notifications, .saey-product-details) :not(.status-icons) > svg {
+:is(.saey-home, .saey-catalog, .saey-cart, .saey-orders, .saey-chats, .saey-account, .saey-account-view, .saey-conversation, .saey-notifications, .saey-product-details, .saey-wallet, .saey-wallet-transactions, .saey-flow, .saey-coupons) :not(.status-icons) > svg {
   fill: none;
   stroke: currentColor;
   stroke-width: 1.8;
