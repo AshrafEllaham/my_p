@@ -81,10 +81,10 @@ body:not(.saey-home) .status-bar { width:min(100%,393px); height:30px; margin:0 
 .catalog-overview-main span { display:block; color:rgba(255,255,255,.7); font-size:7.5px; font-weight:700; white-space:nowrap; }
 .catalog-overview-main span b { color:#6EE7B7; }
 .catalog-overview-side { display:grid; gap:7px; }
-.catalog-overview-side article { min-width:0; display:flex; align-items:center; justify-content:space-between; gap:6px; padding:10px 11px; border:1px solid #DDE5ED; border-radius:14px; background:#FFF; box-shadow:0 4px 12px rgba(15,23,42,.035); }
+.catalog-overview-side article,.catalog-overview-side a { min-width:0; display:flex; align-items:center; justify-content:space-between; gap:6px; padding:10px 11px; border:1px solid #DDE5ED; border-radius:14px; background:#FFF; box-shadow:0 4px 12px rgba(15,23,42,.035); color:inherit; text-decoration:none; }
 .catalog-overview-side span { max-width:70px; color:#64748B; font-size:7.8px; line-height:1.35; font-weight:800; }
 .catalog-overview-side strong { font:900 16px 'Inter','Cairo'; }
-.catalog-overview-side article:last-child strong { color:#B45309; }
+.catalog-overview-side article:last-child strong,.catalog-overview-side a:last-child strong { color:#B45309; font-size:12px; }
 .products-search { min-height:50px; margin:0 !important; flex-shrink:0; border-color:#DCE4ED !important; box-shadow:0 3px 12px rgba(15,23,42,.035); }
 .products-search input { text-align:right; font-size:13px !important; }
 .products-search > svg { width:18px !important; height:18px !important; }

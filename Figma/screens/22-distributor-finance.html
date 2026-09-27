@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>سعي — المالية والتسويات</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="auth.css">
+  <link rel="stylesheet" href="uber-ui.css">
+  <link rel="stylesheet" href="merchant-operations.css">
+</head>
+<body class="merchant-ops">
+  <div class="status-bar"><span class="status-time">9:41</span><div class="status-icons"><svg viewBox="0 0 17 11" width="17"><path d="M1 9h3v2H1zm4-3h3v5H5zm4-3h3v8H9zm4-3h3v11h-3z"/></svg><svg viewBox="0 0 16 12" width="16"><path d="M8 10a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M2 5a8.5 8.5 0 0 1 12 0l-1.1 1.1a7 7 0 0 0-9.8 0z"/></svg><svg viewBox="0 0 25 12" width="24"><rect x="1" y="1" width="20" height="10" rx="3" fill="none" stroke="currentColor"/><rect x="3" y="3" width="16" height="6" rx="1.5"/></svg></div></div>
+
+  <main class="ops-page">
+    <header class="ops-header">
+      <a class="ops-icon-button" href="20-distributor-account.html" aria-label="العودة إلى الحساب"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a>
+      <div class="ops-header-title"><h1>المالية والتسويات</h1><p>أرباح المتجر وتحويلاتها</p></div>
+      <a class="ops-icon-button" href="21-distributor-orders.html" aria-label="عرض الطلبات"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="m9 13 2 2 4-4M9 8h6"/></svg></a>
+    </header>
+
+    <section class="finance-hero ops-card">
+      <small>الرصيد المتاح للتسوية</small><div class="finance-balance" id="availableBalance">—</div>
+      <div class="finance-hero-grid"><div><span>قيد المعالجة</span><strong id="pendingBalance">—</strong></div><div><span>التسوية القادمة</span><strong id="nextSettlement">—</strong></div></div>
+      <button type="button" id="openSettlement">طلب تسوية</button>
+    </section>
+
+    <section class="finance-kpis" aria-label="ملخص الأرباح">
+      <article class="ops-card"><span>إجمالي المبيعات</span><strong id="grossSales">—</strong></article>
+      <article class="ops-card"><span>عمولة سعي</span><strong id="commission">—</strong></article>
+      <article class="ops-card"><span>صافي الأرباح</span><strong id="netEarnings">—</strong></article>
+    </section>
+
+    <div class="ops-tabs" role="tablist" aria-label="تفاصيل المالية"><button class="active" type="button" role="tab" aria-selected="true" data-view="settlements">التسويات</button><button type="button" role="tab" aria-selected="false" data-view="transactions">الحركات</button></div>
+
+    <section id="settlementsView"><div class="section-heading"><h2>سجل التسويات</h2><small>آخر ٣٠ يومًا</small></div><div class="settlements-list" id="settlementsList"></div></section>
+    <section class="hidden" id="transactionsView"><div class="section-heading"><h2>الحركات المالية</h2><small>تفاصيل واضحة لكل حركة</small></div><div class="ops-card" id="transactionsList"></div></section>
+
+    <div class="section-heading"><h2>حساب التحويل</h2><button type="button" id="openBank">تعديل</button></div>
+    <article class="bank-card ops-card"><span class="bank-icon"><svg class="ops-svg" viewBox="0 0 24 24"><path d="M3 10h18M5 10v8M9 10v8M15 10v8M19 10v8M3 18h18M12 3l9 5H3Z"/></svg></span><div><h3 id="bankName">—</h3><p><span id="bankHolder">—</span> · <b id="bankAccount">—</b></p></div><svg class="ops-svg" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></article>
+  </main>
+
+  <div class="sheet-backdrop" id="settlementSheet" aria-hidden="true"><section class="ops-sheet" role="dialog" aria-modal="true" aria-labelledby="settlementTitle"><div class="sheet-handle"></div><header class="ops-sheet-head"><h2 id="settlementTitle">طلب تسوية جديدة</h2><button type="button" data-close-sheet aria-label="إغلاق">×</button></header><p>سيتم تحويل المبلغ إلى حسابك البنكي المسجل خلال ٢–٣ أيام عمل.</p><label class="form-field"><span>المبلغ المطلوب</span><input id="settlementAmount" type="number" inputmode="decimal" min="100" placeholder="الحد الأدنى ١٠٠ ج.م"></label><label class="form-field"><span>حساب التحويل</span><input id="settlementBank" type="text" disabled></label><p class="sheet-error" id="settlementError"></p><button class="primary-action" id="confirmSettlement" type="button">تأكيد طلب التسوية</button></section></div>
+
+  <div class="sheet-backdrop" id="bankSheet" aria-hidden="true"><section class="ops-sheet" role="dialog" aria-modal="true" aria-labelledby="bankTitle"><div class="sheet-handle"></div><header class="ops-sheet-head"><h2 id="bankTitle">تعديل حساب التحويل</h2><button type="button" data-close-sheet aria-label="إغلاق">×</button></header><p>تأكد من مطابقة اسم صاحب الحساب مع بيانات المتجر.</p><label class="form-field"><span>اسم البنك</span><input id="bankInput" type="text"></label><label class="form-field"><span>اسم صاحب الحساب</span><input id="holderInput" type="text"></label><label class="form-field"><span>رقم IBAN</span><input class="iban-input" id="ibanInput" type="text" inputmode="text" maxlength="42" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="EG00 0000 0000 0000 0000 0000 000"></label><p class="sheet-error" id="bankError"></p><button class="primary-action" id="saveBank" type="button">حفظ بيانات التحويل</button></section></div>
+  <div class="ops-toast" id="toast" role="status"></div>
+
+  <script src="merchant-state.js"></script>
+  <script>
+    const money=value=>`${Number(value).toLocaleString('ar-EG')} ج.م`;
+    const cleanIban=value=>String(value||'').replace(/\s/g,'').toUpperCase();
+    const formatIban=value=>cleanIban(value).replace(/(.{4})/g,'$1 ').trim();
+    const maskIban=value=>{const clean=cleanIban(value);return clean?`${clean.slice(0,4)} •••• •••• ${clean.slice(-4)}`:'—'};
+    const transactions=[{title:'طلب #1028',detail:'بيع حذاء رياضي أبيض',amount:950,type:'sale'},{title:'عمولة سعي',detail:'عمولة الطلب #1028',amount:-57,type:'charge'},{title:'طلب #1026',detail:'بيع جاكيت جلد طبيعي',amount:1850,type:'sale'},{title:'تسوية ST-2048',detail:'تحويل إلى الحساب البنكي',amount:-8648,type:'charge'}];
+    function renderFinance(){const finance=SaeyMerchant.finance(),maskedIban=maskIban(finance.bank.iban);document.getElementById('availableBalance').textContent=money(finance.available);document.getElementById('pendingBalance').textContent=money(finance.pending);document.getElementById('nextSettlement').textContent=finance.nextSettlement;document.getElementById('grossSales').textContent=money(finance.grossSales);document.getElementById('commission').textContent=`− ${money(finance.commission)}`;document.getElementById('netEarnings').textContent=money(finance.grossSales-finance.commission);document.getElementById('bankName').textContent=finance.bank.bank;document.getElementById('bankHolder').textContent=finance.bank.holder;document.getElementById('bankAccount').textContent=maskedIban;document.getElementById('settlementBank').value=`${finance.bank.bank} · ${maskedIban}`}
+    function renderSettlements(){document.getElementById('settlementsList').innerHTML=SaeyMerchant.settlements().map(item=>`<article class="settlement-card ops-card"><div class="settlement-head"><h3>${item.id}</h3><span class="status-pill ${item.status==='pending'?'pending':''}">${item.status==='pending'?'قيد المعالجة':'تم التحويل'}</span></div><div class="settlement-amount">${money(item.net)}</div><div class="settlement-meta"><div><span>المبيعات</span><strong>${money(item.gross)}</strong></div><div><span>عمولة سعي</span><strong>${money(item.commission)}</strong></div></div><div class="settlement-foot"><span>${item.date}</span><b>${item.status==='pending'?'تصل خلال ٢–٣ أيام':'تحويل بنكي مكتمل'}</b></div></article>`).join('')}
+    function renderTransactions(){document.getElementById('transactionsList').innerHTML=transactions.map(item=>`<article class="transaction-card ${item.type}"><span class="transaction-icon"><svg class="ops-svg" viewBox="0 0 24 24"><path d="${item.type==='sale'?'M12 19V5M7 10l5-5 5 5':'M12 5v14M7 14l5 5 5-5'}"/></svg></span><div><h3>${item.title}</h3><p>${item.detail}</p></div><strong>${item.amount>0?'+ ':''}${money(item.amount)}</strong></article>`).join('')}
+    const sheets={settlement:document.getElementById('settlementSheet'),bank:document.getElementById('bankSheet')};
+    function openSheet(sheet){sheet.classList.add('visible');sheet.setAttribute('aria-hidden','false')}function closeSheet(sheet){sheet.classList.remove('visible');sheet.setAttribute('aria-hidden','true')}
+    Object.values(sheets).forEach(sheet=>{sheet.querySelector('[data-close-sheet]').onclick=()=>closeSheet(sheet);sheet.onclick=e=>{if(e.target===sheet)closeSheet(sheet)}});
+    function toast(message){const box=document.getElementById('toast');box.textContent=message;box.classList.add('visible');setTimeout(()=>box.classList.remove('visible'),2200)}
+    document.getElementById('openSettlement').onclick=()=>{document.getElementById('settlementAmount').value='';document.getElementById('settlementError').textContent='';openSheet(sheets.settlement)};
+    document.getElementById('confirmSettlement').onclick=()=>{const value=Number(document.getElementById('settlementAmount').value),finance=SaeyMerchant.finance(),error=document.getElementById('settlementError');if(value<100){error.textContent='الحد الأدنى للتسوية ١٠٠ ج.م.';return}if(value>finance.available){error.textContent='المبلغ أكبر من الرصيد المتاح.';return}SaeyMerchant.requestSettlement(value);closeSheet(sheets.settlement);renderFinance();renderSettlements();toast('تم إرسال طلب التسوية بنجاح')};
+    document.getElementById('openBank').onclick=()=>{const bank=SaeyMerchant.finance().bank;document.getElementById('bankInput').value=bank.bank;document.getElementById('holderInput').value=bank.holder;document.getElementById('ibanInput').value=formatIban(bank.iban);document.getElementById('bankError').textContent='';openSheet(sheets.bank)};
+    document.getElementById('ibanInput').oninput=e=>{const clean=cleanIban(e.target.value).replace(/[^A-Z0-9]/g,'').slice(0,34);e.target.value=formatIban(clean)};
+    document.getElementById('saveBank').onclick=()=>{const bank=document.getElementById('bankInput').value.trim(),holder=document.getElementById('holderInput').value.trim(),iban=cleanIban(document.getElementById('ibanInput').value),error=document.getElementById('bankError');if(!bank||!holder){error.textContent='أكمل اسم البنك واسم صاحب الحساب.';return}if(!/^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$/.test(iban)){error.textContent='أدخل رقم IBAN صحيحًا يبدأ برمز الدولة.';return}SaeyMerchant.saveBank({bank,holder,iban});closeSheet(sheets.bank);renderFinance();toast('تم تحديث حساب التحويل')};
+    document.querySelectorAll('[data-view]').forEach(tab=>tab.onclick=()=>{document.querySelectorAll('[data-view]').forEach(item=>{item.classList.toggle('active',item===tab);item.setAttribute('aria-selected',item===tab)});document.getElementById('settlementsView').classList.toggle('hidden',tab.dataset.view!=='settlements');document.getElementById('transactionsView').classList.toggle('hidden',tab.dataset.view!=='transactions')});
+    renderFinance();renderSettlements();renderTransactions();
+  </script>
+</body>
+</html>

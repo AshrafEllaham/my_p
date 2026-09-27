@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>سعي — إدارة المخزون</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="auth.css">
+  <link rel="stylesheet" href="uber-ui.css">
+  <link rel="stylesheet" href="merchant-operations.css">
+</head>
+<body class="merchant-ops">
+  <div class="status-bar"><span class="status-time">9:41</span><div class="status-icons"><svg viewBox="0 0 17 11" width="17"><path d="M1 9h3v2H1zm4-3h3v5H5zm4-3h3v8H9zm4-3h3v11h-3z"/></svg><svg viewBox="0 0 16 12" width="16"><path d="M8 10a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M2 5a8.5 8.5 0 0 1 12 0l-1.1 1.1a7 7 0 0 0-9.8 0z"/></svg><svg viewBox="0 0 25 12" width="24"><rect x="1" y="1" width="20" height="10" rx="3" fill="none" stroke="currentColor"/><rect x="3" y="3" width="16" height="6" rx="1.5"/></svg></div></div>
+
+  <main class="ops-page">
+    <header class="ops-header">
+      <a class="ops-icon-button" href="18-distributor-products.html" aria-label="العودة إلى المنتجات"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a>
+      <div class="ops-header-title"><h1>إدارة المخزون</h1><p>تحكم سريع ودقيق في الكميات</p></div>
+      <button class="ops-icon-button" id="selectAll" type="button" aria-label="تحديد كل المنتجات"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="m8 12 2.5 2.5L16 9"/></svg></button>
+    </header>
+
+    <section class="ops-intro"><div><h2>المخزون الحالي</h2><p>كمية موحدة لكل منتج بدون مقاسات أو ألوان.</p></div></section>
+    <section class="ops-summary" aria-label="ملخص المخزون">
+      <article class="ops-card"><span><i></i>إجمالي الوحدات</span><strong id="totalUnits">—</strong></article>
+      <article class="ops-card"><span><i></i>مخزون منخفض</span><strong id="lowCount">—</strong></article>
+      <article class="ops-card"><span><i></i>نفد المخزون</span><strong id="outCount">—</strong></article>
+    </section>
+
+    <div class="ops-tabs" role="tablist" aria-label="أقسام المخزون"><button class="active" type="button" role="tab" aria-selected="true" data-view="inventory">المنتجات والكميات</button><button type="button" role="tab" aria-selected="false" data-view="movements">سجل الحركة</button></div>
+
+    <section id="inventoryView">
+      <div class="ops-toolbar">
+        <label class="ops-search"><svg class="ops-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg><input id="stockSearch" type="search" placeholder="ابحث باسم المنتج أو الكود"></label>
+        <select class="ops-filter" id="stockFilter" aria-label="تصفية المخزون"><option value="all">الكل</option><option value="low">منخفض</option><option value="out">نفد</option><option value="available">متوفر</option></select>
+      </div>
+      <div class="inventory-list" id="inventoryList"></div>
+    </section>
+
+    <section class="hidden" id="movementsView">
+      <div class="section-heading"><h2>آخر التحديثات</h2><small>الأحدث أولًا</small></div>
+      <div class="movements" id="movementsList"></div>
+    </section>
+  </main>
+
+  <div class="bulk-bar" id="bulkBar"><span id="selectionCount">تم تحديد ٠</span><button type="button" id="openBulk">تحديث الكمية</button></div>
+
+  <div class="sheet-backdrop" id="bulkSheet" aria-hidden="true">
+    <section class="ops-sheet" role="dialog" aria-modal="true" aria-labelledby="bulkTitle">
+      <div class="sheet-handle"></div><header class="ops-sheet-head"><h2 id="bulkTitle">تحديث جماعي للمخزون</h2><button type="button" data-close-sheet aria-label="إغلاق">×</button></header>
+      <p id="bulkDescription">سيتم تطبيق التحديث على المنتجات المحددة.</p>
+      <div class="mode-switch"><button class="active" type="button" data-mode="add">إضافة</button><button type="button" data-mode="subtract">خصم</button><button type="button" data-mode="set">تعيين</button></div>
+      <label class="form-field"><span>الكمية</span><input id="bulkAmount" type="number" inputmode="numeric" min="0" value="5"></label>
+      <p class="sheet-error" id="bulkError"></p><button class="primary-action" id="applyBulk" type="button">تطبيق التحديث</button>
+    </section>
+  </div>
+  <div class="ops-toast" id="toast" role="status"></div>
+
+  <script src="merchant-state.js"></script>
+  <script>
+    const ar=value=>Number(value).toLocaleString('ar-EG');
+    const list=document.getElementById('inventoryList'), movementsList=document.getElementById('movementsList');
+    const selected=new Set();let mode='add';
+    const statusFor=item=>item.stock===0?'out':item.stock<=item.threshold?'low':'available';
+    const statusLabel=item=>item.stock===0?'نفد':item.stock<=item.threshold?'منخفض':'متوفر';
+    function renderSummary(items){document.getElementById('totalUnits').textContent=ar(items.reduce((sum,item)=>sum+item.stock,0));document.getElementById('lowCount').textContent=ar(items.filter(item=>item.stock>0&&item.stock<=item.threshold).length);document.getElementById('outCount').textContent=ar(items.filter(item=>item.stock===0).length)}
+    function renderInventory(){const items=SaeyMerchant.inventory(),query=document.getElementById('stockSearch').value.trim().toLowerCase(),filter=document.getElementById('stockFilter').value;renderSummary(items);const visible=items.filter(item=>(!query||item.name.toLowerCase().includes(query)||item.sku.toLowerCase().includes(query))&&(filter==='all'||statusFor(item)===filter));list.innerHTML=visible.length?visible.map(item=>`<article class="inventory-card ops-card ${statusFor(item)}" data-id="${item.id}"><input class="stock-check" type="checkbox" aria-label="تحديد ${item.name}" ${selected.has(item.id)?'checked':''}><img class="inventory-image" src="${item.image}" alt=""><div class="inventory-content"><div class="inventory-title-row"><div><h3>${item.name}</h3><small>${item.sku}</small></div><em class="stock-badge">${statusLabel(item)}</em></div><div class="stock-control-row"><span>تنبيه عند ${ar(item.threshold)} وحدات</span><div class="stock-stepper"><button type="button" data-delta="-1" aria-label="تقليل الكمية">−</button><input type="number" min="0" value="${item.stock}" aria-label="كمية ${item.name}"><button type="button" data-delta="1" aria-label="زيادة الكمية">+</button></div></div></div></article>`).join(''):`<div class="empty-state ops-card"><svg class="ops-svg" viewBox="0 0 24 24"><path d="m4 8 8-4 8 4-8 4-8-4Z"/><path d="M4 8v8l8 4 8-4V8M12 12v8"/></svg><h3>لا توجد نتائج</h3><p>جرّب تغيير البحث أو حالة المخزون.</p></div>`;bindCards();updateBulkBar()}
+    function bindCards(){list.querySelectorAll('.inventory-card').forEach(card=>{const id=card.dataset.id,check=card.querySelector('.stock-check'),input=card.querySelector('input[type=number]');check.onchange=()=>{check.checked?selected.add(id):selected.delete(id);updateBulkBar()};card.querySelectorAll('[data-delta]').forEach(button=>button.onclick=()=>{const next=Math.max(0,Number(input.value)+Number(button.dataset.delta));SaeyMerchant.updateStock(id,next,button.dataset.delta==='1'?'إضافة سريعة':'خصم سريع');renderInventory();renderMovements()});input.onchange=()=>{SaeyMerchant.updateStock(id,input.value,'تعديل يدوي');renderInventory();renderMovements()}})}
+    function renderMovements(){const rows=SaeyMerchant.movements();movementsList.innerHTML=rows.map(item=>`<article class="movement ops-card ${item.change<0?'negative':''}"><span class="movement-icon"><svg class="ops-svg" viewBox="0 0 24 24"><path d="M12 ${item.change<0?'5v14M7 14l5 5 5-5':'19V5M7 10l5-5 5 5'}"/></svg></span><div><h3>${item.product}</h3><p>${item.reason} · ${item.time}</p></div><strong>${item.change>0?'+':''}${ar(item.change)}<small>${ar(item.before)} ← ${ar(item.after)}</small></strong></article>`).join('')}
+    function updateBulkBar(){const count=selected.size;document.getElementById('selectionCount').textContent=`تم تحديد ${ar(count)}`;document.getElementById('bulkBar').classList.toggle('visible',count>0)}
+    function showToast(message){const toast=document.getElementById('toast');toast.textContent=message;toast.classList.add('visible');setTimeout(()=>toast.classList.remove('visible'),2200)}
+    document.getElementById('stockSearch').oninput=renderInventory;document.getElementById('stockFilter').onchange=renderInventory;
+    document.querySelectorAll('[data-view]').forEach(tab=>tab.onclick=()=>{document.querySelectorAll('[data-view]').forEach(item=>{item.classList.toggle('active',item===tab);item.setAttribute('aria-selected',item===tab)});document.getElementById('inventoryView').classList.toggle('hidden',tab.dataset.view!=='inventory');document.getElementById('movementsView').classList.toggle('hidden',tab.dataset.view!=='movements');document.getElementById('bulkBar').classList.remove('visible');if(tab.dataset.view==='movements')renderMovements();else updateBulkBar()});
+    document.getElementById('selectAll').onclick=()=>{const items=SaeyMerchant.inventory();if(selected.size===items.length)selected.clear();else items.forEach(item=>selected.add(item.id));renderInventory()};
+    const sheet=document.getElementById('bulkSheet');document.getElementById('openBulk').onclick=()=>{document.getElementById('bulkDescription').textContent=`سيتم تطبيق التحديث على ${ar(selected.size)} منتجات محددة.`;sheet.classList.add('visible');sheet.setAttribute('aria-hidden','false')};function closeSheet(){sheet.classList.remove('visible');sheet.setAttribute('aria-hidden','true')}sheet.querySelector('[data-close-sheet]').onclick=closeSheet;sheet.onclick=e=>{if(e.target===sheet)closeSheet()};
+    document.querySelectorAll('[data-mode]').forEach(button=>button.onclick=()=>{mode=button.dataset.mode;document.querySelectorAll('[data-mode]').forEach(item=>item.classList.toggle('active',item===button))});
+    document.getElementById('applyBulk').onclick=()=>{const amount=Number(document.getElementById('bulkAmount').value),error=document.getElementById('bulkError');if(!Number.isFinite(amount)||amount<0){error.textContent='أدخل كمية صحيحة.';return}SaeyMerchant.bulkUpdate([...selected],mode,amount);selected.clear();error.textContent='';closeSheet();renderInventory();renderMovements();showToast('تم تحديث المخزون بنجاح')};
+    renderInventory();renderMovements();
+  </script>
+</body>
+</html>
