@@ -3,6 +3,10 @@
   const MOVEMENTS_KEY = 'saey_merchant_stock_movements_v1';
   const FINANCE_KEY = 'saey_merchant_finance_v1';
   const SETTLEMENTS_KEY = 'saey_merchant_settlements_v1';
+  const RETURNS_KEY = 'saey_merchant_returns_v1';
+  const ORDER_STATES_KEY = 'saey_merchant_order_states_v1';
+  const ORDER_EVENTS_KEY = 'saey_merchant_order_events_v1';
+  const LEDGER_KEY = 'saey_merchant_ledger_v1';
 
   const inventorySeed = [
     { id: 'jacket', name: 'جاكيت جلد طبيعي', sku: 'JK-1042', stock: 18, threshold: 5, image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=240&q=82' },
@@ -31,6 +35,18 @@
     { id: 'MV-3', productId: 'watch', product: 'ساعة رياضية ذكية', change: -2, before: 2, after: 0, reason: 'طلب جديد #1021', time: 'أمس، 1:20 م' }
   ];
 
+  const returnsSeed = [
+    { id: 'RT-3018', order: 'SA-10794', customer: 'ريم خالد', productId: 'shoe', product: 'حذاء رياضي أبيض', amount: 950, reason: 'المنتج لا يطابق الوصف', details: 'العميلة أرفقت صورًا وتطلب استرداد المبلغ.', date: 'اليوم، 11:20 ص', status: 'pending' },
+    { id: 'RT-3014', order: 'SA-10781', customer: 'أحمد سامي', productId: 'backpack', product: 'حقيبة ظهر عملية', amount: 680, reason: 'عيب في المنتج', details: 'تمت مراجعة الصور والمنتج قابل للإرجاع.', date: 'أمس، 4:10 م', status: 'review' },
+    { id: 'RT-3009', order: 'SA-10742', customer: 'مريم حسن', productId: 'jacket', product: 'جاكيت جلد طبيعي', amount: 1850, reason: 'تراجع عن الشراء', details: 'تم استلام المنتج وإعادة المبلغ.', date: '24 سبتمبر 2026', status: 'completed' }
+  ];
+
+  const ledgerSeed = [
+    { id: 'LG-1028', title: 'طلب #SA-10928', detail: 'بيع جاكيت جلد طبيعي', amount: 1850, type: 'sale', date: 'اليوم، 10:32 ص' },
+    { id: 'LG-C1028', title: 'عمولة سعي', detail: 'عمولة الطلب #SA-10928', amount: -111, type: 'charge', date: 'اليوم، 10:32 ص' },
+    { id: 'LG-1026', title: 'طلب #SA-10886', detail: 'بيع حقيبة ظهر عملية', amount: 680, type: 'sale', date: 'أمس، 6:40 م' }
+  ];
+
   const clone = value => JSON.parse(JSON.stringify(value));
   const read = (key, fallback) => {
     try {
@@ -47,6 +63,47 @@
   const api = {
     inventory: () => read(INVENTORY_KEY, inventorySeed),
     movements: () => read(MOVEMENTS_KEY, movementsSeed),
+    returns: () => read(RETURNS_KEY, returnsSeed),
+    updateReturn(id, status, note = '') {
+      const items = api.returns(), item = items.find(entry => entry.id === id);
+      if (!item) return items;
+      item.status = status; item.note = note; item.updatedAt = nowLabel();
+      if (status === 'approved' && !item.restocked) {
+        const product = api.inventory().find(entry => entry.id === item.productId);
+        if (product) api.updateStock(item.productId, product.stock + 1, `مرتجع ${item.id}`);
+        const finance = api.finance(), commission = Math.round(item.amount * .06);
+        finance.available = Math.max(0, finance.available - (item.amount - commission));
+        finance.grossSales = Math.max(0, finance.grossSales - item.amount);
+        finance.commission = Math.max(0, finance.commission - commission);
+        write(FINANCE_KEY, finance);
+        api.addLedger({ title: `استرداد ${item.order}`, detail: item.product, amount: -item.amount, type: 'refund' });
+        item.restocked = true;
+      }
+      return write(RETURNS_KEY, items);
+    },
+    orderStates: () => read(ORDER_STATES_KEY, {}),
+    orderState(code, fallback = 'new') { return api.orderStates()[code] || fallback; },
+    ledger: () => read(LEDGER_KEY, ledgerSeed),
+    addLedger(entry) { const rows = api.ledger(); rows.unshift({ id: `LG-${Date.now()}`, date: nowLabel(), ...entry }); return write(LEDGER_KEY, rows.slice(0, 60)); },
+    advanceOrder(code, nextState, order) {
+      const states = api.orderStates(), events = read(ORDER_EVENTS_KEY, {});
+      states[code] = nextState; write(ORDER_STATES_KEY, states);
+      if (nextState === 'preparing' && !events[`${code}:stock`]) {
+        const product = api.inventory().find(item => item.id === order.productId);
+        if (product) api.updateStock(order.productId, Math.max(0, product.stock - Number(order.quantity || 1)), `تأكيد الطلب #${code}`);
+        events[`${code}:stock`] = new Date().toISOString();
+      }
+      if (nextState === 'completed' && !events[`${code}:finance`]) {
+        const amount = Number(order.amount || 0), commission = Math.round(amount * .06), finance = api.finance();
+        finance.available += amount - commission; finance.grossSales += amount; finance.commission += commission;
+        write(FINANCE_KEY, finance);
+        api.addLedger({ title: `طلب #${code}`, detail: `بيع ${order.product || 'منتج'}`, amount, type: 'sale' });
+        api.addLedger({ title: 'عمولة سعي', detail: `عمولة الطلب #${code}`, amount: -commission, type: 'charge' });
+        events[`${code}:finance`] = new Date().toISOString();
+      }
+      write(ORDER_EVENTS_KEY, events);
+      return nextState;
+    },
     updateStock(id, nextStock, reason = 'تعديل يدوي') {
       const items = api.inventory();
       const item = items.find(entry => entry.id === id);

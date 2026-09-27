@@ -14,6 +14,14 @@
       <label class="store-logo-editor"><input type="file" accept="image/png,image/jpeg"><b>ن</b><span><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></label>
       <div><strong>نقطة ستور</strong><small>متجر موثّق · ملابس وأزياء</small></div>
     </section>
+    <section class="view-card store-qr-section">
+      <header class="store-qr-head"><div><h2 class="view-card-title">رمز QR الخاص بالمتجر</h2><p>يمكن للعملاء مسحه لفتح صفحة متجرك مباشرة.</p></div><span>جاهز للمسح</span></header>
+      <div class="store-qr-content">
+        <button class="store-qr-preview" id="openStoreQr" type="button" aria-label="عرض رمز QR بالحجم الكامل"><img src="store-noqta-qr.png" alt="رمز QR الخاص بمتجر نقطة ستور"></button>
+        <div class="store-qr-copy"><strong id="qrStoreName">نقطة ستور</strong><small dir="ltr">SAEY-STORE-1042</small><p>ضع الرمز عند نقطة الدفع أو اطبعه داخل المتجر.</p></div>
+      </div>
+      <div class="store-qr-actions"><button type="button" id="shareStoreQr"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.7 6.6-4.1M8.7 13.3l6.6 4.1"/></svg>مشاركة الرابط</button><a href="store-noqta-qr.png" download="saey-noqta-store-qr.png"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>تحميل الرمز</a></div>
+    </section>
     <section class="view-card">
       <h2 class="view-card-title">المعلومات الأساسية</h2>
       <div class="view-field"><label class="view-label" for="storeName">اسم المتجر</label><input class="view-input" id="storeName" value="نقطة ستور"></div>
@@ -28,6 +36,7 @@
     </section>
     <button class="view-button" id="saveStoreProfile" type="button">حفظ التغييرات</button><p class="store-save-feedback" id="storeSaveFeedback" role="status"></p>
   </main>
-  <script>const savedStoreName=localStorage.getItem('saey_store_name');if(savedStoreName)document.getElementById('storeName').value=savedStoreName;document.getElementById('saveStoreProfile').addEventListener('click',()=>{localStorage.setItem('saey_store_name',document.getElementById('storeName').value.trim()||'نقطة ستور');document.getElementById('storeSaveFeedback').textContent='تم حفظ بيانات المتجر بنجاح';document.getElementById('saveStoreProfile').textContent='تم الحفظ ✓'});</script>
+  <div class="store-qr-modal" id="storeQrModal" aria-hidden="true"><section role="dialog" aria-modal="true" aria-labelledby="storeQrTitle"><header><div><h2 id="storeQrTitle">رمز متجر نقطة ستور</h2><p>وجّه كاميرا الهاتف إلى الرمز</p></div><button id="closeStoreQr" type="button" aria-label="إغلاق"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button></header><img src="store-noqta-qr.png" alt="رمز QR بالحجم الكامل"><strong dir="ltr">SAEY-STORE-1042</strong><a href="store-noqta-qr.png" download="saey-noqta-store-qr.png">تحميل الرمز</a></section></div>
+  <script>const storeUrl='https://saey.app/store/noqta-store',savedStoreName=localStorage.getItem('saey_store_name');if(savedStoreName){document.getElementById('storeName').value=savedStoreName;document.getElementById('qrStoreName').textContent=savedStoreName;document.getElementById('storeQrTitle').textContent=`رمز متجر ${savedStoreName}`}const qrModal=document.getElementById('storeQrModal');const closeQr=()=>{qrModal.classList.remove('visible');qrModal.setAttribute('aria-hidden','true')};document.getElementById('openStoreQr').onclick=()=>{qrModal.classList.add('visible');qrModal.setAttribute('aria-hidden','false')};document.getElementById('closeStoreQr').onclick=closeQr;qrModal.onclick=e=>{if(e.target===qrModal)closeQr()};document.getElementById('shareStoreQr').onclick=async()=>{if(navigator.share){await navigator.share({title:`متجر ${document.getElementById('qrStoreName').textContent} على سعي`,url:storeUrl})}else{await navigator.clipboard.writeText(storeUrl);document.getElementById('shareStoreQr').lastChild.textContent=' تم نسخ الرابط'}};document.getElementById('saveStoreProfile').addEventListener('click',()=>{const name=document.getElementById('storeName').value.trim()||'نقطة ستور';localStorage.setItem('saey_store_name',name);document.getElementById('qrStoreName').textContent=name;document.getElementById('storeQrTitle').textContent=`رمز متجر ${name}`;document.getElementById('storeSaveFeedback').textContent='تم حفظ بيانات المتجر بنجاح';document.getElementById('saveStoreProfile').textContent='تم الحفظ ✓'});</script>
 </body>
 </html>

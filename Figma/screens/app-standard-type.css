@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap');
+
 /*
  * Saey shared typography layer.
  * Keep this file aligned with ../DESIGN_REFERENCE.md.
  * It is imported by auth.css and therefore reaches every standard app screen.
+ * Cairo is the Arabic face; Inter is used for Latin text, codes, and numbers.
  */
 
 body:not(.sponsored-reel),
