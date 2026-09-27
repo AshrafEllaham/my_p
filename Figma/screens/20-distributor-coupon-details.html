@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>سعي — تفاصيل الكوبون</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="auth.css">
+  <link rel="stylesheet" href="coupons.css">
+</head>
+<body class="saey-coupons">
+  <div class="status-bar"><span class="status-time">9:41</span><div class="status-icons">▮▮　⌁　▰</div></div>
+  <main class="coupons-page coupon-details-page">
+    <header class="coupons-head">
+      <a class="coupon-back" href="20-distributor-coupons.html" aria-label="العودة للكوبونات"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a>
+      <h1>تفاصيل الكوبون</h1>
+      <div class="coupon-details-menu-wrap" id="couponMenuWrap">
+        <button class="coupon-menu-trigger coupon-details-menu-trigger" id="detailsMenuButton" type="button" aria-controls="detailsMenu" aria-expanded="false" aria-label="خيارات الكوبون"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button>
+        <div class="coupon-menu coupon-details-menu" id="detailsMenu" hidden>
+          <button type="button" data-detail-action="edit"><svg viewBox="0 0 24 24"><path d="m4 20 4.5-1 10-10a2.1 2.1 0 0 0-3-3l-10 10L4 20ZM14 7l3 3"/></svg><span>تعديل</span></button>
+          <button type="button" data-detail-action="toggle"><svg viewBox="0 0 24 24"><path d="M12 2v10M6.3 5.7a8 8 0 1 0 11.4 0"/></svg><span id="detailToggleLabel">إلغاء التفعيل</span></button>
+          <button class="danger" type="button" data-detail-action="delete"><svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"/></svg><span>حذف</span></button>
+        </div>
+      </div>
+    </header>
+
+    <div id="couponDetailsContent">
+      <section class="coupon-detail-hero" id="couponHero">
+        <div class="coupon-detail-hero-top"><span class="coupon-detail-code" id="detailCode"></span><span class="coupon-detail-status" id="detailStatus"></span></div>
+        <h2 id="detailValue"></h2>
+        <p>يسري على كل منتجات المتجر</p>
+      </section>
+
+      <nav class="coupon-tabs" role="tablist" aria-label="بيانات الكوبون">
+        <button class="coupon-tab active" id="detailsTab" type="button" role="tab" aria-selected="true" aria-controls="detailsPanel">تفاصيل الكوبون</button>
+        <button class="coupon-tab" id="statsTab" type="button" role="tab" aria-selected="false" aria-controls="statsPanel">إحصائيات الكوبون</button>
+      </nav>
+
+      <section class="coupon-tab-panel" id="detailsPanel" role="tabpanel" aria-labelledby="detailsTab">
+        <article class="coupon-detail-card">
+          <h3>بيانات الخصم</h3>
+          <div class="coupon-detail-row"><span>كود الكوبون</span><strong id="rowCode" dir="ltr"></strong></div>
+          <div class="coupon-detail-row"><span>نوع الخصم</span><strong id="rowType"></strong></div>
+          <div class="coupon-detail-row"><span>قيمة الخصم</span><strong id="rowValue"></strong></div>
+          <div class="coupon-detail-row"><span>الحد الأدنى للطلب</span><strong id="rowMinimum"></strong></div>
+          <div class="coupon-detail-row"><span>المنتجات المشمولة</span><strong>كل المنتجات</strong></div>
+        </article>
+        <article class="coupon-detail-card">
+          <h3>الحالة والصلاحية</h3>
+          <div class="coupon-detail-row"><span>حالة الكوبون</span><strong id="rowStatus"></strong></div>
+          <div class="coupon-detail-row"><span>تاريخ الانتهاء</span><strong id="rowExpiry"></strong></div>
+          <div class="coupon-detail-row"><span>مرات الاستخدام</span><strong id="rowUses"></strong></div>
+        </article>
+      </section>
+
+      <section class="coupon-tab-panel" id="statsPanel" role="tabpanel" aria-labelledby="statsTab" hidden>
+        <div class="coupon-kpis">
+          <article class="coupon-kpi"><span>مرات الاستخدام</span><strong id="statUses"></strong><small>إجمالي الاستخدامات</small></article>
+          <article class="coupon-kpi"><span>المبيعات المحققة</span><strong id="statSales"></strong><small>طلبات استخدمت الكوبون</small></article>
+          <article class="coupon-kpi"><span>إجمالي الخصومات</span><strong id="statDiscount"></strong><small>قيمة الوفر للعملاء</small></article>
+          <article class="coupon-kpi"><span>متوسط الطلب</span><strong id="statAverage"></strong><small>بعد تطبيق الخصم</small></article>
+        </div>
+        <article class="coupon-detail-card">
+          <h3>الاستخدام خلال آخر ٧ أيام</h3>
+          <div class="coupon-chart" id="usageChart" aria-label="رسم استخدام الكوبون خلال آخر سبعة أيام"></div>
+        </article>
+        <div class="coupon-insight"><svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19V3"/></svg><span id="couponInsight"></span></div>
+      </section>
+    </div>
+
+    <section class="coupon-not-found" id="couponNotFound" hidden><h2>الكوبون غير موجود</h2><p>ربما تم حذف الكوبون أو أن الرابط لم يعد صالحًا.</p><a href="20-distributor-coupons.html">العودة إلى الكوبونات</a></section>
+  </main>
+  <dialog class="coupon-delete-dialog" id="detailDeleteDialog">
+    <h2>حذف الكوبون؟</h2><p>لن يتمكن العملاء من استخدام هذا الكود بعد حذفه. لا يمكن التراجع عن هذه الخطوة.</p>
+    <div class="coupon-delete-actions"><button type="button" id="cancelDetailDelete">إلغاء</button><button class="danger" type="button" id="confirmDetailDelete">حذف</button></div>
+  </dialog>
+  <script src="user-state.js"></script>
+  <script>
+    const params=new URLSearchParams(location.search),couponId=params.get('id'),money=n=>`${Number(n).toLocaleString('ar-EG')} ج.م`,dateLabel=value=>new Date(`${value}T12:00:00`).toLocaleDateString('ar-EG',{day:'numeric',month:'long',year:'numeric'}),isActive=item=>item.enabled&&new Date(`${item.expiresAt}T23:59:59`)>=new Date();
+    let coupon=SaeyState.coupons().find(item=>item.id===couponId);
+    function selectTab(name){const stats=name==='stats';detailsTab.classList.toggle('active',!stats);statsTab.classList.toggle('active',stats);detailsTab.setAttribute('aria-selected',String(!stats));statsTab.setAttribute('aria-selected',String(stats));detailsPanel.hidden=stats;statsPanel.hidden=!stats;}
+    function render(){if(!coupon){couponDetailsContent.hidden=true;couponNotFound.hidden=false;couponMenuWrap.hidden=true;return;}const active=isActive(coupon),value=coupon.type==='percent'?`${Number(coupon.value).toLocaleString('ar-EG')}٪ خصم`:`${money(coupon.value)} خصم`,uses=Number(coupon.uses||0),average=Math.max(Number(coupon.minOrder||0)+650,850),sales=uses*average,discountEach=coupon.type==='percent'?Math.round(average*Number(coupon.value)/100):Number(coupon.value),discountTotal=uses*discountEach;couponHero.classList.toggle('inactive',!active);detailCode.textContent=rowCode.textContent=coupon.code;detailStatus.textContent=rowStatus.textContent=active?'نشط':coupon.enabled?'منتهي':'متوقف';detailValue.textContent=value;rowType.textContent=coupon.type==='percent'?'نسبة مئوية':'مبلغ ثابت';rowValue.textContent=coupon.type==='percent'?`${Number(coupon.value).toLocaleString('ar-EG')}٪`:money(coupon.value);rowMinimum.textContent=money(coupon.minOrder);rowExpiry.textContent=dateLabel(coupon.expiresAt);rowUses.textContent=statUses.textContent=uses.toLocaleString('ar-EG');detailToggleLabel.textContent=coupon.enabled?'إلغاء التفعيل':'تفعيل الكوبون';statSales.textContent=money(sales);statDiscount.textContent=money(discountTotal);statAverage.textContent=money(Math.max(0,average-discountEach));const weights=[.08,.12,.1,.18,.14,.2],values=weights.map(weight=>Math.floor(uses*weight));values.push(Math.max(0,uses-values.reduce((sum,item)=>sum+item,0)));const max=Math.max(...values,1),days=['س','ح','ن','ث','ر','خ','ج'];usageChart.innerHTML=values.map((item,index)=>`<div class="coupon-chart-item"><b>${item.toLocaleString('ar-EG')}</b><span class="coupon-chart-bar" style="height:${Math.max(5,item/max*82)}px"></span><span>${days[index]}</span></div>`).join('');couponInsight.textContent=uses?`حقق الكوبون ${uses.toLocaleString('ar-EG')} عملية شراء بقيمة تقديرية ${money(sales)} حتى الآن.`:'لم يُستخدم الكوبون بعد. شارك الكود مع العملاء لبدء قياس أدائه.';}
+    function closeDetailsMenu(){detailsMenu.hidden=true;detailsMenuButton.setAttribute('aria-expanded','false');}
+    detailsMenuButton.onclick=e=>{e.stopPropagation();const shouldOpen=detailsMenu.hidden;closeDetailsMenu();if(shouldOpen){detailsMenu.hidden=false;detailsMenuButton.setAttribute('aria-expanded','true');}};
+    detailsMenu.onclick=e=>{e.stopPropagation();const action=e.target.closest('[data-detail-action]');if(!action)return;closeDetailsMenu();if(action.dataset.detailAction==='edit')location.href=`20-distributor-coupons.html?edit=${encodeURIComponent(coupon.id)}`;if(action.dataset.detailAction==='toggle'){coupon={...coupon,enabled:!coupon.enabled};SaeyState.saveCoupon(coupon);render();}if(action.dataset.detailAction==='delete')detailDeleteDialog.showModal();};
+    cancelDetailDelete.onclick=()=>detailDeleteDialog.close();confirmDetailDelete.onclick=()=>{SaeyState.deleteCoupon(coupon.id);location.href='20-distributor-coupons.html';};document.addEventListener('click',closeDetailsMenu);document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDetailsMenu();});
+    detailsTab.onclick=()=>selectTab('details');statsTab.onclick=()=>selectTab('stats');render();selectTab(params.get('tab')==='stats'?'stats':'details');
+  </script>
+</body>
+</html>

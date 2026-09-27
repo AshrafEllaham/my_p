@@ -10,6 +10,36 @@
   const write = (key, value) => localStorage.setItem(key, JSON.stringify(value));
   window.SaeyState = {
     read, write,
+    coupons() {
+      return read('saey_merchant_coupons', [
+        { id: 'coupon-saey20', code: 'SAEY20', type: 'percent', value: 20, minOrder: 500, expiresAt: '2027-12-31', enabled: true, uses: 24 },
+        { id: 'coupon-welcome100', code: 'WELCOME100', type: 'fixed', value: 100, minOrder: 1000, expiresAt: '2027-06-30', enabled: true, uses: 11 },
+        { id: 'coupon-old15', code: 'OLD15', type: 'percent', value: 15, minOrder: 300, expiresAt: '2025-12-31', enabled: false, uses: 38 }
+      ]);
+    },
+    saveCoupons(items) { write('saey_merchant_coupons', items); return items; },
+    saveCoupon(coupon) {
+      const items = this.coupons(), index = items.findIndex(item => item.id === coupon.id);
+      if (index >= 0) items[index] = coupon; else items.unshift(coupon);
+      return this.saveCoupons(items);
+    },
+    deleteCoupon(id) { return this.saveCoupons(this.coupons().filter(item => item.id !== id)); },
+    findCoupon(code) { return this.coupons().find(item => item.code === String(code || '').trim().toUpperCase()); },
+    validateCoupon(code, subtotal) {
+      const coupon = this.findCoupon(code), amount = Number(subtotal) || 0;
+      if (!coupon) return { valid: false, message: 'كود الخصم غير صحيح.' };
+      if (!coupon.enabled) return { valid: false, message: 'هذا الكوبون غير متاح حاليًا.' };
+      const expires = new Date(`${coupon.expiresAt}T23:59:59`);
+      if (Number.isNaN(expires.getTime()) || expires < new Date()) return { valid: false, message: 'انتهت صلاحية هذا الكوبون.' };
+      if (amount < Number(coupon.minOrder || 0)) return { valid: false, message: `الحد الأدنى لاستخدام الكوبون ${Number(coupon.minOrder).toLocaleString('ar-EG')} ج.م.` };
+      const rawDiscount = coupon.type === 'percent' ? amount * Number(coupon.value) / 100 : Number(coupon.value);
+      return { valid: true, coupon, discount: Math.min(amount, Math.max(0, Math.round(rawDiscount))) };
+    },
+    recordCouponUse(id) {
+      const items = this.coupons(), coupon = items.find(item => item.id === id);
+      if (coupon) coupon.uses = Number(coupon.uses || 0) + 1;
+      this.saveCoupons(items);
+    },
     orderStates() { return read('saey_order_states', {}); },
     orderState(code, fallback = 'ready') { return this.orderStates()[code] || fallback; },
     setOrderState(code, state) { const states = this.orderStates(); states[code] = state; write('saey_order_states', states); return state; },
