@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="user-home-waffarha.css">
   <link rel="stylesheet" href="trader.css">
   <link rel="stylesheet" href="competitions.css">
+  <style>.merchant-activation-banner{display:none;margin:0 0 12px;padding:14px 16px;border:1px solid #FDE68A;border-radius:14px;background:#FFFBEB;color:#92400E}.merchant-activation-banner strong,.merchant-activation-banner span{display:block}.merchant-activation-banner strong{font-size:14px}.merchant-activation-banner span{margin-top:3px;font-size:11px;line-height:1.7}</style>
 </head>
 <body class="saey-home trader-app">
   <div class="status-bar">
@@ -39,6 +40,7 @@
         <a class="top-icon-button" href="24-distributor-notifications.html" aria-label="إشعارات المتجر"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><i>2</i></a>
       </div>
     </header>
+    <a class="merchant-activation-banner" id="merchantActivationBanner" href="merchant-activation-status.html" style="text-decoration:none"><strong id="activationBannerTitle">بيانات المتجر قيد المراجعة</strong><span id="activationBannerText">يمكنك تجهيز المنتجات والإعدادات الآن. استقبال الطلبات والتسويات يتفعّل تلقائيًا بعد الاعتماد.</span></a>
 
     <section class="waffarha-hero trader-hero" aria-label="أداء المتجر">
       <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=900&q=85" alt="متجر ملابس">
@@ -107,6 +109,7 @@
     <a href="20-distributor-account.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></span><span>حسابي</span></a>
   </nav>
   <script>
+    const activation=JSON.parse(localStorage.getItem('saey_merchant_activation_v1')||'null');if(activation&&activation.status!=='approved'){document.getElementById('merchantActivationBanner').style.display='block';if(activation.status==='rejected'){activationBannerTitle.textContent='مطلوب تعديل بيانات التفعيل';activationBannerText.textContent=activation.rejectionReason||'افتح حالة التفعيل لمعرفة السبب وإعادة إرسال المستند.'}}
     const performanceData={today:{label:'اليوم',description:'أداء اليوم حتى الآن',revenue:'١,٨٥٠ ج.م',trend:'<b>+٥٪</b> عن أمس',orders:'١٩',ordersTrend:'+٥ عن أمس',views:'٦٢٠',viewsTrend:'+٨٪',rating:'٥.٠',reviews:'٦ تقييمات'},'7d':{label:'آخر 7 أيام',description:'مقارنة بالأسبوع السابق',revenue:'٦,٤٢٠ ج.م',trend:'<b>+١٢٪</b> عن الأسبوع السابق',orders:'٤٢',ordersTrend:'+٩ طلبات',views:'٢.١K',viewsTrend:'+١٦٪',rating:'٤.٩',reviews:'٢٤ تقييمًا'},'30d':{label:'آخر 30 يومًا',description:'مقارنة بالفترة السابقة',revenue:'٢٤,٨٥٠ ج.م',trend:'<b>+١٨٪</b> عن الفترة السابقة',orders:'١٥٧',ordersTrend:'+١٢ طلبًا',views:'٨.٤K',viewsTrend:'+٢٤٪',rating:'٤.٨',reviews:'٨٦ تقييمًا'}};
     const periodSheet=document.getElementById('performancePeriodSheet'),periodButton=document.getElementById('performancePeriodButton');const closePeriod=()=>{periodSheet.classList.remove('open');periodButton.setAttribute('aria-expanded','false');setTimeout(()=>periodSheet.hidden=true,180)};periodButton.addEventListener('click',()=>{periodSheet.hidden=false;requestAnimationFrame(()=>periodSheet.classList.add('open'));periodButton.setAttribute('aria-expanded','true')});document.getElementById('closePerformancePeriod').addEventListener('click',closePeriod);periodSheet.addEventListener('click',event=>{if(event.target===periodSheet)closePeriod()});document.querySelectorAll('.performance-period-options button').forEach(button=>button.addEventListener('click',()=>{const data=performanceData[button.dataset.period];document.querySelectorAll('.performance-period-options button').forEach(item=>item.classList.toggle('selected',item===button));document.getElementById('performancePeriodLabel').textContent=data.label;document.getElementById('performancePeriodDescription').textContent=data.description;document.getElementById('performanceRevenue').textContent=data.revenue;document.getElementById('performanceTrend').innerHTML=data.trend;document.getElementById('performanceOrders').textContent=data.orders;document.getElementById('performanceOrdersTrend').textContent=data.ordersTrend;document.getElementById('performanceViews').textContent=data.views;document.getElementById('performanceViewsTrend').textContent=data.viewsTrend;document.getElementById('performanceRating').textContent=data.rating;document.getElementById('performanceReviews').textContent=data.reviews;closePeriod()}));
   </script>

@@ -67,6 +67,15 @@
     return clone(value);
   };
   const nowLabel = () => new Intl.DateTimeFormat('ar-EG', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }).format(new Date());
+  const sharedOrders = () => read('saey_orders_v2', []);
+  const writeSharedOrders = items => write('saey_orders_v2', items);
+  const syncUserOrderState = (code, state) => {
+    const states = read('saey_order_states', {}); states[code] = state; write('saey_order_states', states);
+    const items = sharedOrders(), item = items.find(entry => entry.code === code);
+    if (item) { item.state = state; item.updatedAt = new Date().toISOString(); item.events = [...(item.events || []), { state, at: item.updatedAt }]; writeSharedOrders(items); }
+    return item;
+  };
+  const notifyUser = item => { const notices = read('saey_user_notifications', []); notices.unshift({ id: `notice-${Date.now()}-${Math.random().toString(16).slice(2)}`, date: new Date().toISOString(), ...item }); write('saey_user_notifications', notices.slice(0, 40)); };
 
   const api = {
     activity: () => read(ACTIVITY_KEY, activitySeed),
@@ -82,26 +91,34 @@
       const userNotices = read('saey_user_notifications', []);
       userNotices.unshift({ id: `notice-${Date.now()}`, type: 'return', title: status === 'rejected' ? 'تم رفض طلب الاسترجاع' : status === 'approved' ? 'تم قبول طلب الاسترجاع' : 'تم تحديث طلب الاسترجاع', text: note || `تم تحديث حالة الطلب ${item.order}.`, href: `26-return-status.html?code=${item.order}`, date: new Date().toISOString() });
       write('saey_user_notifications', userNotices.slice(0, 40));
-      if (status === 'approved' && !item.restocked) {
+      if (status === 'completed' && !item.restocked) {
         const product = api.inventory().find(entry => entry.id === item.productId);
         if (product) api.updateStock(item.productId, product.stock + 1, `مرتجع ${item.id}`);
-        const finance = api.finance(), commission = Math.round(item.amount * .06);
-        finance.available = Math.max(0, finance.available - (item.amount - commission));
-        finance.grossSales = Math.max(0, finance.grossSales - item.amount);
-        finance.commission = Math.max(0, finance.commission - commission);
-        write(FINANCE_KEY, finance);
-        api.addLedger({ title: `استرداد ${item.order}`, detail: item.product, amount: -item.amount, type: 'refund' });
+        if (item.resolution !== 'exchange') {
+          const finance = api.finance(), commission = Math.round(item.amount * .06);
+          finance.available = Math.max(0, finance.available - (item.amount - commission));
+          finance.grossSales = Math.max(0, finance.grossSales - item.amount);
+          finance.commission = Math.max(0, finance.commission - commission);
+          write(FINANCE_KEY, finance);
+          api.addLedger({ title: `استرداد ${item.order}`, detail: item.product, amount: -item.amount, type: 'refund' });
+          const refunds = read('saey_order_refunds', {});
+          if (!refunds[item.order]) { refunds[item.order] = { amount: item.amount, date: new Date().toISOString() }; write('saey_order_refunds', refunds); localStorage.setItem('saey_wallet_balance', String(Number(localStorage.getItem('saey_wallet_balance') || 4500) + Number(item.amount || 0))); const tx = read('saey_wallet_transactions', []); tx.unshift({ id:`TX-${Date.now()}`, type:'استرداد طلب مقبول', amount:Number(item.amount), status:'completed', date:new Date().toISOString() }); write('saey_wallet_transactions', tx.slice(0,50)); }
+        }
+        syncUserOrderState(item.order, item.resolution === 'exchange' ? 'exchanged' : 'refunded');
+        notifyUser({ type:'return', title:item.resolution === 'exchange'?'تم تجهيز الاستبدال':'تم رد المبلغ', text:item.resolution === 'exchange'?`اكتمل استبدال الطلب ${item.order}.`:`أُعيد ${Number(item.amount).toLocaleString('ar-EG')} ج.م إلى محفظتك.`, href:`26-return-status.html?code=${item.order}` });
         item.restocked = true;
       }
       return write(RETURNS_KEY, items);
     },
+    orders: sharedOrders,
+    order(code) { return sharedOrders().find(item => item.code === code) || null; },
     orderStates: () => read(ORDER_STATES_KEY, {}),
-    orderState(code, fallback = 'new') { return api.orderStates()[code] || fallback; },
+    orderState(code, fallback = 'new') { return api.order(code)?.state || api.orderStates()[code] || fallback; },
     ledger: () => read(LEDGER_KEY, ledgerSeed),
     addLedger(entry) { const rows = api.ledger(); rows.unshift({ id: `LG-${Date.now()}`, date: nowLabel(), ...entry }); return write(LEDGER_KEY, rows.slice(0, 60)); },
     advanceOrder(code, nextState, order) {
       const states = api.orderStates(), events = read(ORDER_EVENTS_KEY, {});
-      states[code] = nextState; write(ORDER_STATES_KEY, states);
+      states[code] = nextState; write(ORDER_STATES_KEY, states); const shared = syncUserOrderState(code, nextState);
       api.addActivity({ type: 'orders', title: `تم تحديث الطلب #${code}`, detail: `الحالة الجديدة: ${nextState}` });
       if (nextState === 'preparing' && !events[`${code}:stock`]) {
         const product = api.inventory().find(item => item.id === order.productId);
@@ -116,8 +133,39 @@
         api.addLedger({ title: 'عمولة سعي', detail: `عمولة الطلب #${code}`, amount: -commission, type: 'charge' });
         events[`${code}:finance`] = new Date().toISOString();
       }
+      const messages = { preparing:'بدأ المتجر تجهيز طلبك.', ready:'طلبك جاهز، ويمكن إتمام التعامل حضوريًا أو عن بُعد.', completion_requested:'طلب المتجر تأكيد إتمام التعامل. راجع الطلب ثم أكّد أو أبلغ عن مشكلة.', completed:'اكتمل الطلب بنجاح.' };
+      if (messages[nextState]) notifyUser({ type:nextState==='ready'?'pickup':'order', title:nextState==='completion_requested'?'مطلوب تأكيدك':'تحديث حالة الطلب', text:`${messages[nextState]} (${code})`, href:`21-order-details.html?code=${code}` });
       write(ORDER_EVENTS_KEY, events);
       return nextState;
+    },
+    rejectOrder(code, reason = 'تعذر تنفيذ الطلب') {
+      const order = api.order(code); syncUserOrderState(code, 'rejected');
+      if (order) {
+        const refunds = read('saey_order_refunds', {});
+        if (!refunds[code]) { const amount=Number(order.total || order.amount || 0); refunds[code] = { amount, date:new Date().toISOString() }; write('saey_order_refunds', refunds); localStorage.setItem('saey_wallet_balance', String(Number(localStorage.getItem('saey_wallet_balance') || 4500) + amount)); const tx=read('saey_wallet_transactions',[]);tx.unshift({id:`TX-${Date.now()}`,type:'استرداد طلب لم يُنفذ',amount,status:'completed',date:new Date().toISOString()});write('saey_wallet_transactions',tx.slice(0,50)); }
+      }
+      notifyUser({ type:'order', title:'تعذر تنفيذ الطلب', text:`${reason}. أُعيد المبلغ إلى محفظتك.`, href:`21-order-details.html?code=${code}` });
+      api.addActivity({ type:'orders', title:`تم رفض الطلب #${code}`, detail:reason }); return true;
+    },
+    verifyPickupCode(code, enteredCode, order) {
+      const expected = String(code || '').replace(/\D/g, '').padEnd(6, '4').slice(-6);
+      if (String(enteredCode || '').replace(/\D/g, '') !== expected) return { ok:false, message:'الكود غير صحيح. اطلب من المستلم مراجعة الكود الظاهر لديه.' };
+      api.advanceOrder(code, 'completed', order); return { ok:true };
+    },
+    markNoShow(code, order) {
+      const item = api.order(code); if (item?.pickupUntil && new Date(item.pickupUntil) > new Date()) return { ok:false, message:'مدة الحجز لم تنتهِ بعد.' };
+      api.rejectOrder(code, 'انتهت مدة الحجز دون إتمام التعامل'); syncUserOrderState(code, 'no_show');
+      return { ok:true };
+    },
+    disputes: () => read('saey_order_disputes_v1', []),
+    resolveDispute(id, resolution, note = '') {
+      const rows=api.disputes(),item=rows.find(entry=>entry.id===id);if(!item)return null;const order=api.order(item.order);item.resolution=resolution;item.resolutionNote=note;item.resolvedAt=new Date().toISOString();item.status=resolution==='more_info'?'awaiting_customer':'resolved';
+      if(resolution==='complete'&&order)api.advanceOrder(item.order,'completed',order);
+      if(resolution==='refund'){
+        const amount=Number(order?.total||order?.amount||0),refunds=read('saey_order_refunds',{});
+        if(amount&&!refunds[item.order]){refunds[item.order]={amount,date:new Date().toISOString()};write('saey_order_refunds',refunds);localStorage.setItem('saey_wallet_balance',String(Number(localStorage.getItem('saey_wallet_balance')||4500)+amount));const tx=read('saey_wallet_transactions',[]);tx.unshift({id:`TX-${Date.now()}`,type:'رد مبلغ بعد تسوية نزاع',amount,status:'completed',date:new Date().toISOString()});write('saey_wallet_transactions',tx.slice(0,50));if(order?.productId){const product=api.inventory().find(entry=>entry.id===order.productId);if(product)api.updateStock(order.productId,product.stock+Number(order.quantity||order.qty||1),`تسوية نزاع ${item.order}`)}}syncUserOrderState(item.order,'refunded');
+      }
+      write('saey_order_disputes_v1',rows);notifyUser({type:'order',title:resolution==='refund'?'تم رد المبلغ':resolution==='complete'?'تم حسم النزاع وإكمال الطلب':'مطلوب معلومات إضافية',text:note||`تم تحديث النزاع الخاص بالطلب ${item.order}.`,href:`order-dispute-status.html?code=${item.order}`});api.addActivity({type:'orders',title:`تم تحديث نزاع الطلب #${item.order}`,detail:resolution});return item;
     },
     updateStock(id, nextStock, reason = 'تعديل يدوي') {
       const items = api.inventory();

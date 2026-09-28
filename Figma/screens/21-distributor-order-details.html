@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="uber-ui.css">
   <link rel="stylesheet" href="user-home-waffarha.css">
   <link rel="stylesheet" href="trader.css">
+  <style>.handover-dialog{width:min(392px,calc(100% - 28px));border:0;border-radius:16px;padding:20px;font-family:'Inter','Cairo',sans-serif;color:#0F172A}.handover-dialog::backdrop{background:rgba(15,23,42,.45)}.handover-dialog h2{margin:0 0 6px;font-size:18px}.handover-dialog p{margin:0 0 14px;color:#64748B;font-size:12px;line-height:1.7}.handover-dialog input,.handover-dialog textarea{box-sizing:border-box;width:100%;min-height:48px;margin-bottom:12px;padding:12px;border:1px solid #E1E8F1;border-radius:10px;font:600 14px 'Inter','Cairo',sans-serif}.handover-dialog textarea{min-height:82px;resize:none}.handover-dialog-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.handover-dialog button{height:48px;border:1px solid #E1E8F1;border-radius:10px;background:#FFF;font:800 13px 'Cairo',sans-serif}.handover-dialog button.primary{border-color:#000;background:#000;color:#FFF}.handover-error{display:block;margin:-4px 0 10px;color:#B91C1C;font-size:12px}.merchant-reject-action{display:block;width:calc(100% - 32px);height:44px;margin:0 auto 88px;border:1px solid #FECACA;border-radius:10px;background:#FFF;color:#B91C1C;font:800 13px 'Cairo',sans-serif}[hidden]{display:none!important}</style>
 </head>
 <body class="saey-home trader-app merchant-order-details-page">
   <div class="status-bar"><span class="status-time">9:41</span><div class="status-icons"><svg viewBox="0 0 17 11" width="17"><path d="M1 9h3v2H1zm4-3h3v5H5zm4-3h3v8H9zm4-3h3v11h-3z"/></svg><svg viewBox="0 0 16 12" width="16"><path d="M8 10a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M2 5a8.5 8.5 0 0 1 12 0l-1.1 1.1a7 7 0 0 0-9.8 0z"/></svg><svg viewBox="0 0 25 12" width="24"><rect x="1" y="1" width="20" height="10" rx="3" fill="none" stroke="currentColor"/><rect x="3" y="3" width="16" height="6" rx="1.5"/></svg></div></div>
@@ -56,9 +57,12 @@
       <header><div><h2>ملخص الدفع</h2><p>تفاصيل المبلغ المدفوع</p></div><span class="payment-paid">مدفوع</span></header>
       <div class="order-detail-rows"><div><span>سعر المنتج</span><strong id="subtotal">١,٨٥٠ ج.م</strong></div><div><span>الخصم</span><strong id="discountValue">٠ ج.م</strong></div><div class="order-payment-total"><span>الإجمالي</span><strong id="paymentTotal">١,٨٥٠ ج.م</strong></div></div>
     </section>
+    <button class="merchant-reject-action" id="rejectOrderAction" type="button" hidden>تعذر تنفيذ الطلب / إلغاء من المتجر</button><button class="merchant-reject-action" id="noShowAction" type="button" hidden>انتهت مدة الحجز ولم يكتمل التعامل</button>
   </main>
 
   <footer class="merchant-order-detail-actions"><a id="detailChatAction" href="14-chat-conversation.html"><svg viewBox="0 0 24 24"><path d="M20 15a4 4 0 0 1-4 4H8l-4 3v-7a4 4 0 0 1-2-3.5V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg>دردشة العميل</a><button id="advanceOrderAction" type="button">تأكيد الطلب</button></footer>
+  <dialog class="handover-dialog" id="handoverDialog"><h2>إتمام التعامل بأمان</h2><p>اختر التأكيد المناسب. في التعامل عن بُعد سيصل للمستخدم طلب تأكيد داخل التطبيق، ولا يكتمل الطلب إلا بموافقته.</p><div class="handover-dialog-actions"><button id="requestCustomerConfirmation" class="primary" type="button">طلب تأكيد المستخدم</button><button id="showPickupCodeForm" type="button">إدخال كود حضوري</button></div><div id="pickupCodeForm" hidden style="margin-top:12px"><input id="pickupCodeInput" inputmode="numeric" maxlength="7" dir="ltr" placeholder="000 000" aria-label="كود الاستلام"><small class="handover-error" id="pickupCodeError" hidden></small><button id="verifyPickupCode" class="primary" style="width:100%" type="button">تحقق وأكمل الطلب</button></div><button id="closeHandoverDialog" style="width:100%;margin-top:8px" type="button">إغلاق</button></dialog>
+  <dialog class="handover-dialog" id="rejectDialog"><h2>تعذر تنفيذ الطلب</h2><p>لن يُغلق الطلب من طرفك من دون سبب واضح. سيصل السبب للمستخدم ويُعاد المبلغ إلى محفظته.</p><textarea id="rejectReason" placeholder="اكتب السبب"></textarea><small class="handover-error" id="rejectError" hidden></small><div class="handover-dialog-actions"><button id="confirmReject" class="primary" type="button">تأكيد ورد المبلغ</button><button id="closeRejectDialog" type="button">تراجع</button></div></dialog>
 
   <script src="merchant-state.js"></script>
   <script>
@@ -67,14 +71,20 @@
       'SA-10914': { state:'preparing', productId:'watch', quantity:1, amount:2400, status:'قيد التجهيز', date:'اليوم، 9:05 ص', customer:'محمود علي', avatar:'م', phone:'+20 112 640 2874', total:'٢,٤٠٠ ج.م', category:'إلكترونيات', product:'ساعة رياضية ذكية', meta:'الكمية: ١', image:'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=500&q=86', pickup:'اليوم من 7:00 إلى 9:00 م', note:'لا توجد ملاحظات', discount:'٠ ج.م' },
       'SA-10886': { state:'ready', productId:'backpack', quantity:1, amount:680, status:'جاهز للاستلام', date:'أمس، 6:40 م', customer:'نورهان حسن', avatar:'ن', phone:'+20 101 582 9036', total:'٦٨٠ ج.م', category:'إكسسوارات', product:'حقيبة ظهر عملية', meta:'الكمية: ١', image:'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=500&q=86', pickup:'اليوم قبل 6:00 م', note:'التواصل عند اكتمال التجهيز', discount:'٠ ج.م' }
     };
-    const code = new URLSearchParams(location.search).get('order') || 'SA-10928';
-    const order = orders[code] || orders['SA-10928'];
+    const code = new URLSearchParams(location.search).get('order') || 'SA-10928', sharedOrder=SaeyMerchant.order(code);
+    const rawOrder = sharedOrder || orders[code] || orders['SA-10928'];
+    const order = sharedOrder ? { ...rawOrder, avatar:(rawOrder.customer||'م').slice(0,1), phone:rawOrder.customerPhone||'+20 100 000 0000', total:`${Number(rawOrder.total||rawOrder.amount).toLocaleString('ar-EG')} ج.م`, meta:`الكمية: ${Number(rawOrder.qty||rawOrder.quantity||1).toLocaleString('ar-EG')}`, pickup:rawOrder.pickupUntil?`قبل ${new Date(rawOrder.pickupUntil).toLocaleString('ar-EG',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'})}`:'حسب الاتفاق مع العميل', note:rawOrder.note||'لا توجد ملاحظات', discount:`${Number(rawOrder.discount||0).toLocaleString('ar-EG')} ج.م` } : rawOrder;
     let currentState = SaeyMerchant.orderState(code, order.state);
     const stateConfig = {
       new: { status:'طلب جديد', stage:0, caption:'بانتظار التأكيد', action:'تأكيد الطلب', next:'preparing', className:'new' },
       preparing: { status:'قيد التجهيز', stage:2, caption:'الطلب قيد التجهيز', action:'جاهز للاستلام', next:'ready', className:'preparing' },
-      ready: { status:'جاهز للاستلام', stage:3, caption:'بانتظار وصول العميل', action:'تأكيد الاستلام', next:'completed', className:'ready' },
-      completed: { status:'تم الاستلام', stage:4, caption:'اكتمل الطلب بنجاح', action:'تم إكمال الطلب', next:null, className:'completed' }
+      ready: { status:'جاهز لإتمام التعامل', stage:3, caption:'حضوري أو عن بُعد', action:'طلب إتمام التعامل', next:'handover', className:'ready' },
+      completion_requested: { status:'بانتظار تأكيد المستخدم', stage:3, caption:'تم إرسال طلب التأكيد', action:'بانتظار المستخدم', next:null, className:'ready' },
+      disputed: { status:'موقوف للمراجعة', stage:3, caption:'أبلغ المستخدم عن مشكلة', action:'قيد المراجعة', next:null, className:'new' },
+      cancelled: { status:'ألغاه المستخدم', stage:0, caption:'أُعيد المبلغ للمستخدم', action:'تم الإلغاء', next:null, className:'new' },
+      rejected: { status:'تعذر التنفيذ', stage:0, caption:'أُعيد المبلغ للمستخدم', action:'تم الإلغاء', next:null, className:'new' },
+      no_show: { status:'انتهت مدة الحجز', stage:3, caption:'أُعيد المبلغ للمستخدم', action:'تم الإغلاق', next:null, className:'new' },
+      completed: { status:'تم الإتمام', stage:4, caption:'أكده المستخدم أو الكود', action:'تم إكمال الطلب', next:null, className:'completed' }
     };
     const setText = (id, value) => { document.getElementById(id).textContent = value; };
     setText('orderCode', `#${code}`); setText('orderDate', order.date); setText('heroCustomer', order.customer); setText('heroTotal', order.total);
@@ -84,13 +94,18 @@
     document.getElementById('orderProductImage').src = order.image; document.getElementById('orderProductImage').alt = order.product;
     const chatHref = `14-chat-conversation.html?store=${encodeURIComponent(order.customer)}`; document.getElementById('customerChat').href = chatHref; document.getElementById('detailChatAction').href = chatHref;
     const renderState = () => {
-      const config = stateConfig[currentState];
+      const config = stateConfig[currentState] || stateConfig.new;
       const badge = document.getElementById('orderStatusBadge'); badge.textContent = config.status; badge.className = config.className;
       setText('progressCaption', config.caption); setText('advanceOrderAction', config.action);
       document.querySelectorAll('#orderProgress [data-step]').forEach((item) => item.classList.toggle('done', Number(item.dataset.step) <= config.stage));
       document.getElementById('advanceOrderAction').disabled = !config.next;
+      document.getElementById('rejectOrderAction').hidden = !['new','preparing'].includes(currentState);
+      document.getElementById('noShowAction').hidden = !(currentState==='ready'&&order.pickupUntil&&new Date(order.pickupUntil)<=new Date());
     };
-    document.getElementById('advanceOrderAction').addEventListener('click', () => { const next = stateConfig[currentState].next; if (next) { currentState = SaeyMerchant.advanceOrder(code, next, order); renderState(); } });
+    document.getElementById('advanceOrderAction').addEventListener('click', () => { const next = stateConfig[currentState].next; if(next==='handover'){handoverDialog.showModal();return}if(next){currentState=SaeyMerchant.advanceOrder(code,next,order);renderState()} });
+    showPickupCodeForm.onclick=()=>{pickupCodeForm.hidden=false;pickupCodeInput.focus()};closeHandoverDialog.onclick=()=>handoverDialog.close();requestCustomerConfirmation.onclick=()=>{currentState=SaeyMerchant.advanceOrder(code,'completion_requested',order);handoverDialog.close();renderState()};verifyPickupCode.onclick=()=>{const result=SaeyMerchant.verifyPickupCode(code,pickupCodeInput.value,order);if(!result.ok){pickupCodeError.textContent=result.message;pickupCodeError.hidden=false;return}currentState='completed';handoverDialog.close();renderState()};
+    rejectOrderAction.onclick=()=>rejectDialog.showModal();closeRejectDialog.onclick=()=>rejectDialog.close();confirmReject.onclick=()=>{const reason=rejectReason.value.trim();if(reason.length<8){rejectError.textContent='اكتب سببًا واضحًا من ٨ أحرف على الأقل.';rejectError.hidden=false;return}SaeyMerchant.rejectOrder(code,reason);currentState='rejected';rejectDialog.close();renderState()};
+    noShowAction.onclick=()=>{const result=SaeyMerchant.markNoShow(code,order);if(result.ok){currentState='no_show';renderState()}else{alert(result.message)}};
     renderState();
   </script>
 </body>

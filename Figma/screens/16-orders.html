@@ -112,14 +112,15 @@
     document.getElementById('resetEmptyFilters').addEventListener('click', () => document.getElementById('clearOrderFilters').click());
 
     try {
-      const latest = JSON.parse(localStorage.getItem('saey_latest_order'));
-      if (latest && !document.querySelector(`[data-code="${latest.code}"]`)) {
+      SaeyState.orders().slice().reverse().forEach(latest => {
+      if (!document.querySelector(`[data-code="${latest.code}"]`)) {
         const card = document.createElement('article');
-        card.className = 'order-card'; card.dataset.status = 'confirmed'; card.dataset.date = latest.date.slice(0, 10); card.dataset.code = latest.code; card.dataset.href = `21-order-details.html?code=${latest.code}`;
+        card.className = 'order-card'; card.dataset.status = latest.state||'new'; card.dataset.date = latest.date.slice(0, 10); card.dataset.code = latest.code; card.dataset.href = `21-order-details.html?code=${latest.code}`;
         card.setAttribute('role', 'link'); card.tabIndex = 0; card.setAttribute('aria-label', `فتح تفاصيل الطلب ${latest.code}`);
-        card.innerHTML = `<header class="order-card-head"><div><span class="order-number">طلب #${latest.code}</span><small>الآن</small></div><div class="order-card-side"><span class="order-status preparing">تم التأكيد</span><span class="order-card-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></span></div></header><div class="order-card-content"><div class="order-store"><span class="store-mark blue">ن</span><div><strong>${latest.store}</strong><small>استلام من المتجر</small></div></div><div class="order-product"><img src="${latest.image||'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=180&q=85'}" alt="${latest.product}"><div><strong>${latest.product}</strong><small>الكمية ${Number(latest.qty||1).toLocaleString('ar-EG')}</small></div><b>${latest.total.toLocaleString('ar-EG')} ج.م</b></div></div>`;
+        card.innerHTML = `<header class="order-card-head"><div><span class="order-number">طلب #${latest.code}</span><small>طلب حديث</small></div><div class="order-card-side"><span class="order-status preparing">بانتظار المتجر</span><span class="order-card-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></span></div></header><div class="order-card-content"><div class="order-store"><span class="store-mark blue">ن</span><div><strong>${latest.store}</strong><small>إتمام مرن: حضوري أو عن بُعد</small></div></div><div class="order-product"><img src="${latest.image||'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=180&q=85'}" alt="${latest.product}"><div><strong>${latest.product}</strong><small>الكمية ${Number(latest.qty||1).toLocaleString('ar-EG')}</small></div><b>${Number(latest.total).toLocaleString('ar-EG')} ج.م</b></div></div>`;
         document.getElementById('current-orders').prepend(card);
       }
+      });
     } catch (error) { panels.forEach(panel => panel.hidden = true); emptyState.hidden = true; document.getElementById('ordersError').hidden = false; }
 
     const savedStates = SaeyState.orderStates();
@@ -127,16 +128,14 @@
       const code = card.dataset.code;
       const state = savedStates[code];
       if (!state) return;
-      if (state === 'cancelled') {
+      const labelMap={new:'بانتظار المتجر',confirmed:'تم التأكيد',preparing:'قيد التجهيز',ready:'جاهز لإتمام التعامل',completion_requested:'مطلوب تأكيدك',disputed:'موقوف للمراجعة',refund_requested:'الاسترجاع قيد المراجعة',exchange_requested:'الاستبدال قيد المراجعة',refunded:'تم رد المبلغ',exchanged:'تم الاستبدال',completed:'مكتمل'};
+      if (['cancelled','rejected','no_show'].includes(state)) {
         card.dataset.status = 'cancelled'; card.dataset.orderGroup = 'cancelled'; card.dataset.href = `21-order-details.html?code=${code}&state=cancelled`; card.classList.add('cancelled-card'); card.classList.remove('completed-card');
-        const status = card.querySelector('.order-status'); status.className = 'order-status cancelled'; status.textContent = 'ملغي';
+        const status = card.querySelector('.order-status'); status.className = 'order-status cancelled'; status.textContent = state==='rejected'?'تعذر التنفيذ':state==='no_show'?'انتهت مدة الحجز':'ملغي';
         card.querySelector('.order-timeline')?.remove(); card.querySelector('.completed-note')?.remove();
         if (!card.querySelector('.cancelled-note')) card.insertAdjacentHTML('beforeend', '<div class="cancelled-note"><svg viewBox="0 0 24 24"><path d="m7 7 10 10M17 7 7 17"/></svg><span>تم إلغاء الطلب وإعادة المبلغ للمحفظة</span></div>');
         document.getElementById('cancelled-orders').prepend(card);
-      } else if (state === 'refund_requested') {
-        card.dataset.href = `21-order-details.html?code=${code}&state=refund_requested`;
-        const status = card.querySelector('.order-status'); status.className = 'order-status preparing'; status.textContent = 'الاسترداد قيد المراجعة';
-      }
+      } else { const status=card.querySelector('.order-status');status.textContent=labelMap[state]||status.textContent;status.className=`order-status ${['completed','refunded','exchanged'].includes(state)?'completed':['ready'].includes(state)?'ready':'preparing'}`;if(['completed','refunded','exchanged'].includes(state)){card.classList.add('completed-card');document.getElementById('past-orders').prepend(card)} }
     });
 
     const refreshTabCounts = () => {

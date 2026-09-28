@@ -12,9 +12,9 @@
     read, write,
     coupons() {
       return read('saey_merchant_coupons', [
-        { id: 'coupon-saey20', code: 'SAEY20', type: 'percent', value: 20, minOrder: 500, expiresAt: '2027-12-31', enabled: true, uses: 24 },
-        { id: 'coupon-welcome100', code: 'WELCOME100', type: 'fixed', value: 100, minOrder: 1000, expiresAt: '2027-06-30', enabled: true, uses: 11 },
-        { id: 'coupon-old15', code: 'OLD15', type: 'percent', value: 15, minOrder: 300, expiresAt: '2025-12-31', enabled: false, uses: 38 }
+        { id: 'coupon-saey20', code: 'SAEY20', type: 'percent', value: 20, minOrder: 500, expiresAt: '2027-12-31', enabled: true, uses: 24, maxUses: 100, perUserLimit: 1 },
+        { id: 'coupon-welcome100', code: 'WELCOME100', type: 'fixed', value: 100, minOrder: 1000, expiresAt: '2027-06-30', enabled: true, uses: 11, maxUses: 50, perUserLimit: 1 },
+        { id: 'coupon-old15', code: 'OLD15', type: 'percent', value: 15, minOrder: 300, expiresAt: '2025-12-31', enabled: false, uses: 38, maxUses: 40, perUserLimit: 1 }
       ]);
     },
     saveCoupons(items) { write('saey_merchant_coupons', items); return items; },
@@ -137,18 +137,75 @@
       if (!coupon.enabled) return { valid: false, message: 'هذا الكوبون غير متاح حاليًا.' };
       const expires = new Date(`${coupon.expiresAt}T23:59:59`);
       if (Number.isNaN(expires.getTime()) || expires < new Date()) return { valid: false, message: 'انتهت صلاحية هذا الكوبون.' };
+      if (Number(coupon.maxUses || 0) > 0 && Number(coupon.uses || 0) >= Number(coupon.maxUses)) return { valid: false, message: 'تم استنفاد الحد الإجمالي لاستخدام هذا الكوبون.' };
+      const userUses=read('saey_coupon_user_uses_v1',{}),currentUserUses=Number(userUses[coupon.id]||0);
+      if (Number(coupon.perUserLimit || 0) > 0 && currentUserUses >= Number(coupon.perUserLimit)) return { valid: false, message: 'استخدمت هذا الكوبون الحد الأقصى المسموح لحسابك.' };
       if (amount < Number(coupon.minOrder || 0)) return { valid: false, message: `الحد الأدنى لاستخدام الكوبون ${Number(coupon.minOrder).toLocaleString('ar-EG')} ج.م.` };
       const rawDiscount = coupon.type === 'percent' ? amount * Number(coupon.value) / 100 : Number(coupon.value);
       return { valid: true, coupon, discount: Math.min(amount, Math.max(0, Math.round(rawDiscount))) };
     },
     recordCouponUse(id) {
       const items = this.coupons(), coupon = items.find(item => item.id === id);
-      if (coupon) coupon.uses = Number(coupon.uses || 0) + 1;
+      if (coupon) { coupon.uses = Number(coupon.uses || 0) + 1; const userUses=read('saey_coupon_user_uses_v1',{});userUses[id]=Number(userUses[id]||0)+1;write('saey_coupon_user_uses_v1',userUses); }
       this.saveCoupons(items);
     },
-    orderStates() { return read('saey_order_states', {}); },
-    orderState(code, fallback = 'ready') { return this.orderStates()[code] || fallback; },
-    setOrderState(code, state) { const states = this.orderStates(); states[code] = state; write('saey_order_states', states); return state; },
+    orders() { return read('saey_orders_v2', []); },
+    order(code) { return this.orders().find(item => item.code === code) || null; },
+    createOrder(order) {
+      const items = this.orders().filter(item => item.code !== order.code);
+      const value = { customer: 'محمد أحمد', customerPhone: '+20 100 000 0000', productId: 'jacket', state: 'new', handover: 'customer_confirmation', events: [{ state: 'new', at: new Date().toISOString() }], ...order };
+      items.unshift(value); write('saey_orders_v2', items.slice(0, 80));
+      this.setOrderState(value.code, value.state);
+      this.addMerchantNotification({ type:'orders', title:'طلب جديد يحتاج تأكيدك', text:`${value.customer} طلب ${value.product}.`, href:`21-distributor-order-details.html?order=${value.code}` });
+      return value;
+    },
+    updateOrder(code, changes) {
+      const items = this.orders(), item = items.find(entry => entry.code === code);
+      if (!item) return null;
+      const previousState = item.state; Object.assign(item, changes, { updatedAt: new Date().toISOString() });
+      if (changes.state && changes.state !== previousState) item.events = [...(item.events || []), { state: changes.state, at: item.updatedAt }];
+      write('saey_orders_v2', items); this.setOrderState(code, item.state); return item;
+    },
+    orderStates() {
+      const states = read('saey_order_states', {});
+      this.orders().forEach(item => { states[item.code] = item.state; });
+      return states;
+    },
+    orderState(code, fallback = 'ready') { return this.order(code)?.state || this.orderStates()[code] || fallback; },
+    setOrderState(code, state) {
+      const states = read('saey_order_states', {}); states[code] = state; write('saey_order_states', states);
+      const items = this.orders(), item = items.find(entry => entry.code === code);
+      if (item && item.state !== state) { item.state = state; item.updatedAt = new Date().toISOString(); item.events = [...(item.events || []), { state, at: item.updatedAt }]; write('saey_orders_v2', items); }
+      return state;
+    },
+    confirmCompletion(code) {
+      const item = this.updateOrder(code, { state: 'completed', completedAt: new Date().toISOString(), completedBy: 'customer' });
+      if (item) {
+        const events = read('saey_merchant_order_events_v1', {});
+        if (!events[`${code}:finance`]) {
+          const amount=Number(item.total||item.amount||0),commission=Math.round(amount*.06),finance=read('saey_merchant_finance_v1',{available:0,pending:0,grossSales:0,commission:0});
+          finance.available=Number(finance.available||0)+amount-commission;finance.grossSales=Number(finance.grossSales||0)+amount;finance.commission=Number(finance.commission||0)+commission;write('saey_merchant_finance_v1',finance);
+          const ledger=read('saey_merchant_ledger_v1',[]);ledger.unshift({id:`LG-${Date.now()}`,title:`طلب #${code}`,detail:`بيع ${item.product}`,amount,type:'sale',date:new Date().toLocaleString('ar-EG')},{id:`LG-${Date.now()}-C`,title:'عمولة سعي',detail:`عمولة الطلب #${code}`,amount:-commission,type:'charge',date:new Date().toLocaleString('ar-EG')});write('saey_merchant_ledger_v1',ledger.slice(0,60));events[`${code}:finance`]=new Date().toISOString();write('saey_merchant_order_events_v1',events);
+        }
+        this.addUserNotification({ type: 'order', title: 'اكتمل الطلب', text: `تم تأكيد إتمام الطلب ${code}.`, href: `21-order-details.html?code=${code}` });
+      }
+      return item;
+    },
+    reportOrderIssue(code, note = '') {
+      const item = this.updateOrder(code, { state: 'disputed', disputeNote: note || 'أبلغ المستخدم عن مشكلة قبل إتمام الطلب.', disputedAt: new Date().toISOString() });
+      const reports = read('saey_order_disputes_v1', []); reports.unshift({ id: `DSP-${Date.now()}`, order: code, note: item?.disputeNote, status: 'open', date: new Date().toISOString() }); write('saey_order_disputes_v1', reports.slice(0, 40));
+      if (item) this.addUserNotification({ type: 'order', title: 'تم إيقاف إتمام الطلب', text: `سجلنا المشكلة على الطلب ${code} وسيظل المبلغ محميًا لحين المراجعة.`, href: `21-order-details.html?code=${code}` });
+      this.addMerchantNotification({ type:'orders', title:'مشكلة تمنع إتمام الطلب', text:`أوقف المستخدم إتمام الطلب ${code}: ${item?.disputeNote||note}`, href:`21-distributor-order-details.html?order=${code}` });
+      return item;
+    },
+    disputes() { return read('saey_order_disputes_v1', []); },
+    dispute(code) { return this.disputes().find(item => item.order === code) || null; },
+    respondToDispute(code, message) { const rows=this.disputes(),item=rows.find(entry=>entry.order===code);if(!item)return null;item.customerResponse=String(message||'').trim();item.status='under_review';item.updatedAt=new Date().toISOString();write('saey_order_disputes_v1',rows);this.addMerchantNotification({type:'orders',title:'رد جديد على النزاع',text:`أضاف المستخدم تفاصيل جديدة للطلب ${code}.`,href:'23-distributor-disputes.html'});return item; },
+    cancelOrder(code, reason = 'ألغاه المستخدم قبل بدء التجهيز', fallbackAmount = 0) {
+      const item=this.updateOrder(code,{state:'cancelled',cancelledBy:'customer',cancelReason:reason,cancelledAt:new Date().toISOString()});
+      if(!item)this.setOrderState(code,'cancelled');this.refundOnce(code,Number(item?.total||item?.amount||fallbackAmount||0));this.addMerchantNotification({type:'orders',title:'ألغى المستخدم الطلب',text:`تم إلغاء الطلب ${code} قبل بدء التجهيز.`,href:`21-distributor-order-details.html?order=${code}`});
+      return item;
+    },
     ratings() { return read('saey_order_ratings', {}); },
     isRated(code) { return Boolean(this.ratings()[code]); },
     saveRating(code, rating) { const ratings = this.ratings(); ratings[code] = { ...rating, date: new Date().toISOString() }; write('saey_order_ratings', ratings); localStorage.setItem('saey_rated_order', code); return ratings[code]; },
@@ -166,7 +223,9 @@
     pickupCode(code) { const digits = String(code || '').replace(/\D/g, '').padEnd(6, '4').slice(-6); return digits.replace(/(.{3})/, '$1 '); },
     returnRequests() { return read('saey_user_return_requests', []); },
     returnRequest(code) { const own = this.returnRequests().find(item => item.order === code), merchant = read('saey_merchant_returns_v1', []).find(item => item.order === code); return own ? { ...own, ...(merchant ? { status: merchant.status, note: merchant.note } : {}) } : merchant; },
-    createReturn(request) { const rows = this.returnRequests(), existing = rows.findIndex(item => item.order === request.order), value = { id: `RT-${String(Date.now()).slice(-5)}`, status: 'pending', createdAt: new Date().toISOString(), ...request }; if (existing >= 0) rows[existing] = value; else rows.unshift(value); write('saey_user_return_requests', rows); const merchantRows=read('saey_merchant_returns_v1',[]),merchantIndex=merchantRows.findIndex(item=>item.order===request.order),merchantValue={id:value.id,order:request.order,customer:'محمد أحمد',productId:'jacket',product:request.product,amount:request.amount,reason:request.reason,details:request.details,date:'اليوم',status:'pending',photoCount:request.photoCount};if(merchantIndex>=0)merchantRows[merchantIndex]=merchantValue;else merchantRows.unshift(merchantValue);write('saey_merchant_returns_v1',merchantRows); this.setOrderState(request.order, 'refund_requested'); this.addTransaction('طلب استرداد قيد المراجعة', 0, 'pending'); this.addUserNotification({ type: 'return', title: 'تم إرسال طلب الاسترجاع', text: `طلب ${request.order} قيد المراجعة الآن.`, href: `26-return-status.html?code=${request.order}` }); return value; },
+    createReturn(request) { const rows = this.returnRequests(), existing = rows.findIndex(item => item.order === request.order), value = { id: `RT-${String(Date.now()).slice(-5)}`, status: 'pending', resolution: 'refund', createdAt: new Date().toISOString(), ...request }; if (existing >= 0) rows[existing] = value; else rows.unshift(value); write('saey_user_return_requests', rows); const merchantRows=read('saey_merchant_returns_v1',[]),merchantIndex=merchantRows.findIndex(item=>item.order===request.order),merchantValue={id:value.id,order:request.order,customer:'محمد أحمد',productId:this.order(request.order)?.productId||'jacket',product:request.product,amount:request.amount,reason:request.reason,details:request.details,date:'اليوم',status:'pending',resolution:value.resolution,photoCount:request.photoCount};if(merchantIndex>=0)merchantRows[merchantIndex]=merchantValue;else merchantRows.unshift(merchantValue);write('saey_merchant_returns_v1',merchantRows); this.setOrderState(request.order, value.resolution==='exchange'?'exchange_requested':'refund_requested'); this.addTransaction(value.resolution==='exchange'?'طلب استبدال قيد المراجعة':'طلب استرداد قيد المراجعة', 0, 'pending'); this.addUserNotification({ type:'return', title:value.resolution==='exchange'?'تم إرسال طلب الاستبدال':'تم إرسال طلب الاسترجاع', text:`طلب ${request.order} قيد المراجعة الآن.`, href:`26-return-status.html?code=${request.order}` }); this.addMerchantNotification({type:'orders',title:value.resolution==='exchange'?'طلب استبدال جديد':'طلب استرجاع جديد',text:`الطلب ${request.order} يحتاج مراجعتك.`,href:'23-distributor-returns.html'}); return value; },
+    merchantNotifications() { return read('saey_merchant_notifications_v1', []); },
+    addMerchantNotification(item) { const rows=this.merchantNotifications();rows.unshift({id:`merchant-notice-${Date.now()}-${Math.random().toString(16).slice(2)}`,date:new Date().toISOString(),...item});write('saey_merchant_notifications_v1',rows.slice(0,50));return rows; },
     userNotifications() { return read('saey_user_notifications', []); },
     addUserNotification(item) { const rows = this.userNotifications(), map={order:'orders',pickup:'pickup',return:'returns',chat:'chats',offer:'offers'},key=map[item.type];if(key&&this.notificationPreferences()[key]===false)return rows; rows.unshift({ id: `notice-${Date.now()}`, date: new Date().toISOString(), ...item }); write('saey_user_notifications', rows.slice(0, 40)); return rows; },
     notificationPreferences() { return read('saey_notification_preferences', { orders: true, pickup: true, returns: true, chats: true, offers: false }); },
