@@ -358,6 +358,8 @@
 ## الملفات الأساسية
 
 - `preview.html`: عارض الشاشات وقيود إطار الـ preview.
+- `USER_FLOW_REFERENCE.md`: مرجع رحلة المستخدم الكاملة وجرد شاشاته الفعالة في الـ preview.
+- `MERCHANT_FLOW_REFERENCE.md`: مرجع رحلة التاجر الكاملة وجرد شاشاته الفعالة في الـ preview.
 - `screens/app-standard-type.css`: مصدر تحميل وتطبيق Cairo وInter ومقياس الكتابة الموحد لكل شاشات التطبيق.
 - `screens/merchant-operations.css` و`screens/merchant-backoffice.css`: مكونات صفحات تشغيل وإدارة المتجر.
 - `screens/merchant-ui-states.css` و`screens/merchant-ui-states.js`: حالات التحميل والخطأ وانقطاع الاتصال، التأكيدات، رسائل النجاح، التركيز، والوضع الداكن لشاشات التاجر الجديدة.
