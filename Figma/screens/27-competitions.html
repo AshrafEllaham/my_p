@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>سعي — مسابقات المتاجر</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="auth.css"><link rel="stylesheet" href="competitions.css">
+</head>
+<body class="saey-contests">
+  <div class="status-bar"><span class="status-time">9:41</span><div class="status-icons"><svg viewBox="0 0 17 11" width="17" height="11" fill="currentColor"><path d="M1 9h3v2H1zm4-3h3v5H5zm4-3h3v8H9zm4-3h3v11h-3z"/></svg><svg viewBox="0 0 16 12" width="16"><path d="M2 5a8 8 0 0 1 12 0M5 8a4 4 0 0 1 6 0M8 11h.01" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><svg viewBox="0 0 25 12" width="24"><rect x="1" y="1" width="20" height="10" rx="3" fill="none" stroke="currentColor"/><rect x="3" y="3" width="16" height="6" rx="1"/></svg></div></div>
+  <main class="contest-page">
+    <header class="contest-header"><a class="contest-back" href="08-user-home.html" aria-label="العودة للرئيسية"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a><div><h1>مسابقات المتاجر</h1><p>شارك بإجابتك وادخل السحب</p></div><span></span></header>
+    <section class="public-contest-intro"><div><h2>كل المسابقات</h2><p>فرص وجوائز جديدة من متاجر سعي</p></div><strong id="publicContestCount">٠ مسابقة</strong></section>
+    <div class="public-contest-tabs" role="group" aria-label="تصفية المسابقات"><button class="active" type="button" data-filter="active" aria-pressed="true">متاحة الآن</button><button type="button" data-filter="completed" aria-pressed="false">انتهت</button></div>
+    <section class="public-contest-list" id="publicContestList"></section>
+  </main>
+  <script src="user-state.js"></script>
+  <script>
+    const list=document.getElementById('publicContestList');let filter='active';const verified='<svg viewBox="0 0 24 24"><path d="m8.5 12 2.3 2.3 4.7-5"/><circle cx="12" cy="12" r="9"/></svg>';
+    function render(){const all=SaeyState.competitions(),items=all.filter(item=>filter==='active'?item.status==='active'&&!item.winnerId:Boolean(item.winnerId)||item.status==='completed');publicContestCount.textContent=`${items.length.toLocaleString('ar-EG')} مسابقة`;list.innerHTML=items.map(item=>`<a class="public-contest-card" href="27-competition-details.html?id=${encodeURIComponent(item.id)}"><span class="public-contest-card-image"><img src="${item.image||'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=520&q=85'}" alt="واجهة متجر ${item.merchant}"><span>صورة المتجر</span></span><span class="public-contest-card-body"><span class="public-contest-card-top"><span class="contest-status">${item.winnerId?'انتهت':'متاحة'}</span><time>${item.winnerId?'تم إعلان الفائز':'حتى '+new Date(item.endsAt).toLocaleDateString('ar-EG',{day:'numeric',month:'short'})}</time></span><h3>${item.title}</h3><p>${item.prize}</p><span class="public-contest-card-store">${verified}${item.merchant}</span></span></a>`).join('')||'<div class="public-contest-empty"><h3>لا توجد مسابقات هنا</h3><p>ستظهر المسابقات الجديدة فور نشرها من المتاجر.</p></div>'}
+    document.querySelector('.public-contest-tabs').onclick=event=>{const button=event.target.closest('[data-filter]');if(!button)return;filter=button.dataset.filter;document.querySelectorAll('[data-filter]').forEach(item=>{const active=item===button;item.classList.toggle('active',active);item.setAttribute('aria-pressed',String(active))});render()};render();
+  </script>
+</body></html>

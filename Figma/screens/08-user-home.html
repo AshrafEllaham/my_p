@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="uber-ui.css">
   <link rel="stylesheet" href="user-home-waffarha.css">
   <link rel="stylesheet" href="sponsored-ads.css">
+  <link rel="stylesheet" href="competitions.css">
 <link rel="stylesheet" href="user-experience.css"></head>
 <body class="saey-home">
   <div class="status-bar">
@@ -73,6 +74,11 @@
       <a class="service-categories" href="09-categories.html"><span><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span><strong>الأقسام</strong></a>
       <a class="service-stores" href="11-featured-stores.html"><span><svg viewBox="0 0 24 24"><path d="M3 9h18l-1 12H4L3 9Z"/><path d="M2 9 4 3h16l2 6M9 13v4M15 13v4"/></svg></span><strong>المتاجر</strong></a>
       <a class="service-orders" href="16-orders.html"><span><svg viewBox="0 0 24 24"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V2h6v2M9 11h6M9 15h4"/></svg></span><strong>طلباتي</strong></a>
+    </section>
+
+    <section class="home-contest-section" id="homeContestSection" aria-labelledby="homeContestTitle">
+      <div class="section-header"><div><div class="section-title-line"><h2 id="homeContestTitle">مسابقات المتاجر</h2><a class="section-action" href="27-competitions.html" aria-label="عرض كل المسابقات"><span>عرض الكل</span><svg viewBox="0 0 24 24"><path d="m14 6-6 6 6 6"/></svg></a></div><small>جاوب وادخل السحب على الجائزة</small></div></div>
+      <div class="home-contest-row" id="homeContestList" aria-label="المسابقات النشطة"></div>
     </section>
 
     <section class="offer-section recommended-section section-recommended">
@@ -213,6 +219,10 @@
         if (event.key === 'Enter' && event.currentTarget.value.trim()) location.href = `23-search-results.html?q=${encodeURIComponent(event.currentTarget.value.trim())}`;
       });
     })();
+  </script>
+  <script src="user-state.js"></script>
+  <script>
+    (()=>{const active=SaeyState.competitions().filter(item=>item.status==='active'&&!item.winnerId),section=document.getElementById('homeContestSection'),list=document.getElementById('homeContestList'),trophy='<svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4ZM7 6H4v2a4 4 0 0 0 4 4M17 6h3v2a4 4 0 0 1-4 4"/></svg>',verified='<svg viewBox="0 0 24 24"><path d="m8.5 12 2.3 2.3 4.7-5"/><circle cx="12" cy="12" r="9"/></svg>',clock='<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',gift='<svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18M12 8H7.5a2.5 2.5 0 1 1 2.2-3.7L12 8Zm0 0h4.5a2.5 2.5 0 1 0-2.2-3.7L12 8Z"/></svg>';if(!active.length){section.hidden=true;return}list.innerHTML=active.slice(0,2).map(item=>`<a class="home-contest-card" href="27-competition-details.html?id=${encodeURIComponent(item.id)}"><span class="home-contest-copy"><span class="home-contest-kicker">${trophy}مسابقة</span><h3>${item.title}</h3><p>جاوب وشارك في السحب</p><span class="home-contest-store"><span><small>مقدمة من</small><strong>${item.merchant}</strong></span><i aria-label="متجر موثّق">${verified}موثّق</i></span><span class="home-contest-footer">${clock}<span>حتى ${new Date(item.endsAt).toLocaleDateString('ar-EG',{day:'numeric',month:'short'})}</span></span></span><span class="home-contest-art"><img src="${item.image||'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=520&q=85'}" alt="واجهة متجر ${item.merchant}"><span class="home-contest-art-shade"></span><span class="home-contest-gift" aria-hidden="true">${gift}</span></span></a>`).join('');})();
   </script>
   <script src="sponsored-ads.js"></script>
 <script src="user-experience.js"></script></body>

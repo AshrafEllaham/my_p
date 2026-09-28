@@ -24,6 +24,112 @@
       return this.saveCoupons(items);
     },
     deleteCoupon(id) { return this.saveCoupons(this.coupons().filter(item => item.id !== id)); },
+    competitions() {
+      const seeded = [
+        {
+          id: 'contest-tech-01',
+          title: 'اكسب سماعة لاسلكية',
+          question: 'ما الميزة الأهم بالنسبة لك عند اختيار سماعة لاسلكية؟',
+          prize: 'سماعة لاسلكية بعزل الضوضاء',
+          merchant: 'نقطة ستور',
+          image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=720&q=85',
+          endsAt: '2026-10-03T22:00',
+          status: 'active',
+          createdAt: '2026-09-27T12:00:00.000Z',
+          winnerId: '',
+          responses: [
+            { id: 'answer-1', user: 'سارة أحمد', answer: 'عزل الضوضاء وجودة الصوت', createdAt: '2026-09-28T08:15:00.000Z' },
+            { id: 'answer-2', user: 'محمود علي', answer: 'عمر البطارية الطويل', createdAt: '2026-09-28T09:40:00.000Z' },
+            { id: 'answer-3', user: 'نور خالد', answer: 'الراحة أثناء الاستخدام', createdAt: '2026-09-28T10:05:00.000Z' },
+            { id: 'answer-4', user: 'أحمد سمير', answer: 'وضوح المكالمات', createdAt: '2026-09-28T10:42:00.000Z' }
+          ]
+        },
+        {
+          id: 'contest-fashion-02',
+          title: 'اكسب قسيمة تسوق ١٬٠٠٠ ج.م',
+          question: 'إيه قطعة الملابس الأساسية في دولابك؟',
+          prize: 'قسيمة شراء بقيمة ١٬٠٠٠ ج.م',
+          merchant: 'أزياء الشرق',
+          image: 'https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=720&q=85',
+          endsAt: '2026-10-06T21:00',
+          status: 'active',
+          createdAt: '2026-09-28T09:00:00.000Z',
+          winnerId: '',
+          responses: [
+            { id: 'fashion-answer-1', user: 'منى عادل', answer: 'الجاكيت العملي', createdAt: '2026-09-28T11:10:00.000Z' },
+            { id: 'fashion-answer-2', user: 'ريم حسن', answer: 'القميص الأبيض', createdAt: '2026-09-28T12:05:00.000Z' }
+          ]
+        },
+        {
+          id: 'contest-home-03',
+          title: 'اكسب قسيمة لتجديد بيتك',
+          question: 'إيه أول ركن تحب تجدده في بيتك؟',
+          prize: 'قسيمة مشتريات منزلية بقيمة ٧٥٠ ج.م',
+          merchant: 'بيتك أجمل',
+          image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=720&q=85',
+          endsAt: '2026-10-08T20:00',
+          status: 'active',
+          createdAt: '2026-09-28T10:00:00.000Z',
+          winnerId: '',
+          responses: []
+        }
+      ];
+      const saved = read('saey_competitions_v1', []);
+      const deleted = read('saey_deleted_competitions_v1', []);
+      const visibleSaved = saved.filter(item => !deleted.includes(item.id));
+      const visibleSeeded = seeded.filter(item => !deleted.includes(item.id));
+      if (!visibleSaved.length) return visibleSeeded;
+      return [...visibleSaved, ...visibleSeeded.filter(seed => !visibleSaved.some(item => item.id === seed.id))];
+    },
+    saveCompetitions(items) { write('saey_competitions_v1', items); return items; },
+    saveCompetition(competition) {
+      const deleted = read('saey_deleted_competitions_v1', []).filter(id => id !== competition.id);
+      write('saey_deleted_competitions_v1', deleted);
+      const items = this.competitions(), index = items.findIndex(item => item.id === competition.id);
+      if (index >= 0) items[index] = competition; else items.unshift(competition);
+      return this.saveCompetitions(items);
+    },
+    deleteCompetition(id) {
+      const deleted = read('saey_deleted_competitions_v1', []);
+      if (!deleted.includes(id)) deleted.push(id);
+      write('saey_deleted_competitions_v1', deleted);
+      return this.saveCompetitions(this.competitions().filter(item => item.id !== id));
+    },
+    competition(id) { return this.competitions().find(item => item.id === id) || this.competitions()[0]; },
+    answerCompetition(id, answer) {
+      const items = this.competitions(), item = items.find(entry => entry.id === id);
+      if (!item || item.status !== 'active' || item.winnerId) return null;
+      item.responses = Array.isArray(item.responses) ? item.responses : [];
+      const existing = item.responses.find(entry => entry.id === 'answer-current-user');
+      const value = { id: 'answer-current-user', user: 'محمد أحمد', answer: String(answer || '').trim(), createdAt: new Date().toISOString() };
+      if (existing) Object.assign(existing, value); else item.responses.push(value);
+      this.saveCompetitions(items);
+      return value;
+    },
+    competitionAnswerKey(answer) {
+      return String(answer || '')
+        .trim()
+        .replace(/[\u064B-\u065F\u0670]/g, '')
+        .replace(/[أإآٱ]/g, 'ا')
+        .replace(/ى/g, 'ي')
+        .replace(/ؤ/g, 'و')
+        .replace(/ئ/g, 'ي')
+        .replace(/\s+/g, ' ')
+        .toLowerCase();
+    },
+    pickCompetitionWinner(id, correctAnswer) {
+      const items = this.competitions(), item = items.find(entry => entry.id === id), responses = item?.responses || [];
+      const answer = String(correctAnswer || '').trim(), answerKey = this.competitionAnswerKey(answer);
+      if (!item || item.winnerId || !responses.length || !answerKey) return null;
+      const eligible = responses.filter(response => this.competitionAnswerKey(response.answer) === answerKey);
+      if (!eligible.length) return null;
+      const winner = eligible[Math.floor(Math.random() * eligible.length)];
+      item.correctAnswer = answer;
+      item.eligibleResponses = eligible.length;
+      item.winnerId = winner.id; item.status = 'completed'; item.winnerPickedAt = new Date().toISOString();
+      this.saveCompetitions(items);
+      return winner;
+    },
     findCoupon(code) { return this.coupons().find(item => item.code === String(code || '').trim().toUpperCase()); },
     validateCoupon(code, subtotal) {
       const coupon = this.findCoupon(code), amount = Number(subtotal) || 0;
