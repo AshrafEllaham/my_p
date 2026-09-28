@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>سعي — تقييماتي</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="auth.css">
   <link rel="stylesheet" href="user-home.css">
   <link rel="stylesheet" href="user-home-layout.css">
@@ -28,7 +31,10 @@
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
     }
-    .reviews-shell::-webkit-scrollbar { display: none; }
+
+    .reviews-shell::-webkit-scrollbar {
+      display: none;
+    }
 
     /* ── Header ── */
     .reviews-header {
@@ -42,27 +48,59 @@
       top: 0;
       z-index: 20;
     }
+
     .reviews-header a.back-btn {
-      width: 36px; height: 36px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       border: 1px solid #E1E8F1;
       background: #fff;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex-shrink: 0;
       color: #0F172A;
       text-decoration: none;
       transition: background .15s;
     }
-    .reviews-header a.back-btn:active { background: #F1F5F9; }
-    .reviews-header a.back-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    .reviews-header-copy { flex: 1; min-width: 0; }
-    .reviews-header-copy small { display: block; font-size: 10px; color: #94A3B8; font-weight: 700; }
-    .reviews-header-copy h1 { font-size: 16px; font-weight: 900; color: #0F172A; }
+
+    .reviews-header a.back-btn:active {
+      background: #F1F5F9;
+    }
+
+    .reviews-header a.back-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .reviews-header-copy {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .reviews-header-copy small {
+      display: block;
+      font-size: 10px;
+      color: #94A3B8;
+      font-weight: 700;
+    }
+
+    .reviews-header-copy h1 {
+      font-size: 16px;
+      font-weight: 900;
+      color: #0F172A;
+    }
 
     /* ── Global SVG Star overrides to prevent uber-ui stroke overriding ── */
     .reviews-shell svg polygon {
       stroke: none !important;
     }
+
     .reviews-shell .stars-row svg,
     .reviews-shell .review-stars-wrap svg {
       width: 14px;
@@ -71,11 +109,13 @@
       stroke: none !important;
       display: inline-block;
     }
+
     .reviews-shell .stars-row svg polygon,
     .reviews-shell .review-stars-wrap svg polygon {
       fill: #F59E0B !important;
       stroke: none !important;
     }
+
     .reviews-shell .review-stars-wrap svg.empty,
     .reviews-shell .review-stars-wrap svg.empty polygon {
       fill: #E2E8F0 !important;
@@ -89,13 +129,15 @@
       border: 1px solid #E1E8F1;
       border-radius: 18px;
       padding: 16px 16px 14px;
-      box-shadow: 0 4px 16px rgba(15,23,42,.03);
+      box-shadow: 0 4px 16px rgba(15, 23, 42, .03);
     }
+
     .reviews-summary-top {
       display: flex;
       align-items: center;
       gap: 16px;
     }
+
     .reviews-big-score {
       display: flex;
       flex-direction: column;
@@ -103,6 +145,7 @@
       min-width: 82px;
       flex-shrink: 0;
     }
+
     .reviews-big-score strong {
       font-size: 42px;
       font-weight: 900;
@@ -111,21 +154,43 @@
       line-height: 1;
       letter-spacing: -0.5px;
     }
+
     .reviews-big-score .stars-row {
       display: flex;
       align-items: center;
       gap: 2px;
       margin: 6px 0 4px;
     }
+
     .reviews-big-score small {
       font-size: 10.5px;
       color: #94A3B8;
       font-weight: 700;
       white-space: nowrap;
     }
-    .reviews-bars { flex: 1; display: flex; flex-direction: column; gap: 5px; }
-    .reviews-bar-row { display: flex; align-items: center; gap: 8px; }
-    .reviews-bar-row span { font-size: 11px; color: #64748B; font-weight: 800; width: 26px; text-align: right; font-family: 'Inter', 'Cairo', sans-serif; }
+
+    .reviews-bars {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .reviews-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .reviews-bar-row span {
+      font-size: 11px;
+      color: #64748B;
+      font-weight: 800;
+      width: 26px;
+      text-align: right;
+      font-family: 'Inter', 'Cairo', sans-serif;
+    }
+
     .reviews-bar-track {
       flex: 1;
       height: 7px;
@@ -135,6 +200,7 @@
       position: relative;
       direction: rtl;
     }
+
     .reviews-bar-fill {
       height: 100%;
       background: #F59E0B;
@@ -143,8 +209,16 @@
       margin-right: 0;
       margin-left: auto;
     }
-    .reviews-bar-row small { font-size: 10.5px; color: #94A3B8; font-weight: 700; width: 22px; text-align: left; font-family: 'Inter', sans-serif; }
-    
+
+    .reviews-bar-row small {
+      font-size: 10.5px;
+      color: #94A3B8;
+      font-weight: 700;
+      width: 22px;
+      text-align: left;
+      font-family: 'Inter', sans-serif;
+    }
+
     .reviews-summary-sub {
       display: flex;
       align-items: center;
@@ -152,6 +226,7 @@
       padding-top: 12px;
       border-top: 1px solid #F1F5F9;
     }
+
     .reviews-sub-stat {
       flex: 1;
       text-align: center;
@@ -160,9 +235,24 @@
       align-items: center;
       gap: 2px;
     }
-    .reviews-sub-stat strong { font-size: 16px; font-weight: 900; color: #0F172A; font-family: 'Inter', 'Cairo', sans-serif; }
-    .reviews-sub-stat strong.green { color: #059669; }
-    .reviews-sub-stat small  { font-size: 10.5px; color: #94A3B8; font-weight: 700; }
+
+    .reviews-sub-stat strong {
+      font-size: 16px;
+      font-weight: 900;
+      color: #0F172A;
+      font-family: 'Inter', 'Cairo', sans-serif;
+    }
+
+    .reviews-sub-stat strong.green {
+      color: #059669;
+    }
+
+    .reviews-sub-stat small {
+      font-size: 10.5px;
+      color: #94A3B8;
+      font-weight: 700;
+    }
+
     .reviews-sub-divider {
       width: 1px;
       height: 24px;
@@ -182,7 +272,11 @@
       position: relative;
       z-index: 5;
     }
-    .reviews-star-tabs::-webkit-scrollbar { display: none; }
+
+    .reviews-star-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
     .reviews-star-tab {
       flex-shrink: 0;
       height: 34px;
@@ -198,6 +292,7 @@
       gap: 6px;
       transition: all .15s;
     }
+
     .reviews-star-tab b {
       min-width: 20px;
       height: 20px;
@@ -209,17 +304,24 @@
       color: #64748B;
       font: 800 10px 'Inter', sans-serif;
     }
-    .reviews-star-tab:hover { border-color: #CBD5E1; color: #0F172A; }
+
+    .reviews-star-tab:hover {
+      border-color: #CBD5E1;
+      color: #0F172A;
+    }
+
     .reviews-star-tab.active {
       background: #000;
       border-color: #000;
       color: #fff;
-      box-shadow: 0 4px 12px rgba(0,0,0,.12);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, .12);
     }
+
     .reviews-star-tab.active b {
-      background: rgba(255,255,255,.18);
+      background: rgba(255, 255, 255, .18);
       color: #fff;
     }
+
     .reviews-star-tab .star-color {
       color: #F59E0B;
       font-size: 13px;
@@ -237,12 +339,14 @@
       position: relative;
       z-index: 5;
     }
+
     .reviews-count-label {
       font-size: 12px;
       color: #64748B;
       font-weight: 800;
       white-space: nowrap;
     }
+
     .reviews-period-selector {
       display: flex;
       gap: 4px;
@@ -250,6 +354,7 @@
       padding: 3px;
       border-radius: 9px;
     }
+
     .period-pill {
       border: none;
       background: transparent;
@@ -261,10 +366,11 @@
       transition: all .15s;
       white-space: nowrap;
     }
+
     .period-pill.active {
       background: #fff;
       color: #0F172A;
-      box-shadow: 0 2px 6px rgba(15,23,42,.08);
+      box-shadow: 0 2px 6px rgba(15, 23, 42, .08);
     }
 
     /* ── Review cards ── */
@@ -273,20 +379,23 @@
       flex-direction: column;
       gap: 10px;
     }
+
     .review-card {
       margin: 0 14px;
       background: #fff;
       border: 1px solid #E1E8F1;
       border-radius: 16px;
       padding: 14px 16px;
-      box-shadow: 0 4px 16px rgba(15,23,42,.03);
+      box-shadow: 0 4px 16px rgba(15, 23, 42, .03);
     }
+
     .review-card-head {
       display: flex;
       align-items: flex-start;
       gap: 10px;
       margin-bottom: 6px;
     }
+
     .review-avatar {
       width: 38px;
       height: 38px;
@@ -300,18 +409,39 @@
       color: #0F172A;
       flex-shrink: 0;
     }
-    .review-avatar.purple { background: #F3E8FF; color: #7E22CE; }
-    .review-avatar.blue   { background: #EFF6FF; color: #1D4ED8; }
-    .review-avatar.green  { background: #ECFDF5; color: #047857; }
-    .review-avatar.amber  { background: #FEF3C7; color: #B45309; }
 
-    .review-card-meta { flex: 1; min-width: 0; }
+    .review-avatar.purple {
+      background: #F3E8FF;
+      color: #7E22CE;
+    }
+
+    .review-avatar.blue {
+      background: #EFF6FF;
+      color: #1D4ED8;
+    }
+
+    .review-avatar.green {
+      background: #ECFDF5;
+      color: #047857;
+    }
+
+    .review-avatar.amber {
+      background: #FEF3C7;
+      color: #B45309;
+    }
+
+    .review-card-meta {
+      flex: 1;
+      min-width: 0;
+    }
+
     .review-card-top-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
     }
+
     .review-card-top-row strong {
       font-size: 13.5px;
       font-weight: 800;
@@ -320,12 +450,14 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
     .review-card-top-row time {
       font-size: 10.5px;
       color: #94A3B8;
       font-weight: 700;
       flex-shrink: 0;
     }
+
     .review-stars-wrap {
       display: flex;
       align-items: center;
@@ -346,7 +478,16 @@
       font-weight: 700;
       margin-top: 6px;
     }
-    .review-product-chip svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .review-product-chip svg {
+      width: 12px;
+      height: 12px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
 
     .review-card p {
       font-size: 12.5px;
@@ -363,6 +504,7 @@
       padding-top: 8px;
       border-top: 1px solid #F8FAFC;
     }
+
     .review-verified {
       display: inline-flex;
       align-items: center;
@@ -371,7 +513,16 @@
       color: #059669;
       font-weight: 800;
     }
-    .review-verified svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    .review-verified svg {
+      width: 12px;
+      height: 12px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
 
     .review-reply-btn {
       border: 1px solid #E1E8F1;
@@ -386,8 +537,22 @@
       gap: 5px;
       transition: all .15s;
     }
-    .review-reply-btn:hover { background: #000; color: #fff; border-color: #000; }
-    .review-reply-btn svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .review-reply-btn:hover {
+      background: #000;
+      color: #fff;
+      border-color: #000;
+    }
+
+    .review-reply-btn svg {
+      width: 12px;
+      height: 12px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
 
     /* ── Merchant reply block ── */
     .merchant-reply-block {
@@ -398,6 +563,7 @@
       border: 1px solid #E2E8F0;
       border-right: 3px solid #000;
     }
+
     .merchant-reply-block .reply-badge {
       display: inline-flex;
       align-items: center;
@@ -407,11 +573,17 @@
       color: #0F172A;
       margin-bottom: 4px;
     }
+
     .merchant-reply-block .reply-badge svg {
-      width: 12px; height: 12px;
-      fill: none; stroke: currentColor;
-      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+      width: 12px;
+      height: 12px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
+
     .merchant-reply-block p {
       margin: 0;
       font-size: 11.5px;
@@ -433,46 +605,108 @@
       border: 1px dashed #CBD5E1;
       border-radius: 16px;
     }
-    .reviews-empty.is-visible { display: flex; }
+
+    .reviews-empty.is-visible {
+      display: flex;
+    }
+
     .reviews-empty-icon {
-      width: 48px; height: 48px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       background: #F1F5F9;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       margin-bottom: 10px;
       color: #64748B;
     }
-    .reviews-empty-icon svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-    .reviews-empty strong { display: block; font-size: 13px; font-weight: 800; color: #0F172A; margin-bottom: 4px; }
-    .reviews-empty p { font-size: 11px; margin: 0; }
+
+    .reviews-empty-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .reviews-empty strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      color: #0F172A;
+      margin-bottom: 4px;
+    }
+
+    .reviews-empty p {
+      font-size: 11px;
+      margin: 0;
+    }
 
     /* ── Bottom spacer ── */
-    .reviews-bottom-spacer { height: 110px; }
+    .reviews-bottom-spacer {
+      height: 110px;
+    }
 
     /* ── Reply Bottom Sheet ── */
     .reply-sheet-backdrop {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,.48);
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .48);
       z-index: 100;
-      opacity: 0; pointer-events: none;
+      opacity: 0;
+      pointer-events: none;
       transition: opacity .22s;
     }
-    .reply-sheet-backdrop.open { opacity: 1; pointer-events: all; }
+
+    .reply-sheet-backdrop.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
     .reply-sheet {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      max-width: 440px; margin: 0 auto;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      max-width: 440px;
+      margin: 0 auto;
       background: #fff;
       border-radius: 22px 22px 0 0;
       padding: 12px 16px 28px;
       z-index: 101;
       transform: translateY(100%);
-      transition: transform .28s cubic-bezier(.32,1,.4,1);
-      box-shadow: 0 -8px 32px rgba(15,23,42,.14);
+      transition: transform .28s cubic-bezier(.32, 1, .4, 1);
+      box-shadow: 0 -8px 32px rgba(15, 23, 42, .14);
     }
-    .reply-sheet-backdrop.open .reply-sheet { transform: translateY(0); }
-    .reply-sheet-handle { width: 38px; height: 4px; border-radius: 20px; background: #E1E8F1; margin: 0 auto 12px; }
-    .reply-sheet h2 { font-size: 14px; font-weight: 900; color: #0F172A; margin-bottom: 4px; }
-    .reply-sheet p  { font-size: 11px; color: #94A3B8; margin-bottom: 12px; }
+
+    .reply-sheet-backdrop.open .reply-sheet {
+      transform: translateY(0);
+    }
+
+    .reply-sheet-handle {
+      width: 38px;
+      height: 4px;
+      border-radius: 20px;
+      background: #E1E8F1;
+      margin: 0 auto 12px;
+    }
+
+    .reply-sheet h2 {
+      font-size: 14px;
+      font-weight: 900;
+      color: #0F172A;
+      margin-bottom: 4px;
+    }
+
+    .reply-sheet p {
+      font-size: 11px;
+      color: #94A3B8;
+      margin-bottom: 12px;
+    }
+
     .reply-sheet textarea {
       width: 100%;
       height: 90px;
@@ -486,29 +720,60 @@
       outline: none;
       margin-bottom: 10px;
     }
-    .reply-sheet textarea:focus { border-color: #000; }
-    .reply-sheet-actions { display: flex; gap: 8px; }
+
+    .reply-sheet textarea:focus {
+      border-color: #000;
+    }
+
+    .reply-sheet-actions {
+      display: flex;
+      gap: 8px;
+    }
+
     .reply-submit-btn {
-      flex: 1; height: 42px; border-radius: 10px; border: none;
-      background: #000; color: #fff; font: 800 12px 'Cairo', sans-serif;
+      flex: 1;
+      height: 42px;
+      border-radius: 10px;
+      border: none;
+      background: #000;
+      color: #fff;
+      font: 800 12px 'Cairo', sans-serif;
       cursor: pointer;
     }
+
     .reply-cancel-btn {
-      height: 42px; padding: 0 16px; border-radius: 10px; border: 1px solid #E1E8F1;
-      background: #F8FAFC; color: #475569; font: 800 12px 'Cairo', sans-serif;
+      height: 42px;
+      padding: 0 16px;
+      border-radius: 10px;
+      border: 1px solid #E1E8F1;
+      background: #F8FAFC;
+      color: #475569;
+      font: 800 12px 'Cairo', sans-serif;
       cursor: pointer;
     }
   </style>
 </head>
+
 <body class="saey-home trader-app reviews-page">
-  <div class="status-bar"><span class="status-time">9:41</span><div class="status-icons"><svg viewBox="0 0 17 11" width="17"><path d="M1 9h3v2H1zm4-3h3v5H5zm4-3h3v8H9zm4-3h3v11h-3z"/></svg><svg viewBox="0 0 16 12" width="16"><path d="M8 10a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M2 5a8.5 8.5 0 0 1 12 0l-1.1 1.1a7 7 0 0 0-9.8 0z"/></svg><svg viewBox="0 0 25 12" width="24"><rect x="1" y="1" width="20" height="10" rx="3" fill="none" stroke="currentColor"/><rect x="3" y="3" width="16" height="6" rx="1.5"/></svg></div></div>
+  <div class="status-bar"><span class="status-time">9:41</span>
+    <div class="status-icons"><svg viewBox="0 0 17 11" width="17">
+        <path d="M1 9h3v2H1zm4-3h3v5H5zm4-3h3v8H9zm4-3h3v11h-3z" />
+      </svg><svg viewBox="0 0 16 12" width="16">
+        <path d="M8 10a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M2 5a8.5 8.5 0 0 1 12 0l-1.1 1.1a7 7 0 0 0-9.8 0z" />
+      </svg><svg viewBox="0 0 25 12" width="24">
+        <rect x="1" y="1" width="20" height="10" rx="3" fill="none" stroke="currentColor" />
+        <rect x="3" y="3" width="16" height="6" rx="1.5" />
+      </svg></div>
+  </div>
 
   <main class="reviews-shell">
 
     <!-- Header -->
     <header class="reviews-header">
       <a class="back-btn" href="20-distributor-account.html" aria-label="العودة إلى حسابي">
-        <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+        <svg viewBox="0 0 24 24">
+          <path d="m9 18 6-6-6-6" />
+        </svg>
       </a>
       <div class="reviews-header-copy">
         <small>آراء العملاء</small>
@@ -522,38 +787,63 @@
         <div class="reviews-big-score">
           <strong>4.8</strong>
           <div class="stars-row" aria-label="تقييم 4.8 من 5">
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg viewBox="0 0 24 24">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+            <svg viewBox="0 0 24 24">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+            <svg viewBox="0 0 24 24">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+            <svg viewBox="0 0 24 24">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+            <svg viewBox="0 0 24 24">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
           </div>
           <small>من 86 تقييمًا</small>
         </div>
         <div class="reviews-bars">
           <div class="reviews-bar-row">
             <span>5 ★</span>
-            <div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:82%"></div></div>
+            <div class="reviews-bar-track">
+              <div class="reviews-bar-fill" style="width:82%"></div>
+            </div>
             <small>71</small>
           </div>
           <div class="reviews-bar-row">
             <span>4 ★</span>
-            <div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:12%"></div></div>
+            <div class="reviews-bar-track">
+              <div class="reviews-bar-fill" style="width:12%"></div>
+            </div>
             <small>10</small>
           </div>
           <div class="reviews-bar-row">
             <span>3 ★</span>
-            <div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:4%"></div></div>
+            <div class="reviews-bar-track">
+              <div class="reviews-bar-fill" style="width:4%"></div>
+            </div>
             <small>3</small>
           </div>
           <div class="reviews-bar-row">
             <span>2 ★</span>
-            <div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:2%"></div></div>
+            <div class="reviews-bar-track">
+              <div class="reviews-bar-fill" style="width:2%"></div>
+            </div>
             <small>2</small>
           </div>
           <div class="reviews-bar-row">
             <span>1 ★</span>
-            <div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:0%"></div></div>
+            <div class="reviews-bar-track">
+              <div class="reviews-bar-fill" style="width:0%"></div>
+            </div>
             <small>0</small>
           </div>
         </div>
@@ -632,29 +922,51 @@
               <time>منذ ساعتين</time>
             </div>
             <div class="review-stars-wrap">
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
             </div>
           </div>
         </div>
         <div class="review-product-chip">
-          <svg viewBox="0 0 24 24"><path d="M6 2h12l2 5-2 15H6L4 7l2-5Z"/><path d="M9 10a3 3 0 0 0 6 0"/></svg>
+          <svg viewBox="0 0 24 24">
+            <path d="M6 2h12l2 5-2 15H6L4 7l2-5Z" />
+            <path d="M9 10a3 3 0 0 0 6 0" />
+          </svg>
           جاكيت جلد طبيعي
         </div>
         <p>الخامة ممتازة جدًا والطلب كان جاهزًا للاستلام في نفس اليوم. تعامل راقٍ ومتجر يستحق كل التقدير.</p>
         <div class="merchant-reply-block">
           <div class="reply-badge">
-            <svg viewBox="0 0 24 24"><path d="m3 10 7-7v4c8 0 11 6 12 12-3-4-7-5-12-5v4z"/></svg>
+            <svg viewBox="0 0 24 24">
+              <path d="m3 10 7-7v4c8 0 11 6 12 12-3-4-7-5-12-5v4z" />
+            </svg>
             رد المتجر · نقطة ستور
           </div>
           <p>شكرًا لكِ يا سارة، نسعد دائمًا بخدمتك وننتظر زيارتك القادمة بكل ترحيب!</p>
         </div>
         <div class="review-card-footer">
           <div class="review-verified">
-            <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>
+            <svg viewBox="0 0 24 24">
+              <path d="m5 12 4 4L19 6" />
+            </svg>
             شراء موثق
           </div>
         </div>
@@ -670,26 +982,48 @@
               <time>أمس</time>
             </div>
             <div class="review-stars-wrap">
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <svg class="empty" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg class="empty" viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
             </div>
           </div>
         </div>
         <div class="review-product-chip">
-          <svg viewBox="0 0 24 24"><path d="M6 2h12l2 5-2 15H6L4 7l2-5Z"/><path d="M9 10a3 3 0 0 0 6 0"/></svg>
+          <svg viewBox="0 0 24 24">
+            <path d="M6 2h12l2 5-2 15H6L4 7l2-5Z" />
+            <path d="M9 10a3 3 0 0 0 6 0" />
+          </svg>
           حذاء رياضي أبيض
         </div>
         <p>المنتج مطابق للصور وسريع في التجهيز. المقاس كان مريحًا وجودة النعل جيدة جدًا مقارنة بالسعر.</p>
         <div class="review-card-footer">
           <div class="review-verified">
-            <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>
+            <svg viewBox="0 0 24 24">
+              <path d="m5 12 4 4L19 6" />
+            </svg>
             شراء موثق
           </div>
           <button class="review-reply-btn" type="button" onclick="openReplySheet('محمود علي')">
-            <svg viewBox="0 0 24 24"><path d="m3 10 7-7v4c8 0 11 6 12 12-3-4-7-5-12-5v4z"/></svg>
+            <svg viewBox="0 0 24 24">
+              <path d="m3 10 7-7v4c8 0 11 6 12 12-3-4-7-5-12-5v4z" />
+            </svg>
             رد على التقييم
           </button>
         </div>
@@ -705,29 +1039,51 @@
               <time>منذ ٣ أيام</time>
             </div>
             <div class="review-stars-wrap">
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
             </div>
           </div>
         </div>
         <div class="review-product-chip">
-          <svg viewBox="0 0 24 24"><path d="M6 2h12l2 5-2 15H6L4 7l2-5Z"/><path d="M9 10a3 3 0 0 0 6 0"/></svg>
+          <svg viewBox="0 0 24 24">
+            <path d="M6 2h12l2 5-2 15H6L4 7l2-5Z" />
+            <path d="M9 10a3 3 0 0 0 6 0" />
+          </svg>
           حقيبة ظهر عملية
         </div>
         <p>الشنطة ممتازة وخامتها متينة وتتحمل الاستخدام اليومي. التغليف كان أنيقًا والاستلام كان سهلًا.</p>
         <div class="merchant-reply-block">
           <div class="reply-badge">
-            <svg viewBox="0 0 24 24"><path d="m3 10 7-7v4c8 0 11 6 12 12-3-4-7-5-12-5v4z"/></svg>
+            <svg viewBox="0 0 24 24">
+              <path d="m3 10 7-7v4c8 0 11 6 12 12-3-4-7-5-12-5v4z" />
+            </svg>
             رد المتجر · نقطة ستور
           </div>
           <p>أهلًا بكِ نورهان، سعداء جدًا بإعجابك بالمنتج وحرصنا دائمًا على تقديم أفضل جودة.</p>
         </div>
         <div class="review-card-footer">
           <div class="review-verified">
-            <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>
+            <svg viewBox="0 0 24 24">
+              <path d="m5 12 4 4L19 6" />
+            </svg>
             شراء موثق
           </div>
         </div>
@@ -743,26 +1099,48 @@
               <time>منذ أسبوع</time>
             </div>
             <div class="review-stars-wrap">
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
             </div>
           </div>
         </div>
         <div class="review-product-chip">
-          <svg viewBox="0 0 24 24"><path d="M6 2h12l2 5-2 15H6L4 7l2-5Z"/><path d="M9 10a3 3 0 0 0 6 0"/></svg>
+          <svg viewBox="0 0 24 24">
+            <path d="M6 2h12l2 5-2 15H6L4 7l2-5Z" />
+            <path d="M9 10a3 3 0 0 0 6 0" />
+          </svg>
           جاكيت جلد طبيعي
         </div>
         <p>من أفضل المتاجر اللي تعاملت معها على التطبيق. الجودة تستحق السعر تمامًا.</p>
         <div class="review-card-footer">
           <div class="review-verified">
-            <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>
+            <svg viewBox="0 0 24 24">
+              <path d="m5 12 4 4L19 6" />
+            </svg>
             شراء موثق
           </div>
           <button class="review-reply-btn" type="button" onclick="openReplySheet('أحمد سامي')">
-            <svg viewBox="0 0 24 24"><path d="m3 10 7-7v4c8 0 11 6 12 12-3-4-7-5-12-5v4z"/></svg>
+            <svg viewBox="0 0 24 24">
+              <path d="m3 10 7-7v4c8 0 11 6 12 12-3-4-7-5-12-5v4z" />
+            </svg>
             رد على التقييم
           </button>
         </div>
@@ -778,26 +1156,48 @@
               <time>منذ أسبوعين</time>
             </div>
             <div class="review-stars-wrap">
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <svg class="empty" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <svg class="empty" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg class="empty" viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg class="empty" viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
             </div>
           </div>
         </div>
         <div class="review-product-chip">
-          <svg viewBox="0 0 24 24"><path d="M6 2h12l2 5-2 15H6L4 7l2-5Z"/><path d="M9 10a3 3 0 0 0 6 0"/></svg>
+          <svg viewBox="0 0 24 24">
+            <path d="M6 2h12l2 5-2 15H6L4 7l2-5Z" />
+            <path d="M9 10a3 3 0 0 0 6 0" />
+          </svg>
           حذاء رياضي أبيض
         </div>
         <p>المنتج جيد لكن كان ممكن التغليف يكون أفضل لحماية الحذاء وقت النقل.</p>
         <div class="review-card-footer">
           <div class="review-verified">
-            <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>
+            <svg viewBox="0 0 24 24">
+              <path d="m5 12 4 4L19 6" />
+            </svg>
             شراء موثق
           </div>
           <button class="review-reply-btn" type="button" onclick="openReplySheet('رنا خالد')">
-            <svg viewBox="0 0 24 24"><path d="m3 10 7-7v4c8 0 11 6 12 12-3-4-7-5-12-5v4z"/></svg>
+            <svg viewBox="0 0 24 24">
+              <path d="m3 10 7-7v4c8 0 11 6 12 12-3-4-7-5-12-5v4z" />
+            </svg>
             رد على التقييم
           </button>
         </div>
@@ -813,29 +1213,51 @@
               <time>منذ شهر</time>
             </div>
             <div class="review-stars-wrap">
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <svg class="empty" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <svg class="empty" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <svg class="empty" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg class="empty" viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg class="empty" viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <svg class="empty" viewBox="0 0 24 24">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
             </div>
           </div>
         </div>
         <div class="review-product-chip">
-          <svg viewBox="0 0 24 24"><path d="M6 2h12l2 5-2 15H6L4 7l2-5Z"/><path d="M9 10a3 3 0 0 0 6 0"/></svg>
+          <svg viewBox="0 0 24 24">
+            <path d="M6 2h12l2 5-2 15H6L4 7l2-5Z" />
+            <path d="M9 10a3 3 0 0 0 6 0" />
+          </svg>
           حقيبة ظهر عملية
         </div>
         <p>الخامة كانت خفيفة بالنسبة لتوقعاتي، ولكن المتجر كان متعاوناً واستجاب لاستفساراتي بسرعة.</p>
         <div class="merchant-reply-block">
           <div class="reply-badge">
-            <svg viewBox="0 0 24 24"><path d="m3 10 7-7v4c8 0 11 6 12 12-3-4-7-5-12-5v4z"/></svg>
+            <svg viewBox="0 0 24 24">
+              <path d="m3 10 7-7v4c8 0 11 6 12 12-3-4-7-5-12-5v4z" />
+            </svg>
             رد المتجر · نقطة ستور
           </div>
           <p>نعتذر لك يا كريم عن أي تقصير، ورضاك يهمنا جدًا. تم تحديث المواصفات وتوفير بدائل أفضل في المخزون.</p>
         </div>
         <div class="review-card-footer">
           <div class="review-verified">
-            <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>
+            <svg viewBox="0 0 24 24">
+              <path d="m5 12 4 4L19 6" />
+            </svg>
             شراء موثق
           </div>
         </div>
@@ -846,7 +1268,10 @@
     <!-- Empty State -->
     <div class="reviews-empty" id="reviewsEmpty">
       <div class="reviews-empty-icon">
-        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24">
+          <polygon
+            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+        </svg>
       </div>
       <strong>لا توجد تقييمات مطابقة</strong>
       <p>لم يقم أي عميل بتقييم هذا التصنيف حتى الآن.</p>
@@ -871,11 +1296,30 @@
 
   <!-- Bottom Nav -->
   <nav class="saey-bottom-nav market-nav">
-    <a href="17-distributor-dashboard.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22v-9h6v9"/></svg></span><span>الرئيسية</span></a>
-    <a href="18-distributor-products.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><rect width="7" height="7" x="3" y="3" rx="1.5"/><rect width="7" height="7" x="14" y="3" rx="1.5"/><rect width="7" height="7" x="14" y="14" rx="1.5"/><rect width="7" height="7" x="3" y="14" rx="1.5"/></svg></span><span>منتجاتي</span></a>
-    <a href="21-distributor-orders.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4M9 10h6"/></svg></span><span>الطلبات</span></a>
-    <a href="19-distributor-ads.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="m4 12 15-7v14L4 12Z"/><path d="M4 12v5a2 2 0 0 0 2 2M19 10h2a2 2 0 0 1 0 4h-2"/></svg></span><span>إعلاناتي</span></a>
-    <a class="active" aria-current="page" href="20-distributor-account.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></span><span>حسابي</span></a>
+    <a href="17-distributor-dashboard.html"><span class="nav-icon"><svg viewBox="0 0 24 24">
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <path d="M9 22v-9h6v9" />
+        </svg></span><span>الرئيسية</span></a>
+    <a href="18-distributor-products.html"><span class="nav-icon"><svg viewBox="0 0 24 24">
+          <rect width="7" height="7" x="3" y="3" rx="1.5" />
+          <rect width="7" height="7" x="14" y="3" rx="1.5" />
+          <rect width="7" height="7" x="14" y="14" rx="1.5" />
+          <rect width="7" height="7" x="3" y="14" rx="1.5" />
+        </svg></span><span>منتجاتي</span></a>
+    <a href="21-distributor-orders.html"><span class="nav-icon"><svg viewBox="0 0 24 24">
+          <rect width="8" height="4" x="8" y="2" rx="1" />
+          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+          <path d="m9 14 2 2 4-4M9 10h6" />
+        </svg></span><span>الطلبات</span></a>
+    <a href="19-distributor-ads.html"><span class="nav-icon"><svg viewBox="0 0 24 24">
+          <path d="m4 12 15-7v14L4 12Z" />
+          <path d="M4 12v5a2 2 0 0 0 2 2M19 10h2a2 2 0 0 1 0 4h-2" />
+        </svg></span><span>إعلاناتي</span></a>
+    <a class="active" aria-current="page" href="20-distributor-account.html"><span class="nav-icon"><svg
+          viewBox="0 0 24 24">
+          <circle cx="12" cy="8" r="4" />
+          <path d="M20 21a8 8 0 0 0-16 0" />
+        </svg></span><span>حسابي</span></a>
   </nav>
 
   <script>
@@ -951,4 +1395,5 @@
     });
   </script>
 </body>
+
 </html>
