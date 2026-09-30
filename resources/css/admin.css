@@ -2886,3 +2886,137 @@ html[data-theme="dark"] .admin-hero {
         box-shadow: 0 26px 64px rgba(4, 2, 10, .54), inset 0 1px rgba(255, 255, 255, .06);
     }
 }
+
+/* Reference header structure: grouped navigation with independent utilities */
+.admin-header__actions {
+    gap: 7px;
+}
+
+.admin-settings-menu__trigger {
+    display: inline-flex;
+    min-height: 42px;
+    padding: 0 14px;
+    align-items: center;
+    gap: 8px;
+    color: var(--ink);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+    box-shadow: inset 0 1px rgba(255, 255, 255, .12);
+    cursor: pointer;
+    transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.admin-settings-menu__trigger svg {
+    width: 19px;
+    height: 19px;
+}
+
+.admin-settings-menu__trigger span {
+    font-size: 12px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.admin-settings-menu__trigger:hover {
+    transform: translateY(-1px);
+}
+
+.admin-settings-menu__trigger:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+.admin-header__actions > .admin-icon-button,
+.admin-header__actions .admin-profile {
+    width: 42px;
+    min-width: 42px;
+    height: 42px;
+    min-height: 42px;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--surface);
+}
+
+.admin-header__actions .admin-profile__avatar {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    place-items: center;
+    color: var(--ink);
+    background: transparent;
+    box-shadow: none;
+}
+
+.admin-header__actions .admin-profile__avatar svg {
+    width: 19px;
+    height: 19px;
+}
+
+html[data-theme="light"] .admin-settings-menu__trigger,
+html[data-theme="light"] .admin-header__actions > .admin-icon-button,
+html[data-theme="light"] .admin-header__actions .admin-profile {
+    color: #292826;
+    border-color: rgba(255, 255, 255, .74);
+    background: rgba(248, 247, 243, .72);
+    box-shadow: inset 0 1px #fff;
+}
+
+html[data-theme="light"] .admin-settings-menu__trigger:hover,
+html[data-theme="light"] .admin-header__actions > .admin-icon-button:hover,
+html[data-theme="light"] .admin-account-menu[open] .admin-profile {
+    color: #292826;
+    border-color: rgba(45, 45, 43, .18);
+    background: rgba(255, 255, 255, .92);
+}
+
+html[data-theme="dark"] .admin-settings-menu__trigger,
+html[data-theme="dark"] .admin-header__actions > .admin-icon-button,
+html[data-theme="dark"] .admin-header__actions .admin-profile {
+    color: #ded9e8;
+    border-color: rgba(207, 198, 226, .14);
+    background: rgba(43, 27, 72, .52);
+    box-shadow: inset 0 1px rgba(255, 255, 255, .06);
+}
+
+html[data-theme="dark"] .admin-settings-menu__trigger:hover,
+html[data-theme="dark"] .admin-header__actions > .admin-icon-button:hover,
+html[data-theme="dark"] .admin-account-menu[open] .admin-profile {
+    color: #fff;
+    border-color: rgba(174, 151, 224, .44);
+    background: rgba(91, 61, 151, .4);
+}
+
+@media (max-width: 1100px) {
+    .admin-settings-menu__trigger {
+        width: 42px;
+        padding: 0;
+        justify-content: center;
+    }
+
+    .admin-settings-menu__trigger span {
+        display: none;
+    }
+}
+
+@media (max-width: 640px) {
+    .admin-header__actions .admin-theme-menu {
+        display: block;
+    }
+
+    .admin-header__actions .admin-header__locale {
+        display: inline-flex;
+    }
+
+    .admin-header__actions > .admin-icon-button,
+    .admin-header__actions .admin-theme-menu__trigger,
+    .admin-header__actions .admin-header__locale,
+    .admin-header__actions .admin-profile,
+    .admin-settings-menu__trigger {
+        width: 38px;
+        min-width: 38px;
+        height: 38px;
+        min-height: 38px;
+    }
+}

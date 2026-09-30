@@ -15,10 +15,14 @@
     </div>
     @include('admin.layout.inc.sidebar')
     <div class="admin-header__actions">
-        <details class="admin-theme-menu admin-settings-menu" data-theme-menu>
-            <summary class="admin-settings-menu__trigger" aria-label="{{ __('admin.navigation.settings') }}">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.42 1.42-.06-.06a1.7 1.7 0 0 0-2.92 1.18V20h-2v-.48a1.7 1.7 0 0 0-2.92-1.18l-.06.06L9 16.98l.06-.06A1.7 1.7 0 0 0 7.84 14H7v-2h.84a1.7 1.7 0 0 0 1.22-2.92L9 9.02l1.42-1.42.06.06A1.7 1.7 0 0 0 13.4 6.48V6h2v.48a1.7 1.7 0 0 0 2.92 1.18l.06-.06 1.42 1.42-.06.06A1.7 1.7 0 0 0 20.96 12H21v2h-.04A1.7 1.7 0 0 0 19.4 15Z"/></svg>
-                <span>{{ __('admin.navigation.settings') }}</span>
+        <button class="admin-settings-menu__trigger" type="button" data-admin-settings aria-label="{{ __('admin.navigation.settings') }}">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.42 1.42-.06-.06a1.7 1.7 0 0 0-2.92 1.18V20h-2v-.48a1.7 1.7 0 0 0-2.92-1.18l-.06.06L9 16.98l.06-.06A1.7 1.7 0 0 0 7.84 14H7v-2h.84a1.7 1.7 0 0 0 1.22-2.92L9 9.02l1.42-1.42.06.06A1.7 1.7 0 0 0 13.4 6.48V6h2v.48a1.7 1.7 0 0 0 2.92 1.18l.06-.06 1.42 1.42-.06.06A1.7 1.7 0 0 0 20.96 12H21v2h-.04A1.7 1.7 0 0 0 19.4 15Z"/></svg>
+            <span>{{ __('admin.navigation.settings') }}</span>
+        </button>
+        <details class="admin-theme-menu" data-theme-menu>
+            <summary class="admin-icon-button admin-theme-menu__trigger" title="{{ __('admin.theme.title') }}" aria-label="{{ __('admin.theme.title') }}">
+                <svg class="admin-theme-menu__icon admin-theme-menu__icon--light" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/></svg>
+                <svg class="admin-theme-menu__icon admin-theme-menu__icon--dark" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/></svg>
             </summary>
             <div class="admin-theme-menu__dropdown" role="radiogroup" aria-label="{{ __('admin.theme.title') }}">
                 <span class="admin-theme-menu__title">{{ __('admin.theme.title') }}</span>
@@ -37,10 +41,9 @@
                     <span>{{ __('admin.theme.system') }}</span>
                     <i aria-hidden="true"></i>
                 </button>
-                <div class="admin-settings-menu__divider" aria-hidden="true"></div>
-                <x-admin.language-switch class="admin-settings-menu__language" />
             </div>
         </details>
+        <x-admin.language-switch class="admin-header__locale" />
         <button class="admin-icon-button" type="button" aria-label="{{ __('admin.actions.notifications') }}">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>
         </button>
