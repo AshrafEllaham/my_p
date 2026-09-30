@@ -10,15 +10,29 @@
         <button class="admin-icon-button" type="button" aria-label="{{ __('admin.actions.notifications') }}">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>
         </button>
-        <div class="admin-profile">
-            <span class="admin-profile__avatar">{{ mb_substr(auth('admin')->user()->name, 0, 1) }}</span>
-            <span class="admin-profile__copy"><strong>{{ auth('admin')->user()->name }}</strong><small>{{ __('admin.auth.admin_role') }}</small></span>
-        </div>
-        <form method="POST" action="{{ route('admin.logout') }}">
-            @csrf
-            <button class="admin-icon-button" type="submit" aria-label="{{ __('admin.auth.logout') }}" title="{{ __('admin.auth.logout') }}">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5M15 12H3M14 3h5a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-5"/></svg>
-            </button>
-        </form>
+        <details class="admin-account-menu">
+            <summary class="admin-profile" aria-label="{{ __('admin.profile.open_menu') }}">
+                <span class="admin-profile__avatar">{{ mb_substr(auth('admin')->user()->name, 0, 1) }}</span>
+                <span class="admin-profile__copy"><strong>{{ auth('admin')->user()->name }}</strong><small>{{ auth('admin')->user()->admin_type?->label() ?? __('admin.auth.admin_role') }}</small></span>
+                <svg class="admin-profile__chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 10 3 3 3-3"/></svg>
+            </summary>
+            <div class="admin-account-menu__dropdown">
+                <div class="admin-account-menu__identity">
+                    <strong>{{ auth('admin')->user()->name }}</strong>
+                    <small dir="ltr">{{ auth('admin')->user()->email }}</small>
+                </div>
+                <a class="admin-account-menu__item" href="{{ route('admin.profile.edit') }}">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+                    <span>{{ __('admin.profile.title') }}</span>
+                </a>
+                <form method="POST" action="{{ route('admin.logout') }}">
+                    @csrf
+                    <button class="admin-account-menu__item admin-account-menu__item--danger" type="submit">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5M15 12H3M14 3h5a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-5"/></svg>
+                        <span>{{ __('admin.auth.logout') }}</span>
+                    </button>
+                </form>
+            </div>
+        </details>
     </div>
 </header>

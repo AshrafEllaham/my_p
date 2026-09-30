@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\Admin\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
@@ -19,6 +20,8 @@ Route::group([
 
     Route::middleware('auth:admin')->group(function (): void {
         Route::get('/dashboard', [HomeController::class, 'index'])->name('admin.index');
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('admin.profile.edit');
+        Route::put('/profile', [ProfileController::class, 'update'])->name('admin.profile.update');
         Route::post('/logout', [LoginController::class, 'logout'])->name('admin.logout');
     });
 });
