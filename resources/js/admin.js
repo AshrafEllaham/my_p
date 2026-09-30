@@ -30,3 +30,13 @@ document.querySelectorAll('[data-modal-close]').forEach((button) => {
         if (modal) modal.hidden = true;
     });
 });
+
+document.querySelectorAll('[data-password-toggle]').forEach((button) => {
+    button.addEventListener('click', () => {
+        const input = document.getElementById(button.dataset.passwordToggle);
+        if (!(input instanceof HTMLInputElement)) return;
+
+        input.type = input.type === 'password' ? 'text' : 'password';
+        button.classList.toggle('is-visible', input.type === 'text');
+    });
+});

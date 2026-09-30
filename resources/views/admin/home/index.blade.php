@@ -10,7 +10,7 @@
             <p>{{ __('admin.welcome_description') }}</p>
         </div>
         <div class="admin-hero__mark" aria-hidden="true">
-            <svg viewBox="0 0 64 64"><path d="M13 42c7-17 18-25 38-25M41 10l10 7-4 13"/></svg>
+            <x-admin.brand-mark />
         </div>
     </section>
 

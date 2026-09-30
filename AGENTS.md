@@ -54,6 +54,18 @@ routes/api/
 - لا تستخدم local scopes لإخفاء استعلامات business مخصصة؛ ضعها بوضوح داخل الـ Repository.
 - لا تستخدم `$guarded = []`. عرّف `$fillable` صراحةً.
 
+### Models متعددة اللغة
+
+- استخدم `Astrotomic\Translatable\Translatable` فقط للـ Models التي تحتوي على بيانات مترجمة. حزمة Lexi وأي جدول ترجمة polymorphic موحد غير معتمدين في المشروع.
+- كل Model مترجم له جدول ترجمة مستقل باسم `{model}_translations` وModel ترجمة مستقل باسم `{Model}Translation` بجوار Model الأساسي.
+- الجدول الأساسي يحتوي على الحقول غير المترجمة فقط. جدول الترجمة يحتوي على `id`، وforeign key للجدول الأساسي مع `cascadeOnDelete()`، و`locale`، والحقول المترجمة، وtimestamps عند الحاجة.
+- أضف unique composite index على `[foreign_key, locale]` لمنع تكرار ترجمة اللغة نفسها، وأضف index يبدأ بـ `locale` فقط عندما توجد استعلامات فعلية تبدأ بالفلترة حسب اللغة.
+- داخل الـ Model الأساسي استخدم trait باسم `Translatable` وعرّف `public array $translatedAttributes` صراحةً. داخل Translation Model عرّف `$fillable` للحقول المترجمة فقط، ولا تضع business logic في أي منهما.
+- Validation حقول الترجمة يكون بصيغة واضحة لكل لغة مثل `ar.name` و`en.name`، مع الاعتماد على اللغات المعرفة في `config/translatable.php` وعدم قبول locales أخرى.
+- كل إنشاء أو تحديث للكيان وترجماته يتم داخل transaction واحدة في الـ Service، بينما تظل عمليات الحفظ والاستعلام داخل الـ Repository.
+- عند عرض قوائم تستخدم خصائص مترجمة، حمّل relation باسم `translations` مسبقًا داخل الـ Repository. ممنوع الاعتماد على lazy loading من Resource أو داخل loop.
+- الـ Resource يعرض ترجمة اللغة الحالية من العلاقات المحملة مسبقًا، ولا يشغّل query ولا يخزن الحقول المترجمة في JSON column داخل الجدول الأساسي.
+
 ### Repository
 
 - مكانه الافتراضي `app/Repositories/Twenty/`.
@@ -116,9 +128,13 @@ routes/api/
 
 ## معمارية لوحة التحكم
 
+- ملف علامة سعي الموحد للواجهة هو `public/assets/brand/saey-mark.svg`، ويُعرض عبر Blade component باسم `<x-admin.brand-mark />`. ممنوع رسم نسخة inline أو إنشاء ملف شعار موازٍ؛ عدّل الأصل الموحد فقط عندما يطلب المستخدم تغيير العلامة.
+- اللغتان المدعومتان هما العربية `ar` والإنجليزية `en` فقط، وتُضبطان في `config/laravellocalization.php` و`config/translatable.php`. أي نص واجهة جديد يجب إضافته في `lang/ar/` و`lang/en/` بنفس المفتاح، وممنوع تضمين نص واجهة ثابت داخل Blade.
+- تبديل لغة لوحة التحكم يتم عبر `<x-admin.language-switch />` ومسار `admin.locale`، ويحفظ الاختيار في الـ session من خلال `App\Http\Middleware\SetLocale`. يجب أن يبقى `lang` و`dir` في الـ master layout ديناميكيين وأن تُراجع الواجهة في وضعي RTL وLTR.
 - Controllers لوحة التحكم تحت `app/Http/Controllers/Admin/`، وServices الخاصة بها تحت `app/Services/Admin/`، وModels الخاصة بهوية وإعدادات الإدارة تحت `app/Models/Admin/`.
 - Models الدومين المشتركة تظل تحت `app/Models/Twenty/` وتستخدمها الـ API والـ Dashboard دون نسخها.
 - كل routes لوحة التحكم موجودة في `routes/admin.php` تحت prefix وname باسم `admin`.
+- كل routes لوحة التحكم محمية بـ `auth:admin`، والاستثناء الوحيد هو routes تسجيل الدخول التي تستخدم `guest:admin` مع rate limiting على محاولة الدخول.
 - الـ master layout الوحيد هو `resources/views/admin/layout/indexs/index.blade.php`، وكل صفحات الإدارة تمتد منه.
 - أجزاء `sidebar`, `header`, `footer`, `_css`, `_js`, `breadcrumb`, و`global_modals` تبقى partials مستقلة تحت `resources/views/admin/layout/inc/`.
 - كل قسم في الواجهة يحتوي على صفحات كاملة مثل `index`, `show`, و`pending`، بينما HTML الذي يرجع داخل modal يوضع تحت `parts/`.
@@ -207,6 +223,7 @@ routes/api/
 - لا يوجد business logic داخل Model أو Controller أو Resource.
 - لا توجد قيم status/type/priority مكتوبة كنص بدل Enum.
 - لا توجد queries داخل loops أو Resources.
+- كل Model متعدد اللغة يستخدم Astrotomic وله Translation Model وجدول `{model}_translations` مستقل مع unique index على الـ foreign key والـ locale.
 - كل العلاقات المستخدمة محملة مسبقًا دون N+1.
 - الاستعلامات الكبيرة paginated وتحمّل الأعمدة المطلوبة فقط.
 - الـ indexes المناسبة موجودة في migrations.

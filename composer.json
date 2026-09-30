@@ -3,24 +3,34 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "keywords": [
+        "laravel",
+        "framework"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.3",
+        "astrotomic/laravel-translatable": "^11.17",
+        "intervention/image": "^3.11",
         "laravel/framework": "^13.17",
-        "laravel/tinker": "^3.0"
+        "laravel/tinker": "^3.0",
+        "mcamara/laravel-localization": "^2.4"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^4.4",
         "fakerphp/faker": "^1.23",
         "laravel/pail": "^1.2.5",
         "laravel/pao": "^1.0.6",
         "laravel/pint": "^1.27",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
+        "opcodesio/log-viewer": "^3.24",
         "phpunit/phpunit": "^12.5.12"
     },
     "autoload": {
         "files": [
+            "app/Helpers/MainHelper.php",
+            "app/Helpers/ImageHelper.php",
             "app/helpers.php"
         ],
         "psr-4": {

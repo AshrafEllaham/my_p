@@ -1,12 +1,12 @@
 <aside class="admin-sidebar" data-admin-sidebar aria-label="{{ __('admin.panel_name') }}">
     <div class="admin-sidebar__brand">
         <span class="admin-sidebar__logo" aria-hidden="true">
-            <svg viewBox="0 0 36 36"><path d="M8 23.5c3.5-8 8.5-12 19-12M21.5 7.5 27 11.5l-2 6.5"/></svg>
+            <x-admin.brand-mark />
         </span>
         <span><strong>{{ __('admin.app_name') }}</strong><small>{{ __('admin.panel_name') }}</small></span>
     </div>
     <nav class="admin-nav">
-        <a class="admin-nav__item {{ request()->routeIs('admin.home') ? 'is-active' : '' }}" href="{{ route('admin.home') }}">
+        <a class="admin-nav__item {{ request()->routeIs('admin.index') ? 'is-active' : '' }}" href="{{ route('admin.index') }}">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/></svg>
             <span>{{ __('admin.navigation.main') }}</span>
         </a>
