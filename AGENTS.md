@@ -114,6 +114,22 @@ routes/api/
 - كل route group محمي بـ `auth:api` و`throttle:60,1` وأي middleware خاص بالدور.
 - استخدم أسماء routes واضحة وRESTful، ولا تضع closures تحتوي logic.
 
+## معمارية لوحة التحكم
+
+- Controllers لوحة التحكم تحت `app/Http/Controllers/Admin/`، وServices الخاصة بها تحت `app/Services/Admin/`، وModels الخاصة بهوية وإعدادات الإدارة تحت `app/Models/Admin/`.
+- Models الدومين المشتركة تظل تحت `app/Models/Twenty/` وتستخدمها الـ API والـ Dashboard دون نسخها.
+- كل routes لوحة التحكم موجودة في `routes/admin.php` تحت prefix وname باسم `admin`.
+- الـ master layout الوحيد هو `resources/views/admin/layout/indexs/index.blade.php`، وكل صفحات الإدارة تمتد منه.
+- أجزاء `sidebar`, `header`, `footer`, `_css`, `_js`, `breadcrumb`, و`global_modals` تبقى partials مستقلة تحت `resources/views/admin/layout/inc/`.
+- كل قسم في الواجهة يحتوي على صفحات كاملة مثل `index`, `show`, و`pending`، بينما HTML الذي يرجع داخل modal يوضع تحت `parts/`.
+- نمط صفحات القوائم: الطلب العادي يعيد View، وطلب AJAX يعيد DataTables JSON من Builder محسن ومفلتر.
+- نمط صفحات modal: يتم render لملف `parts/*.blade.php` ثم إعادة HTML داخل JSON دون إرجاع layout كامل.
+- عمليات approve/reject/update الخاصة بالـ AJAX تستخدم `dashBoardJson()` الموحد الموجود في base Controller.
+- استخدم helpers المشتركة مثل `showButton`, `settingsButton`, `banButton`, و`helperTrans` بدل تكرار HTML للأفعال.
+- Admin Services منفصلة تمامًا عن Twenty Services؛ الأولى لقرارات المشرف، والثانية لحالات استخدام الـ API.
+- **استثناء لوحة التحكم:** يجوز لـ `App\Services\Admin` حقن Model والتعامل معه مباشرة عندما يكون الاستعلام خاصًا بالـ Dashboard ومعقدًا ولا يحقق Repository abstraction قيمة واضحة. هذا الاستثناء لا ينطبق على `App\Services\Twenty`.
+- عند استخدام الاستثناء السابق، يجب أن يظل الاستعلام داخل Admin Service فقط، مع eager loading وselects وpagination وindexes المناسبة، ومنع N+1. إذا أُعيد استخدام الاستعلام أو تضخم الـ Service، انقله إلى Admin Repository مخصص.
+
 ## SOLID وDependency Injection
 
 - **Single Responsibility:** لا تنقل مسؤولية طبقة إلى طبقة أخرى. قسّم Service أو Repository عندما يصبح له أكثر من سبب مستقل للتغيير.
@@ -186,8 +202,8 @@ routes/api/
 
 ## قائمة مراجعة قبل التسليم
 
-- لا يوجد query خارج Repository.
-- لا يوجد Model أو Eloquent داخل Service أو Controller.
+- لا يوجد query خارج Repository، باستثناء استعلامات `App\Services\Admin` المسموحة والمبررة في قسم معمارية لوحة التحكم.
+- لا يوجد Model أو Eloquent داخل Twenty Service أو أي Controller، وأي استخدام مباشر داخل Admin Service يلتزم بالاستثناء الموثق أعلاه.
 - لا يوجد business logic داخل Model أو Controller أو Resource.
 - لا توجد قيم status/type/priority مكتوبة كنص بدل Enum.
 - لا توجد queries داخل loops أو Resources.
