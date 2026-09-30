@@ -32,6 +32,8 @@ class DashboardTest extends TestCase
         $response
             ->assertOk()
             ->assertViewIs('admin.home.index')
+            ->assertSee('data-page-loader', false)
+            ->assertSee(__('admin.loading.message'))
             ->assertSee(__('admin.welcome'))
             ->assertSee(__('admin.panel_name'));
     }

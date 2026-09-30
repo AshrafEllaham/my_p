@@ -34,6 +34,8 @@ class AdminAuthenticationTest extends TestCase
             ->assertOk()
             ->assertViewIs('admin.auth.login')
             ->assertSee('assets/brand/saey-mark.svg', false)
+            ->assertSee('data-page-loader', false)
+            ->assertSee(__('admin.loading.message'))
             ->assertSee(__('admin.auth.login_title'));
     }
 

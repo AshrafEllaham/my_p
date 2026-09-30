@@ -28,6 +28,7 @@
         </div>
         @include('admin.layout.inc.global_modals')
     @endif
+    @include('admin.layout.inc.loader')
     @include('admin.layout.inc._js')
     @stack('js')
     @yield('js')

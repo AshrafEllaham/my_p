@@ -123,6 +123,27 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
 .admin-modal__content { padding: 20px; }
 .admin-sidebar-overlay { z-index: 35; display: none; }
 
+.admin-page-loader[hidden] { display: none; }
+.admin-page-loader { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; opacity: 0; pointer-events: none; transition: opacity 220ms ease; }
+.admin-page-loader.is-visible { opacity: 1; pointer-events: auto; }
+.admin-page-loader__backdrop { position: absolute; inset: 0; background: rgba(247,249,252,.7); backdrop-filter: blur(10px) saturate(.9); }
+.admin-page-loader__content { position: relative; display: grid; width: min(calc(100% - 40px),260px); padding: 18px 20px 16px; grid-template-columns: auto 1fr; align-items: center; gap: 6px 16px; overflow: hidden; border: 1px solid rgba(255,255,255,.88); border-radius: 18px; background: rgba(255,255,255,.9); box-shadow: 0 22px 55px rgba(15,23,42,.13), inset 0 0 0 1px rgba(225,232,241,.65); transform: translateY(10px) scale(.98); transition: transform 260ms cubic-bezier(.22,1,.36,1); }
+.admin-page-loader.is-visible .admin-page-loader__content { transform: translateY(0) scale(1); }
+.admin-page-loader__brand { position: relative; display: grid; width: 64px; height: 64px; place-items: center; grid-row: 1 / span 2; }
+.admin-page-loader__orbit { position: absolute; inset: 0; border: 2px solid #e7ebf0; border-top-color: #000; border-radius: 50%; animation: admin-loader-spin .9s linear infinite; }
+.admin-page-loader__orbit::after { position: absolute; top: 2px; right: 8px; width: 5px; height: 5px; border-radius: 50%; background: #000; box-shadow: 0 0 0 3px rgba(0,0,0,.08); content: ''; }
+.admin-page-loader__mark { display: grid; width: 46px; height: 46px; place-items: center; filter: drop-shadow(0 7px 10px rgba(0,0,0,.14)); animation: admin-loader-breathe 1.6s ease-in-out infinite; }
+.admin-page-loader__mark img { display: block; width: 46px; height: 46px; }
+.admin-page-loader__copy { display: grid; align-self: end; line-height: 1.25; }
+.admin-page-loader__copy strong { color: var(--ink); font-size: 14px; font-weight: 900; letter-spacing: -.02em; }
+.admin-page-loader__copy small { margin-top: 4px; color: var(--muted); font-size: 11px; font-weight: 700; }
+.admin-page-loader__track { position: relative; display: block; width: 100%; height: 2px; align-self: start; overflow: hidden; border-radius: 999px; background: #e8edf3; }
+.admin-page-loader__track span { position: absolute; inset: 0 auto 0 0; width: 44%; border-radius: inherit; background: linear-gradient(90deg,rgba(0,0,0,.08),#000); animation: admin-loader-progress 1.1s cubic-bezier(.65,0,.35,1) infinite; }
+.has-page-loader { overflow: hidden; }
+@keyframes admin-loader-spin { to { transform: rotate(360deg); } }
+@keyframes admin-loader-breathe { 0%,100% { transform: scale(.96); } 50% { transform: scale(1); } }
+@keyframes admin-loader-progress { 0% { transform: translateX(-120%); } 100% { transform: translateX(330%); } }
+
 .admin-body--auth { overflow-x: hidden; background: #fff; }
 .admin-auth-page { min-height: 100vh; }
 .admin-login { display: grid; min-height: 100vh; grid-template-columns: minmax(560px, 54%) 1fr; direction: ltr; }
@@ -183,6 +204,8 @@ html[dir="ltr"] .admin-sidebar { inset: 0 auto 0 0; }
 html[dir="ltr"] .admin-main { margin-right: 0; margin-left: var(--sidebar-width); }
 html[dir="ltr"] .admin-breadcrumb svg { transform: none; }
 html[dir="ltr"] .admin-login__submit svg { transform: none; }
+html[dir="rtl"] .admin-page-loader__track span { inset: 0 0 0 auto; animation-name: admin-loader-progress-rtl; }
+@keyframes admin-loader-progress-rtl { 0% { transform: translateX(115%); } 100% { transform: translateX(-340%); } }
 
 @media (max-width: 1100px) { .admin-stats-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
 @media (max-width: 860px) {
@@ -213,4 +236,8 @@ html[dir="ltr"] .admin-login__submit svg { transform: none; }
     .admin-login__form-card { padding: 72px 20px 28px; border: 1px solid var(--border); border-radius: 16px; background: rgba(255,255,255,.92); box-shadow: 0 20px 60px rgba(15,23,42,.08); }
     .admin-login__header h1 { font-size: 24px; }
 }
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    .admin-page-loader__orbit, .admin-page-loader__mark { animation: none; }
+    .admin-page-loader__track span { width: 100%; animation: none; }
+}

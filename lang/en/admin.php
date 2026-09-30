@@ -9,6 +9,10 @@ return [
     'overview' => 'Overview',
     'recent_activity' => 'Recent activity',
     'no_activity' => 'There is no recent activity yet.',
+    'loading' => [
+        'label' => 'Page is loading',
+        'message' => 'Loading...',
+    ],
     'auth' => [
         'login_title' => 'Admin sign in',
         'login_description' => 'Enter your admin credentials to access the dashboard.',
