@@ -1,6 +1,53 @@
 const shell = document.querySelector('[data-admin-shell]');
 const sidebarToggle = document.querySelector('[data-sidebar-toggle]');
 const sidebarClose = document.querySelector('[data-sidebar-close]');
+const themeMenu = document.querySelector('[data-theme-menu]');
+const themeOptions = document.querySelectorAll('[data-theme-option]');
+const themeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+const themeStorageKey = 'saey-admin-theme';
+const allowedThemes = ['light', 'dark', 'system'];
+let activeThemePreference = allowedThemes.includes(document.documentElement.dataset.themePreference)
+    ? document.documentElement.dataset.themePreference
+    : 'system';
+
+const applyTheme = (preference, persist = true) => {
+    if (!allowedThemes.includes(preference)) return;
+
+    activeThemePreference = preference;
+    const resolvedTheme = preference === 'system'
+        ? (themeMediaQuery.matches ? 'dark' : 'light')
+        : preference;
+
+    document.documentElement.dataset.theme = resolvedTheme;
+    document.documentElement.dataset.themePreference = preference;
+
+    themeOptions.forEach((option) => {
+        const isActive = option.dataset.themeOption === preference;
+        option.classList.toggle('is-active', isActive);
+        option.setAttribute('aria-checked', String(isActive));
+    });
+
+    if (!persist) return;
+
+    try {
+        localStorage.setItem(themeStorageKey, preference);
+    } catch (error) {
+        // The selected theme still applies for the current page when storage is unavailable.
+    }
+};
+
+themeOptions.forEach((option) => {
+    option.addEventListener('click', () => {
+        applyTheme(option.dataset.themeOption);
+        if (themeMenu instanceof HTMLDetailsElement) themeMenu.open = false;
+    });
+});
+
+themeMediaQuery.addEventListener('change', () => {
+    if (activeThemePreference === 'system') applyTheme('system', false);
+});
+
+applyTheme(activeThemePreference, false);
 
 const setSidebar = (open) => {
     if (!shell || !sidebarToggle) return;
@@ -22,6 +69,7 @@ document.addEventListener('keydown', (event) => {
     setSidebar(false);
     const modal = document.querySelector('[data-admin-modal]:not([hidden])');
     if (modal) modal.hidden = true;
+    if (themeMenu instanceof HTMLDetailsElement) themeMenu.open = false;
 });
 
 document.querySelectorAll('[data-modal-close]').forEach((button) => {

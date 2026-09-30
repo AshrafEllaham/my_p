@@ -32,8 +32,20 @@ class DashboardTest extends TestCase
         $response
             ->assertOk()
             ->assertViewIs('admin.home.index')
+            ->assertSee('class="admin-header__brand"', false)
+            ->assertSee('data-admin-sidebar', false)
+            ->assertSee('class="admin-theme-menu admin-settings-menu"', false)
+            ->assertSee('class="admin-settings-menu__trigger"', false)
+            ->assertSee('class="admin-settings-menu__language"', false)
+            ->assertSee('aria-current="page"', false)
+            ->assertSee('data-sidebar-toggle', false)
             ->assertSee('data-page-loader', false)
+            ->assertSee('data-theme-menu', false)
+            ->assertSee('data-theme-option="light"', false)
+            ->assertSee('data-theme-option="dark"', false)
+            ->assertSee('data-theme-option="system"', false)
             ->assertSee(__('admin.loading.message'))
+            ->assertSee(__('admin.theme.title'))
             ->assertSee(__('admin.welcome'))
             ->assertSee(__('admin.panel_name'));
     }

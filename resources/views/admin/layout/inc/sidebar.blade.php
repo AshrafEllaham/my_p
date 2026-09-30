@@ -1,12 +1,6 @@
 <aside class="admin-sidebar" data-admin-sidebar aria-label="{{ __('admin.panel_name') }}">
-    <div class="admin-sidebar__brand">
-        <span class="admin-sidebar__logo" aria-hidden="true">
-            <x-admin.brand-mark />
-        </span>
-        <span><strong>{{ __('admin.app_name') }}</strong><small>{{ __('admin.panel_name') }}</small></span>
-    </div>
     <nav class="admin-nav">
-        <a class="admin-nav__item {{ request()->routeIs('admin.index') ? 'is-active' : '' }}" href="{{ route('admin.index') }}">
+        <a class="admin-nav__item {{ request()->routeIs('admin.index') ? 'is-active' : '' }}" href="{{ route('admin.index') }}" @if(request()->routeIs('admin.index')) aria-current="page" @endif>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/></svg>
             <span>{{ __('admin.navigation.main') }}</span>
         </a>
@@ -21,10 +15,6 @@
         <span class="admin-nav__item is-disabled" aria-disabled="true">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12l2 5-8 4-8-4Z"/><path d="M4 8v10l8 4 8-4V8M12 12v10"/></svg>
             <span>{{ __('admin.navigation.orders') }}</span>
-        </span>
-        <span class="admin-nav__item is-disabled" aria-disabled="true">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.42 1.42-.06-.06a1.7 1.7 0 0 0-2.92 1.18V20h-2v-.48a1.7 1.7 0 0 0-2.92-1.18l-.06.06L9 16.98l.06-.06A1.7 1.7 0 0 0 7.84 14H7v-2h.84a1.7 1.7 0 0 0 1.22-2.92L9 9.02l1.42-1.42.06.06A1.7 1.7 0 0 0 13.4 6.48V6h2v.48a1.7 1.7 0 0 0 2.92 1.18l.06-.06 1.42 1.42-.06.06A1.7 1.7 0 0 0 20.96 12H21v2h-.04A1.7 1.7 0 0 0 19.4 15Z"/></svg>
-            <span>{{ __('admin.navigation.settings') }}</span>
         </span>
     </nav>
 </aside>

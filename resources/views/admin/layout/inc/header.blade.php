@@ -3,18 +3,52 @@
         <button class="admin-icon-button admin-menu-button" type="button" data-sidebar-toggle aria-label="{{ __('admin.actions.toggle_menu') }}" aria-expanded="false">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         </button>
-        <div><small>{{ __('admin.panel_name') }}</small><strong>@yield('page-title', __('admin.dashboard'))</strong></div>
+        <a class="admin-header__brand" href="{{ route('admin.index') }}" aria-label="{{ __('admin.app_name') }} — {{ __('admin.panel_name') }}">
+            <span class="admin-header__brand-mark" aria-hidden="true">
+                <x-admin.brand-mark />
+            </span>
+            <span class="admin-header__brand-copy">
+                <strong>{{ __('admin.app_name') }}</strong>
+                <small>{{ __('admin.panel_name') }}</small>
+            </span>
+        </a>
     </div>
+    @include('admin.layout.inc.sidebar')
     <div class="admin-header__actions">
-        <x-admin.language-switch class="admin-header__locale" />
+        <details class="admin-theme-menu admin-settings-menu" data-theme-menu>
+            <summary class="admin-settings-menu__trigger" aria-label="{{ __('admin.navigation.settings') }}">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.42 1.42-.06-.06a1.7 1.7 0 0 0-2.92 1.18V20h-2v-.48a1.7 1.7 0 0 0-2.92-1.18l-.06.06L9 16.98l.06-.06A1.7 1.7 0 0 0 7.84 14H7v-2h.84a1.7 1.7 0 0 0 1.22-2.92L9 9.02l1.42-1.42.06.06A1.7 1.7 0 0 0 13.4 6.48V6h2v.48a1.7 1.7 0 0 0 2.92 1.18l.06-.06 1.42 1.42-.06.06A1.7 1.7 0 0 0 20.96 12H21v2h-.04A1.7 1.7 0 0 0 19.4 15Z"/></svg>
+                <span>{{ __('admin.navigation.settings') }}</span>
+            </summary>
+            <div class="admin-theme-menu__dropdown" role="radiogroup" aria-label="{{ __('admin.theme.title') }}">
+                <span class="admin-theme-menu__title">{{ __('admin.theme.title') }}</span>
+                <button class="admin-theme-menu__option" type="button" role="radio" aria-label="{{ __('admin.theme.light') }}" aria-checked="false" data-theme-option="light">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/></svg>
+                    <span>{{ __('admin.theme.light') }}</span>
+                    <i aria-hidden="true"></i>
+                </button>
+                <button class="admin-theme-menu__option" type="button" role="radio" aria-label="{{ __('admin.theme.dark') }}" aria-checked="false" data-theme-option="dark">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/></svg>
+                    <span>{{ __('admin.theme.dark') }}</span>
+                    <i aria-hidden="true"></i>
+                </button>
+                <button class="admin-theme-menu__option" type="button" role="radio" aria-label="{{ __('admin.theme.system') }}" aria-checked="false" data-theme-option="system">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 22h8M12 18v4"/></svg>
+                    <span>{{ __('admin.theme.system') }}</span>
+                    <i aria-hidden="true"></i>
+                </button>
+                <div class="admin-settings-menu__divider" aria-hidden="true"></div>
+                <x-admin.language-switch class="admin-settings-menu__language" />
+            </div>
+        </details>
         <button class="admin-icon-button" type="button" aria-label="{{ __('admin.actions.notifications') }}">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>
         </button>
         <details class="admin-account-menu">
             <summary class="admin-profile" aria-label="{{ __('admin.profile.open_menu') }}">
-                <span class="admin-profile__avatar">{{ mb_substr(auth('admin')->user()->name, 0, 1) }}</span>
-                <span class="admin-profile__copy"><strong>{{ auth('admin')->user()->name }}</strong><small>{{ auth('admin')->user()->admin_type?->label() ?? __('admin.auth.admin_role') }}</small></span>
-                <svg class="admin-profile__chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 10 3 3 3-3"/></svg>
+                <span class="admin-profile__avatar" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+                </span>
             </summary>
             <div class="admin-account-menu__dropdown">
                 <div class="admin-account-menu__identity">

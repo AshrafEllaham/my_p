@@ -13,6 +13,12 @@ return [
         'label' => 'Page is loading',
         'message' => 'Loading...',
     ],
+    'theme' => [
+        'title' => 'Interface theme',
+        'light' => 'Light',
+        'dark' => 'Dark',
+        'system' => 'System theme',
+    ],
     'auth' => [
         'login_title' => 'Admin sign in',
         'login_description' => 'Enter your admin credentials to access the dashboard.',
