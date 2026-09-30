@@ -2409,9 +2409,16 @@ html[dir="ltr"] .admin-main {
     margin-left: 0;
 }
 
+:root {
+    --admin-header-top: 14px;
+    --admin-header-height: 78px;
+    --admin-header-menu-gap: 10px;
+    --admin-header-bottom: calc(var(--admin-header-top) + var(--admin-header-height));
+}
+
 .admin-header {
     display: grid;
-    min-height: 78px;
+    min-height: var(--admin-header-height);
     grid-template-columns: minmax(150px, 1fr) auto minmax(150px, 1fr);
     grid-template-areas: "brand navigation actions";
     gap: 18px;
@@ -2428,7 +2435,9 @@ html[dir="ltr"] .admin-main {
 .admin-header__brand {
     display: inline-flex;
     min-height: 54px;
-    padding: 5px 13px 5px 7px;
+    padding-block: 6px;
+    padding-inline-start: 7px;
+    padding-inline-end: 18px;
     align-items: center;
     gap: 10px;
     border: 1px solid rgba(255, 255, 255, .16);
@@ -2436,6 +2445,14 @@ html[dir="ltr"] .admin-main {
     background: rgba(255, 255, 255, .055);
     box-shadow: inset 0 1px rgba(255, 255, 255, .1);
     transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+}
+
+html[dir="rtl"] .admin-header__brand {
+    padding: 6px 7px 6px 18px;
+}
+
+html[dir="ltr"] .admin-header__brand {
+    padding: 6px 18px 6px 7px;
 }
 
 .admin-header__brand:hover {
@@ -2605,6 +2622,12 @@ html[data-theme="dark"] .admin-header__brand-copy strong {
 }
 
 @media (max-width: 860px) {
+    :root {
+        --admin-header-top: 10px;
+        --admin-header-height: 70px;
+        --admin-header-menu-gap: 8px;
+    }
+
     .admin-header {
         grid-template-columns: minmax(0, 1fr) auto;
         grid-template-areas: "brand actions";
@@ -2617,7 +2640,7 @@ html[data-theme="dark"] .admin-header__brand-copy strong {
     .admin-sidebar,
     html[dir="ltr"] .admin-sidebar {
         position: fixed;
-        inset: 92px 12px auto;
+        inset: calc(var(--admin-header-bottom, calc(var(--admin-header-top) + var(--admin-header-height))) + var(--admin-header-menu-gap)) 12px auto;
         z-index: 52;
         width: auto;
         padding: 8px;
@@ -2660,8 +2683,14 @@ html[data-theme="dark"] .admin-header__brand-copy strong {
 }
 
 @media (max-width: 640px) {
+    :root {
+        --admin-header-top: 8px;
+        --admin-header-height: 66px;
+        --admin-header-menu-gap: 8px;
+    }
+
     .admin-header {
-        min-height: 66px;
+        min-height: var(--admin-header-height);
         padding: 7px 8px;
         border-radius: 20px;
     }
@@ -2694,11 +2723,7 @@ html[data-theme="dark"] .admin-header__brand-copy strong {
 
     .admin-sidebar,
     html[dir="ltr"] .admin-sidebar {
-        inset: 82px 8px auto;
-    }
-
-    .admin-account-menu__dropdown {
-        top: 72px;
+        inset: calc(var(--admin-header-bottom, calc(var(--admin-header-top) + var(--admin-header-height))) + var(--admin-header-menu-gap)) 8px auto;
     }
 }
 
@@ -3000,6 +3025,23 @@ html[data-theme="dark"] .admin-account-menu[open] .admin-profile {
     }
 }
 
+@media (max-width: 860px) {
+    /* Both header menus hang cleanly below the header bottom edge */
+    .admin-theme-menu__dropdown,
+    .admin-account-menu__dropdown,
+    html[dir="ltr"] .admin-theme-menu__dropdown,
+    html[dir="ltr"] .admin-account-menu__dropdown {
+        position: fixed;
+        top: calc(var(--admin-header-bottom, calc(var(--admin-header-top) + var(--admin-header-height))) + var(--admin-header-menu-gap));
+        right: 12px;
+        left: 12px;
+        width: auto;
+        max-height: calc(100dvh - var(--admin-header-bottom, 80px) - 24px);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+    }
+}
+
 @media (max-width: 640px) {
     .admin-header__actions .admin-theme-menu {
         display: block;
@@ -3009,6 +3051,7 @@ html[data-theme="dark"] .admin-account-menu[open] .admin-profile {
         display: inline-flex;
     }
 
+    .admin-header__start .admin-menu-button,
     .admin-header__actions > .admin-icon-button,
     .admin-header__actions .admin-theme-menu__trigger,
     .admin-header__actions .admin-header__locale,
@@ -3018,5 +3061,117 @@ html[data-theme="dark"] .admin-account-menu[open] .admin-profile {
         min-width: 38px;
         height: 38px;
         min-height: 38px;
+    }
+
+    .admin-theme-menu__dropdown,
+    .admin-account-menu__dropdown,
+    html[dir="ltr"] .admin-theme-menu__dropdown,
+    html[dir="ltr"] .admin-account-menu__dropdown {
+        right: 8px;
+        left: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-header {
+        padding: 6px 8px;
+        gap: 6px;
+    }
+
+    .admin-header__start,
+    .admin-header__actions {
+        gap: 4px;
+    }
+
+    .admin-header__start .admin-menu-button,
+    .admin-header__actions > .admin-icon-button,
+    .admin-header__actions .admin-theme-menu__trigger,
+    .admin-header__actions .admin-header__locale,
+    .admin-header__actions .admin-profile,
+    .admin-header__actions .admin-profile__avatar,
+    .admin-settings-menu__trigger {
+        width: 36px;
+        min-width: 36px;
+        height: 36px;
+        min-height: 36px;
+    }
+
+    .admin-header__brand {
+        min-height: 40px;
+        padding: 2px;
+    }
+
+    .admin-header__brand-mark,
+    .admin-header__brand-mark img {
+        width: 34px;
+        height: 34px;
+    }
+}
+
+@media (max-width: 360px) {
+    :root {
+        --admin-header-top: 6px;
+        --admin-header-height: 52px;
+        --admin-header-menu-gap: 6px;
+    }
+
+    .admin-header {
+        top: var(--admin-header-top);
+        min-height: var(--admin-header-height);
+        margin: 0 4px;
+        padding: 5px 6px;
+        gap: 4px;
+    }
+
+    .admin-header__start,
+    .admin-header__actions {
+        gap: 3px;
+    }
+
+    .admin-header__start .admin-menu-button,
+    .admin-header__actions > .admin-icon-button,
+    .admin-header__actions .admin-theme-menu__trigger,
+    .admin-header__actions .admin-header__locale,
+    .admin-header__actions .admin-profile,
+    .admin-header__actions .admin-profile__avatar,
+    .admin-settings-menu__trigger {
+        width: 32px;
+        min-width: 32px;
+        height: 32px;
+        min-height: 32px;
+    }
+
+    .admin-header__start .admin-menu-button svg,
+    .admin-header__actions > .admin-icon-button svg,
+    .admin-header__actions .admin-theme-menu__trigger svg,
+    .admin-header__actions .admin-header__locale svg,
+    .admin-header__actions .admin-profile__avatar svg,
+    .admin-settings-menu__trigger svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .admin-header__brand {
+        width: 34px;
+        min-width: 34px;
+        height: 34px;
+        min-height: 34px;
+        padding: 0;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+    .admin-header__brand-mark,
+    .admin-header__brand-mark img {
+        width: 28px;
+        height: 28px;
+    }
+
+    .admin-theme-menu__dropdown,
+    .admin-account-menu__dropdown,
+    html[dir="ltr"] .admin-theme-menu__dropdown,
+    html[dir="ltr"] .admin-account-menu__dropdown {
+        right: 4px;
+        left: 4px;
     }
 }

@@ -2,6 +2,7 @@ const shell = document.querySelector('[data-admin-shell]');
 const sidebarToggle = document.querySelector('[data-sidebar-toggle]');
 const sidebarClose = document.querySelector('[data-sidebar-close]');
 const themeMenu = document.querySelector('[data-theme-menu]');
+const accountMenu = document.querySelector('.admin-account-menu');
 const themeOptions = document.querySelectorAll('[data-theme-option]');
 const themeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 const themeStorageKey = 'saey-admin-theme';
@@ -49,12 +50,38 @@ themeMediaQuery.addEventListener('change', () => {
 
 applyTheme(activeThemePreference, false);
 
+const updateHeaderMetrics = () => {
+    const header = document.querySelector('.admin-header');
+    if (!header) return;
+    const rect = header.getBoundingClientRect();
+    document.documentElement.style.setProperty('--admin-header-bottom', `${Math.round(rect.bottom)}px`);
+};
+
+window.addEventListener('resize', updateHeaderMetrics, { passive: true });
+window.addEventListener('scroll', updateHeaderMetrics, { passive: true });
+document.addEventListener('DOMContentLoaded', updateHeaderMetrics);
+updateHeaderMetrics();
+
+const closeAllHeaderMenus = (except = null) => {
+    if (themeMenu instanceof HTMLDetailsElement && themeMenu !== except && themeMenu.open) {
+        themeMenu.open = false;
+    }
+    if (accountMenu instanceof HTMLDetailsElement && accountMenu !== except && accountMenu.open) {
+        accountMenu.open = false;
+    }
+};
+
 const setSidebar = (open) => {
     if (!shell || !sidebarToggle) return;
+
+    if (open) {
+        closeAllHeaderMenus();
+    }
 
     shell.classList.toggle('is-sidebar-open', open);
     sidebarToggle.setAttribute('aria-expanded', String(open));
     document.body.classList.toggle('has-admin-overlay', open);
+    updateHeaderMetrics();
 };
 
 sidebarToggle?.addEventListener('click', () => {
@@ -63,13 +90,47 @@ sidebarToggle?.addEventListener('click', () => {
 
 sidebarClose?.addEventListener('click', () => setSidebar(false));
 
+[themeMenu, accountMenu].forEach((menu) => {
+    if (!(menu instanceof HTMLDetailsElement)) return;
+
+    menu.querySelector('summary')?.addEventListener('click', () => {
+        closeAllHeaderMenus(menu);
+        if (shell?.classList.contains('is-sidebar-open')) {
+            setSidebar(false);
+        }
+        updateHeaderMetrics();
+    });
+
+    menu.addEventListener('toggle', () => {
+        if (menu.open) {
+            closeAllHeaderMenus(menu);
+            if (shell?.classList.contains('is-sidebar-open')) {
+                setSidebar(false);
+            }
+            updateHeaderMetrics();
+        }
+    });
+});
+
 document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape') return;
 
     setSidebar(false);
     const modal = document.querySelector('[data-admin-modal]:not([hidden])');
     if (modal) modal.hidden = true;
-    if (themeMenu instanceof HTMLDetailsElement) themeMenu.open = false;
+    closeAllHeaderMenus();
+});
+
+document.addEventListener('click', (event) => {
+    if (!(event.target instanceof Node)) return;
+
+    if (themeMenu instanceof HTMLDetailsElement && themeMenu.open && !themeMenu.contains(event.target)) {
+        themeMenu.open = false;
+    }
+
+    if (accountMenu instanceof HTMLDetailsElement && accountMenu.open && !accountMenu.contains(event.target)) {
+        accountMenu.open = false;
+    }
 });
 
 document.querySelectorAll('[data-modal-close]').forEach((button) => {
