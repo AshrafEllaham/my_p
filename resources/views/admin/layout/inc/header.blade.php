@@ -13,7 +13,6 @@
             </span>
         </a>
     </div>
-    @include('admin.layout.inc.sidebar')
     <div class="admin-header__actions">
         <button class="admin-settings-menu__trigger" type="button" data-admin-settings aria-label="{{ __('admin.navigation.settings') }}">
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.42 1.42-.06-.06a1.7 1.7 0 0 0-2.92 1.18V20h-2v-.48a1.7 1.7 0 0 0-2.92-1.18l-.06.06L9 16.98l.06-.06A1.7 1.7 0 0 0 7.84 14H7v-2h.84a1.7 1.7 0 0 0 1.22-2.92L9 9.02l1.42-1.42.06.06A1.7 1.7 0 0 0 13.4 6.48V6h2v.48a1.7 1.7 0 0 0 2.92 1.18l.06-.06 1.42 1.42-.06.06A1.7 1.7 0 0 0 20.96 12H21v2h-.04A1.7 1.7 0 0 0 19.4 15Z"/></svg>

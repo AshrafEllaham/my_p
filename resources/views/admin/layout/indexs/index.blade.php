@@ -16,6 +16,7 @@
         </main>
     @else
         <div class="admin-shell" data-admin-shell>
+            @include('admin.layout.inc.sidebar')
             <div class="admin-main">
                 @include('admin.layout.inc.header')
                 <main class="admin-content" id="main-content">

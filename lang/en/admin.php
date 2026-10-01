@@ -135,7 +135,9 @@ return [
             'created' => 'The item was added successfully.',
             'updated' => 'The changes were saved successfully.',
             'deleted' => 'The item was deleted successfully.',
+            'delete_title' => 'Confirm deletion',
             'delete_confirm' => 'Are you sure you want to delete this item?',
+            'delete_warning' => 'This action cannot be undone after confirmation.',
             'generic_error' => 'The request could not be completed. Please try again.',
         ],
         'errors' => [

@@ -7,7 +7,9 @@ const themeMenu = document.querySelector('[data-theme-menu]');
 const accountMenu = document.querySelector('.admin-account-menu');
 const themeOptions = document.querySelectorAll('[data-theme-option]');
 const themeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+const sidebarMediaQuery = window.matchMedia('(max-width: 860px)');
 const themeStorageKey = 'saey-admin-theme';
+const sidebarStorageKey = 'saey-admin-sidebar-collapsed';
 const allowedThemes = ['light', 'dark', 'system'];
 let activeThemePreference = allowedThemes.includes(document.documentElement.dataset.themePreference)
     ? document.documentElement.dataset.themePreference
@@ -86,11 +88,50 @@ const setSidebar = (open) => {
     updateHeaderMetrics();
 };
 
+const setSidebarCollapsed = (collapsed, persist = true) => {
+    if (!shell || !sidebarToggle) return;
+
+    shell.classList.toggle('is-sidebar-collapsed', collapsed);
+    sidebarToggle.setAttribute('aria-expanded', String(!collapsed));
+
+    if (!persist) return;
+
+    try {
+        localStorage.setItem(sidebarStorageKey, collapsed ? '1' : '0');
+    } catch (error) {
+        // The selected sidebar state still applies for the current page.
+    }
+};
+
+const syncSidebarMode = () => {
+    if (!shell || !sidebarToggle) return;
+
+    setSidebar(false);
+
+    if (sidebarMediaQuery.matches) return;
+
+    let collapsed = false;
+    try {
+        collapsed = localStorage.getItem(sidebarStorageKey) === '1';
+    } catch (error) {
+        collapsed = false;
+    }
+
+    setSidebarCollapsed(collapsed, false);
+};
+
 sidebarToggle?.addEventListener('click', () => {
-    setSidebar(!shell?.classList.contains('is-sidebar-open'));
+    if (sidebarMediaQuery.matches) {
+        setSidebar(!shell?.classList.contains('is-sidebar-open'));
+        return;
+    }
+
+    setSidebarCollapsed(!shell?.classList.contains('is-sidebar-collapsed'));
 });
 
 sidebarClose?.addEventListener('click', () => setSidebar(false));
+sidebarMediaQuery.addEventListener('change', syncSidebarMode);
+syncSidebarMode();
 
 [themeMenu, accountMenu].forEach((menu) => {
     if (!(menu instanceof HTMLDetailsElement)) return;
@@ -264,13 +305,51 @@ if (catalogPage instanceof HTMLElement && catalogTable instanceof HTMLTableEleme
 const adminModal = document.querySelector('[data-admin-modal]');
 const adminModalTitle = adminModal?.querySelector('[data-modal-title]');
 const adminModalContent = adminModal?.querySelector('[data-modal-content]');
+const deleteModal = document.querySelector('[data-delete-modal]');
+const deleteModalConfirm = deleteModal?.querySelector('[data-delete-confirm]');
+const deleteModalError = deleteModal?.querySelector('[data-delete-error]');
 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+let pendingDeleteTrigger = null;
+
+const syncAdminOverlay = () => {
+    const hasVisibleModal = [adminModal, deleteModal].some((modal) => modal instanceof HTMLElement && !modal.hidden);
+    document.body.classList.toggle('has-admin-overlay', hasVisibleModal);
+};
 
 const closeAdminModal = () => {
     if (!(adminModal instanceof HTMLElement)) return;
     adminModal.hidden = true;
-    document.body.classList.remove('has-admin-overlay');
     if (adminModalContent instanceof HTMLElement) adminModalContent.replaceChildren();
+    syncAdminOverlay();
+};
+
+const closeDeleteModal = (restoreFocus = true) => {
+    if (!(deleteModal instanceof HTMLElement)) return;
+
+    deleteModal.hidden = true;
+    if (deleteModalError instanceof HTMLElement) {
+        deleteModalError.hidden = true;
+        deleteModalError.textContent = '';
+    }
+    if (deleteModalConfirm instanceof HTMLButtonElement) {
+        deleteModalConfirm.disabled = false;
+        deleteModalConfirm.classList.remove('is-loading');
+    }
+
+    const trigger = pendingDeleteTrigger;
+    pendingDeleteTrigger = null;
+    syncAdminOverlay();
+    if (restoreFocus && trigger instanceof HTMLElement && trigger.isConnected) trigger.focus();
+};
+
+const openDeleteModal = (trigger) => {
+    if (!(deleteModal instanceof HTMLElement) || !(trigger instanceof HTMLElement)) return;
+
+    pendingDeleteTrigger = trigger;
+    if (deleteModalError instanceof HTMLElement) deleteModalError.hidden = true;
+    deleteModal.hidden = false;
+    syncAdminOverlay();
+    window.requestAnimationFrame(() => deleteModalConfirm?.focus());
 };
 
 const showCatalogMessage = (type, message) => {
@@ -306,7 +385,7 @@ const openCatalogModal = async (url, heading) => {
     if (!(adminModal instanceof HTMLElement) || !(adminModalContent instanceof HTMLElement)) return;
 
     adminModal.hidden = false;
-    document.body.classList.add('has-admin-overlay');
+    syncAdminOverlay();
     if (adminModalTitle instanceof HTMLElement) adminModalTitle.textContent = heading || '';
     adminModalContent.innerHTML = '<div class="admin-modal-loading" aria-busy="true"><span></span></div>';
 
@@ -350,35 +429,64 @@ document.addEventListener('click', async (event) => {
         return;
     }
 
+    const deleteCancel = event.target.closest('[data-delete-cancel]');
+    if (deleteCancel && deleteCancel.closest('[data-delete-modal]')) {
+        event.preventDefault();
+        closeDeleteModal();
+        return;
+    }
+
+    const deleteConfirm = event.target.closest('[data-delete-confirm]');
+    if (deleteConfirm instanceof HTMLButtonElement) {
+        event.preventDefault();
+        const deleteTrigger = pendingDeleteTrigger;
+        if (!(deleteTrigger instanceof HTMLElement) || !deleteTrigger.dataset.deleteUrl) return;
+
+        deleteTrigger.setAttribute('disabled', 'disabled');
+        deleteConfirm.disabled = true;
+        deleteConfirm.classList.add('is-loading');
+
+        try {
+            const response = await fetch(deleteTrigger.dataset.deleteUrl, {
+                method: 'DELETE',
+                headers: {
+                    Accept: 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+            });
+            const payload = await parseJsonResponse(response);
+
+            if (!response.ok) {
+                throw new Error(responseErrors(payload, catalogPage?.dataset.genericError)[0]);
+            }
+
+            closeDeleteModal(false);
+            showCatalogMessage('success', payload.message);
+            catalogDataTable?.ajax.reload(null, false);
+        } catch (error) {
+            if (deleteModalError instanceof HTMLElement) {
+                deleteModalError.textContent = error.message || catalogPage?.dataset.genericError;
+                deleteModalError.hidden = false;
+            }
+        } finally {
+            deleteTrigger.removeAttribute('disabled');
+            deleteConfirm.disabled = false;
+            deleteConfirm.classList.remove('is-loading');
+        }
+        return;
+    }
+
     const deleteTrigger = event.target.closest('[data-delete-url]');
     if (!(deleteTrigger instanceof HTMLElement)) return;
 
     event.preventDefault();
-    if (!window.confirm(catalogPage?.dataset.deleteConfirm || '')) return;
+    openDeleteModal(deleteTrigger);
+});
 
-    deleteTrigger.setAttribute('disabled', 'disabled');
-
-    try {
-        const response = await fetch(deleteTrigger.dataset.deleteUrl, {
-            method: 'DELETE',
-            headers: {
-                Accept: 'application/json',
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRF-TOKEN': csrfToken,
-            },
-        });
-        const payload = await parseJsonResponse(response);
-
-        if (!response.ok) {
-            throw new Error(responseErrors(payload, catalogPage?.dataset.genericError)[0]);
-        }
-
-        showCatalogMessage('success', payload.message);
-        catalogDataTable?.ajax.reload(null, false);
-    } catch (error) {
-        showCatalogMessage('error', error.message || catalogPage?.dataset.genericError);
-    } finally {
-        deleteTrigger.removeAttribute('disabled');
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && deleteModal instanceof HTMLElement && !deleteModal.hidden) {
+        closeDeleteModal();
     }
 });
 

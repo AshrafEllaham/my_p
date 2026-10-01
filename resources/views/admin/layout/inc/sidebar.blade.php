@@ -1,4 +1,13 @@
 <aside class="admin-sidebar" data-admin-sidebar aria-label="{{ __('admin.panel_name') }}">
+    <a class="admin-sidebar__brand" href="{{ route('admin.index') }}" aria-label="{{ __('admin.app_name') }} — {{ __('admin.panel_name') }}">
+        <span class="admin-sidebar__logo" aria-hidden="true">
+            <x-admin.brand-mark />
+        </span>
+        <span class="admin-sidebar__brand-copy">
+            <strong>{{ __('admin.app_name') }}</strong>
+            <small>{{ __('admin.panel_name') }}</small>
+        </span>
+    </a>
     <nav class="admin-nav">
         <a class="admin-nav__item {{ request()->routeIs('admin.index') ? 'is-active' : '' }}" href="{{ route('admin.index') }}" @if(request()->routeIs('admin.index')) aria-current="page" @endif>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/></svg>
@@ -21,23 +30,33 @@
             </summary>
             <div class="admin-nav-group__menu">
                 <a class="admin-nav__subitem {{ request()->routeIs('admin.countries.*') ? 'is-active' : '' }}" href="{{ route('admin.countries.index') }}" @if(request()->routeIs('admin.countries.*')) aria-current="page" @endif>
-                    <span class="admin-nav__subitem-dot" aria-hidden="true"></span>
+                    <span class="admin-nav__subitem-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3.5 9h17M3.5 15h17M12 3c2.3 2.5 3.5 5.5 3.5 9S14.3 18.5 12 21c-2.3-2.5-3.5-5.5-3.5-9S9.7 5.5 12 3Z"/></svg>
+                    </span>
                     <span>{{ __('admin.navigation.countries') }}</span>
                 </a>
                 <a class="admin-nav__subitem {{ request()->routeIs('admin.governorates.*') ? 'is-active' : '' }}" href="{{ route('admin.governorates.index') }}" @if(request()->routeIs('admin.governorates.*')) aria-current="page" @endif>
-                    <span class="admin-nav__subitem-dot" aria-hidden="true"></span>
+                    <span class="admin-nav__subitem-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M12 21s7-5.1 7-11a7 7 0 1 0-14 0c0 5.9 7 11 7 11Z"/><circle cx="12" cy="10" r="2.4"/></svg>
+                    </span>
                     <span>{{ __('admin.navigation.governorates') }}</span>
                 </a>
                 <a class="admin-nav__subitem {{ request()->routeIs('admin.cities.*') ? 'is-active' : '' }}" href="{{ route('admin.cities.index') }}" @if(request()->routeIs('admin.cities.*')) aria-current="page" @endif>
-                    <span class="admin-nav__subitem-dot" aria-hidden="true"></span>
+                    <span class="admin-nav__subitem-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M4 21V9l6-3v15M10 21V3l10 4v14M2 21h20M14 9h2M14 13h2M14 17h2M6 12h1M6 16h1"/></svg>
+                    </span>
                     <span>{{ __('admin.navigation.cities') }}</span>
                 </a>
                 <a class="admin-nav__subitem {{ request()->routeIs('admin.main-categories.*') ? 'is-active' : '' }}" href="{{ route('admin.main-categories.index') }}" @if(request()->routeIs('admin.main-categories.*')) aria-current="page" @endif>
-                    <span class="admin-nav__subitem-dot" aria-hidden="true"></span>
+                    <span class="admin-nav__subitem-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5M3 16l9 5 9-5"/></svg>
+                    </span>
                     <span>{{ __('admin.navigation.main_categories') }}</span>
                 </a>
                 <a class="admin-nav__subitem {{ request()->routeIs('admin.sub-categories.*') ? 'is-active' : '' }}" href="{{ route('admin.sub-categories.index') }}" @if(request()->routeIs('admin.sub-categories.*')) aria-current="page" @endif>
-                    <span class="admin-nav__subitem-dot" aria-hidden="true"></span>
+                    <span class="admin-nav__subitem-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M4 5h6l2 3h8v11H4Z"/><path d="M8 12h8M8 16h5"/></svg>
+                    </span>
                     <span>{{ __('admin.navigation.sub_categories') }}</span>
                 </a>
             </div>

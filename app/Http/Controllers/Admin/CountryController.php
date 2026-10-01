@@ -24,8 +24,8 @@ class CountryController extends Controller
     {
         if ($request->ajax()) {
             return $this->dataTables->eloquent($this->service->dataTableQuery(app()->getLocale()))
-                ->editColumn('is_active', fn ($country): bool => (bool) $country->is_active)
-                ->addColumn('actions', fn ($country): string => view(
+                ->editColumn('is_active', fn($country): bool => (bool) $country->is_active)
+                ->addColumn('actions', fn($country): string => view(
                     'admin.catalog.parts.actions',
                     $this->actionUrls('countries', (int) $country->id),
                 )->render())

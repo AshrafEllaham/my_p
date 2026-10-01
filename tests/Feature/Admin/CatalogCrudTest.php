@@ -56,8 +56,15 @@ class CatalogCrudTest extends TestCase
             ->get(route($route))
             ->assertOk()
             ->assertViewIs('admin.catalog.index')
+            ->assertSee('data-admin-sidebar', false)
+            ->assertSee('class="admin-sidebar__brand"', false)
+            ->assertSee('data-sidebar-toggle', false)
             ->assertSee('data-catalog-navigation', false)
             ->assertSee('class="admin-nav-group__menu"', false)
+            ->assertSee('class="admin-nav__subitem-icon"', false)
+            ->assertSee('data-delete-modal', false)
+            ->assertSee('data-delete-confirm', false)
+            ->assertSee('role="alertdialog"', false)
             ->assertSee('data-catalog-notice hidden', false)
             ->assertSee('data-catalog-error hidden', false);
 
