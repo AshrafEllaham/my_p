@@ -4311,3 +4311,291 @@ html[data-theme="dark"] .admin-delete-modal__actions .admin-button--secondary:ho
         animation: none !important;
     }
 }
+
+/* Restrained glass hierarchy with readable translucent content cards. */
+html[data-theme="light"] {
+    --content-surface: linear-gradient(135deg, rgba(255, 255, 255, .34), rgba(235, 244, 247, .18));
+    --content-surface-raised: rgba(255, 255, 255, .48);
+    --content-border: rgba(255, 255, 255, .76);
+    --content-shadow: 0 22px 52px rgba(18, 42, 57, .2), inset 0 1px rgba(255, 255, 255, .92), inset 0 0 0 1px rgba(255, 255, 255, .16);
+    --glass-fallback: #eceae5;
+}
+
+html[data-theme="dark"] {
+    --content-surface: linear-gradient(135deg, rgba(55, 40, 78, .45), rgba(14, 12, 30, .28));
+    --content-surface-raised: rgba(35, 24, 58, .56);
+    --content-border: rgba(225, 232, 245, .26);
+    --content-shadow: 0 24px 58px rgba(2, 7, 18, .42), inset 0 1px rgba(255, 255, 255, .13), inset 0 0 0 1px rgba(255, 255, 255, .035);
+    --glass-fallback: #181027;
+}
+
+.admin-header,
+.admin-sidebar,
+html[dir="ltr"] .admin-sidebar,
+html[data-theme="light"] .admin-sidebar,
+html[data-theme="dark"] .admin-sidebar {
+    border-color: var(--content-border) !important;
+    background: var(--content-surface) !important;
+    box-shadow: var(--content-shadow) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(1.3) brightness(1.04) !important;
+    backdrop-filter: blur(22px) saturate(1.3) brightness(1.04) !important;
+}
+
+.admin-account-menu__dropdown,
+.admin-theme-menu__dropdown,
+.admin-modal__dialog {
+    border-color: var(--content-border) !important;
+    background: var(--content-surface) !important;
+    box-shadow: var(--content-shadow) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(1.32) brightness(1.04) !important;
+    backdrop-filter: blur(24px) saturate(1.32) brightness(1.04) !important;
+}
+
+.admin-breadcrumb,
+.admin-icon-button,
+.admin-language-switch,
+.admin-header__brand,
+.admin-sidebar .admin-nav-group__menu,
+.admin-form-actions {
+    border-color: var(--content-border) !important;
+    background: var(--content-surface-raised) !important;
+    box-shadow: inset 0 1px rgba(255, 255, 255, .18) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(1.22) !important;
+    backdrop-filter: blur(16px) saturate(1.22) !important;
+}
+
+.admin-stat-card {
+    -webkit-backdrop-filter: blur(8px) saturate(1.08);
+    backdrop-filter: blur(8px) saturate(1.08);
+}
+
+html[data-theme="light"] .admin-stat-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, .36), rgba(235, 244, 247, .2));
+}
+
+html[data-theme="dark"] .admin-stat-card {
+    background: linear-gradient(145deg, rgba(118, 91, 189, .16), transparent 48%), rgba(22, 15, 42, .44);
+}
+
+.admin-panel,
+.admin-profile-card,
+.admin-profile-form-card,
+.admin-catalog__heading,
+.admin-catalog__panel {
+    border-color: var(--content-border) !important;
+    background: var(--content-surface) !important;
+    box-shadow: var(--content-shadow) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(1.3) brightness(1.04) !important;
+    backdrop-filter: blur(22px) saturate(1.3) brightness(1.04) !important;
+}
+
+.admin-field__control,
+.admin-detail-list > div,
+.admin-action-button,
+.dt-container .dt-input,
+.dt-container .dt-length select.dt-input,
+.dt-container .dt-paging .dt-paging-button {
+    border-color: var(--content-border) !important;
+    background-color: var(--content-surface-raised) !important;
+}
+
+.admin-table thead th {
+    border-color: var(--content-border) !important;
+    background: rgba(127, 127, 127, .045);
+}
+
+.admin-table tbody td,
+.admin-form-actions,
+.admin-profile-form__security,
+.admin-profile-form__actions {
+    border-color: var(--content-border) !important;
+}
+
+.admin-empty-state,
+.admin-footer {
+    border-color: var(--content-border) !important;
+    background: var(--content-surface) !important;
+    box-shadow: var(--content-shadow) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(1.3) brightness(1.04) !important;
+    backdrop-filter: blur(22px) saturate(1.3) brightness(1.04) !important;
+}
+
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+    .admin-header,
+    .admin-sidebar,
+    .admin-account-menu__dropdown,
+    .admin-theme-menu__dropdown,
+    .admin-modal__dialog,
+    .admin-breadcrumb,
+    .admin-icon-button,
+    .admin-language-switch,
+    .admin-header__brand,
+    .admin-sidebar .admin-nav-group__menu,
+    .admin-form-actions,
+    .admin-panel,
+    .admin-profile-card,
+    .admin-profile-form-card,
+    .admin-catalog__heading,
+    .admin-catalog__panel,
+    .admin-empty-state,
+    .admin-footer {
+        background: var(--glass-fallback) !important;
+    }
+
+    .admin-stat-card {
+        background: var(--content-surface-raised) !important;
+    }
+}
+
+/* Neutral architectural background designed to support translucent dashboard surfaces. */
+html[data-theme="light"] body.admin-body {
+    background:
+        linear-gradient(rgba(255, 255, 255, .08), rgba(226, 229, 232, .14)),
+        url('/assets/backgrounds/admin-glass-architecture.png') center / cover fixed no-repeat;
+}
+
+html[data-theme="dark"] body.admin-body {
+    background:
+        linear-gradient(rgba(5, 7, 10, .58), rgba(8, 10, 14, .7)),
+        url('/assets/backgrounds/admin-glass-architecture.png') center / cover fixed no-repeat;
+}
+
+html[data-theme="light"] body.admin-body::before,
+html[data-theme="dark"] body.admin-body::before {
+    opacity: .1;
+}
+
+/* Fixed interface accent: independent from the user-selected background image. */
+html[data-theme="light"],
+html[data-theme="dark"] {
+    --action-accent: #000000;
+    --action-accent-hover: #262626;
+    --action-accent-pressed: #111111;
+    --action-accent-contrast: #ffffff;
+    --action-accent-soft: rgba(0, 0, 0, .12);
+    --action-accent-ring: rgba(0, 0, 0, .32);
+}
+
+.admin-button,
+.admin-action-button,
+.admin-icon-button,
+.admin-language-switch,
+.admin-sidebar .admin-nav__item,
+.admin-sidebar .admin-nav__subitem,
+.dt-container .dt-paging .dt-paging-button {
+    transition: color 160ms ease, border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+html[data-theme="light"] .admin-button--primary,
+html[data-theme="dark"] .admin-button--primary,
+html[data-theme="light"] .admin-form-actions .admin-button--primary,
+html[data-theme="dark"] .admin-form-actions .admin-button--primary,
+html[data-theme="light"] .admin-login__submit,
+html[data-theme="dark"] .admin-login__submit {
+    color: var(--action-accent-contrast) !important;
+    border-color: var(--action-accent) !important;
+    background: linear-gradient(135deg, var(--action-accent), var(--action-accent-hover)) !important;
+    box-shadow: 0 10px 24px var(--action-accent-ring), inset 0 1px rgba(255, 255, 255, .24) !important;
+}
+
+html[data-theme="light"] .admin-button--primary:hover,
+html[data-theme="dark"] .admin-button--primary:hover,
+html[data-theme="light"] .admin-form-actions .admin-button--primary:hover,
+html[data-theme="dark"] .admin-form-actions .admin-button--primary:hover,
+html[data-theme="light"] .admin-login__submit:hover,
+html[data-theme="dark"] .admin-login__submit:hover {
+    border-color: var(--action-accent-hover) !important;
+    background: linear-gradient(135deg, var(--action-accent-hover), var(--action-accent)) !important;
+    box-shadow: 0 14px 30px var(--action-accent-ring), inset 0 1px rgba(255, 255, 255, .3) !important;
+    transform: translateY(-2px);
+}
+
+.admin-button--primary:active,
+.admin-form-actions .admin-button--primary:active,
+.admin-login__submit:active {
+    background: var(--action-accent-pressed) !important;
+    box-shadow: 0 5px 14px var(--action-accent-ring) !important;
+    transform: translateY(0) scale(.98);
+}
+
+.admin-button--secondary:hover,
+.admin-form-actions .admin-button--secondary:hover,
+.admin-icon-button:hover,
+.admin-language-switch:hover,
+.admin-settings-menu__trigger:hover,
+.admin-header__actions > .admin-icon-button:hover {
+    color: var(--action-accent) !important;
+    border-color: var(--action-accent) !important;
+    background: var(--action-accent-soft) !important;
+    box-shadow: 0 8px 20px var(--action-accent-ring) !important;
+}
+
+.admin-button--secondary:active,
+.admin-icon-button:active,
+.admin-language-switch:active {
+    color: var(--action-accent-pressed) !important;
+    background: var(--action-accent-soft) !important;
+    transform: scale(.96);
+}
+
+.admin-button:focus-visible,
+.admin-action-button:focus-visible,
+.admin-icon-button:focus-visible,
+.admin-language-switch:focus-visible,
+.admin-sidebar a:focus-visible,
+.admin-sidebar button:focus-visible,
+.dt-container .dt-paging .dt-paging-button:focus-visible {
+    outline: 3px solid var(--action-accent-ring) !important;
+    outline-offset: 3px;
+}
+
+.admin-sidebar .admin-nav__item:not(.is-disabled):hover,
+.admin-sidebar .admin-nav__subitem:hover,
+.admin-sidebar .admin-nav-group[open] .admin-nav-group__trigger,
+.admin-sidebar .admin-nav-group.is-active .admin-nav-group__trigger {
+    color: var(--action-accent) !important;
+    border-color: var(--action-accent-ring) !important;
+    background: var(--action-accent-soft) !important;
+}
+
+.admin-sidebar .admin-nav__item.is-active,
+.admin-sidebar .admin-nav__subitem.is-active {
+    color: var(--action-accent-contrast) !important;
+    border-color: var(--action-accent) !important;
+    background: linear-gradient(135deg, var(--action-accent), var(--action-accent-hover)) !important;
+    box-shadow: 0 10px 24px var(--action-accent-ring) !important;
+}
+
+.admin-sidebar .admin-nav__item.is-active:active,
+.admin-sidebar .admin-nav__subitem.is-active:active {
+    background: var(--action-accent-pressed) !important;
+    transform: scale(.985);
+}
+
+.admin-action-button--view { color: var(--action-accent) !important; }
+.admin-action-button--view:hover {
+    color: var(--action-accent-pressed) !important;
+    border-color: var(--action-accent) !important;
+    background: var(--action-accent-soft) !important;
+}
+.admin-action-button--edit { color: #b66a12 !important; }
+.admin-action-button--edit:hover { color: #8a4b08 !important; border-color: #d79a4f !important; background: rgba(217, 145, 54, .14) !important; }
+.admin-action-button--delete { color: #dc3f52 !important; }
+.admin-action-button--delete:hover { color: #b62438 !important; border-color: #ef7b8a !important; background: rgba(220, 63, 82, .13) !important; }
+.admin-action-button:active { transform: translateY(0) scale(.92); }
+
+.dt-container .dt-paging .dt-paging-button:not(.disabled):not(.current):hover {
+    color: var(--action-accent) !important;
+    border-color: var(--action-accent-ring) !important;
+    background: var(--action-accent-soft) !important;
+}
+
+html[data-theme="light"] .dt-container .dt-paging .dt-paging-button.current,
+html[data-theme="light"] .dt-container .dt-paging .dt-paging-button.current:hover,
+html[data-theme="dark"] .dt-container .dt-paging .dt-paging-button.current,
+html[data-theme="dark"] .dt-container .dt-paging .dt-paging-button.current:hover {
+    color: var(--action-accent-contrast) !important;
+    border-color: var(--action-accent) !important;
+    background: var(--action-accent) !important;
+    box-shadow: 0 7px 18px var(--action-accent-ring) !important;
+}
