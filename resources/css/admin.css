@@ -3437,34 +3437,352 @@ html[data-theme="light"] .admin-nav__subitem.is-active { color: #fff; background
 .admin-alert--danger { color: #b91c1c; border-color: #fecaca; background: #fef2f2; }
 
 .admin-table-wrap { width: 100%; overflow-x: auto; }
-.admin-table { width: 100% !important; min-width: 760px; border-collapse: collapse !important; }
-.admin-table thead th { padding: 13px 12px !important; color: var(--muted); border-bottom: 1px solid var(--border) !important; font-size: 11px; font-weight: 900; text-align: start !important; white-space: nowrap; }
-.admin-table tbody td { padding: 13px 12px !important; color: var(--ink); border-bottom: 1px solid var(--border) !important; font-size: 12px; font-weight: 650; text-align: start !important; vertical-align: middle; }
+.admin-table { width: 100% !important; min-width: 760px; border-collapse: separate !important; border-spacing: 0 !important; }
+.admin-table thead th {
+    padding: 13px 14px !important;
+    color: var(--muted);
+    background: rgba(15, 23, 42, 0.024);
+    border-bottom: 1px solid var(--border) !important;
+    font-size: 11.5px;
+    font-weight: 850;
+    text-align: start !important;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+    transition: background-color 140ms ease;
+}
+.admin-table thead th:first-child { border-start-start-radius: 10px; border-end-start-radius: 10px; }
+.admin-table thead th:last-child { border-start-end-radius: 10px; border-end-end-radius: 10px; }
+.admin-table tbody td {
+    padding: 14px 14px !important;
+    color: var(--ink);
+    border-bottom: 1px solid var(--border) !important;
+    font-size: 12.5px;
+    font-weight: 650;
+    text-align: start !important;
+    vertical-align: middle;
+}
 .admin-table tbody tr:last-child td { border-bottom: 0 !important; }
-.admin-table tbody tr:hover { background: rgba(127,127,127,.045); }
-.admin-table-actions { display: flex; align-items: center; gap: 5px; white-space: nowrap; }
-.admin-action-button { display: inline-grid; width: 34px; height: 34px; padding: 0; place-items: center; border: 1px solid var(--border); border-radius: 9px; background: var(--surface-strong, var(--surface)); cursor: pointer; transition: 150ms ease; }
-.admin-action-button svg { width: 16px; height: 16px; }
+.admin-table tbody tr { transition: background-color 140ms ease; }
+.admin-table tbody tr:hover td { background: rgba(15, 23, 42, 0.022); }
+.admin-table tbody td.dt-empty {
+    padding: 48px 24px !important;
+    text-align: center !important;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+    background: transparent !important;
+}
+.admin-table tbody td.dt-empty::before {
+    content: '';
+    display: block;
+    width: 44px;
+    height: 44px;
+    margin: 0 auto 12px;
+    border-radius: 12px;
+    background-color: rgba(127, 127, 127, 0.08);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8' stroke-width='1.8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 20px 20px;
+}
+
+table.dataTable thead>tr>th.dt-orderable-asc:hover,
+table.dataTable thead>tr>th.dt-orderable-desc:hover {
+    outline: none !important;
+    background: rgba(127, 127, 127, 0.065) !important;
+}
+
+.admin-table-actions { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.admin-action-button {
+    display: inline-grid;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    place-items: center;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--surface-strong, var(--surface));
+    cursor: pointer;
+    transition: all 140ms ease;
+}
+.admin-action-button svg { width: 16px; height: 16px; transition: transform 140ms ease; }
 .admin-action-button:hover { transform: translateY(-1px); }
+.admin-action-button:hover svg { transform: scale(1.08); }
 .admin-action-button--view { color: #2563eb; }
+.admin-action-button--view:hover { border-color: #93c5fd; background: rgba(37, 99, 235, 0.08); }
 .admin-action-button--edit { color: #7c3aed; }
+.admin-action-button--edit:hover { border-color: #d8b4fe; background: rgba(124, 58, 237, 0.08); }
 .admin-action-button--delete { color: #dc2626; }
+.admin-action-button--delete:hover { border-color: #fca5a5; background: rgba(220, 38, 38, 0.08); }
 .admin-action-button:disabled { cursor: wait; opacity: .5; }
 
-.admin-status-badge { display: inline-flex; min-height: 26px; padding: 0 9px; align-items: center; border-radius: 999px; font-size: 10px; font-weight: 900; white-space: nowrap; }
+.admin-status-badge {
+    display: inline-flex;
+    min-height: 26px;
+    padding: 0 10px;
+    align-items: center;
+    gap: 6px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+.admin-status-badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+}
 .admin-status-badge--active { color: #047857; background: #d1fae5; }
 .admin-status-badge--inactive { color: #b91c1c; background: #fee2e2; }
 
-.dt-container { color: var(--ink); font-family: inherit; font-size: 12px; }
-.dt-container .dt-layout-row { margin: 0 0 14px !important; align-items: center; gap: 12px; }
-.dt-container .dt-layout-row:last-child { margin: 14px 0 0 !important; }
-.dt-container .dt-search label, .dt-container .dt-length label, .dt-container .dt-info { color: var(--muted); font-size: 11px; font-weight: 700; }
-.dt-container .dt-input { min-height: 38px; padding: 7px 10px !important; color: var(--ink); border: 1px solid var(--border) !important; border-radius: 9px !important; background: var(--surface-strong, var(--surface)) !important; font: inherit; }
-.dt-container .dt-search .dt-input { min-width: 220px; margin-inline-start: 7px; }
-.dt-container .dt-paging .dt-paging-button { min-width: 34px; min-height: 34px; margin: 0 2px !important; padding: 5px 9px !important; color: var(--ink) !important; border: 1px solid transparent !important; border-radius: 8px !important; background: transparent !important; }
-.dt-container .dt-paging .dt-paging-button.current, .dt-container .dt-paging .dt-paging-button:hover { color: #fff !important; border-color: #000 !important; background: #000 !important; }
+.dt-container { color: var(--ink); font-family: inherit; font-size: 12px; position: relative; }
+.dt-container .dt-layout-row { margin: 0 0 16px !important; align-items: center; gap: 14px; }
+.dt-container .dt-layout-row:last-child { margin: 16px 0 0 !important; }
+.dt-container .dt-search {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+}
+.dt-container .dt-search label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+.dt-container .dt-search .dt-input {
+    min-width: 260px;
+    min-height: 40px;
+    padding: 8px 14px 8px 38px !important;
+    color: var(--ink);
+    border: 1px solid var(--border) !important;
+    border-radius: 10px !important;
+    background-color: var(--surface-strong, var(--surface)) !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-size: 16px 16px !important;
+    background-position: left 12px center !important;
+    font-size: 12.5px;
+    font-weight: 650;
+    margin-inline-start: 0 !important;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+html[dir="rtl"] .dt-container .dt-search .dt-input {
+    padding: 8px 38px 8px 14px !important;
+    background-position: right 12px center !important;
+}
+.dt-container .dt-search .dt-input:focus {
+    border-color: #000 !important;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+}
+
+.dt-container .dt-length select.dt-input {
+    min-height: 40px;
+    padding: 6px 12px !important;
+    border-radius: 10px !important;
+    border: 1px solid var(--border) !important;
+    background: var(--surface-strong, var(--surface)) !important;
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: border-color 150ms ease;
+}
+.dt-container .dt-length select.dt-input:focus {
+    border-color: #000 !important;
+    outline: none;
+}
+.dt-container .dt-length label {
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+    margin-inline-start: 8px;
+}
+.dt-container .dt-info {
+    color: var(--muted) !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    padding: 0 !important;
+}
+
+div.dt-container div.dt-processing {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: auto !important;
+    min-width: 170px;
+    margin: 0 !important;
+    padding: 10px 20px !important;
+    border-radius: 999px !important;
+    border: 1px solid var(--border) !important;
+    background: var(--surface) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+    color: var(--ink) !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    z-index: 20 !important;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    backdrop-filter: blur(10px);
+}
+div.dt-container div.dt-processing[style*="display: block"] {
+    display: inline-flex !important;
+}
+div.dt-container div.dt-processing[style*="display: none"] {
+    display: none !important;
+}
+div.dt-container div.dt-processing::before {
+    content: '';
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border: 2px solid var(--border);
+    border-top-color: var(--ink);
+    border-radius: 50%;
+    animation: admin-spin 0.7s linear infinite;
+    flex-shrink: 0;
+}
+div.dt-container div.dt-processing > div:last-child {
+    display: none !important;
+}
+
+.dt-container .dt-paging .dt-paging-button {
+    min-width: 36px;
+    height: 36px;
+    margin: 0 2px !important;
+    padding: 6px 11px !important;
+    color: var(--muted) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 9px !important;
+    background: var(--surface-strong, var(--surface)) !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    transition: all 140ms ease !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+    cursor: pointer;
+}
+.dt-container .dt-paging .dt-paging-button:not(.disabled):not(.current):hover {
+    color: var(--ink) !important;
+    border-color: rgba(15, 23, 42, 0.22) !important;
+    background: rgba(127, 127, 127, 0.08) !important;
+    transform: translateY(-1px);
+}
+.dt-container .dt-paging .dt-paging-button.current,
+.dt-container .dt-paging .dt-paging-button.current:hover {
+    color: #fff !important;
+    border-color: #000 !important;
+    background: #000 !important;
+    font-weight: 850 !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.14) !important;
+    transform: none !important;
+}
+.dt-container .dt-paging .dt-paging-button.disabled,
+.dt-container .dt-paging .dt-paging-button.disabled:hover,
+.dt-container .dt-paging .dt-paging-button.disabled:active {
+    cursor: not-allowed !important;
+    opacity: 0.38 !important;
+    color: var(--muted) !important;
+    border-color: var(--border) !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+html[data-theme="dark"] .admin-table thead th {
+    background: rgba(255, 255, 255, 0.035);
+}
+html[data-theme="dark"] .admin-table tbody tr:hover td {
+    background: rgba(255, 255, 255, 0.035);
+}
+html[data-theme="dark"] table.dataTable thead>tr>th.dt-orderable-asc:hover,
+html[data-theme="dark"] table.dataTable thead>tr>th.dt-orderable-desc:hover {
+    background: rgba(255, 255, 255, 0.06) !important;
+}
+html[data-theme="dark"] table.dataTable thead>tr>th.dt-ordering-asc .dt-column-order:before,
+html[data-theme="dark"] table.dataTable thead>tr>th.dt-ordering-desc .dt-column-order:after {
+    color: #fff;
+    opacity: 0.9;
+}
+html[data-theme="dark"] .admin-action-button {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+html[data-theme="dark"] .admin-action-button--view:hover {
+    background: rgba(37, 99, 235, 0.16);
+    border-color: rgba(59, 130, 246, 0.4);
+}
+html[data-theme="dark"] .admin-action-button--edit:hover {
+    background: rgba(124, 58, 237, 0.16);
+    border-color: rgba(147, 51, 234, 0.4);
+}
+html[data-theme="dark"] .admin-action-button--delete:hover {
+    background: rgba(220, 38, 38, 0.16);
+    border-color: rgba(239, 68, 68, 0.4);
+}
+html[data-theme="dark"] .dt-container .dt-search .dt-input {
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    background-color: rgba(255, 255, 255, 0.04) !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z'/%3E%3C/svg%3E") !important;
+}
+html[data-theme="dark"] .dt-container .dt-search .dt-input:focus {
+    border-color: #fff !important;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.12);
+}
+html[data-theme="dark"] .dt-container .dt-length select.dt-input {
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    background-color: rgba(255, 255, 255, 0.04) !important;
+}
+html[data-theme="dark"] .dt-container .dt-length select.dt-input:focus {
+    border-color: #fff !important;
+}
+html[data-theme="dark"] div.dt-container div.dt-processing {
+    background: #18191c !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45) !important;
+    color: #fff !important;
+}
+html[data-theme="dark"] div.dt-container div.dt-processing::before {
+    border-color: rgba(255, 255, 255, 0.2);
+    border-top-color: #fff;
+}
+html[data-theme="dark"] .dt-container .dt-paging .dt-paging-button {
+    color: rgba(255, 255, 255, 0.65) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    background: rgba(255, 255, 255, 0.035) !important;
+}
+html[data-theme="dark"] .dt-container .dt-paging .dt-paging-button:not(.disabled):not(.current):hover {
+    color: #fff !important;
+    border-color: rgba(255, 255, 255, 0.22) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+}
 html[data-theme="dark"] .dt-container .dt-paging .dt-paging-button.current,
-html[data-theme="dark"] .dt-container .dt-paging .dt-paging-button:hover { border-color: #9c7bdc !important; background: #6f4dad !important; }
+html[data-theme="dark"] .dt-container .dt-paging .dt-paging-button.current:hover {
+    color: #000 !important;
+    border-color: #fff !important;
+    background: #fff !important;
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2) !important;
+}
+html[data-theme="dark"] .dt-container .dt-paging .dt-paging-button.disabled,
+html[data-theme="dark"] .dt-container .dt-paging .dt-paging-button.disabled:hover,
+html[data-theme="dark"] .dt-container .dt-paging .dt-paging-button.disabled:active {
+    color: rgba(255, 255, 255, 0.25) !important;
+    border-color: rgba(255, 255, 255, 0.05) !important;
+    background: transparent !important;
+}
 
 .admin-catalog-form { display: flex; flex-direction: column; gap: 20px; min-height: 100%; }
 .admin-form-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; flex: 1 0 auto; }
@@ -3477,23 +3795,105 @@ html[data-theme="dark"] .dt-container .dt-paging .dt-paging-button:hover { borde
 .admin-form-actions {
     position: sticky;
     bottom: -28px;
-    display: flex;
-    padding-top: 14px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    width: 100%;
+    padding-top: 16px;
     padding-bottom: 8px;
-    justify-content: flex-end;
-    gap: 10px;
     border-top: 1px solid var(--border);
-    background: inherit;
-    -webkit-backdrop-filter: blur(14px);
-    backdrop-filter: blur(14px);
+    background: var(--surface);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
     z-index: 5;
     margin-top: auto;
+    box-sizing: border-box;
 }
 .admin-form-actions .admin-button {
-    min-height: 44px;
-    padding: 0 20px;
+    width: 100%;
+    min-width: 0;
+    min-height: 48px;
+    padding: 0 18px;
+    border-radius: 14px;
     font-size: 14px;
     font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    transition: all 180ms cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
+}
+.admin-form-actions .admin-button svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    transition: transform 180ms ease;
+}
+.admin-form-actions .admin-button:hover svg {
+    transform: scale(1.08);
+}
+.admin-form-actions .admin-button--secondary {
+    color: var(--ink);
+    border: 1px solid var(--border);
+    background: #f8fafc;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+.admin-form-actions .admin-button--secondary:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    transform: translateY(-1.5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+.admin-form-actions .admin-button--secondary:active {
+    transform: translateY(0);
+}
+.admin-form-actions .admin-button--primary {
+    color: #fff;
+    border: 1px solid #000;
+    background: #000;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+.admin-form-actions .admin-button--primary:hover {
+    background: #171717;
+    border-color: #171717;
+    transform: translateY(-1.5px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+}
+.admin-form-actions .admin-button--primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+.admin-form-actions .admin-button:disabled {
+    cursor: wait;
+    opacity: 0.6;
+    transform: none !important;
+}
+
+html[data-theme="dark"] .admin-form-actions {
+    background: #18191c;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+html[data-theme="dark"] .admin-form-actions .admin-button--secondary {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.12);
+    color: #f1eff5;
+    box-shadow: none;
+}
+html[data-theme="dark"] .admin-form-actions .admin-button--secondary:hover {
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(255, 255, 255, 0.22);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+html[data-theme="dark"] .admin-form-actions .admin-button--primary {
+    background: #fff;
+    color: #000;
+    border-color: #fff;
+    box-shadow: 0 4px 16px rgba(255, 255, 255, 0.16);
+}
+html[data-theme="dark"] .admin-form-actions .admin-button--primary:hover {
+    background: #f1f5f9;
+    box-shadow: 0 6px 22px rgba(255, 255, 255, 0.25);
 }
 .admin-form-errors { padding: 12px 14px; color: #b91c1c; border: 1px solid #fecaca; border-radius: 10px; background: #fef2f2; font-size: 11px; font-weight: 700; }
 .admin-form-errors p { margin: 0; }
@@ -3539,10 +3939,14 @@ html[data-theme="dark"] .admin-form-errors { color: #fca5a5; border-color: rgba(
     .admin-form-grid__full, .admin-detail-list__full { grid-column: auto; }
     .admin-form-actions {
         bottom: calc(-24px - env(safe-area-inset-bottom, 16px));
-        flex-direction: column-reverse;
+        grid-template-columns: 1fr 1fr;
         padding-bottom: calc(10px + env(safe-area-inset-bottom, 16px));
     }
-    .admin-form-actions .admin-button { width: 100%; height: 48px; }
+    @media (max-width: 420px) {
+        .admin-form-actions {
+            grid-template-columns: 1fr;
+        }
+    }
     .dt-container .dt-layout-row { align-items: stretch; flex-direction: column; }
     .dt-container .dt-layout-cell { width: 100%; text-align: start !important; }
     .dt-container .dt-search .dt-input { width: 100%; min-width: 0; margin: 7px 0 0; }

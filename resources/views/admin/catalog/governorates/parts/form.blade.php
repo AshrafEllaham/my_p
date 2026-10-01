@@ -29,7 +29,13 @@
         @include('admin.catalog.parts.active-field', ['isActive' => $governorate?->is_active ?? true])
     </div>
     <div class="admin-form-actions">
-        <button class="admin-button admin-button--secondary" type="button" data-modal-close>{{ __('admin.actions.cancel') }}</button>
-        <button class="admin-button admin-button--primary" type="submit">{{ __('admin.actions.save') }}</button>
+        <button class="admin-button admin-button--secondary" type="button" data-modal-close>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            <span>{{ __('admin.actions.cancel') }}</span>
+        </button>
+        <button class="admin-button admin-button--primary" type="submit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>{{ __('admin.actions.save') }}</span>
+        </button>
     </div>
 </form>
