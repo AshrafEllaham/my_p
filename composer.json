@@ -14,7 +14,8 @@
         "intervention/image": "^3.11",
         "laravel/framework": "^13.17",
         "laravel/tinker": "^3.0",
-        "mcamara/laravel-localization": "^2.4"
+        "mcamara/laravel-localization": "^2.4",
+        "yajra/laravel-datatables-oracle": "^13.3"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^4.4",

@@ -1,3 +1,5 @@
+import DataTable from 'datatables.net-dt';
+
 const shell = document.querySelector('[data-admin-shell]');
 const sidebarToggle = document.querySelector('[data-sidebar-toggle]');
 const sidebarClose = document.querySelector('[data-sidebar-close]');
@@ -216,3 +218,215 @@ document.addEventListener('submit', (event) => {
 });
 
 window.addEventListener('pageshow', hidePageLoader);
+
+const catalogPage = document.querySelector('[data-catalog-page]');
+const catalogTable = document.querySelector('[data-admin-datatable]');
+const dataTableConfigNode = document.querySelector('[data-datatable-config]');
+let catalogDataTable = null;
+
+if (catalogPage instanceof HTMLElement && catalogTable instanceof HTMLTableElement && dataTableConfigNode) {
+    const config = JSON.parse(dataTableConfigNode.textContent || '{}');
+    const columns = (config.columns || []).map((column) => {
+        const normalized = { ...column };
+        delete normalized.title;
+
+        if (normalized.type === 'status') {
+            delete normalized.type;
+            normalized.render = (value, renderType) => {
+                if (renderType !== 'display') return value ? 1 : 0;
+
+                const active = Boolean(value);
+                const label = active ? catalogPage.dataset.activeLabel : catalogPage.dataset.inactiveLabel;
+                const state = active ? 'active' : 'inactive';
+
+                return `<span class="admin-status-badge admin-status-badge--${state}">${label}</span>`;
+            };
+        }
+
+        return normalized;
+    });
+
+    catalogDataTable = new DataTable(catalogTable, {
+        ajax: {
+            url: config.ajax,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        },
+        columns,
+        serverSide: true,
+        processing: true,
+        responsive: false,
+        order: [[0, 'desc']],
+        pageLength: 10,
+        language: config.language || {},
+    });
+}
+
+const adminModal = document.querySelector('[data-admin-modal]');
+const adminModalTitle = adminModal?.querySelector('[data-modal-title]');
+const adminModalContent = adminModal?.querySelector('[data-modal-content]');
+const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
+const closeAdminModal = () => {
+    if (!(adminModal instanceof HTMLElement)) return;
+    adminModal.hidden = true;
+    document.body.classList.remove('has-admin-overlay');
+    if (adminModalContent instanceof HTMLElement) adminModalContent.replaceChildren();
+};
+
+const showCatalogMessage = (type, message) => {
+    if (!(catalogPage instanceof HTMLElement)) return;
+
+    const notice = catalogPage.querySelector(type === 'success' ? '[data-catalog-notice]' : '[data-catalog-error]');
+    const counterpart = catalogPage.querySelector(type === 'success' ? '[data-catalog-error]' : '[data-catalog-notice]');
+    if (counterpart instanceof HTMLElement) counterpart.hidden = true;
+    if (!(notice instanceof HTMLElement)) return;
+
+    notice.textContent = message;
+    notice.hidden = false;
+    window.setTimeout(() => { notice.hidden = true; }, 4500);
+};
+
+const parseJsonResponse = async (response) => {
+    try {
+        return await response.json();
+    } catch (error) {
+        return {};
+    }
+};
+
+const responseErrors = (payload, fallback) => {
+    if (payload?.errors && typeof payload.errors === 'object') {
+        return Object.values(payload.errors).flat().filter(Boolean);
+    }
+
+    return [payload?.message || fallback];
+};
+
+const openCatalogModal = async (url, heading) => {
+    if (!(adminModal instanceof HTMLElement) || !(adminModalContent instanceof HTMLElement)) return;
+
+    adminModal.hidden = false;
+    document.body.classList.add('has-admin-overlay');
+    if (adminModalTitle instanceof HTMLElement) adminModalTitle.textContent = heading || '';
+    adminModalContent.innerHTML = '<div class="admin-modal-loading" aria-busy="true"><span></span></div>';
+
+    try {
+        const response = await fetch(url, {
+            headers: {
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        });
+        const payload = await parseJsonResponse(response);
+
+        if (!response.ok || !payload?.data?.html) {
+            throw new Error(payload?.message || catalogPage?.dataset.genericError);
+        }
+
+        adminModalContent.innerHTML = payload.data.html;
+        adminModalContent.querySelector('input, select, textarea')?.focus();
+    } catch (error) {
+        const alert = document.createElement('div');
+        alert.className = 'admin-alert admin-alert--danger';
+        alert.textContent = error.message || catalogPage?.dataset.genericError;
+        adminModalContent.replaceChildren(alert);
+    }
+};
+
+document.addEventListener('click', async (event) => {
+    if (!(event.target instanceof Element)) return;
+
+    const modalTrigger = event.target.closest('[data-modal-url]');
+    if (modalTrigger instanceof HTMLElement) {
+        event.preventDefault();
+        await openCatalogModal(modalTrigger.dataset.modalUrl, modalTrigger.dataset.modalHeading);
+        return;
+    }
+
+    const modalClose = event.target.closest('[data-modal-close]');
+    if (modalClose && modalClose.closest('[data-admin-modal]')) {
+        event.preventDefault();
+        closeAdminModal();
+        return;
+    }
+
+    const deleteTrigger = event.target.closest('[data-delete-url]');
+    if (!(deleteTrigger instanceof HTMLElement)) return;
+
+    event.preventDefault();
+    if (!window.confirm(catalogPage?.dataset.deleteConfirm || '')) return;
+
+    deleteTrigger.setAttribute('disabled', 'disabled');
+
+    try {
+        const response = await fetch(deleteTrigger.dataset.deleteUrl, {
+            method: 'DELETE',
+            headers: {
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': csrfToken,
+            },
+        });
+        const payload = await parseJsonResponse(response);
+
+        if (!response.ok) {
+            throw new Error(responseErrors(payload, catalogPage?.dataset.genericError)[0]);
+        }
+
+        showCatalogMessage('success', payload.message);
+        catalogDataTable?.ajax.reload(null, false);
+    } catch (error) {
+        showCatalogMessage('error', error.message || catalogPage?.dataset.genericError);
+    } finally {
+        deleteTrigger.removeAttribute('disabled');
+    }
+});
+
+document.addEventListener('submit', async (event) => {
+    if (!(event.target instanceof HTMLFormElement) || !event.target.matches('[data-catalog-form]')) return;
+
+    event.preventDefault();
+    const form = event.target;
+    const submitButton = form.querySelector('[type="submit"]');
+    const errorsBox = form.querySelector('[data-form-errors]');
+    if (submitButton instanceof HTMLButtonElement) submitButton.disabled = true;
+    if (errorsBox instanceof HTMLElement) errorsBox.hidden = true;
+
+    try {
+        const response = await fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: {
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': csrfToken,
+            },
+        });
+        const payload = await parseJsonResponse(response);
+
+        if (!response.ok) {
+            const messages = responseErrors(payload, catalogPage?.dataset.genericError);
+            if (errorsBox instanceof HTMLElement) {
+                const paragraphs = messages.map((message) => {
+                    const paragraph = document.createElement('p');
+                    paragraph.textContent = message;
+                    return paragraph;
+                });
+                errorsBox.replaceChildren(...paragraphs);
+                errorsBox.hidden = false;
+            }
+            return;
+        }
+
+        closeAdminModal();
+        showCatalogMessage('success', payload.message);
+        catalogDataTable?.ajax.reload(null, false);
+    } catch (error) {
+        if (errorsBox instanceof HTMLElement) {
+            errorsBox.textContent = error.message || catalogPage?.dataset.genericError;
+            errorsBox.hidden = false;
+        }
+    } finally {
+        if (submitButton instanceof HTMLButtonElement) submitButton.disabled = false;
+    }
+});

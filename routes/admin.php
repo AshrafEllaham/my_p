@@ -1,8 +1,13 @@
 <?php
 
 use App\Http\Controllers\Admin\Auth\LoginController;
+use App\Http\Controllers\Admin\CityController;
+use App\Http\Controllers\Admin\CountryController;
+use App\Http\Controllers\Admin\GovernorateController;
 use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\Admin\MainCategoryController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\SubCategoryController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
@@ -18,10 +23,19 @@ Route::group([
             ->name('admin.login.post');
     });
 
-    Route::middleware('auth:admin')->group(function (): void {
+    Route::middleware(['auth:admin', 'throttle:60,1'])->group(function (): void {
         Route::get('/dashboard', [HomeController::class, 'index'])->name('admin.index');
         Route::get('/profile', [ProfileController::class, 'edit'])->name('admin.profile.edit');
         Route::put('/profile', [ProfileController::class, 'update'])->name('admin.profile.update');
+        Route::resources([
+            'countries' => CountryController::class,
+            'governorates' => GovernorateController::class,
+            'cities' => CityController::class,
+            'main-categories' => MainCategoryController::class,
+            'sub-categories' => SubCategoryController::class,
+        ], [
+            'as' => 'admin',
+        ]);
         Route::post('/logout', [LoginController::class, 'logout'])->name('admin.logout');
     });
 });

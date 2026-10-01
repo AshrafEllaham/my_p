@@ -4,6 +4,44 @@
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/></svg>
             <span>{{ __('admin.navigation.main') }}</span>
         </a>
+        @php
+            $catalogNavigationIsActive = request()->routeIs([
+                'admin.countries.*',
+                'admin.governorates.*',
+                'admin.cities.*',
+                'admin.main-categories.*',
+                'admin.sub-categories.*',
+            ]);
+        @endphp
+        <details class="admin-nav-group {{ $catalogNavigationIsActive ? 'is-active' : '' }}" data-catalog-navigation @if($catalogNavigationIsActive) open @endif>
+            <summary class="admin-nav__item admin-nav-group__trigger">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg>
+                <span>{{ __('admin.navigation.catalog') }}</span>
+                <svg class="admin-nav-group__chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg>
+            </summary>
+            <div class="admin-nav-group__menu">
+                <a class="admin-nav__subitem {{ request()->routeIs('admin.countries.*') ? 'is-active' : '' }}" href="{{ route('admin.countries.index') }}" @if(request()->routeIs('admin.countries.*')) aria-current="page" @endif>
+                    <span class="admin-nav__subitem-dot" aria-hidden="true"></span>
+                    <span>{{ __('admin.navigation.countries') }}</span>
+                </a>
+                <a class="admin-nav__subitem {{ request()->routeIs('admin.governorates.*') ? 'is-active' : '' }}" href="{{ route('admin.governorates.index') }}" @if(request()->routeIs('admin.governorates.*')) aria-current="page" @endif>
+                    <span class="admin-nav__subitem-dot" aria-hidden="true"></span>
+                    <span>{{ __('admin.navigation.governorates') }}</span>
+                </a>
+                <a class="admin-nav__subitem {{ request()->routeIs('admin.cities.*') ? 'is-active' : '' }}" href="{{ route('admin.cities.index') }}" @if(request()->routeIs('admin.cities.*')) aria-current="page" @endif>
+                    <span class="admin-nav__subitem-dot" aria-hidden="true"></span>
+                    <span>{{ __('admin.navigation.cities') }}</span>
+                </a>
+                <a class="admin-nav__subitem {{ request()->routeIs('admin.main-categories.*') ? 'is-active' : '' }}" href="{{ route('admin.main-categories.index') }}" @if(request()->routeIs('admin.main-categories.*')) aria-current="page" @endif>
+                    <span class="admin-nav__subitem-dot" aria-hidden="true"></span>
+                    <span>{{ __('admin.navigation.main_categories') }}</span>
+                </a>
+                <a class="admin-nav__subitem {{ request()->routeIs('admin.sub-categories.*') ? 'is-active' : '' }}" href="{{ route('admin.sub-categories.index') }}" @if(request()->routeIs('admin.sub-categories.*')) aria-current="page" @endif>
+                    <span class="admin-nav__subitem-dot" aria-hidden="true"></span>
+                    <span>{{ __('admin.navigation.sub_categories') }}</span>
+                </a>
+            </div>
+        </details>
         <span class="admin-nav__item is-disabled" aria-disabled="true">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             <span>{{ __('admin.navigation.users') }}</span>
