@@ -165,14 +165,152 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
 .admin-action { display: inline-grid; width: 34px; height: 34px; padding: 0; place-items: center; color: var(--ink); border: 1px solid var(--border); border-radius: 9px; background: #fff; cursor: pointer; }
 .admin-action svg { width: 17px; height: 17px; }
 .admin-action--danger { color: var(--danger); border-color: #fecaca; background: #fef2f2; }
-.admin-modal[hidden] { display: none; }
-.admin-modal { position: fixed; inset: 0; z-index: 70; display: grid; padding: 20px; place-items: center; }
-.admin-modal__backdrop, .admin-sidebar-overlay { position: absolute; inset: 0; border: 0; background: rgba(15,23,42,.56); }
-.admin-modal__dialog { position: relative; width: min(100%,680px); max-height: calc(100vh - 40px); overflow: auto; border-radius: 16px; background: #fff; box-shadow: 0 24px 60px rgba(15,23,42,.24); }
-.admin-modal__header { display: flex; padding: 16px 20px; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
-.admin-modal__header h2 { margin: 0; font-size: 18px; font-weight: 900; }
-.admin-modal__content { padding: 20px; }
-.admin-sidebar-overlay { z-index: 35; display: none; }
+[hidden],
+.admin-modal[hidden],
+.admin-alert[hidden],
+.admin-delete-modal__error[hidden],
+[data-delete-error][hidden] {
+    display: none !important;
+}
+.admin-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0;
+    overflow: hidden;
+}
+.admin-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    border: 0;
+    background: rgba(15, 23, 42, .48);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    opacity: 0;
+    transition: opacity 260ms cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity;
+}
+.admin-modal.is-open .admin-modal__backdrop {
+    opacity: 1;
+}
+.admin-modal__dialog {
+    position: relative;
+    width: min(100%, 720px);
+    max-height: min(88vh, calc(100dvh - 32px));
+    display: flex;
+    flex-direction: column;
+    border-radius: 24px 24px 0 0;
+    border: 1px solid var(--border);
+    border-bottom: 0;
+    background: #fff;
+    box-shadow: 0 -16px 48px rgba(15, 23, 42, .18), 0 -2px 10px rgba(15, 23, 42, .05);
+    transform: translateY(100%);
+    transition: transform 280ms cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+    overflow: hidden;
+    margin: 0 auto;
+    touch-action: pan-y;
+}
+.admin-modal.is-open .admin-modal__dialog {
+    transform: translateY(0);
+}
+.admin-bottom-sheet {
+    border-radius: 24px 24px 0 0 !important;
+    border-bottom: 0 !important;
+}
+.admin-bottom-sheet__handle-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 10px;
+    padding-bottom: 6px;
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+    flex-shrink: 0;
+}
+.admin-bottom-sheet__handle-wrap:active {
+    cursor: grabbing;
+}
+.admin-bottom-sheet__handle {
+    display: block;
+    width: 38px;
+    height: 4px;
+    border-radius: 999px;
+    background: #cbd5e1;
+    transition: background 180ms ease, transform 180ms ease;
+}
+.admin-bottom-sheet__handle-wrap:hover .admin-bottom-sheet__handle {
+    background: #94a3b8;
+    transform: scaleX(1.12);
+}
+html[data-theme="dark"] .admin-bottom-sheet__handle {
+    background: rgba(255, 255, 255, 0.22);
+}
+html[data-theme="dark"] .admin-bottom-sheet__handle-wrap:hover .admin-bottom-sheet__handle {
+    background: rgba(255, 255, 255, 0.38);
+}
+.admin-modal__header {
+    display: flex;
+    padding: 10px 22px 14px;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    gap: 12px;
+}
+.admin-modal__header h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+}
+.admin-modal__close-btn {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface, #fff);
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 160ms ease, border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+.admin-modal__close-btn:hover {
+    color: var(--ink);
+    border-color: var(--ink);
+    transform: scale(1.05);
+}
+.admin-modal__content {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 22px 24px 28px;
+    -webkit-overflow-scrolling: touch;
+}
+.admin-modal__content::-webkit-scrollbar {
+    width: 6px;
+}
+.admin-modal__content::-webkit-scrollbar-track {
+    background: transparent;
+}
+.admin-modal__content::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.4);
+    border-radius: 999px;
+}
+.admin-modal__content::-webkit-scrollbar-thumb:hover {
+    background: rgba(148, 163, 184, 0.7);
+}
+html[data-theme="dark"] .admin-modal__content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.18);
+}
+.admin-sidebar-overlay { position: absolute; inset: 0; border: 0; background: rgba(15,23,42,.56); z-index: 35; display: none; }
 
 .admin-page-loader[hidden] { display: none; }
 .admin-page-loader { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; opacity: 0; pointer-events: none; transition: opacity 220ms ease; }
@@ -3328,15 +3466,35 @@ html[data-theme="light"] .admin-nav__subitem.is-active { color: #fff; background
 html[data-theme="dark"] .dt-container .dt-paging .dt-paging-button.current,
 html[data-theme="dark"] .dt-container .dt-paging .dt-paging-button:hover { border-color: #9c7bdc !important; background: #6f4dad !important; }
 
-.admin-catalog-form { display: grid; gap: 20px; }
-.admin-form-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
+.admin-catalog-form { display: flex; flex-direction: column; gap: 20px; min-height: 100%; }
+.admin-form-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; flex: 1 0 auto; }
 .admin-form-grid__full { grid-column: 1 / -1; }
 .admin-field__control select, .admin-field__control textarea { width: 100%; color: var(--ink); border: 0; outline: 0; background: transparent; font: inherit; font-size: 13px; font-weight: 650; }
 .admin-field__control--select select { height: 100%; cursor: pointer; }
 .admin-field__control--select option { color: #111827; background: #fff; }
 .admin-field__control--textarea { height: auto; min-height: 110px; padding-block: 12px; align-items: flex-start; }
 .admin-field__control--textarea textarea { min-height: 84px; resize: vertical; }
-.admin-form-actions { display: flex; padding-top: 18px; justify-content: flex-end; gap: 10px; border-top: 1px solid var(--border); }
+.admin-form-actions {
+    position: sticky;
+    bottom: -28px;
+    display: flex;
+    padding-top: 14px;
+    padding-bottom: 8px;
+    justify-content: flex-end;
+    gap: 10px;
+    border-top: 1px solid var(--border);
+    background: inherit;
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    z-index: 5;
+    margin-top: auto;
+}
+.admin-form-actions .admin-button {
+    min-height: 44px;
+    padding: 0 20px;
+    font-size: 14px;
+    font-weight: 800;
+}
 .admin-form-errors { padding: 12px 14px; color: #b91c1c; border: 1px solid #fecaca; border-radius: 10px; background: #fef2f2; font-size: 11px; font-weight: 700; }
 .admin-form-errors p { margin: 0; }
 .admin-form-errors p + p { margin-top: 5px; }
@@ -3365,10 +3523,26 @@ html[data-theme="dark"] .admin-form-errors { color: #fca5a5; border-color: rgba(
 @media (max-width: 720px) {
     .admin-catalog__heading { padding: 18px; align-items: stretch; flex-direction: column; }
     .admin-catalog__heading .admin-button { width: 100%; }
+    .admin-modal__dialog {
+        width: 100%;
+        max-width: 100%;
+        max-height: calc(100dvh - 16px);
+        border-radius: 22px 22px 0 0 !important;
+    }
+    .admin-modal__header {
+        padding: 8px 18px 12px;
+    }
+    .admin-modal__content {
+        padding: 16px 18px calc(24px + env(safe-area-inset-bottom, 16px));
+    }
     .admin-form-grid, .admin-detail-list { grid-template-columns: 1fr; }
     .admin-form-grid__full, .admin-detail-list__full { grid-column: auto; }
-    .admin-form-actions { flex-direction: column-reverse; }
-    .admin-form-actions .admin-button { width: 100%; }
+    .admin-form-actions {
+        bottom: calc(-24px - env(safe-area-inset-bottom, 16px));
+        flex-direction: column-reverse;
+        padding-bottom: calc(10px + env(safe-area-inset-bottom, 16px));
+    }
+    .admin-form-actions .admin-button { width: 100%; height: 48px; }
     .dt-container .dt-layout-row { align-items: stretch; flex-direction: column; }
     .dt-container .dt-layout-cell { width: 100%; text-align: start !important; }
     .dt-container .dt-search .dt-input { width: 100%; min-width: 0; margin: 7px 0 0; }
@@ -3593,57 +3767,143 @@ html[data-theme="dark"] .admin-form-errors { color: #fca5a5; border-color: rgba(
     .admin-sidebar .admin-nav-group__menu { animation: none; }
 }
 
-/* Delete confirmation popup */
-.admin-delete-modal .admin-modal__backdrop { background: rgba(15, 10, 27, .62); backdrop-filter: blur(8px); }
+/* Delete confirmation bottom sheet */
 .admin-delete-modal__dialog {
-    width: min(100%, 440px);
-    padding: 30px;
-    overflow: visible;
-    border: 1px solid var(--border);
-    border-radius: 24px;
-    text-align: center;
-    animation: admin-delete-modal-enter 180ms ease-out;
+    width: min(100%, 460px);
+    border-radius: 28px 28px 0 0 !important;
 }
-.admin-delete-modal__close { position: absolute; top: 16px; inset-inline-end: 16px; width: 36px; height: 36px; }
+.admin-delete-modal__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 24px 28px calc(24px + env(safe-area-inset-bottom, 16px));
+}
 .admin-delete-modal__icon {
     display: grid;
-    width: 70px;
-    height: 70px;
-    margin: 2px auto 20px;
+    width: 64px;
+    height: 64px;
+    margin: 2px auto 18px;
     place-items: center;
-    color: #dc2626;
-    border: 1px solid rgba(220,38,38,.18);
-    border-radius: 22px;
-    background: rgba(220,38,38,.09);
-    box-shadow: 0 16px 32px rgba(220,38,38,.12);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, .22);
+    border-radius: 20px;
+    background: linear-gradient(145deg, rgba(239, 68, 68, .12), rgba(220, 38, 38, .05));
+    box-shadow: 0 10px 24px -4px rgba(239, 68, 68, .16), 0 0 0 6px rgba(239, 68, 68, .04);
+    transition: transform 200ms ease;
 }
-.admin-delete-modal__icon svg { width: 31px; height: 31px; }
-.admin-delete-modal__copy h2 { margin: 0; color: var(--ink); font-size: 22px; font-weight: 900; }
-.admin-delete-modal__copy p { margin: 11px 0 0; color: var(--ink); font-size: 14px; font-weight: 750; }
-.admin-delete-modal__copy small { display: block; margin-top: 7px; color: var(--muted); font-size: 11px; font-weight: 650; line-height: 1.7; }
-.admin-delete-modal__error { margin: 18px 0 0; text-align: start; }
-.admin-delete-modal__actions { display: grid; margin-top: 24px; grid-template-columns: 1fr 1fr; gap: 10px; }
-.admin-delete-modal__actions .admin-button { width: 100%; min-width: 0; }
-.admin-button--danger { color: #fff; border-color: #dc2626; background: #dc2626; box-shadow: 0 10px 24px rgba(220,38,38,.22); }
-.admin-button--danger:hover { border-color: #b91c1c; background: #b91c1c; }
-.admin-button--danger:disabled { cursor: wait; opacity: .65; }
-.admin-button--danger.is-loading svg { animation: admin-delete-button-pulse .75s ease-in-out infinite alternate; }
-
-html[data-theme="dark"] .admin-delete-modal__icon { color: #fca5a5; border-color: rgba(248,113,113,.26); background: rgba(127,29,29,.3); box-shadow: 0 16px 36px rgba(127,29,29,.2); }
-
-@keyframes admin-delete-modal-enter {
-    from { opacity: 0; transform: translateY(10px) scale(.97); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+.admin-delete-modal__icon svg { width: 28px; height: 28px; }
+.admin-delete-modal__copy { max-width: 360px; margin: 0 auto; }
+.admin-delete-modal__copy p {
+    margin: 0;
+    color: var(--ink);
+    font-size: 16px;
+    font-weight: 850;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
 }
+.admin-delete-modal__copy small {
+    display: block;
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.6;
+}
+.admin-delete-modal__error {
+    width: 100%;
+    margin: 16px 0 0;
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-size: 12.5px;
+    font-weight: 700;
+    text-align: start;
+}
+.admin-delete-modal__actions {
+    display: grid;
+    width: 100%;
+    margin-top: 24px;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+.admin-delete-modal__actions .admin-button {
+    width: 100%;
+    min-width: 0;
+    height: 48px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 800;
+    transition: all 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.admin-delete-modal__actions .admin-button--secondary {
+    color: var(--ink);
+    border-color: var(--border, #e2e8f0);
+    background: #f8fafc;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .03);
+}
+.admin-delete-modal__actions .admin-button--secondary:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .05);
+}
+.admin-delete-modal__actions .admin-button--danger {
+    color: #fff;
+    border: 1px solid #b91c1c;
+    background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+    box-shadow: 0 6px 18px -2px rgba(220, 38, 38, .35), inset 0 1px 0 rgba(255, 255, 255, .2);
+}
+.admin-delete-modal__actions .admin-button--danger:hover {
+    background: linear-gradient(180deg, #dc2626 0%, #b91c1c 100%);
+    box-shadow: 0 8px 22px -2px rgba(220, 38, 38, .45);
+    transform: translateY(-1px);
+}
+.admin-delete-modal__actions .admin-button--danger:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(220, 38, 38, .25);
+}
+.admin-delete-modal__actions .admin-button--danger svg { width: 17px; height: 17px; }
+.admin-delete-modal__actions .admin-button:disabled { cursor: wait; opacity: .65; transform: none !important; }
+.admin-delete-modal__actions .admin-button--danger.is-loading svg { animation: admin-delete-button-pulse .75s ease-in-out infinite alternate; }
+
+html[data-theme="dark"] .admin-delete-modal__icon {
+    color: #f87171;
+    border-color: rgba(248, 113, 113, .28);
+    background: linear-gradient(145deg, rgba(239, 68, 68, .22), rgba(185, 28, 28, .1));
+    box-shadow: 0 12px 28px -4px rgba(220, 38, 38, .32), 0 0 0 6px rgba(239, 68, 68, .06);
+}
+html[data-theme="dark"] .admin-delete-modal__actions .admin-button--secondary {
+    background: rgba(255, 255, 255, .05);
+    border-color: rgba(255, 255, 255, .12);
+    color: #f1eff5;
+    box-shadow: none;
+}
+html[data-theme="dark"] .admin-delete-modal__actions .admin-button--secondary:hover {
+    background: rgba(255, 255, 255, .09);
+    border-color: rgba(255, 255, 255, .2);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, .25);
+}
+
 @keyframes admin-delete-button-pulse { to { transform: scale(.84); opacity: .55; } }
 
 @media (max-width: 520px) {
-    .admin-delete-modal { padding: 14px; }
-    .admin-delete-modal__dialog { padding: 26px 20px 20px; border-radius: 20px; }
+    .admin-delete-modal__dialog {
+        width: 100%;
+        max-width: 100%;
+        border-radius: 24px 24px 0 0 !important;
+    }
+    .admin-delete-modal__content {
+        padding: 20px 18px calc(24px + env(safe-area-inset-bottom, 16px));
+    }
     .admin-delete-modal__actions { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {
+    .admin-modal__backdrop,
+    .admin-modal__dialog,
     .admin-delete-modal__dialog,
-    .admin-button--danger.is-loading svg { animation: none; }
+    .admin-button--danger.is-loading svg {
+        transition: none !important;
+        animation: none !important;
+    }
 }

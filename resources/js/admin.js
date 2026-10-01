@@ -159,8 +159,12 @@ document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape') return;
 
     setSidebar(false);
-    const modal = document.querySelector('[data-admin-modal]:not([hidden])');
-    if (modal) modal.hidden = true;
+    if (adminModal instanceof HTMLElement && !adminModal.hidden) {
+        closeAdminModal();
+    }
+    if (deleteModal instanceof HTMLElement && !deleteModal.hidden) {
+        closeDeleteModal();
+    }
     closeAllHeaderMenus();
 });
 
@@ -174,13 +178,6 @@ document.addEventListener('click', (event) => {
     if (accountMenu instanceof HTMLDetailsElement && accountMenu.open && !accountMenu.contains(event.target)) {
         accountMenu.open = false;
     }
-});
-
-document.querySelectorAll('[data-modal-close]').forEach((button) => {
-    button.addEventListener('click', () => {
-        const modal = button.closest('[data-admin-modal]');
-        if (modal) modal.hidden = true;
-    });
 });
 
 document.querySelectorAll('[data-password-toggle]').forEach((button) => {
@@ -311,45 +308,126 @@ const deleteModalError = deleteModal?.querySelector('[data-delete-error]');
 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 let pendingDeleteTrigger = null;
 
+let adminModalCloseTimer = null;
+let deleteModalCloseTimer = null;
+
 const syncAdminOverlay = () => {
     const hasVisibleModal = [adminModal, deleteModal].some((modal) => modal instanceof HTMLElement && !modal.hidden);
     document.body.classList.toggle('has-admin-overlay', hasVisibleModal);
 };
 
-const closeAdminModal = () => {
+const closeAdminModal = (immediate = false) => {
     if (!(adminModal instanceof HTMLElement)) return;
-    adminModal.hidden = true;
-    if (adminModalContent instanceof HTMLElement) adminModalContent.replaceChildren();
-    syncAdminOverlay();
+
+    window.clearTimeout(adminModalCloseTimer);
+    adminModal.classList.remove('is-open');
+
+    const dialog = adminModal.querySelector('.admin-modal__dialog');
+    const backdrop = adminModal.querySelector('.admin-modal__backdrop');
+    if (dialog instanceof HTMLElement) {
+        dialog.style.transform = '';
+        dialog.style.transition = '';
+    }
+    if (backdrop instanceof HTMLElement) {
+        backdrop.style.opacity = '';
+        backdrop.style.transition = '';
+    }
+
+    const finalize = () => {
+        adminModal.hidden = true;
+        if (adminModalContent instanceof HTMLElement) adminModalContent.replaceChildren();
+        syncAdminOverlay();
+    };
+
+    if (immediate || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        finalize();
+    } else {
+        adminModalCloseTimer = window.setTimeout(finalize, 280);
+    }
 };
 
-const closeDeleteModal = (restoreFocus = true) => {
+const activateBottomSheet = (modal) => {
+    if (!(modal instanceof HTMLElement)) return;
+
+    modal.hidden = false;
+    const dialog = modal.querySelector('.admin-modal__dialog');
+    const backdrop = modal.querySelector('.admin-modal__backdrop');
+    if (dialog instanceof HTMLElement) {
+        dialog.style.transform = '';
+        dialog.style.transition = '';
+    }
+    if (backdrop instanceof HTMLElement) {
+        backdrop.style.opacity = '';
+        backdrop.style.transition = '';
+    }
+
+    syncAdminOverlay();
+    // Force a synchronous reflow to start transition immediately on current frame
+    void modal.offsetHeight;
+    modal.classList.add('is-open');
+};
+
+const openAdminModal = () => {
+    if (!(adminModal instanceof HTMLElement)) return;
+    window.clearTimeout(adminModalCloseTimer);
+    activateBottomSheet(adminModal);
+};
+
+const closeDeleteModal = (restoreFocus = true, immediate = false) => {
     if (!(deleteModal instanceof HTMLElement)) return;
 
-    deleteModal.hidden = true;
-    if (deleteModalError instanceof HTMLElement) {
-        deleteModalError.hidden = true;
-        deleteModalError.textContent = '';
+    window.clearTimeout(deleteModalCloseTimer);
+    deleteModal.classList.remove('is-open');
+
+    const dialog = deleteModal.querySelector('.admin-modal__dialog');
+    const backdrop = deleteModal.querySelector('.admin-modal__backdrop');
+    if (dialog instanceof HTMLElement) {
+        dialog.style.transform = '';
+        dialog.style.transition = '';
     }
-    if (deleteModalConfirm instanceof HTMLButtonElement) {
-        deleteModalConfirm.disabled = false;
-        deleteModalConfirm.classList.remove('is-loading');
+    if (backdrop instanceof HTMLElement) {
+        backdrop.style.opacity = '';
+        backdrop.style.transition = '';
     }
 
     const trigger = pendingDeleteTrigger;
     pendingDeleteTrigger = null;
-    syncAdminOverlay();
-    if (restoreFocus && trigger instanceof HTMLElement && trigger.isConnected) trigger.focus();
+
+    const finalize = () => {
+        deleteModal.hidden = true;
+        if (deleteModalError instanceof HTMLElement) {
+            deleteModalError.hidden = true;
+            deleteModalError.textContent = '';
+        }
+        if (deleteModalConfirm instanceof HTMLButtonElement) {
+            deleteModalConfirm.disabled = false;
+            deleteModalConfirm.classList.remove('is-loading');
+        }
+        syncAdminOverlay();
+        if (restoreFocus && trigger instanceof HTMLElement && trigger.isConnected) trigger.focus();
+    };
+
+    if (immediate || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        finalize();
+    } else {
+        deleteModalCloseTimer = window.setTimeout(finalize, 280);
+    }
 };
 
 const openDeleteModal = (trigger) => {
     if (!(deleteModal instanceof HTMLElement) || !(trigger instanceof HTMLElement)) return;
 
+    window.clearTimeout(deleteModalCloseTimer);
     pendingDeleteTrigger = trigger;
     if (deleteModalError instanceof HTMLElement) deleteModalError.hidden = true;
-    deleteModal.hidden = false;
-    syncAdminOverlay();
-    window.requestAnimationFrame(() => deleteModalConfirm?.focus());
+
+    activateBottomSheet(deleteModal);
+
+    window.setTimeout(() => {
+        if (!deleteModal.hidden && deleteModal.classList.contains('is-open')) {
+            deleteModalConfirm?.focus({ preventScroll: true });
+        }
+    }, 280);
 };
 
 const showCatalogMessage = (type, message) => {
@@ -384,8 +462,7 @@ const responseErrors = (payload, fallback) => {
 const openCatalogModal = async (url, heading) => {
     if (!(adminModal instanceof HTMLElement) || !(adminModalContent instanceof HTMLElement)) return;
 
-    adminModal.hidden = false;
-    syncAdminOverlay();
+    openAdminModal();
     if (adminModalTitle instanceof HTMLElement) adminModalTitle.textContent = heading || '';
     adminModalContent.innerHTML = '<div class="admin-modal-loading" aria-busy="true"><span></span></div>';
 
@@ -411,6 +488,219 @@ const openCatalogModal = async (url, heading) => {
         adminModalContent.replaceChildren(alert);
     }
 };
+
+const initBottomSheetGestures = () => {
+    if (!(adminModal instanceof HTMLElement)) return;
+
+    const dialog = adminModal.querySelector('.admin-modal__dialog');
+    const backdrop = adminModal.querySelector('.admin-modal__backdrop');
+    const dragHandle = adminModal.querySelector('[data-sheet-drag-handle]');
+    const header = adminModal.querySelector('.admin-modal__header');
+    if (!(dialog instanceof HTMLElement)) return;
+
+    let startY = 0;
+    let currentDeltaY = 0;
+    let isDragging = false;
+    let startTime = 0;
+
+    const onPointerDown = (event) => {
+        if (!event.isPrimary) return;
+        if (event.target instanceof Element && event.target.closest('button, a, input, select, textarea')) {
+            return;
+        }
+
+        isDragging = true;
+        startY = event.clientY;
+        currentDeltaY = 0;
+        startTime = performance.now();
+
+        try {
+            event.target.setPointerCapture?.(event.pointerId);
+        } catch (_) {}
+    };
+
+    const onPointerMove = (event) => {
+        if (!isDragging) return;
+
+        const dy = event.clientY - startY;
+        if (dy > 0) {
+            currentDeltaY = dy;
+            dialog.style.transform = `translateY(${dy}px)`;
+            dialog.style.transition = 'none';
+            if (backdrop instanceof HTMLElement) {
+                const opacity = Math.max(0.12, 1 - (dy / 380));
+                backdrop.style.opacity = String(opacity);
+                backdrop.style.transition = 'none';
+            }
+        } else {
+            currentDeltaY = 0;
+            const resistance = dy * 0.18;
+            dialog.style.transform = `translateY(${resistance}px)`;
+            dialog.style.transition = 'none';
+        }
+    };
+
+    const onPointerUp = (event) => {
+        if (!isDragging) return;
+        isDragging = false;
+
+        try {
+            event.target.releasePointerCapture?.(event.pointerId);
+        } catch (_) {}
+
+        const elapsed = performance.now() - startTime;
+        const velocity = currentDeltaY / Math.max(elapsed, 1);
+
+        if (currentDeltaY > 110 || (currentDeltaY > 40 && velocity > 0.45)) {
+            dialog.style.transition = 'transform 220ms cubic-bezier(0.16, 1, 0.3, 1)';
+            dialog.style.transform = 'translateY(100%)';
+            if (backdrop instanceof HTMLElement) {
+                backdrop.style.transition = 'opacity 220ms cubic-bezier(0.16, 1, 0.3, 1)';
+                backdrop.style.opacity = '0';
+            }
+            window.setTimeout(() => {
+                closeAdminModal(true);
+            }, 220);
+        } else {
+            dialog.style.transition = 'transform 260ms cubic-bezier(0.16, 1, 0.3, 1)';
+            dialog.style.transform = 'translateY(0)';
+            if (backdrop instanceof HTMLElement) {
+                backdrop.style.transition = 'opacity 260ms cubic-bezier(0.16, 1, 0.3, 1)';
+                backdrop.style.opacity = '1';
+            }
+            window.setTimeout(() => {
+                dialog.style.transition = '';
+                dialog.style.transform = '';
+                if (backdrop instanceof HTMLElement) {
+                    backdrop.style.transition = '';
+                    backdrop.style.opacity = '';
+                }
+            }, 260);
+        }
+    };
+
+    if (dragHandle instanceof HTMLElement) {
+        dragHandle.addEventListener('pointerdown', onPointerDown);
+        dragHandle.addEventListener('pointermove', onPointerMove);
+        dragHandle.addEventListener('pointerup', onPointerUp);
+        dragHandle.addEventListener('pointercancel', onPointerUp);
+    }
+
+    if (header instanceof HTMLElement) {
+        header.addEventListener('pointerdown', onPointerDown);
+        header.addEventListener('pointermove', onPointerMove);
+        header.addEventListener('pointerup', onPointerUp);
+        header.addEventListener('pointercancel', onPointerUp);
+    }
+};
+
+const initDeleteSheetGestures = () => {
+    if (!(deleteModal instanceof HTMLElement)) return;
+
+    const dialog = deleteModal.querySelector('.admin-modal__dialog');
+    const backdrop = deleteModal.querySelector('.admin-modal__backdrop');
+    const dragHandle = deleteModal.querySelector('[data-delete-drag-handle]');
+    if (!(dialog instanceof HTMLElement)) return;
+
+    let startY = 0;
+    let currentDeltaY = 0;
+    let isDragging = false;
+    let startTime = 0;
+
+    const onPointerDown = (event) => {
+        if (!event.isPrimary) return;
+        if (event.target instanceof Element && event.target.closest('button, a, input')) {
+            return;
+        }
+
+        isDragging = true;
+        startY = event.clientY;
+        currentDeltaY = 0;
+        startTime = performance.now();
+
+        try {
+            event.target.setPointerCapture?.(event.pointerId);
+        } catch (_) {}
+    };
+
+    const onPointerMove = (event) => {
+        if (!isDragging) return;
+
+        const dy = event.clientY - startY;
+        if (dy > 0) {
+            currentDeltaY = dy;
+            dialog.style.transform = `translateY(${dy}px)`;
+            dialog.style.transition = 'none';
+            if (backdrop instanceof HTMLElement) {
+                const opacity = Math.max(0.12, 1 - (dy / 340));
+                backdrop.style.opacity = String(opacity);
+                backdrop.style.transition = 'none';
+            }
+        } else {
+            currentDeltaY = 0;
+            const resistance = dy * 0.18;
+            dialog.style.transform = `translateY(${resistance}px)`;
+            dialog.style.transition = 'none';
+        }
+    };
+
+    const onPointerUp = (event) => {
+        if (!isDragging) return;
+        isDragging = false;
+
+        try {
+            event.target.releasePointerCapture?.(event.pointerId);
+        } catch (_) {}
+
+        const elapsed = performance.now() - startTime;
+        const velocity = currentDeltaY / Math.max(elapsed, 1);
+
+        if (currentDeltaY > 100 || (currentDeltaY > 35 && velocity > 0.45)) {
+            dialog.style.transition = 'transform 220ms cubic-bezier(0.16, 1, 0.3, 1)';
+            dialog.style.transform = 'translateY(100%)';
+            if (backdrop instanceof HTMLElement) {
+                backdrop.style.transition = 'opacity 220ms cubic-bezier(0.16, 1, 0.3, 1)';
+                backdrop.style.opacity = '0';
+            }
+            window.setTimeout(() => {
+                closeDeleteModal(true, true);
+            }, 220);
+        } else {
+            dialog.style.transition = 'transform 260ms cubic-bezier(0.16, 1, 0.3, 1)';
+            dialog.style.transform = 'translateY(0)';
+            if (backdrop instanceof HTMLElement) {
+                backdrop.style.transition = 'opacity 260ms cubic-bezier(0.16, 1, 0.3, 1)';
+                backdrop.style.opacity = '1';
+            }
+            window.setTimeout(() => {
+                dialog.style.transition = '';
+                dialog.style.transform = '';
+                if (backdrop instanceof HTMLElement) {
+                    backdrop.style.transition = '';
+                    backdrop.style.opacity = '';
+                }
+            }, 260);
+        }
+    };
+
+    if (dragHandle instanceof HTMLElement) {
+        dragHandle.addEventListener('pointerdown', onPointerDown);
+        dragHandle.addEventListener('pointermove', onPointerMove);
+        dragHandle.addEventListener('pointerup', onPointerUp);
+        dragHandle.addEventListener('pointercancel', onPointerUp);
+    }
+
+    const header = deleteModal.querySelector('.admin-modal__header');
+    if (header instanceof HTMLElement) {
+        header.addEventListener('pointerdown', onPointerDown);
+        header.addEventListener('pointermove', onPointerMove);
+        header.addEventListener('pointerup', onPointerUp);
+        header.addEventListener('pointercancel', onPointerUp);
+    }
+};
+
+initBottomSheetGestures();
+initDeleteSheetGestures();
 
 document.addEventListener('click', async (event) => {
     if (!(event.target instanceof Element)) return;
@@ -482,12 +772,6 @@ document.addEventListener('click', async (event) => {
 
     event.preventDefault();
     openDeleteModal(deleteTrigger);
-});
-
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && deleteModal instanceof HTMLElement && !deleteModal.hidden) {
-        closeDeleteModal();
-    }
 });
 
 document.addEventListener('submit', async (event) => {
