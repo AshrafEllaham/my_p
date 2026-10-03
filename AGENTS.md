@@ -105,6 +105,7 @@ routes/api/
 - `authorize()` تعيد `true` ما دام middleware هو المسؤول عن حماية المسار.
 - استخدم `Rule::enum(SomeEnum::class)` بدل كتابة القيم الثابتة يدويًا.
 - استخدم قواعد قاعدة البيانات مثل `exists` و`unique` عند كونها validation بسيطة؛ أما قرارات الصلاحية والحالة فتكون في الـ Service.
+- رسائل validation وتسميات الحقول المخصصة تُقرأ من ملفات اللغة `lang/ar/messages.php` و`lang/en/messages.php` بالمفاتيح نفسها؛ لا تضمّن نصوصًا ثابتة للرسائل، وغطِّ كل القواعد المستخدمة.
 - مرّر `$request->validated()` فقط إلى الـ Service، ولا تمرّر Request كاملًا.
 
 ### Resource
@@ -127,6 +128,17 @@ routes/api/
 - ملفات API مقسمة حسب الدور أو المجال تحت `routes/api/`، مثل `teacher.php`, `assistant.php`, `course.php`, `user.php`, و`school.php`.
 - كل route group محمي بـ `auth:api` و`throttle:60,1` وأي middleware خاص بالدور.
 - استخدم أسماء routes واضحة وRESTful، ولا تضع closures تحتوي logic.
+
+### متطلبات إلزامية لكل API Endpoint
+
+- لا يعتبر أي API endpoint مكتملًا حتى يُربط بتدفقه المقابل في الـ preview، ويُضاف له request مستقل في مجموعة Bruno، وتُترجم رسائل validation الخاصة به إلى العربية والإنجليزية.
+- قبل تعديل preview داخل `Figma/`، اقرأ `Figma/DESIGN_REFERENCE.md` والتزم به. اربط الإجراء الفعلي في الشاشة (مثل تحميل البيانات أو إرسال النموذج) بالـ endpoint، وتعامل مع حالات النجاح وأخطاء الـ API بدل الاكتفاء بواجهة شكلية أو بيانات تجريبية منفصلة.
+- استخدم الشاشة الموجودة المناسبة في `Figma/preview.html`؛ وإذا لم توجد شاشة/حالة مناسبة، أضفها بالطريقة المعتمدة وسجّلها في preview بدل إنشاء preview موازٍ. تحقّق من التدفق المرتبط بالـ endpoint بعد التعديل.
+- لكل endpoint أنشئ ملف طلب Bruno بصيغة `.bru` داخل المجموعة الموجودة `/home/nami/Documents/collections/Sai`، في مجلد المجال المناسب. إذا لم يوجد مجلد مناسب، أنشئ مجلدًا للمجال مع `folder.yml` وفق صيغة المجموعة الحالية.
+- يتضمن طلب Bruno على الأقل method وURL، والـ headers والمصادقة المطلوبة، وpath/query parameters أو body حسب endpoint، ومثالًا للاستجابة الناجحة وأخطاء validation المهمة. استخدم متغيرات المجموعة والبيئة الحالية للـ base URL والتوكن، ولا تنشئ مجموعة موازية.
+- كل رسالة validation يراها مستهلك الـ API يجب أن يكون لها ترجمة مطابقة في `lang/ar/messages.php` و`lang/en/messages.php` بالمفتاح نفسه. استخدم مفاتيح ترجمة في FormRequest للرسائل المخصصة وتسميات الحقول، ولا تكتب نصوص رسائل ثابتة داخل FormRequest أو Controller أو Service.
+- غطِّ رسائل القواعد والحقول المتداخلة والقواعد المخصصة المستخدمة فعليًا، وأضف كل مفتاح جديد إلى ملفي اللغتين معًا. لا تترك أي رسالة validation ظاهرة للمستخدم دون ترجمة في إحدى اللغتين.
+- أضف إلى اختبارات endpoint تحققًا من مفاتيح/نصوص أخطاء validation المترجمة عندما يكون ذلك عمليًا، بالإضافة إلى تغطية validation المعتادة.
 
 ## معمارية لوحة التحكم
 
@@ -214,9 +226,10 @@ routes/api/
 5. ضع القرارات والتنسيق وstate transitions في Service.
 6. أنشئ FormRequest للـ validation وResource لشكل الرد.
 7. اجعل Controller رفيعًا وأضف route داخل ملف الدور الصحيح مع middleware المناسب.
-8. أضف الترجمات والاختبارات اللازمة.
-9. راجع N+1، الأعمدة المحملة، indexes، وعدد الاستعلامات قبل اعتبار المهمة مكتملة.
-10. شغّل الاختبارات والـ formatter، ثم لخّص ما تغير وأي افتراضات مهمة.
+8. اربط endpoint بتدفقه المناسب في preview وفق `Figma/DESIGN_REFERENCE.md` عند تعديل `Figma/`، وأنشئ له ملف `.bru` داخل `/home/nami/Documents/collections/Sai`.
+9. أضف كل رسائل validation وتسميات الحقول اللازمة إلى `lang/ar/messages.php` و`lang/en/messages.php` بالمفاتيح نفسها، ثم أضف الترجمات والاختبارات اللازمة.
+10. راجع N+1، الأعمدة المحملة، indexes، وعدد الاستعلامات قبل اعتبار المهمة مكتملة.
+11. شغّل الاختبارات والـ formatter، ثم لخّص ما تغير وأي افتراضات مهمة.
 
 ## قائمة مراجعة قبل التسليم
 
@@ -231,6 +244,8 @@ routes/api/
 - الـ indexes المناسبة موجودة في migrations.
 - dependencies محقونة، ومسؤولية كل class واحدة وواضحة.
 - response يستخدم Resource والـ helper المناسب.
+- كل API endpoint مرتبط بتدفقه في preview وله ملف `.bru` داخل مجموعة Sai.
+- كل رسائل validation وتسميات الحقول المطلوبة موجودة بالمفاتيح نفسها في `lang/ar/messages.php` و`lang/en/messages.php`، ولا توجد رسائل ثابتة غير مترجمة.
 - الاختبارات ذات الصلة ناجحة.
 
 ## مراجعة إلزامية بعد انتهاء أي مهمة
