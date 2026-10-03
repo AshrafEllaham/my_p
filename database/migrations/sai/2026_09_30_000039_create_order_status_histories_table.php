@@ -15,7 +15,7 @@ return new class extends Migration
             $table->foreignId('order_id')->constrained('orders')->cascadeOnDelete();
             $table->enum('from_status', OrderStatusEnum::values())->nullable();
             $table->enum('to_status', OrderStatusEnum::values());
-            $table->nullableMorphs('actor');
+            $table->foreignId('actor_id')->nullable()->constrained('users')->nullOnDelete();
             $table->text('note')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();

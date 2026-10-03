@@ -16,9 +16,13 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained('categories')->restrictOnDelete();
             $table->string('name');
             $table->text('description')->nullable();
+            $table->string('sku')->nullable();
+            $table->string('slug');
             $table->enum('status', ProductStatusEnum::values())->default(ProductStatusEnum::Draft->value)->index();
             $table->decimal('price', 12, 2); // يخزن سعر المنتج الحالي الذي يراه العملاء.
             $table->decimal('original_price', 12, 2)->nullable(); // يخزن السعر الأصلي للمنتج قبل أي خصم أو تخفيض.
+            $table->decimal('discount_percentage', 5, 2)->nullable(); // يخزن نسبة الخصم الاختيارية التي يحددها التاجر.
+            $table->timestamp('discount_ends_at')->nullable()->index(); // يحدد تاريخ ووقت انتهاء الخصم الاختياري.
             $table->unsignedInteger('stock_quantity')->default(0); // يخزن كمية المخزون المتاحة للمنتج.
             $table->unsignedInteger('low_stock_threshold')->default(5); // يخزن الحد الأدنى من المخزون الذي يثير تنبيه المخزون المنخفض.
             $table->boolean('is_featured')->default(false)->index(); // يخزن ما إذا كان المنتج مميزًا للعرض في الصفحات الرئيسية أو القوائم الخاصة.

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->enum('status', CompetitionStatusEnum::values())->default(CompetitionStatusEnum::Active->value)->index();
             $table->string('correct_answer')->nullable();
-            $table->string('normalized_correct_answer')->nullable()->index();
+            $table->string('normalized_correct_answer')->nullable()->index(); // يخزن نسخة من الإجابة الصحيحة بعد إزالة المسافات وعلامات التشكيل لتسهيل المطابقة مع إجابات المستخدمين.
             $table->timestamp('ends_at')->index();
             $table->timestamp('drawn_at')->nullable();
             $table->timestamps();

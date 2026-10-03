@@ -13,7 +13,7 @@ return new class extends Migration
         Schema::create('messages', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('conversation_id')->constrained('conversations')->cascadeOnDelete();
-            $table->morphs('sender');
+            $table->foreignId('sender_id')->constrained('users')->restrictOnDelete();
             $table->enum('type', MessageTypeEnum::values())->default(MessageTypeEnum::Text->value);
             $table->text('body')->nullable();
             $table->string('attachment_path')->nullable();

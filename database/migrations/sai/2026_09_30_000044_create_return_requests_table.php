@@ -16,7 +16,7 @@ return new class extends Migration
             $table->uuid('public_id')->unique();
             $table->foreignId('order_id')->unique()->constrained('orders')->restrictOnDelete();
             $table->foreignId('user_id')->constrained('users')->restrictOnDelete();
-            $table->foreignId('store_id')->constrained('stores')->restrictOnDelete();
+            $table->foreignId('store_id')->constrained('users')->restrictOnDelete();
             $table->enum('status', ReturnStatusEnum::values())->default(ReturnStatusEnum::PendingReview->value)->index();
             $table->string('reason', 100);
             $table->text('details');

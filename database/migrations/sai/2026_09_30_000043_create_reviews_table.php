@@ -13,7 +13,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('order_id')->unique()->constrained('orders')->restrictOnDelete();
             $table->foreignId('user_id')->constrained('users')->restrictOnDelete();
-            $table->foreignId('store_id')->constrained('stores')->restrictOnDelete();
+            $table->foreignId('store_id')->constrained('users')->restrictOnDelete();
             $table->foreignId('product_id')->constrained('products')->restrictOnDelete();
             $table->unsignedTinyInteger('rating');
             $table->text('comment')->nullable();

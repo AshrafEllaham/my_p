@@ -13,7 +13,7 @@ return new class extends Migration
             $table->id();
             $table->nullableMorphs('actor');
             $table->nullableMorphs('subject');
-            $table->foreignId('store_id')->nullable()->constrained('stores')->nullOnDelete();
+            $table->foreignId('store_id')->nullable()->constrained('users')->nullOnDelete();
             $table->string('event', 100)->index();
             $table->json('old_values')->nullable();
             $table->json('new_values')->nullable();

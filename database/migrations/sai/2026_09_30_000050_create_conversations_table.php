@@ -13,7 +13,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('public_id')->unique();
             $table->foreignId('user_id')->constrained('users')->restrictOnDelete();
-            $table->foreignId('store_id')->constrained('stores')->restrictOnDelete();
+            $table->foreignId('store_id')->constrained('users')->restrictOnDelete();
             $table->foreignId('product_id')->nullable()->constrained('products')->nullOnDelete();
             $table->foreignId('order_id')->nullable()->constrained('orders')->nullOnDelete();
             $table->timestamp('last_message_at')->nullable()->index();
