@@ -148,11 +148,38 @@
         signupCountryTrigger.setAttribute('aria-expanded', 'false');
       }
     });
-    document.getElementById('signupButton').addEventListener('click', () => {
-      const phone=document.getElementById('signupPhone').value.replace(/\D/g,''),email=document.getElementById('signupEmail').value.trim(),password=document.getElementById('signupPassword').value,confirm=document.getElementById('signupConfirmPassword').value,error=document.getElementById('signupError'),button=document.getElementById('signupButton');
-      const validEmail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-      if(phone.length<9||!validEmail||password.length<8||password!==confirm){error.textContent=phone.length<9?'اكتب رقم هاتف صحيحًا.':!validEmail?'اكتب بريدًا إلكترونيًا صحيحًا.':password.length<8?'كلمة المرور يجب ألا تقل عن ٨ أحرف.':'كلمتا المرور غير متطابقتين.';error.hidden=false;return;}
-      error.hidden=true;button.disabled=true;button.textContent='جارٍ إنشاء الحساب…';localStorage.setItem('saey_signup_draft',JSON.stringify({phone:`${signupCountryDial.textContent}${phone}`,email,date:new Date().toISOString()}));setTimeout(()=>location.href='03-verify-otp.html',500);
+    document.getElementById('signupButton').addEventListener('click', async (event) => {
+      const phone=document.getElementById('signupPhone').value.replace(/\D/g,'');
+      const email=document.getElementById('signupEmail').value.trim();
+      const password=document.getElementById('signupPassword').value;
+      const confirmation=document.getElementById('signupConfirmPassword').value;
+      const error=document.getElementById('signupError');
+      const button=event.currentTarget;
+      if(button.disabled)return;
+      error.hidden=true;
+      button.disabled=true;
+      button.setAttribute('aria-busy','true');
+      button.textContent='جارٍ إنشاء الحساب…';
+      try {
+        const response=await fetch('http://127.0.0.1:8000/api/register',{
+          method:'POST',
+          headers:{'Accept':'application/json','Content-Type':'application/json'},
+          body:JSON.stringify({phone_code:signupCountryDial.textContent,phone,email,password,password_confirmation:confirmation})
+        });
+        const result=await response.json();
+        if(!response.ok){
+          const firstError=Object.values(result.errors||{}).flat()[0];
+          throw new Error(firstError||result.message||'تعذر إنشاء الحساب. حاول مرة أخرى.');
+        }
+        sessionStorage.setItem('saey_signup_draft',JSON.stringify({phone:`${signupCountryDial.textContent}${phone}`,email,userId:result.data?.id,date:new Date().toISOString()}));
+        location.href='03-verify-otp.html';
+      } catch (requestError) {
+        error.textContent=requestError instanceof TypeError?'تعذر الاتصال بالخادم. تحقق من تشغيل API ثم أعد المحاولة.':requestError.message;
+        error.hidden=false;
+        button.disabled=false;
+        button.removeAttribute('aria-busy');
+        button.textContent='متابعة';
+      }
     });
   </script>
 </body>

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('public_id')->unique();
             $table->foreignId('store_id')->constrained('stores')->restrictOnDelete();
             $table->foreignId('wallet_id')->constrained('wallets')->restrictOnDelete();
-            $table->foreignId('store_bank_account_id')->constrained('store_bank_accounts')->restrictOnDelete();
+            $table->foreignId('store_bank_account_id')->constrained('user_bank_accounts')->restrictOnDelete();
             $table->enum('status', SettlementStatusEnum::values())->default(SettlementStatusEnum::Pending->value)->index();
             $table->decimal('gross_amount', 14, 2); // يخزن المبلغ الإجمالي قبل خصم أي رسوم أو عمولات.
             $table->decimal('fee_amount', 14, 2)->default(0); // يخزن مبلغ الرسوم أو العمولة المحتسبة.

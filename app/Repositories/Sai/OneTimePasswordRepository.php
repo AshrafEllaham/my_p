@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Sai;
 
+use App\Enums\OtpPurposeEnum;
 use App\Models\Sai\OneTimePassword;
 use App\Repositories\MainRepository;
 use Illuminate\Database\Eloquent\Builder;
@@ -32,6 +33,15 @@ class OneTimePasswordRepository extends MainRepository
         $record->save();
 
         return $record;
+    }
+
+    public function expireUnconsumed(string $identity, OtpPurposeEnum $purpose): int
+    {
+        return $this->query()
+            ->where('identity', $identity)
+            ->where('purpose', $purpose->value)
+            ->whereNull('consumed_at')
+            ->update(['consumed_at' => now()]);
     }
 
     /** @param array<string, mixed> $data */

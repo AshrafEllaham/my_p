@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('contact_phone', 32)->nullable(); // يخزن رقم الهاتف للتواصل مع المتجر.
             $table->string('contact_email')->nullable(); // يخزن البريد الإلكتروني للتواصل مع المتجر.
             $table->boolean('is_featured')->default(false)->index();
-            $table->index(['is_featured']);
         });
     }
 

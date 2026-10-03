@@ -13,7 +13,7 @@ return new class extends Migration
         // يخزن الحسابات الأساسية وبيانات تسجيل الدخول ونوع الحساب والموقع والحالة.
         Schema::create('users', function (Blueprint $table): void {
             $table->id();
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->string('email')->unique();
             $table->string('phone_code', 5)->nullable();
             $table->string('phone', 32)->nullable();

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthApiController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -16,7 +17,7 @@ Route::group([], function () {
     // Public Routes (no auth required)
     // -------------------------------------------------------
     Route::group([], function () {
-
+        Route::post('/register', [AuthApiController::class, 'store'])->middleware('throttle:5,1')->name('user.register');
     });
 
     // -------------------------------------------------------
@@ -24,15 +25,9 @@ Route::group([], function () {
     // -------------------------------------------------------
     Route::group(['middleware' => ['auth:api']], function () {
 
-    });
-
-    Route::group(['middleware' => ['auth:api', 'not-blocked']], function () {
-
-
         // ############################ notifications ############################
 
 
         // ############################ chat ############################
-
     });
 });

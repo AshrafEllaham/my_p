@@ -12,7 +12,14 @@ class SetLocale
     public function handle(Request $request, Closure $next): Response
     {
         $supportedLocales = array_keys(config('laravellocalization.supportedLocales', []));
-        $locale = $request->session()->get('locale', config('app.locale'));
+        $locale = $request->hasSession()
+            ? $request->session()->get('locale')
+            : null;
+
+        if (! is_string($locale) || $locale === '') {
+            $locale = $request->getPreferredLanguage($supportedLocales)
+                ?? config('app.locale');
+        }
 
         if (! is_string($locale) || ! in_array($locale, $supportedLocales, true)) {
             $locale = (string) config('app.fallback_locale', 'en');
