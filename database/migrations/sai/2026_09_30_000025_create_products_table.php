@@ -12,7 +12,7 @@ return new class extends Migration
         // يخزن بيانات المنتج التي يدخلها التاجر مع السعر والمخزون وحالة النشر.
         Schema::create('products', function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('store_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('category_id')->constrained('categories')->restrictOnDelete();
             $table->string('name');
             $table->text('description')->nullable();
@@ -30,11 +30,11 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->unique(['user_id', 'slug']);
-            $table->unique(['user_id', 'sku']);
-            $table->index(['user_id', 'status', 'updated_at']);
+            $table->unique(['store_id', 'slug']);
+            $table->unique(['store_id', 'sku']);
+            $table->index(['store_id', 'status', 'updated_at']);
             $table->index(['category_id', 'status', 'is_featured']);
-            $table->index(['user_id', 'stock_quantity']);
+            $table->index(['store_id', 'stock_quantity']);
             $table->index(['status', 'published_at']);
         });
     }

@@ -11,7 +11,7 @@ return new class extends Migration
         // يحفظ نسخ سياسات الاستلام والاسترجاع والاستبدال لضمان التاريخية.
         Schema::create('store_policy_versions', function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('store_id')->constrained('users')->cascadeOnDelete();
             $table->unsignedInteger('version');
             $table->unsignedSmallInteger('pickup_hold_hours')->default(24);
             $table->unsignedSmallInteger('return_window_days')->default(0);
@@ -26,8 +26,8 @@ return new class extends Migration
             $table->timestamp('effective_at')->index();
             $table->timestamps();
 
-            $table->unique(['user_id', 'version']);
-            $table->index(['user_id', 'is_current']);
+            $table->unique(['store_id', 'version']);
+            $table->index(['store_id', 'is_current']);
         });
     }
 

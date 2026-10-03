@@ -11,13 +11,13 @@ return new class extends Migration
         // يخزن أدوار موظفي المتجر ومجموعة الصلاحيات الخاصة بكل دور.
         Schema::create('store_roles', function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('store_id')->constrained('users')->cascadeOnDelete();
             $table->string('name');
             $table->json('permissions');
             $table->boolean('is_system')->default(false);
             $table->timestamps();
 
-            $table->unique(['user_id', 'name']);
+            $table->unique(['store_id', 'name']);
         });
     }
 

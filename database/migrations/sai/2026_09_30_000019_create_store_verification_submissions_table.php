@@ -13,14 +13,14 @@ return new class extends Migration
         // يسجل طلبات تفعيل المتجر وقرارات المراجعة وتوقيتها.
         Schema::create('store_verification_submissions', function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('store_id')->constrained('users')->cascadeOnDelete();
             $table->enum('status', UserStatusEnum::values())->default(UserStatusEnum::PendingVerification->value)->index();
             $table->text('review_note')->nullable();
             $table->timestamp('submitted_at')->index();
             $table->timestamp('reviewed_at')->nullable();
             $table->timestamps();
 
-            $table->index(['user_id', 'submitted_at']);
+            $table->index(['store_id', 'submitted_at']);
         });
     }
 
