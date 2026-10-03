@@ -15,7 +15,6 @@ class Category extends Model implements TranslatableContract
 
     protected $fillable = [
         'parent_id',
-        'slug',
         'icon',
         'image',
         'is_active',

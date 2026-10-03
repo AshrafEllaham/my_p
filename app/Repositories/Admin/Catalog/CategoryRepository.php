@@ -28,7 +28,6 @@ class CategoryRepository extends MainRepository
             ->select([
                 'categories.id',
                 'categories.parent_id',
-                'categories.slug',
                 'categories.icon',
                 'categories.is_active',
                 'categories.sort_order',

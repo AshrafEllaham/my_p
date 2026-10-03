@@ -188,7 +188,6 @@ class CatalogCrudTest extends TestCase
     public function test_admin_can_manage_main_and_subcategories_without_accidental_cascade_deletion(): void
     {
         $mainPayload = [
-            'slug' => 'electronics',
             'icon' => 'device-mobile',
             'sort_order' => 1,
             'is_active' => true,
@@ -204,7 +203,6 @@ class CatalogCrudTest extends TestCase
 
         $this->actingAs($this->admin, 'admin')->postJson(route('admin.sub-categories.store'), [
             'parent_id' => $main->id,
-            'slug' => 'smartphones',
             'icon' => 'phone',
             'sort_order' => 2,
             'is_active' => true,
@@ -216,18 +214,16 @@ class CatalogCrudTest extends TestCase
 
         $this->actingAs($this->admin, 'admin')->putJson(route('admin.main-categories.update', $main), [
             ...$mainPayload,
-            'slug' => 'consumer-electronics',
             'sort_order' => 5,
             'ar' => ['name' => 'الإلكترونيات الاستهلاكية', 'description' => 'الأجهزة الحديثة'],
             'en' => ['name' => 'Consumer Electronics', 'description' => 'Modern devices'],
         ])->assertOk();
 
-        $this->assertDatabaseHas('categories', ['id' => $main->id, 'slug' => 'consumer-electronics', 'sort_order' => 5]);
+        $this->assertDatabaseHas('categories', ['id' => $main->id, 'sort_order' => 5]);
         $this->assertDatabaseHas('category_translations', ['category_id' => $main->id, 'locale' => 'en', 'name' => 'Consumer Electronics']);
 
         $this->actingAs($this->admin, 'admin')->postJson(route('admin.sub-categories.store'), [
             'parent_id' => $sub->id,
-            'slug' => 'invalid-third-level',
             'icon' => null,
             'sort_order' => 3,
             'is_active' => true,
@@ -245,7 +241,6 @@ class CatalogCrudTest extends TestCase
 
         $this->actingAs($this->admin, 'admin')->putJson(route('admin.sub-categories.update', $sub), [
             'parent_id' => $main->id,
-            'slug' => 'mobile-phones',
             'icon' => 'phone',
             'sort_order' => 4,
             'is_active' => false,
@@ -253,7 +248,7 @@ class CatalogCrudTest extends TestCase
             'en' => ['name' => 'Mobile phones', 'description' => null],
         ])->assertOk();
 
-        $this->assertDatabaseHas('categories', ['id' => $sub->id, 'slug' => 'mobile-phones', 'is_active' => false]);
+        $this->assertDatabaseHas('categories', ['id' => $sub->id, 'is_active' => false]);
 
         $this->actingAs($this->admin, 'admin')->deleteJson(route('admin.sub-categories.destroy', $sub))->assertOk();
         $this->actingAs($this->admin, 'admin')->deleteJson(route('admin.main-categories.destroy', $main))->assertOk();

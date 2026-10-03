@@ -97,7 +97,6 @@ class SubCategoryController extends Controller
                 ['data' => 'id', 'name' => 'categories.id', 'title' => '#'],
                 ['data' => 'name', 'name' => 'category_translation.name', 'title' => __('admin.catalog.fields.name')],
                 ['data' => 'parent_name', 'name' => 'parent_translation.name', 'title' => __('admin.catalog.fields.main_category')],
-                ['data' => 'slug', 'name' => 'categories.slug', 'title' => __('admin.catalog.fields.slug')],
                 ['data' => 'sort_order', 'name' => 'categories.sort_order', 'title' => __('admin.catalog.fields.sort_order')],
                 ['data' => 'is_active', 'name' => 'categories.is_active', 'title' => __('admin.catalog.fields.status'), 'type' => 'status'],
                 ['data' => 'actions', 'name' => 'actions', 'title' => __('admin.catalog.fields.actions'), 'orderable' => false, 'searchable' => false],

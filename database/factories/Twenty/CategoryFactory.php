@@ -18,7 +18,6 @@ class CategoryFactory extends Factory
 
         return [
             'parent_id' => null,
-            'slug' => Str::slug($name).'-'.fake()->unique()->numberBetween(1000, 9999),
             'icon' => 'box',
             'image' => null,
             'is_active' => true,

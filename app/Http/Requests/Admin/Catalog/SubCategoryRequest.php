@@ -17,7 +17,6 @@ class SubCategoryRequest extends FormRequest
     {
         return [
             'parent_id' => ['required', 'integer', Rule::exists('categories', 'id')],
-            'slug' => ['required', 'string', 'max:255', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', Rule::unique('categories', 'slug')->ignore($this->route('sub_category'))],
             'icon' => ['nullable', 'string', 'max:255'],
             'sort_order' => ['required', 'integer', 'min:0', 'max:4294967295'],
             'is_active' => ['required', 'boolean'],

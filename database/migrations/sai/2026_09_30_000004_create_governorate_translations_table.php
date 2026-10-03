@@ -8,15 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('governorates', function (Blueprint $table): void {
-            $table->id();
-            $table->foreignId('country_id')->constrained('countries')->cascadeOnDelete();
-            $table->boolean('is_active')->default(true)->index();
-            $table->timestamps();
-
-            $table->index(['country_id', 'is_active']);
-        });
-
+        // يخزن أسماء المحافظات المترجمة لكل لغة مدعومة.
         Schema::create('governorate_translations', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('governorate_id')->constrained('governorates')->cascadeOnDelete();
@@ -29,6 +21,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('governorate_translations');
-        Schema::dropIfExists('governorates');
     }
 };

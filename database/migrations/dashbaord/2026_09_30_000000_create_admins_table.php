@@ -9,6 +9,7 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // يخزن حسابات مشرفي لوحة التحكم وصلاحية الدخول وحالة الحساب.
         Schema::create('admins', function (Blueprint $table): void {
             $table->id();
             $table->unsignedTinyInteger('admin_type')->default(AdminTypeEnum::Admin->value)->index();

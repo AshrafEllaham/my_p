@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Admin\Catalog;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class MainCategoryRequest extends FormRequest
 {
@@ -15,7 +14,7 @@ class MainCategoryRequest extends FormRequest
     /** @return array<string, mixed> */
     public function rules(): array
     {
-        return $this->categoryRules($this->route('main_category'));
+        return $this->categoryRules();
     }
 
     /** @return array<string, string> */
@@ -25,10 +24,9 @@ class MainCategoryRequest extends FormRequest
     }
 
     /** @return array<string, mixed> */
-    private function categoryRules(mixed $categoryId): array
+    private function categoryRules(): array
     {
         return [
-            'slug' => ['required', 'string', 'max:255', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', Rule::unique('categories', 'slug')->ignore($categoryId)],
             'icon' => ['nullable', 'string', 'max:255'],
             'sort_order' => ['required', 'integer', 'min:0', 'max:4294967295'],
             'is_active' => ['required', 'boolean'],

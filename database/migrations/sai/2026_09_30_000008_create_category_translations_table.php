@@ -8,19 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table): void {
-            $table->id();
-            $table->foreignId('parent_id')->nullable()->constrained('categories')->cascadeOnDelete();
-            $table->string('slug')->unique();
-            $table->string('icon')->nullable();
-            $table->string('image')->nullable();
-            $table->boolean('is_active')->default(true)->index();
-            $table->unsignedInteger('sort_order')->default(0)->index();
-            $table->timestamps();
-
-            $table->index(['parent_id', 'is_active', 'sort_order']);
-        });
-
+        // يخزن أسماء الأقسام وأوصافها المترجمة لكل لغة.
         Schema::create('category_translations', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
@@ -34,6 +22,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('category_translations');
-        Schema::dropIfExists('categories');
     }
 };

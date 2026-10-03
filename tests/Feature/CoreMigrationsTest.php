@@ -116,7 +116,6 @@ class CoreMigrationsTest extends TestCase
     {
         $mainCategory = Category::create([
             'parent_id' => null,
-            'slug' => 'fashion',
             'icon' => 'shirt',
             'is_active' => true,
             'sort_order' => 1,
@@ -132,7 +131,6 @@ class CoreMigrationsTest extends TestCase
 
         $subCategory = Category::create([
             'parent_id' => $mainCategory->id,
-            'slug' => 'mens-clothing',
             'icon' => 'user',
             'is_active' => true,
             'sort_order' => 1,

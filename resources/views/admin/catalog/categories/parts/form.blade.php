@@ -33,11 +33,6 @@
             <div class="admin-field__control"><input id="category-en-name" name="en[name]"
                     value="{{ old('en.name', $en?->name) }}" dir="ltr" required></div>
         </div>
-        <div class="admin-field admin-form-grid__full">
-            <label for="category-slug">{{ __('admin.catalog.fields.slug') }}</label>
-            <div class="admin-field__control"><input id="category-slug" name="slug"
-                    value="{{ old('slug', $category?->slug) }}" dir="ltr" required></div>
-        </div>
         <div class="admin-field">
             <label for="category-icon">{{ __('admin.catalog.fields.icon') }}</label>
             <div class="admin-field__control"><input id="category-icon" name="icon"

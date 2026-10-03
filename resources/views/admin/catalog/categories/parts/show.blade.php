@@ -4,7 +4,6 @@
     @endif
     <div><dt>{{ __('admin.catalog.fields.name_ar') }}</dt><dd>{{ $category->translate('ar', false)?->name }}</dd></div>
     <div><dt>{{ __('admin.catalog.fields.name_en') }}</dt><dd dir="ltr">{{ $category->translate('en', false)?->name }}</dd></div>
-    <div><dt>{{ __('admin.catalog.fields.slug') }}</dt><dd dir="ltr">{{ $category->slug }}</dd></div>
     <div><dt>{{ __('admin.catalog.fields.icon') }}</dt><dd dir="ltr">{{ $category->icon ?: '—' }}</dd></div>
     <div><dt>{{ __('admin.catalog.fields.sort_order') }}</dt><dd>{{ $category->sort_order }}</dd></div>
     @unless ($isSubCategory)
