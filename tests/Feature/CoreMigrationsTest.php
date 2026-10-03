@@ -2,11 +2,11 @@
 
 namespace Tests\Feature;
 
-use App\Models\Twenty\Category;
-use App\Models\Twenty\City;
-use App\Models\Twenty\Country;
-use App\Models\Twenty\CountryTranslation;
-use App\Models\Twenty\Governorate;
+use App\Models\Sai\Category;
+use App\Models\Sai\City;
+use App\Models\Sai\Country;
+use App\Models\Sai\CountryTranslation;
+use App\Models\Sai\Governorate;
 use Database\Seeders\CategorySeeder;
 use Database\Seeders\CitySeeder;
 use Database\Seeders\CountrySeeder;

@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Twenty\Country;
+use App\Models\Sai\Country;
 use Illuminate\Database\Seeder;
 
 class CountrySeeder extends Seeder

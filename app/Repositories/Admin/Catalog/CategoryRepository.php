@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Admin\Catalog;
 
-use App\Models\Twenty\Category;
+use App\Models\Sai\Category;
 use App\Repositories\MainRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;

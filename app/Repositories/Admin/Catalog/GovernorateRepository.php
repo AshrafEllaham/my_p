@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Admin\Catalog;
 
-use App\Models\Twenty\Governorate;
+use App\Models\Sai\Governorate;
 use App\Repositories\MainRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;

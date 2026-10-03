@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Admin\Catalog;
 
-use App\Models\Twenty\City;
+use App\Models\Sai\City;
 use App\Repositories\MainRepository;
 use Illuminate\Database\Eloquent\Builder;
 

@@ -2,7 +2,7 @@
 
 namespace App\Services\Admin\Catalog;
 
-use App\Models\Twenty\Category;
+use App\Models\Sai\Category;
 use App\Repositories\Admin\Catalog\CategoryRepository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Eloquent\Builder;

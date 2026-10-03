@@ -3,7 +3,7 @@
 use App\Models\Admin\Admin;
 use App\Models\Driver;
 use App\Models\Store;
-use App\Models\Twenty\User;
+use App\Models\Sai\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
@@ -88,7 +88,7 @@ if (! function_exists('get_file')) {
         }
 
         if ($path === 'logo') {
-            $path = setting()->logo ?? 'assets/default/twenty.png';
+            $path = setting()->logo ?? 'assets/default/Sai.png';
         }
 
         if (! $path) {

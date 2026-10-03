@@ -3,10 +3,10 @@
 namespace Tests\Feature\Admin;
 
 use App\Models\Admin\Admin;
-use App\Models\Twenty\Category;
-use App\Models\Twenty\City;
-use App\Models\Twenty\Country;
-use App\Models\Twenty\Governorate;
+use App\Models\Sai\Category;
+use App\Models\Sai\City;
+use App\Models\Sai\Country;
+use App\Models\Sai\Governorate;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter;
 use Mcamara\LaravelLocalization\Middleware\LocaleSessionRedirect;

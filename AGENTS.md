@@ -32,9 +32,9 @@ Model             تعريف الجدول والـ casts والـ relations فق
 
 ```text
 app/Enums/
-app/Models/Twenty/
-app/Repositories/Twenty/
-app/Services/Twenty/
+app/Models/Sai/
+app/Repositories/Sai/
+app/Services/Sai/
 app/Http/Controllers/Api/
 app/Http/Requests/
 app/Http/Resources/Api/
@@ -47,7 +47,7 @@ routes/api/
 
 ### Model
 
-- مكانه الافتراضي `app/Models/Twenty/`.
+- مكانه الافتراضي `app/Models/Sai/`.
 - يحتوي فقط على اسم الجدول عند الحاجة، و`$fillable`، و`casts()`، والـ relations.
 - استخدم Enum casts للأعمدة ذات القيم الثابتة، وcasts مناسبة للتواريخ والأرقام وJSON.
 - ممنوع business logic أو authorization أو تنسيق responses أو استعلامات خاصة داخل الـ Model.
@@ -70,7 +70,7 @@ routes/api/
 
 ### Repository
 
-- مكانه الافتراضي `app/Repositories/Twenty/`.
+- مكانه الافتراضي `app/Repositories/Sai/`.
 - كل Repository يمتد من `MainRepository` ويحقن الـ Model في الـ constructor.
 - كل عمليات Eloquent وQuery Builder والـ filters والـ joins والـ eager loading والـ persistence تكون هنا فقط.
 - استخدم عمليات `MainRepository` الأساسية مثل `store`, `find`, `update`, و`delete` بدل تكرارها.
@@ -81,7 +81,7 @@ routes/api/
 
 ### Service
 
-- مكانه الافتراضي `app/Services/Twenty/`.
+- مكانه الافتراضي `app/Services/Sai/`.
 - يحتوي على business logic، الصلاحيات المرتبطة بحالة الاستخدام، state transitions، والتنسيق بين أكثر من Repository.
 - يحقن Repository أو Repository Contract في الـ constructor.
 - ممنوع استخدام Model أو Eloquent أو Query Builder مباشرة داخل الـ Service.
@@ -134,7 +134,7 @@ routes/api/
 - اللغتان المدعومتان هما العربية `ar` والإنجليزية `en` فقط، وتُضبطان في `config/laravellocalization.php` و`config/translatable.php`. أي نص واجهة جديد يجب إضافته في `lang/ar/` و`lang/en/` بنفس المفتاح، وممنوع تضمين نص واجهة ثابت داخل Blade.
 - تبديل لغة لوحة التحكم يتم عبر `<x-admin.language-switch />` ومسار `admin.locale`، ويحفظ الاختيار في الـ session من خلال `App\Http\Middleware\SetLocale`. يجب أن يبقى `lang` و`dir` في الـ master layout ديناميكيين وأن تُراجع الواجهة في وضعي RTL وLTR.
 - Controllers لوحة التحكم تحت `app/Http/Controllers/Admin/`، وServices الخاصة بها تحت `app/Services/Admin/`، وModels الخاصة بهوية وإعدادات الإدارة تحت `app/Models/Admin/`.
-- Models الدومين المشتركة تظل تحت `app/Models/Twenty/` وتستخدمها الـ API والـ Dashboard دون نسخها.
+- Models الدومين المشتركة تظل تحت `app/Models/Sai/` وتستخدمها الـ API والـ Dashboard دون نسخها.
 - كل routes لوحة التحكم موجودة في `routes/admin.php` تحت prefix وname باسم `admin`.
 - كل routes لوحة التحكم محمية بـ `auth:admin`، والاستثناء الوحيد هو routes تسجيل الدخول التي تستخدم `guest:admin` مع rate limiting على محاولة الدخول.
 - الـ master layout الوحيد هو `resources/views/admin/layout/indexs/index.blade.php`، وكل صفحات الإدارة تمتد منه.
@@ -144,8 +144,8 @@ routes/api/
 - نمط صفحات modal: يتم render لملف `parts/*.blade.php` ثم إعادة HTML داخل JSON دون إرجاع layout كامل.
 - عمليات approve/reject/update الخاصة بالـ AJAX تستخدم `dashBoardJson()` الموحد الموجود في base Controller.
 - استخدم helpers المشتركة مثل `showButton`, `settingsButton`, `banButton`, و`helperTrans` بدل تكرار HTML للأفعال.
-- Admin Services منفصلة تمامًا عن Twenty Services؛ الأولى لقرارات المشرف، والثانية لحالات استخدام الـ API.
-- **استثناء لوحة التحكم:** يجوز لـ `App\Services\Admin` حقن Model والتعامل معه مباشرة عندما يكون الاستعلام خاصًا بالـ Dashboard ومعقدًا ولا يحقق Repository abstraction قيمة واضحة. هذا الاستثناء لا ينطبق على `App\Services\Twenty`.
+- Admin Services منفصلة تمامًا عن Sai Services؛ الأولى لقرارات المشرف، والثانية لحالات استخدام الـ API.
+- **استثناء لوحة التحكم:** يجوز لـ `App\Services\Admin` حقن Model والتعامل معه مباشرة عندما يكون الاستعلام خاصًا بالـ Dashboard ومعقدًا ولا يحقق Repository abstraction قيمة واضحة. هذا الاستثناء لا ينطبق على `App\Services\Sai`.
 - عند استخدام الاستثناء السابق، يجب أن يظل الاستعلام داخل Admin Service فقط، مع eager loading وselects وpagination وindexes المناسبة، ومنع N+1. إذا أُعيد استخدام الاستعلام أو تضخم الـ Service، انقله إلى Admin Repository مخصص.
 
 ## SOLID وDependency Injection
@@ -221,7 +221,7 @@ routes/api/
 ## قائمة مراجعة قبل التسليم
 
 - لا يوجد query خارج Repository، باستثناء استعلامات `App\Services\Admin` المسموحة والمبررة في قسم معمارية لوحة التحكم.
-- لا يوجد Model أو Eloquent داخل Twenty Service أو أي Controller، وأي استخدام مباشر داخل Admin Service يلتزم بالاستثناء الموثق أعلاه.
+- لا يوجد Model أو Eloquent داخل Sai Service أو أي Controller، وأي استخدام مباشر داخل Admin Service يلتزم بالاستثناء الموثق أعلاه.
 - لا يوجد business logic داخل Model أو Controller أو Resource.
 - لا توجد قيم status/type/priority مكتوبة كنص بدل Enum.
 - لا توجد queries داخل loops أو Resources.

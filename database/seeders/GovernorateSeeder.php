@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Twenty\Country;
-use App\Models\Twenty\Governorate;
+use App\Models\Sai\Country;
+use App\Models\Sai\Governorate;
 use Illuminate\Database\Seeder;
 
 class GovernorateSeeder extends Seeder

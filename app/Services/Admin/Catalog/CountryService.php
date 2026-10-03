@@ -2,7 +2,7 @@
 
 namespace App\Services\Admin\Catalog;
 
-use App\Models\Twenty\Country;
+use App\Models\Sai\Country;
 use App\Repositories\Admin\Catalog\CountryRepository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Eloquent\Builder;

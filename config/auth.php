@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Admin\Admin;
-use App\Models\User;
+use App\Models\Sai\User;
 
 return [
 
@@ -46,6 +46,10 @@ return [
         'admin' => [
             'driver' => 'session',
             'provider' => 'admins',
+        ],
+        'api' => [
+            'driver' => 'jwt',
+            'provider' => 'users',
         ],
     ],
 

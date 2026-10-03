@@ -2,8 +2,8 @@
 
 namespace App\Services\Admin\Catalog;
 
-use App\Models\Twenty\Country;
-use App\Models\Twenty\Governorate;
+use App\Models\Sai\Country;
+use App\Models\Sai\Governorate;
 use App\Repositories\Admin\Catalog\CountryRepository;
 use App\Repositories\Admin\Catalog\GovernorateRepository;
 use Illuminate\Database\DatabaseManager;

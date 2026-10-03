@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Twenty\City;
-use App\Models\Twenty\Governorate;
+use App\Models\Sai\City;
+use App\Models\Sai\Governorate;
 use Illuminate\Database\Seeder;
 
 class CitySeeder extends Seeder
