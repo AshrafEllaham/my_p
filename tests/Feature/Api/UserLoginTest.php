@@ -2,12 +2,9 @@
 
 namespace Tests\Feature\Api;
 
-use App\Contracts\Sai\SocialIdentityVerifier;
-use App\Enums\SocialLoginProviderEnum;
 use App\Enums\UserStatusEnum;
 use App\Models\Sai\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Mockery;
 use Tests\TestCase;
 
 class UserLoginTest extends TestCase
@@ -78,59 +75,41 @@ class UserLoginTest extends TestCase
             ->assertJsonPath('errors.password.0', __('messages.validation.password.required'));
     }
 
-    public function test_social_login_verifies_provider_identity_and_returns_api_token(): void
+    public function test_social_login_creates_user_from_social_id_and_returns_api_token(): void
     {
-        $this->app->instance(SocialIdentityVerifier::class, Mockery::mock(SocialIdentityVerifier::class, function ($mock): void {
-            $mock->shouldReceive('verify')
-                ->once()
-                ->with(SocialLoginProviderEnum::Google, 'signed-provider-token')
-                ->andReturn([
-                    'sub' => 'google-sub-123',
-                    'email' => 'social@example.com',
-                    'email_verified' => true,
-                    'name' => 'Social User',
-                ]);
-        }));
-
         $response = $this->postJson('/api/social-login', [
-            'provider' => 'google',
-            'id_token' => 'signed-provider-token',
             'social_id' => 'google-sub-123',
             'email' => 'social@example.com',
-            'phone_code' => '+20',
-            'phone' => '1012345678',
+            'name' => 'Social User',
         ]);
 
         $response->assertOk()
+            ->assertJsonPath('data.name', 'Social User')
             ->assertJsonPath('data.email', 'social@example.com')
-            ->assertJsonPath('data.phone', null)
+            ->assertJsonPath('data.status', UserStatusEnum::Active->value)
             ->assertJsonPath('data.token_type', 'bearer');
         $this->assertIsString($response->json('data.access_token'));
-        $this->assertDatabaseHas('social_accounts', [
-            'provider' => 'google',
+        $this->assertDatabaseHas('users', [
             'social_id' => 'google-sub-123',
-            'provider_email' => 'social@example.com',
+            'email' => 'social@example.com',
+            'name' => 'Social User',
         ]);
     }
 
-    public function test_social_login_rejects_client_claims_that_do_not_match_the_signed_token(): void
+    public function test_social_login_reuses_user_matching_social_id(): void
     {
-        $this->app->instance(SocialIdentityVerifier::class, Mockery::mock(SocialIdentityVerifier::class, function ($mock): void {
-            $mock->shouldReceive('verify')->once()->andReturn([
-                'sub' => 'verified-sub',
-                'email' => 'verified@example.com',
-                'email_verified' => true,
-            ]);
-        }));
+        $user = User::factory()->create([
+            'social_id' => 'google-sub-123',
+            'email' => 'social@example.com',
+            'status' => UserStatusEnum::Active,
+        ]);
 
-        $this->postJson('/api/social-login', [
-            'provider' => 'apple',
-            'id_token' => 'signed-provider-token',
-            'social_id' => 'spoofed-sub',
-            'email' => 'verified@example.com',
-        ])->assertUnprocessable()
-            ->assertJsonPath('errors.id_token.0', __('messages.auth.social_token_invalid'));
+        $response = $this->postJson('/api/social-login', [
+            'social_id' => 'google-sub-123',
+            'email' => 'social@example.com',
+        ]);
 
-        $this->assertDatabaseCount('users', 0);
+        $response->assertOk()->assertJsonPath('data.id', $user->id);
+        $this->assertDatabaseCount('users', 1);
     }
 }
