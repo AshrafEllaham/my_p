@@ -18,8 +18,7 @@ class RegisteredUserResource extends JsonResource
             'phone_code' => $this->phone_code,
             'phone' => $this->phone,
             'status' => $this->status?->value,
-            'verification_required' => true,
-            'verification_expires_at' => $this->resource->verification_expires_at,
+            'verification_required' => false,
         ];
     }
 }

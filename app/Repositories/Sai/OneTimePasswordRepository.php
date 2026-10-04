@@ -44,6 +44,38 @@ class OneTimePasswordRepository extends MainRepository
             ->update(['consumed_at' => now()]);
     }
 
+    public function findLatestUsable(string $identity, OtpPurposeEnum $purpose, ?bool $verified = null): ?OneTimePassword
+    {
+        return $this->query()
+            ->where('identity', $identity)
+            ->where('purpose', $purpose->value)
+            ->whereNull('consumed_at')
+            ->where('expires_at', '>', now())
+            ->when($verified === true, fn (Builder $query) => $query->whereNotNull('verified_at'))
+            ->when($verified === false, fn (Builder $query) => $query->whereNull('verified_at'))
+            ->latest('id')
+            ->lockForUpdate()
+            ->first();
+    }
+
+    public function markVerified(OneTimePassword $otp): void
+    {
+        $otp->forceFill(['verified_at' => now()])->save();
+    }
+
+    public function incrementAttempts(OneTimePassword $otp): void
+    {
+        $otp->increment('attempts');
+    }
+
+    public function consumeForUser(OneTimePassword $otp, int $userId): void
+    {
+        $otp->forceFill([
+            'user_id' => $userId,
+            'consumed_at' => now(),
+        ])->save();
+    }
+
     /** @param array<string, mixed> $data */
     public function updateRecord(int|string $id, array $data): Model
     {

@@ -37,21 +37,21 @@
     <!-- Screen Title & Subtitle -->
     <section class="barq-hero" style="margin-top: 10px;">
       <h1>التحقق من الرمز</h1>
-      <p>أدخل رمز التحقق المكون من 4 أرقام الذي أرسلناه للتو إلى رقم هاتفك المحمول <strong style="color: var(--barq-ink); font-family: 'Inter', sans-serif;">00***50</strong></p>
+      <p id="otpDescription">أدخل رمز التحقق المكوّن من 4 أرقام.</p>
     </section>
 
     <!-- OTP Track -->
     <div class="barq-otp-track" id="otpTrack" style="margin-top: 18px;">
-      <div class="barq-otp-cell" data-index="0">5</div>
-      <div class="barq-otp-cell" data-index="1">8</div>
-      <div class="barq-otp-cell active" data-index="2">
+      <div class="barq-otp-cell active" data-index="0">
         <span class="barq-cursor"></span>
       </div>
+      <div class="barq-otp-cell" data-index="1"></div>
+      <div class="barq-otp-cell" data-index="2"></div>
       <div class="barq-otp-cell" data-index="3"></div>
     </div>
 
     <!-- Hidden real input for typing interaction -->
-    <input type="text" id="hiddenOtpInput" maxlength="4" value="58" style="position: absolute; opacity: 0; pointer-events: none;">
+    <input type="text" id="hiddenOtpInput" maxlength="4" value="" inputmode="numeric" autocomplete="one-time-code" style="position: absolute; opacity: 0; pointer-events: none;">
 
     <!-- Resend Countdown & Action -->
     <div class="barq-resend-box" style="margin-top: 24px;">
@@ -71,6 +71,8 @@
   <script>
     const otpTrack = document.getElementById('otpTrack');
     const otpParams = new URLSearchParams(location.search), resetFlow = otpParams.get('flow') === 'reset';
+    const signupDraft = JSON.parse(sessionStorage.getItem('saey_signup_draft') || 'null');
+    if(signupDraft)document.getElementById('otpDescription').innerHTML='أدخل رمز التحقق المكوّن من 4 أرقام. الرمز التجريبي الحالي هو <strong style="color: var(--barq-ink); font-family: \'Inter\', sans-serif;">1234</strong>';
     const hiddenInput = document.getElementById('hiddenOtpInput');
     const cells = Array.from(document.querySelectorAll('.barq-otp-cell'));
 
@@ -107,7 +109,7 @@
     const timerDigits = document.getElementById('timerDigits');
     const resendBtn = document.getElementById('resendBtn');
 
-    const countdown = setInterval(() => {
+    let countdown = setInterval(() => {
       secondsLeft--;
       if (secondsLeft <= 0) {
         clearInterval(countdown);
@@ -119,8 +121,44 @@
         timerDigits.textContent = '00:' + str;
       }
     }, 1000);
-    resendBtn.addEventListener('click', () => { if(secondsLeft>0)return;hiddenInput.value='';updateCells();resendBtn.textContent='تم إرسال رمز جديد'; });
-    document.getElementById('verifyAction').addEventListener('click', event => { const button=event.currentTarget,error=document.getElementById('otpError');if(hiddenInput.value.length!==4){error.textContent='أدخل رمز التحقق المكوّن من ٤ أرقام.';error.hidden=false;hiddenInput.focus();return;}error.hidden=true;button.disabled=true;button.textContent='جارٍ التحقق…';localStorage.setItem('saey_otp_verified_at',new Date().toISOString());setTimeout(()=>location.href=resetFlow?'07-reset-password.html':'05-profile-setup.html',450); });
+    resendBtn.addEventListener('click', async () => {
+      if(secondsLeft>0)return;
+      if(signupDraft){
+        try {
+          const response=await fetch('http://127.0.0.1:8000/api/send-otp',{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify({phone_code:signupDraft.phone_code,phone:signupDraft.phone})});
+          const result=await response.json();
+          if(!response.ok)throw new Error(result.message||'تعذر إعادة إرسال الرمز.');
+          secondsLeft=30;
+          timerDigits.textContent='00:30';
+          resendBtn.textContent='إعادة إرسال الرمز';
+          countdown=setInterval(()=>{secondsLeft--;if(secondsLeft<=0){clearInterval(countdown);timerDigits.textContent='00:00';}else{timerDigits.textContent='00:'+(secondsLeft<10?'0':'')+secondsLeft;}},1000);
+        } catch(error) { document.getElementById('otpError').textContent=error.message;document.getElementById('otpError').hidden=false; }
+        return;
+      }
+      hiddenInput.value='';updateCells();resendBtn.textContent='تم إرسال رمز جديد';
+    });
+    document.getElementById('verifyAction').addEventListener('click', async event => {
+      const button=event.currentTarget,error=document.getElementById('otpError');
+      if(hiddenInput.value.length!==4){error.textContent='أدخل رمز التحقق المكوّن من ٤ أرقام.';error.hidden=false;hiddenInput.focus();return;}
+      error.hidden=true;button.disabled=true;button.textContent='جارٍ التحقق…';
+      try {
+        if(signupDraft){
+          const confirmResponse=await fetch('http://127.0.0.1:8000/api/confirm-otp',{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify({phone_code:signupDraft.phone_code,phone:signupDraft.phone,code:hiddenInput.value})});
+          const confirmResult=await confirmResponse.json();
+          if(!confirmResponse.ok){const firstError=Object.values(confirmResult.errors||{}).flat()[0];throw new Error(firstError||confirmResult.message||'رمز التحقق غير صحيح.');}
+          const registerResponse=await fetch('http://127.0.0.1:8000/api/register',{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify(signupDraft)});
+          const registerResult=await registerResponse.json();
+          if(!registerResponse.ok){const firstError=Object.values(registerResult.errors||{}).flat()[0];throw new Error(firstError||registerResult.message||'تعذر إنشاء الحساب.');}
+          sessionStorage.setItem('saey_signup_draft',JSON.stringify({phone_code:signupDraft.phone_code,phone:signupDraft.phone,email:signupDraft.email,userId:registerResult.data?.id}));
+        } else {
+          localStorage.setItem('saey_otp_verified_at',new Date().toISOString());
+        }
+        location.href=resetFlow?'07-reset-password.html':'05-profile-setup.html';
+      } catch(requestError) {
+        error.textContent=requestError instanceof TypeError?'تعذر الاتصال بالخادم. تحقق من تشغيل API ثم أعد المحاولة.':requestError.message;
+        error.hidden=false;button.disabled=false;button.textContent='تحقق';
+      }
+    });
   </script>
 </body>
 </html>

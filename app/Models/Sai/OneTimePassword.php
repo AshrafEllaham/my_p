@@ -18,6 +18,7 @@ class OneTimePassword extends Model
         'code_hash',
         'attempts',
         'expires_at',
+        'verified_at',
         'consumed_at',
     ];
 
@@ -27,6 +28,7 @@ class OneTimePassword extends Model
             'purpose' => OtpPurposeEnum::class,
             'attempts' => 'integer',
             'expires_at' => 'datetime',
+            'verified_at' => 'datetime',
             'consumed_at' => 'datetime',
         ];
     }

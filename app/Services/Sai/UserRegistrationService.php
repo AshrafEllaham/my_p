@@ -8,7 +8,7 @@ use App\Models\Sai\User;
 use App\Repositories\Sai\OneTimePasswordRepository;
 use App\Repositories\Sai\UserRepository;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class UserRegistrationService
 {
@@ -22,29 +22,24 @@ class UserRegistrationService
     {
         return DB::transaction(function () use ($data, $locale): User {
             $identity = $data['phone_code'].$data['phone'];
-            $this->otps->expireUnconsumed($identity, OtpPurposeEnum::Registration);
+            $otp = $this->otps->findLatestUsable($identity, OtpPurposeEnum::Registration, verified: true);
+
+            if ($otp === null) {
+                throw ValidationException::withMessages([
+                    'phone' => __('messages.auth.registration_otp_required'),
+                ]);
+            }
 
             $user = $this->users->createRecord([
                 'email' => $data['email'],
                 'phone_code' => $data['phone_code'],
                 'phone' => $data['phone'],
                 'password' => $data['password'],
-                'status' => UserStatusEnum::PendingVerification,
+                'status' => UserStatusEnum::Active,
                 'preferred_locale' => $locale,
             ]);
 
-            $otp = str_pad((string) random_int(0, 9999), 4, '0', STR_PAD_LEFT);
-            $expiresAt = now()->addMinutes(5);
-
-            $this->otps->createRecord([
-                'user_id' => $user->id,
-                'identity' => $identity,
-                'purpose' => OtpPurposeEnum::Registration,
-                'code_hash' => Hash::make($otp),
-                'expires_at' => $expiresAt,
-            ]);
-
-            $user->setAttribute('verification_expires_at', $expiresAt->toISOString());
+            $this->otps->consumeForUser($otp, $user->id);
 
             return $user;
         });

@@ -2,7 +2,11 @@
 
 return [
     'auth' => [
-        'registration_created' => 'Account created. Verification is required to continue.',
+        'registration_created' => 'The account was created successfully.',
+        'otp_prepared' => 'The verification code is ready. Use the temporary fixed code 1234.',
+        'otp_confirmed' => 'The phone number was verified successfully.',
+        'otp_invalid_or_expired' => 'The verification code is invalid or expired.',
+        'registration_otp_required' => 'Verify the phone number before creating the account.',
     ],
     'validation_failed' => 'The submitted data is invalid.',
     'validation' => [
@@ -35,6 +39,11 @@ return [
         'password_confirmation' => [
             'required' => 'The password confirmation is required.',
             'string' => 'The password confirmation must be a string.',
+        ],
+        'otp' => [
+            'required' => 'The verification code is required.',
+            'string' => 'The verification code must be a string.',
+            'digits' => 'The verification code must contain 4 digits.',
         ],
     ],
 ];

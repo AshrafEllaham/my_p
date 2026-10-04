@@ -159,19 +159,20 @@
       error.hidden=true;
       button.disabled=true;
       button.setAttribute('aria-busy','true');
-      button.textContent='جارٍ إنشاء الحساب…';
+      button.textContent='جارٍ إرسال رمز التحقق…';
       try {
-        const response=await fetch('http://127.0.0.1:8000/api/register',{
+        const registration={phone_code:signupCountryDial.textContent,phone,email,password,password_confirmation:confirmation};
+        const response=await fetch('http://127.0.0.1:8000/api/send-otp',{
           method:'POST',
           headers:{'Accept':'application/json','Content-Type':'application/json'},
-          body:JSON.stringify({phone_code:signupCountryDial.textContent,phone,email,password,password_confirmation:confirmation})
+          body:JSON.stringify({phone_code:registration.phone_code,phone:registration.phone})
         });
         const result=await response.json();
         if(!response.ok){
           const firstError=Object.values(result.errors||{}).flat()[0];
-          throw new Error(firstError||result.message||'تعذر إنشاء الحساب. حاول مرة أخرى.');
+          throw new Error(firstError||result.message||'تعذر إرسال رمز التحقق. حاول مرة أخرى.');
         }
-        sessionStorage.setItem('saey_signup_draft',JSON.stringify({phone:`${signupCountryDial.textContent}${phone}`,email,userId:result.data?.id,date:new Date().toISOString()}));
+        sessionStorage.setItem('saey_signup_draft',JSON.stringify(registration));
         location.href='03-verify-otp.html';
       } catch (requestError) {
         error.textContent=requestError instanceof TypeError?'تعذر الاتصال بالخادم. تحقق من تشغيل API ثم أعد المحاولة.':requestError.message;
