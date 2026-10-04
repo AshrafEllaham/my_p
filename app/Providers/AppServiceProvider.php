@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Contracts\Sai\SocialIdentityVerifier;
+use App\Services\Sai\OidcSocialIdentityVerifier;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
 use Illuminate\Support\ServiceProvider;
 use Mcamara\LaravelLocalization\Traits\LoadsTranslatedCachedRoutes;
@@ -16,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(SocialIdentityVerifier::class, OidcSocialIdentityVerifier::class);
     }
 
     /**
@@ -24,10 +26,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        RouteServiceProvider::loadCachedRoutesUsing(fn() => $this->loadCachedRoutes());
+        RouteServiceProvider::loadCachedRoutesUsing(fn () => $this->loadCachedRoutes());
 
         $migrationsPath = database_path('migrations');
-        $directories = glob($migrationsPath . '/*', GLOB_ONLYDIR);
+        $directories = glob($migrationsPath.'/*', GLOB_ONLYDIR);
         $paths = array_merge([$migrationsPath], $directories);
 
         $this->loadMigrationsFrom($paths);

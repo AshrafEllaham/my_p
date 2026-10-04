@@ -14,6 +14,7 @@ class RegisteredUserResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'name' => $this->name,
             'email' => $this->email,
             'phone_code' => $this->phone_code,
             'phone' => $this->phone,

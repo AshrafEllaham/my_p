@@ -245,27 +245,92 @@
       }
     });
 
-    const socialIsNew = new URLSearchParams(window.location.search).get('social') === 'new';
-    document.querySelectorAll('.social-login').forEach(button => {
-      button.addEventListener('click', () => {
-        const provider = button.dataset.provider;
-        window.location.href = socialIsNew
-          ? `03-verify-otp.html?source=${provider}`
-          : `08-user-home.html?provider=${provider}`;
-      });
-    });
     const loginButton = document.getElementById('loginButton');
     const loginError = document.getElementById('loginError');
-    loginButton.addEventListener('click', () => {
-      const identity = identityInput.value.trim(), password = passwordInput.value;
-      const validIdentity = identityInput.type === 'email' ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identity) : identity.replace(/\D/g, '').length >= 9;
-      if (!validIdentity || password.length < 6) {
-        loginError.textContent = !validIdentity ? 'اكتب بريدًا إلكترونيًا أو رقم هاتف صحيحًا.' : 'كلمة المرور يجب ألا تقل عن ٦ أحرف.';
-        loginError.hidden = false;
-        return;
+    const apiBaseUrl = 'http://127.0.0.1:8000/api';
+
+    function showLoginError(message) {
+      loginError.textContent = message || 'تعذر تسجيل الدخول. حاول مرة أخرى.';
+      loginError.hidden = false;
+    }
+
+    function saveLoginSession(data) {
+      localStorage.setItem('saey_api_token', data.access_token);
+      localStorage.setItem('saey_session', JSON.stringify({
+        userId: data.id,
+        email: data.email,
+        phone: data.phone,
+        date: new Date().toISOString(),
+      }));
+      location.href = '08-user-home.html';
+    }
+
+    async function postLogin(endpoint, payload) {
+      const response = await fetch(`${apiBaseUrl}/${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Accept-Language': document.documentElement.lang || 'ar',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        const errors = result.errors ? Object.values(result.errors).flat() : [];
+        throw new Error(errors[0] || result.message || 'تعذر تسجيل الدخول. حاول مرة أخرى.');
       }
-      loginError.hidden = true; loginButton.disabled = true; loginButton.textContent = 'جارٍ تسجيل الدخول…';
-      setTimeout(() => { localStorage.setItem('saey_session', JSON.stringify({ identity, date:new Date().toISOString() })); location.href = '08-user-home.html'; }, 500);
+      saveLoginSession(result.data);
+    }
+
+    loginButton.addEventListener('click', async () => {
+      const identity = identityInput.value.trim();
+      const payload = { password: passwordInput.value };
+      if (identityInput.type === 'email') {
+        payload.email = identity.toLowerCase();
+      } else {
+        payload.phone_code = countryDial.textContent.trim();
+        payload.phone = identity.replace(/\D/g, '');
+      }
+
+      loginError.hidden = true;
+      loginButton.disabled = true;
+      loginButton.textContent = 'جارٍ تسجيل الدخول…';
+      try {
+        await postLogin('login', payload);
+      } catch (error) {
+        showLoginError(error.message);
+        loginButton.disabled = false;
+        loginButton.textContent = 'تسجيل الدخول';
+      }
+    });
+
+    document.querySelectorAll('.social-login').forEach(button => {
+      button.addEventListener('click', async () => {
+        const provider = button.dataset.provider;
+        const nativeAuth = window.SaeyNativeAuth;
+        if (!nativeAuth || typeof nativeAuth.signIn !== 'function') {
+          showLoginError('يتطلب تسجيل Google أو Apple تشغيل مزود تسجيل الدخول داخل التطبيق.');
+          return;
+        }
+
+        button.disabled = true;
+        loginError.hidden = true;
+        try {
+          const identity = await nativeAuth.signIn(provider);
+          await postLogin('social-login', {
+            provider,
+            id_token: identity.id_token,
+            social_id: identity.social_id,
+            email: identity.email,
+            ...(identity.phone_code ? { phone_code: identity.phone_code } : {}),
+            ...(identity.phone ? { phone: identity.phone } : {}),
+          });
+        } catch (error) {
+          showLoginError(error.message);
+          button.disabled = false;
+        }
+      });
     });
   </script>
 </body>

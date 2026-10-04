@@ -21,6 +21,8 @@ Route::group([], function () {
         Route::post('/send-otp', [AuthApiController::class, 'sendOtp'])->middleware('throttle:3,1')->name('auth.send-otp');
         Route::post('/confirm-otp', [AuthApiController::class, 'confirmOtp'])->middleware('throttle:10,1')->name('auth.confirm-otp');
         Route::post('/register', [AuthApiController::class, 'store'])->middleware('throttle:5,1')->name('user.register');
+        Route::post('/login', [AuthApiController::class, 'login'])->middleware('throttle:5,1')->name('user.login');
+        Route::post('/social-login', [AuthApiController::class, 'socialLogin'])->middleware('throttle:10,1')->name('user.social-login');
         Route::patch('/accounts/{account}/type', [AccountTypeController::class, 'update'])->whereNumber('account')->middleware('throttle:10,1')->name('account.type.update');
     });
 

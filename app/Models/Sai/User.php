@@ -21,6 +21,11 @@ class User extends Authenticatable implements JWTSubject
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, SoftDeletes;
 
+    protected static function newFactory(): UserFactory
+    {
+        return UserFactory::new();
+    }
+
     protected $fillable = [
         'name',
         'email',

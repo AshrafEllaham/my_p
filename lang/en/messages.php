@@ -7,6 +7,12 @@ return [
         'otp_confirmed' => 'The phone number was verified successfully.',
         'otp_invalid_or_expired' => 'The verification code is invalid or expired.',
         'registration_otp_required' => 'Verify the phone number before creating the account.',
+        'login_success' => 'You are now signed in.',
+        'social_login_success' => 'You are now signed in with your social account.',
+        'credentials_invalid' => 'The sign-in details are incorrect or the account is unavailable.',
+        'social_token_invalid' => 'The social identity could not be verified.',
+        'social_account_already_linked' => 'This email is linked to another social sign-in method. Sign in with the linked method first.',
+        'account_unavailable' => 'This account is unavailable for sign-in.',
     ],
     'account' => [
         'type_updated' => 'The account type and location were updated successfully.',
@@ -32,6 +38,23 @@ return [
             'string' => 'The country calling code must be a string.',
             'regex' => 'The country calling code is invalid, for example: +20.',
             'max' => 'The country calling code is too long.',
+        ],
+        'login_identity' => [
+            'exclusive' => 'Enter an email address or a phone number, not both.',
+        ],
+        'social_provider' => [
+            'required' => 'The social sign-in provider is required.',
+            'enum' => 'The provider must be google or apple.',
+        ],
+        'social_id_token' => [
+            'required' => 'The identity token from Google or Apple is required.',
+            'string' => 'The identity token must be a string.',
+            'max' => 'The identity token is too long.',
+        ],
+        'social_id' => [
+            'required' => 'The account ID from the provider is required.',
+            'string' => 'The social account ID must be a string.',
+            'max' => 'The social account ID is too long.',
         ],
         'phone' => [
             'required' => 'The phone number is required.',
