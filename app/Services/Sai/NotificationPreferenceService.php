@@ -3,37 +3,19 @@
 namespace App\Services\Sai;
 
 use App\Repositories\Sai\NotificationPreferenceRepository;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
 class NotificationPreferenceService
 {
     public function __construct(private readonly NotificationPreferenceRepository $repository) {}
 
-    public function query(): Builder
+    public function get(int $userId): object
     {
-        return $this->repository->query();
+        return $this->repository->findOrCreateForUser($userId);
     }
 
-    public function find(int|string $id): Model
+    /** @param array<string, bool> $data */
+    public function update(int $userId, array $data): object
     {
-        return $this->repository->findOrFail($id);
-    }
-
-    /** @param array<string, mixed> $data */
-    public function create(array $data): Model
-    {
-        return $this->repository->createRecord($data);
-    }
-
-    /** @param array<string, mixed> $data */
-    public function update(int|string $id, array $data): Model
-    {
-        return $this->repository->updateRecord($id, $data);
-    }
-
-    public function delete(int|string $id): bool
-    {
-        return $this->repository->deleteRecord($id);
+        return $this->repository->updateForUser($userId, $data);
     }
 }

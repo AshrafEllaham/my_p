@@ -138,7 +138,8 @@ class SaeyPreviewSchemaTest extends TestCase
 
     public function test_user_entered_content_is_stored_on_its_main_table(): void
     {
-        $this->assertTrue(Schema::hasColumns('stores', ['name', 'description']));
+        $this->assertTrue(Schema::hasColumns('users', ['name', 'avatar', 'address_line']));
+        $this->assertTrue(Schema::hasColumns('stores', ['description', 'cover_image']));
         $this->assertTrue(Schema::hasColumns('products', ['name', 'description']));
         $this->assertTrue(Schema::hasColumns('store_policy_versions', [
             'pickup_instructions',

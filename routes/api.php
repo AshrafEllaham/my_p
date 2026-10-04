@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\AccountTypeController;
 use App\Http\Controllers\Api\AuthApiController;
+use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\NotificationPreferenceController;
 use Illuminate\Support\Facades\Route;
 
 // User (student) routes
@@ -28,9 +30,17 @@ Route::group([], function () {
     // -------------------------------------------------------
     // Protected Routes (Require Authentication)
     // -------------------------------------------------------
-    Route::group(['middleware' => ['auth:api']], function () {
+    Route::group(['middleware' => ['auth:api', 'throttle:60,1']], function () {
 
         // ############################ notifications ############################
+        Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+        Route::patch('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
+        Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])
+            ->whereUuid('notification')
+            ->name('notifications.read');
+        Route::delete('/notifications', [NotificationController::class, 'destroyAll'])->name('notifications.destroy-all');
+        Route::get('/notifications/preferences', [NotificationPreferenceController::class, 'show'])->name('notifications.preferences.show');
+        Route::put('/notifications/preferences', [NotificationPreferenceController::class, 'update'])->name('notifications.preferences.update');
 
         // ############################ chat ############################
     });

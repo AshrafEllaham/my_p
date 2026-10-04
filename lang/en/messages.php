@@ -17,6 +17,14 @@ return [
         'user_type_required' => 'This endpoint is available to user accounts only.',
         'store_type_required' => 'This endpoint is available to store accounts only.',
     ],
+    'notifications' => [
+        'listed' => 'Notifications were retrieved successfully.',
+        'marked_read' => 'The notification was marked as read.',
+        'all_marked_read' => 'All notifications were marked as read.',
+        'deleted' => 'All notifications were deleted.',
+        'preferences_loaded' => 'Notification preferences were retrieved successfully.',
+        'preferences_updated' => 'Notification preferences were updated successfully.',
+    ],
     'validation_failed' => 'The submitted data is invalid.',
     'validation' => [
         'phone_code' => [
@@ -101,6 +109,18 @@ return [
             'image' => 'The cover file must be an image.',
             'mimes' => 'The cover must be a JPG, JPEG, PNG, or WEBP file.',
             'max' => 'The cover must not be larger than 10 MB.',
+        ],
+        'notifications_unread_only' => [
+            'boolean' => 'The unread-only filter must be true or false.',
+        ],
+        'notifications_per_page' => [
+            'integer' => 'The page size must be an integer.',
+            'min' => 'The page size must be at least 1.',
+            'max' => 'The page size must not exceed 100.',
+        ],
+        'notification_preference' => [
+            'required' => 'Every notification preference is required.',
+            'boolean' => 'Every notification preference must be true or false.',
         ],
     ],
 ];

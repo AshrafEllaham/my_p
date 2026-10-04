@@ -3,9 +3,11 @@
 namespace App\Repositories\Sai;
 
 use App\Models\Sai\Notification;
+use App\Models\Sai\User;
 use App\Repositories\MainRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class NotificationRepository extends MainRepository
 {
@@ -47,5 +49,47 @@ class NotificationRepository extends MainRepository
     public function deleteRecord(int|string $id): bool
     {
         return (bool) $this->findOrFail($id)->delete();
+    }
+
+    public function paginateForUser(int $userId, bool $unreadOnly, int $perPage): LengthAwarePaginator
+    {
+        return $this->query()
+            ->where('notifiable_type', User::class)
+            ->where('notifiable_id', $userId)
+            ->when($unreadOnly, fn (Builder $query): Builder => $query->whereNull('read_at'))
+            ->latest()
+            ->paginate($perPage);
+    }
+
+    public function markAsReadForUser(int $userId, string $notificationId): Model
+    {
+        $notification = $this->query()
+            ->where('notifiable_type', User::class)
+            ->where('notifiable_id', $userId)
+            ->findOrFail($notificationId);
+
+        if ($notification->read_at === null) {
+            $notification->fill(['read_at' => now()]);
+            $notification->save();
+        }
+
+        return $notification;
+    }
+
+    public function markAllAsReadForUser(int $userId): int
+    {
+        return $this->query()
+            ->where('notifiable_type', User::class)
+            ->where('notifiable_id', $userId)
+            ->whereNull('read_at')
+            ->update(['read_at' => now()]);
+    }
+
+    public function deleteAllForUser(int $userId): int
+    {
+        return $this->query()
+            ->where('notifiable_type', User::class)
+            ->where('notifiable_id', $userId)
+            ->delete();
     }
 }

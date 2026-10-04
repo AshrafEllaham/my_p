@@ -48,4 +48,17 @@ class NotificationPreferenceRepository extends MainRepository
     {
         return (bool) $this->findOrFail($id)->delete();
     }
+
+    public function findOrCreateForUser(int $userId): Model
+    {
+        $this->query()->firstOrCreate(['user_id' => $userId]);
+
+        return $this->query()->where('user_id', $userId)->firstOrFail();
+    }
+
+    /** @param array<string, bool> $data */
+    public function updateForUser(int $userId, array $data): Model
+    {
+        return $this->query()->updateOrCreate(['user_id' => $userId], $data);
+    }
 }

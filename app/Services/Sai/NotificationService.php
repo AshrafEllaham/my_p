@@ -3,37 +3,28 @@
 namespace App\Services\Sai;
 
 use App\Repositories\Sai\NotificationRepository;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
 class NotificationService
 {
     public function __construct(private readonly NotificationRepository $repository) {}
 
-    public function query(): Builder
+    public function paginate(int $userId, bool $unreadOnly, int $perPage): object
     {
-        return $this->repository->query();
+        return $this->repository->paginateForUser($userId, $unreadOnly, $perPage);
     }
 
-    public function find(int|string $id): Model
+    public function markAsRead(int $userId, string $notificationId): object
     {
-        return $this->repository->findOrFail($id);
+        return $this->repository->markAsReadForUser($userId, $notificationId);
     }
 
-    /** @param array<string, mixed> $data */
-    public function create(array $data): Model
+    public function markAllAsRead(int $userId): int
     {
-        return $this->repository->createRecord($data);
+        return $this->repository->markAllAsReadForUser($userId);
     }
 
-    /** @param array<string, mixed> $data */
-    public function update(int|string $id, array $data): Model
+    public function deleteAll(int $userId): int
     {
-        return $this->repository->updateRecord($id, $data);
-    }
-
-    public function delete(int|string $id): bool
-    {
-        return $this->repository->deleteRecord($id);
+        return $this->repository->deleteAllForUser($userId);
     }
 }
