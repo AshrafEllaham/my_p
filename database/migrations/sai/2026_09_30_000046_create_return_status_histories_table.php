@@ -13,8 +13,8 @@ return new class extends Migration
         Schema::create('return_status_histories', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('return_request_id')->constrained('return_requests')->cascadeOnDelete();
-            $table->enum('from_status', ReturnStatusEnum::values())->nullable();
-            $table->enum('to_status', ReturnStatusEnum::values());
+            $table->string('from_status')->nullable();
+            $table->string('to_status');
             $table->nullableMorphs('actor');
             $table->text('note')->nullable();
             $table->timestamps();

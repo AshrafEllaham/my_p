@@ -16,8 +16,8 @@ return new class extends Migration
             $table->uuid('public_id')->unique(); // معرف عام فريد يمكن استخدامه في واجهات برمجة التطبيقات أو الروابط العامة.
             $table->foreignId('wallet_id')->constrained('wallets')->restrictOnDelete();
             $table->foreignId('counterparty_wallet_id')->nullable()->constrained('wallets')->nullOnDelete(); // يخزن المحفظة المقابلة في حالة التحويل بين المحافظ.
-            $table->enum('type', WalletTransactionTypeEnum::values())->index();
-            $table->enum('status', WalletTransactionStatusEnum::values())
+            $table->string('type')->index();
+            $table->string('status')
                 ->default(WalletTransactionStatusEnum::Pending->value)
                 ->index();
             $table->decimal('amount', 14, 2);

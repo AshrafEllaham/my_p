@@ -13,8 +13,8 @@ return new class extends Migration
         Schema::create('order_status_histories', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('order_id')->constrained('orders')->cascadeOnDelete();
-            $table->enum('from_status', OrderStatusEnum::values())->nullable();
-            $table->enum('to_status', OrderStatusEnum::values());
+            $table->string('from_status')->nullable();
+            $table->string('to_status');
             $table->foreignId('actor_id')->nullable()->constrained('users')->nullOnDelete();
             $table->text('note')->nullable();
             $table->json('metadata')->nullable();

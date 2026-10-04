@@ -15,14 +15,14 @@ return new class extends Migration
             $table->id();
             $table->foreignId('store_id')->constrained('stores')->cascadeOnDelete();
             $table->string('code', 32);
-            $table->enum('discount_type', CouponDiscountTypeEnum::values());
+            $table->string('discount_type');
             $table->decimal('discount_value', 12, 2);
             $table->decimal('minimum_order_amount', 12, 2)->default(0);
             $table->decimal('maximum_discount_amount', 12, 2)->nullable();
             $table->unsignedInteger('max_uses')->nullable();
             $table->unsignedInteger('max_uses_per_user')->default(1);
             $table->unsignedInteger('uses_count')->default(0);
-            $table->enum('status', CouponStatusEnum::values())->default(CouponStatusEnum::Active->value)->index();
+            $table->string('status')->default(CouponStatusEnum::Active->value)->index();
             $table->timestamp('starts_at')->nullable()->index();
             $table->timestamp('expires_at')->nullable()->index();
             $table->timestamps();

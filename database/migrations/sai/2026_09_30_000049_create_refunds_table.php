@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('return_request_id')->nullable()->unique()->constrained('return_requests')->nullOnDelete();
             $table->foreignId('order_dispute_id')->nullable()->unique()->constrained('order_disputes')->nullOnDelete();
             $table->foreignId('wallet_transaction_id')->nullable()->unique()->constrained('wallet_transactions')->nullOnDelete();
-            $table->enum('status', WalletTransactionStatusEnum::values())
+            $table->string('status')
                 ->default(WalletTransactionStatusEnum::Pending->value)
                 ->index();
             $table->decimal('amount', 14, 2);

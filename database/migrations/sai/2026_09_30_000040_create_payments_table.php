@@ -16,8 +16,8 @@ return new class extends Migration
             $table->uuid('public_id')->unique();
             $table->foreignId('order_id')->constrained('orders')->restrictOnDelete();
             $table->foreignId('wallet_transaction_id')->nullable()->constrained('wallet_transactions')->nullOnDelete();
-            $table->enum('status', PaymentStatusEnum::values())->default(PaymentStatusEnum::Pending->value)->index();
-            $table->enum('method', PaymentMethodEnum::values())->default(PaymentMethodEnum::Wallet->value);
+            $table->string('status')->default(PaymentStatusEnum::Pending->value)->index();
+            $table->string('method')->default(PaymentMethodEnum::Wallet->value);
             $table->decimal('amount', 14, 2);
             $table->char('currency', 3)->default('EGP');
             $table->string('idempotency_key')->unique();

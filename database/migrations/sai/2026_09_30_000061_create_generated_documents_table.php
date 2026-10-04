@@ -16,8 +16,8 @@ return new class extends Migration
             $table->uuid('public_id')->unique();
             $table->morphs('owner');
             $table->nullableMorphs('source');
-            $table->enum('type', GeneratedDocumentTypeEnum::values())->index();
-            $table->enum('status', RequestStatusEnum::values())->default(RequestStatusEnum::Pending->value)->index();
+            $table->string('type')->index();
+            $table->string('status')->default(RequestStatusEnum::Pending->value)->index();
             $table->string('title');
             $table->string('file_path')->nullable();
             $table->date('period_from')->nullable();

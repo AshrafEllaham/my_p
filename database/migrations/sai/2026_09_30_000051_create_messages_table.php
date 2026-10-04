@@ -14,7 +14,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('conversation_id')->constrained('conversations')->cascadeOnDelete();
             $table->foreignId('sender_id')->constrained('users')->restrictOnDelete();
-            $table->enum('type', MessageTypeEnum::values())->default(MessageTypeEnum::Text->value);
+            $table->string('type')->default(MessageTypeEnum::Text->value);
             $table->text('body')->nullable();
             $table->string('attachment_path')->nullable();
             $table->json('metadata')->nullable();

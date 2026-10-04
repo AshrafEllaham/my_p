@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('phone_code', 5)->nullable();
             $table->string('phone', 32)->nullable();
             $table->string('password')->nullable();
-            $table->enum('account_type', AccountTypeEnum::values())->nullable()->index();
-            $table->enum('status', UserStatusEnum::values())->default(UserStatusEnum::PendingVerification->value)->index();
+            $table->string('account_type')->nullable()->index();
+            $table->string('status')->default(UserStatusEnum::PendingVerification->value)->index();
 
             $table->foreignId('country_id')->nullable()->constrained('countries')->nullOnDelete();
             $table->foreignId('governorate_id')->nullable()->constrained('governorates')->nullOnDelete();

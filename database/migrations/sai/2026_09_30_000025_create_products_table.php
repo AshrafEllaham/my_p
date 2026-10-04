@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('sku')->nullable();
             $table->string('slug');
-            $table->enum('status', ProductStatusEnum::values())->default(ProductStatusEnum::Draft->value)->index();
+            $table->string('status')->default(ProductStatusEnum::Draft->value)->index();
             $table->decimal('price', 12, 2); // يخزن سعر المنتج الحالي الذي يراه العملاء.
             $table->decimal('original_price', 12, 2)->nullable(); // يخزن السعر الأصلي للمنتج قبل أي خصم أو تخفيض.
             $table->decimal('discount_percentage', 5, 2)->nullable(); // يخزن نسبة الخصم الاختيارية التي يحددها التاجر.

@@ -39,7 +39,7 @@ class RegistrationOtpService
             ]);
         });
 
-        return ['verification_expires_at' => $expiresAt->toISOString()];
+        return ['verification_expires_at' => $expiresAt->format('Y-m-d H:i:s')];
     }
 
     /** @param array{phone_code: string, phone: string, code: string} $data
@@ -72,7 +72,7 @@ class RegistrationOtpService
             }
 
             // Return the expiration time of the OTP in ISO 8601 format.
-            return $otp->expires_at->toISOString();
+            return $otp->expires_at->format('Y-m-d H:i:s');
         });
 
         // If the OTP was not found, expired, or exceeded the maximum attempts, throw a validation exception.

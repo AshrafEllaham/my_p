@@ -15,7 +15,7 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
             $table->integer('quantity_change');
             $table->unsignedInteger('quantity_after');
-            $table->enum('reason', InventoryMovementReasonEnum::values());
+            $table->string('reason');
             $table->nullableMorphs('reference');
             $table->nullableMorphs('actor');
             $table->text('note')->nullable();

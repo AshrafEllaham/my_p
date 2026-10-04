@@ -15,7 +15,7 @@ return new class extends Migration
             $table->foreignId('store_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('store_role_id')->constrained('store_roles')->restrictOnDelete();
-            $table->enum('status', TeamMemberStatusEnum::values())->default(TeamMemberStatusEnum::Invited->value)->index();
+            $table->string('status')->default(TeamMemberStatusEnum::Invited->value)->index();
             $table->foreignId('invited_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamp('invited_at')->nullable();
             $table->timestamp('joined_at')->nullable();

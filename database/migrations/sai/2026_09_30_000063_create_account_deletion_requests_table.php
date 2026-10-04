@@ -14,7 +14,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('public_id')->unique();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->enum('status', RequestStatusEnum::values())->default(RequestStatusEnum::Pending->value)->index();
+            $table->string('status')->default(RequestStatusEnum::Pending->value)->index();
             $table->text('reason')->nullable();
             $table->timestamp('scheduled_for')->index();
             $table->timestamp('completed_at')->nullable();

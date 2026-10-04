@@ -14,7 +14,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
-            $table->enum('reason', ProductReportReasonEnum::values());
+            $table->string('reason');
             $table->text('details')->nullable();
             $table->timestamp('resolved_at')->nullable()->index();
             $table->timestamps();

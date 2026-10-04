@@ -24,11 +24,11 @@ return new class extends Migration
             $table->string('title', 120);
             $table->string('action_label', 60)->nullable();
             $table->text('caption')->nullable();
-            $table->enum('placement', AdPlacementEnum::values())->index(); // يخزن موضع الإعلان في التطبيق (على سبيل المثال: الصفحة الرئيسية، صفحة المنتج، صفحة الفئة).
-            $table->enum('action', AdActionEnum::values()); // يخزن نوع الإجراء الذي يحدث عند النقر على الإعلان (على سبيل المثال: فتح صفحة المنتج، فتح صفحة الفئة، فتح رابط خارجي).
-            $table->enum('media_type', MediaTypeEnum::values())->default(MediaTypeEnum::Image->value);
+            $table->string('placement')->index(); // يخزن موضع الإعلان في التطبيق (على سبيل المثال: الصفحة الرئيسية، صفحة المنتج، صفحة الفئة).
+            $table->string('action'); // يخزن نوع الإجراء الذي يحدث عند النقر على الإعلان (على سبيل المثال: فتح صفحة المنتج، فتح صفحة الفئة، فتح رابط خارجي).
+            $table->string('media_type')->default(MediaTypeEnum::Image->value);
             $table->string('media_path');
-            $table->enum('status', AdStatusEnum::values())->default(AdStatusEnum::Draft->value)->index();
+            $table->string('status')->default(AdStatusEnum::Draft->value)->index();
             $table->decimal('cost', 12, 2);
             $table->char('currency', 3)->default('EGP');
             $table->timestamp('starts_at')->nullable()->index();

@@ -13,7 +13,7 @@ return new class extends Migration
         Schema::create('product_media', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
-            $table->enum('type', MediaTypeEnum::values())->default(MediaTypeEnum::Image->value);
+            $table->string('type')->default(MediaTypeEnum::Image->value);
             $table->string('path');
             $table->boolean('is_primary')->default(false);
             $table->timestamps();

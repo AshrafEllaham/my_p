@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('question');
             $table->string('prize', 160);
             $table->string('image')->nullable();
-            $table->enum('status', CompetitionStatusEnum::values())->default(CompetitionStatusEnum::Active->value)->index();
+            $table->string('status')->default(CompetitionStatusEnum::Active->value)->index();
             $table->string('correct_answer')->nullable();
             $table->string('normalized_correct_answer')->nullable()->index(); // يخزن نسخة من الإجابة الصحيحة بعد إزالة المسافات وعلامات التشكيل لتسهيل المطابقة مع إجابات المستخدمين.
             $table->timestamp('ends_at')->index();

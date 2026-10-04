@@ -19,8 +19,8 @@ return new class extends Migration
             $table->foreignId('store_id')->constrained('users')->restrictOnDelete();
             $table->foreignId('coupon_id')->nullable()->constrained('coupons')->nullOnDelete();
             $table->foreignId('store_policy_version_id')->constrained('store_policy_versions')->restrictOnDelete();
-            $table->enum('status', OrderStatusEnum::values())->default(OrderStatusEnum::PendingStore->value)->index();
-            $table->enum('payment_status', PaymentStatusEnum::values())->default(PaymentStatusEnum::Pending->value)->index();
+            $table->string('status')->default(OrderStatusEnum::PendingStore->value)->index();
+            $table->string('payment_status')->default(PaymentStatusEnum::Pending->value)->index();
             $table->decimal('subtotal', 14, 2); // يخزن المبلغ الإجمالي للمنتجات قبل أي خصومات أو رسوم أو عمولات.
             $table->decimal('discount_amount', 14, 2)->default(0); // يخزن مبلغ الخصم المحتسب من الكوبون أو العروض الترويجية.
             $table->decimal('total_amount', 14, 2); // يخزن المبلغ الإجمالي النهائي بعد خصم أي خصومات وإضافة أي رسوم أو عمولات.

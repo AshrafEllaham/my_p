@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('store_verification_submissions', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('store_id')->constrained('users')->cascadeOnDelete();
-            $table->enum('status', UserStatusEnum::values())->default(UserStatusEnum::PendingVerification->value)->index();
+            $table->string('status')->default(UserStatusEnum::PendingVerification->value)->index();
             $table->text('review_note')->nullable();
             $table->timestamp('submitted_at')->index();
             $table->timestamp('reviewed_at')->nullable();

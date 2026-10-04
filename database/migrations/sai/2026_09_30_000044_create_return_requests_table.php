@@ -17,12 +17,12 @@ return new class extends Migration
             $table->foreignId('order_id')->unique()->constrained('orders')->restrictOnDelete();
             $table->foreignId('user_id')->constrained('users')->restrictOnDelete();
             $table->foreignId('store_id')->constrained('users')->restrictOnDelete();
-            $table->enum('status', ReturnStatusEnum::values())->default(ReturnStatusEnum::PendingReview->value)->index();
+            $table->string('status')->default(ReturnStatusEnum::PendingReview->value)->index();
             $table->string('reason', 100);
             $table->text('details');
             $table->decimal('requested_amount', 14, 2);
             $table->decimal('approved_amount', 14, 2)->nullable();
-            $table->enum('resolution_type', ReturnResolutionTypeEnum::values())->nullable();
+            $table->string('resolution_type')->nullable();
             $table->text('merchant_note')->nullable();
             $table->timestamp('decided_at')->nullable();
             $table->timestamp('product_received_at')->nullable();

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('order_id')->unique()->constrained('orders')->restrictOnDelete();
             $table->foreignId('opened_by')->constrained('users')->restrictOnDelete();
             $table->foreignId('store_id')->constrained('users')->restrictOnDelete();
-            $table->enum('status', DisputeStatusEnum::values())->default(DisputeStatusEnum::Open->value)->index();
+            $table->string('status')->default(DisputeStatusEnum::Open->value)->index();
             $table->string('reason', 100);
             $table->text('details');
             $table->text('resolution_note')->nullable();
