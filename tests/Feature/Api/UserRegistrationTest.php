@@ -38,8 +38,11 @@ class UserRegistrationTest extends TestCase
             ->assertJsonPath('data.phone', '1012345678')
             ->assertJsonPath('data.status', UserStatusEnum::Active->value)
             ->assertJsonPath('data.verification_required', false)
+            ->assertJsonPath('data.token_type', 'bearer')
             ->assertJsonMissingPath('data.password')
             ->assertJsonMissingPath('data.otp');
+
+        $this->assertIsString($response->json('data.access_token'));
 
         $user = User::query()->where('email', 'new.user@example.com')->firstOrFail();
 

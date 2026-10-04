@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Sai;
 
+use App\Helpers\ImageHelper;
 use App\Models\Sai\User;
 use App\Repositories\MainRepository;
 use Illuminate\Database\Eloquent\Builder;
@@ -38,6 +39,17 @@ class UserRepository extends MainRepository
     public function updateRecord(int|string $id, array $data): Model
     {
         $record = $this->findOrFail($id);
+        $record->fill($data);
+        $record->save();
+
+        return $record;
+    }
+
+    /** @param array<string, mixed> $data */
+    public function updateProfile(int|string $id, array $data): Model
+    {
+        $record = $this->findOrFail($id);
+        $data['avatar'] = ImageHelper::upload($data['avatar'], 'users/avatars', $record->avatar);
         $record->fill($data);
         $record->save();
 

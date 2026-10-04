@@ -98,26 +98,26 @@
         </div>
       </div>
       <div class="barq-dropdown-menu" id="govMenu">
-        <div class="barq-dropdown-item" data-gov="القاهرة">القاهرة</div>
-        <div class="barq-dropdown-item" data-gov="الجيزة">الجيزة</div>
-        <div class="barq-dropdown-item" data-gov="الإسكندرية">الإسكندرية</div>
-        <div class="barq-dropdown-item" data-gov="الشرقية">الشرقية</div>
-        <div class="barq-dropdown-item" data-gov="الدقهلية">الدقهلية</div>
-        <div class="barq-dropdown-item" data-gov="القليوبية">القليوبية</div>
-        <div class="barq-dropdown-item" data-gov="البحيرة">البحيرة</div>
+        <div class="barq-dropdown-item" data-gov="القاهرة" data-gov-id="1">القاهرة</div>
+        <div class="barq-dropdown-item" data-gov="الجيزة" data-gov-id="2">الجيزة</div>
+        <div class="barq-dropdown-item" data-gov="الإسكندرية" data-gov-id="3">الإسكندرية</div>
+        <div class="barq-dropdown-item" data-gov="الشرقية" data-gov-id="6">الشرقية</div>
+        <div class="barq-dropdown-item" data-gov="الدقهلية" data-gov-id="5">الدقهلية</div>
+        <div class="barq-dropdown-item" data-gov="القليوبية" data-gov-id="4">القليوبية</div>
+        <div class="barq-dropdown-item" data-gov="البحيرة" data-gov-id="9">البحيرة</div>
       </div>
     </div>
 
     <!-- Actions Area -->
     <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 14px;">
       <!-- Primary Button: متابعة -->
-      <a class="barq-btn-primary" href="04-account-type.html">متابعة</a>
+      <button class="barq-btn-primary" id="saveLocationButton" type="button">متابعة</button>
 
       <!-- Divider: أو -->
       <div class="barq-divider">أو</div>
 
       <!-- Secondary Button: تخطي الآن -->
-      <a class="barq-btn-secondary" href="04-account-type.html">تخطي الآن</a>
+      <button class="barq-btn-secondary" id="skipLocationButton" type="button">تخطي الآن</button>
     </div>
 
   </main>
@@ -129,6 +129,7 @@
     const govBox = document.getElementById('govBox');
     const govMenu = document.getElementById('govMenu');
     const govValue = document.getElementById('govValue');
+    let selectedGovernorateId = null;
 
     govBox.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -138,6 +139,7 @@
     document.querySelectorAll('.barq-dropdown-item').forEach(item => {
       item.addEventListener('click', () => {
         const gov = item.dataset.gov;
+        selectedGovernorateId = Number(item.dataset.govId);
         govValue.textContent = gov;
         govValue.classList.remove('placeholder');
         govMenu.classList.remove('open');
@@ -148,6 +150,19 @@
       if (!govBox.contains(e.target) && !govMenu.contains(e.target)) {
         govMenu.classList.remove('open');
       }
+    });
+
+    document.getElementById('saveLocationButton').addEventListener('click', () => {
+      sessionStorage.setItem('saey_onboarding_location', JSON.stringify({
+        country_id: 1,
+        ...(selectedGovernorateId ? { governorate_id: selectedGovernorateId } : {})
+      }));
+      location.href = '04-account-type.html';
+    });
+
+    document.getElementById('skipLocationButton').addEventListener('click', () => {
+      sessionStorage.removeItem('saey_onboarding_location');
+      location.href = '04-account-type.html';
     });
   </script>
 </body>

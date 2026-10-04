@@ -65,7 +65,7 @@
           </svg>
         </div>
         <div class="barq-role-content">
-          <div class="barq-role-title">حساب موزع</div>
+          <div class="barq-role-title">حساب متجر</div>
           <div class="barq-role-desc">لإنشاء متجر، عرض المنتجات، وإدارة طلبات الاستلام</div>
           <div class="barq-role-note">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
@@ -77,7 +77,8 @@
     </div>
 
     <!-- Primary Action Button: متابعة -->
-    <a class="barq-btn-primary" id="continueBtn" href="06-distributor-setup.html" style="margin-top: 14px;">متابعة</a>
+    <p class="auth-form-error" id="accountTypeError" hidden></p>
+    <button class="barq-btn-primary" id="continueBtn" type="button" style="margin-top: 14px;">متابعة</button>
 
   </main>
 
@@ -88,17 +89,67 @@
     const cardPersonal = document.getElementById('cardPersonal');
     const cardDistributor = document.getElementById('cardDistributor');
     const continueBtn = document.getElementById('continueBtn');
+    const accountTypeError = document.getElementById('accountTypeError');
+    let selectedAccountType = 'store';
 
     cardPersonal.addEventListener('click', () => {
       cardPersonal.classList.add('selected');
       cardDistributor.classList.remove('selected');
-      continueBtn.href = '08-profile-setup.html';
+      selectedAccountType = 'user';
     });
 
     cardDistributor.addEventListener('click', () => {
       cardDistributor.classList.add('selected');
       cardPersonal.classList.remove('selected');
-      continueBtn.href = '06-distributor-setup.html';
+      selectedAccountType = 'store';
+    });
+
+    continueBtn.addEventListener('click', async () => {
+      const signupDraft = JSON.parse(sessionStorage.getItem('saey_signup_draft') || 'null');
+      const locationData = JSON.parse(sessionStorage.getItem('saey_onboarding_location') || '{}');
+
+      if (!signupDraft?.userId) {
+        accountTypeError.textContent = 'أكمل إنشاء الحساب أولًا حتى يمكن حفظ نوع الحساب.';
+        accountTypeError.hidden = false;
+        return;
+      }
+
+      accountTypeError.hidden = true;
+      continueBtn.disabled = true;
+      continueBtn.setAttribute('aria-busy', 'true');
+      continueBtn.textContent = 'جارٍ حفظ الاختيار…';
+
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/api/accounts/${signupDraft.userId}/type`, {
+          method: 'PATCH',
+          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ account_type: selectedAccountType, ...locationData })
+        });
+        const result = await response.json();
+
+        if (!response.ok) {
+          const firstError = Object.values(result.errors || {}).flat()[0];
+          throw new Error(firstError || result.message || 'تعذر حفظ نوع الحساب. حاول مرة أخرى.');
+        }
+
+        sessionStorage.setItem('saey_signup_draft', JSON.stringify({
+          ...signupDraft,
+          accountType: result.data?.account_type,
+          countryId: result.data?.country_id,
+          governorateId: result.data?.governorate_id,
+          cityId: result.data?.city_id
+        }));
+        sessionStorage.removeItem('saey_onboarding_location');
+        location.href = selectedAccountType === 'store' ? '06-distributor-setup.html' : '08-profile-setup.html';
+      } catch (requestError) {
+        accountTypeError.textContent = requestError instanceof TypeError
+          ? 'تعذر الاتصال بالخادم. تحقق من تشغيل API ثم أعد المحاولة.'
+          : requestError.message;
+        accountTypeError.hidden = false;
+        continueBtn.disabled = false;
+        continueBtn.removeAttribute('aria-busy');
+        continueBtn.textContent = 'متابعة';
+      }
     });
   </script>
 </body>

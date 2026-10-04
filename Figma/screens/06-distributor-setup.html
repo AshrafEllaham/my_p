@@ -183,12 +183,12 @@
         </div>
         <!-- Category Dropdown Menu -->
         <div class="barq-dropdown-menu" id="categoryMenu">
-          <div class="barq-dropdown-item" data-cat="أجهزة وإلكترونيات"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M10 17h4"/></svg><span>أجهزة وإلكترونيات</span></div>
-          <div class="barq-dropdown-item" data-cat="مواد غذائية وتوزيع"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16M6 8v11h12V8M9 8V5h6v3M8 12h8"/></svg><span>مواد غذائية وتوزيع</span></div>
-          <div class="barq-dropdown-item" data-cat="أزياء وملابس"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 4 4 3 4-3 4 4-3 3v9H7v-9L4 8l4-4Z"/></svg><span>أزياء وملابس</span></div>
-          <div class="barq-dropdown-item" data-cat="عناية ومنظفات"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4h6M10 4v3l-2 2v10h8V9l-2-2V4M8 13h8"/></svg><span>عناية ومنظفات</span></div>
-          <div class="barq-dropdown-item" data-cat="أدوات منزلية ومكتبية"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-7 9 7M5 10v10h14V10M9 20v-6h6v6"/></svg><span>أدوات منزلية ومكتبية</span></div>
-          <div class="barq-dropdown-item" data-cat="قطع غيار ومعدات"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5a5 5 0 0 0-5 5c0 .8.2 1.5.5 2.2L4 17.7 6.3 20l5.5-5.5c.7.3 1.4.5 2.2.5a5 5 0 0 0 5-5c0-.8-.2-1.5-.5-2.2L15 11l-2-2 3.2-3.2A5 5 0 0 0 14 5Z"/></svg><span>قطع غيار ومعدات</span></div>
+          <div class="barq-dropdown-item" data-cat="أجهزة وإلكترونيات" data-category-id="7"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M10 17h4"/></svg><span>أجهزة وإلكترونيات</span></div>
+          <div class="barq-dropdown-item" data-cat="مواد غذائية وتوزيع" data-category-id="24"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16M6 8v11h12V8M9 8V5h6v3M8 12h8"/></svg><span>مواد غذائية وتوزيع</span></div>
+          <div class="barq-dropdown-item" data-cat="أزياء وملابس" data-category-id="1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 4 4 3 4-3 4 4-3 3v9H7v-9L4 8l4-4Z"/></svg><span>أزياء وملابس</span></div>
+          <div class="barq-dropdown-item" data-cat="عناية ومنظفات" data-category-id="24"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4h6M10 4v3l-2 2v10h8V9l-2-2V4M8 13h8"/></svg><span>عناية ومنظفات</span></div>
+          <div class="barq-dropdown-item" data-cat="أدوات منزلية ومكتبية" data-category-id="24"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-7 9 7M5 10v10h14V10M9 20v-6h6v6"/></svg><span>أدوات منزلية ومكتبية</span></div>
+          <div class="barq-dropdown-item" data-cat="قطع غيار ومعدات" data-category-id="18"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5a5 5 0 0 0-5 5c0 .8.2 1.5.5 2.2L4 17.7 6.3 20l5.5-5.5c.7.3 1.4.5 2.2.5a5 5 0 0 0 5-5c0-.8-.2-1.5-.5-2.2L15 11l-2-2 3.2-3.2A5 5 0 0 0 14 5Z"/></svg><span>قطع غيار ومعدات</span></div>
         </div>
       </div>
 
@@ -209,6 +209,13 @@
             </svg>
           </div>
           <textarea id="storeDesc" maxlength="200" placeholder="اكتب نبذة مختصرة عن نشاط المتجر، المنتجات المتوفرة، والخدمات للعملاء..."></textarea>
+        </div>
+      </div>
+
+      <div class="barq-input-card">
+        <label class="barq-input-label" for="storeAddress">عنوان المتجر</label>
+        <div class="barq-input-inner">
+          <input type="text" id="storeAddress" placeholder="المحافظة، الحي، الشارع">
         </div>
       </div>
 
@@ -235,7 +242,7 @@
 
     <!-- CTA Button -->
     <div class="store-setup-cta" style="margin-top: 18px; margin-bottom: 24px;">
-      <a class="barq-btn-primary" href="17-distributor-dashboard.html" id="saveStoreBtn">إرسال للمراجعة والمتابعة</a>
+      <button class="barq-btn-primary" type="button" id="saveStoreBtn">إرسال للمراجعة والمتابعة</button>
     </div>
 
   </main>
@@ -249,7 +256,6 @@
     const coverUploadBtn = document.getElementById('coverUploadBtn');
     const coverInput = document.getElementById('coverInput');
     const coverOverlay = document.getElementById('coverOverlay');
-    document.getElementById('saveStoreBtn').addEventListener('click',event=>{const owner=document.getElementById('ownerName').value.trim(),registration=document.getElementById('merchantRegistration').value.trim(),iban=document.getElementById('merchantIban').value.replace(/\s+/g,'').toUpperCase(),documentFile=document.getElementById('merchantDocument').files[0],error=document.getElementById('activationError');if(owner.length<3||registration.length<5||!/^EG[A-Z0-9]{20,40}$/.test(iban)||!documentFile){event.preventDefault();error.textContent='أكمل بيانات المسؤول ورقم التسجيل وIBAN صحيح وارفع مستند إثبات النشاط.';error.style.display='block';return}localStorage.setItem('saey_merchant_activation_v1',JSON.stringify({status:'pending_review',owner,registration,ibanLast4:iban.slice(-4),documentName:documentFile.name,submittedAt:new Date().toISOString()}));const finance=JSON.parse(localStorage.getItem('saey_merchant_finance_v1')||'{}');finance.bank={...(finance.bank||{}),holder:owner,iban};localStorage.setItem('saey_merchant_finance_v1',JSON.stringify(finance));});
 
     coverUploadBtn.addEventListener('click', () => coverInput.click());
     coverInput.addEventListener('change', (e) => {
@@ -290,6 +296,7 @@
     const categoryBox = document.getElementById('categoryBox');
     const categoryMenu = document.getElementById('categoryMenu');
     const categoryValue = document.getElementById('categoryValue');
+    let selectedCategoryId = null;
 
     categoryBox.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -300,6 +307,7 @@
     document.querySelectorAll('#categoryMenu .barq-dropdown-item').forEach(item => {
       item.addEventListener('click', () => {
         const selectedCategory = item.dataset.cat || item.textContent.trim();
+        selectedCategoryId = Number(item.dataset.categoryId);
         categoryValue.textContent = selectedCategory;
         localStorage.setItem('saeyStoreCategory', selectedCategory);
         categoryValue.classList.remove('placeholder');
@@ -318,6 +326,72 @@
     const descCounter = document.getElementById('descCounter');
     storeDesc.addEventListener('input', () => {
       descCounter.textContent = `${storeDesc.value.length} / 200`;
+    });
+
+    document.getElementById('saveStoreBtn').addEventListener('click', async event => {
+      const button = event.currentTarget;
+      const token = localStorage.getItem('saey_api_token');
+      const name = document.getElementById('storeName').value.trim();
+      const image = avatarInput.files[0];
+      const cover = coverInput.files[0];
+      const description = storeDesc.value.trim();
+      const address = document.getElementById('storeAddress').value.trim();
+      const owner = document.getElementById('ownerName').value.trim();
+      const registration = document.getElementById('merchantRegistration').value.trim();
+      const iban = document.getElementById('merchantIban').value.replace(/\s+/g, '').toUpperCase();
+      const documentFile = document.getElementById('merchantDocument').files[0];
+      const error = document.getElementById('activationError');
+
+      if (!token || name.length < 2 || !image || !selectedCategoryId) {
+        error.textContent = !token
+          ? 'انتهت جلسة التسجيل. أعد إنشاء الحساب ثم حاول مرة أخرى.'
+          : 'أدخل اسم المتجر واختر صورته وتصنيفه للمتابعة.';
+        error.style.display = 'block';
+        return;
+      }
+      if (owner.length < 3 || registration.length < 5 || !/^EG[A-Z0-9]{20,40}$/.test(iban) || !documentFile) {
+        error.textContent = 'أكمل بيانات المسؤول ورقم التسجيل وIBAN صحيح وارفع مستند إثبات النشاط.';
+        error.style.display = 'block';
+        return;
+      }
+
+      const body = new FormData();
+      body.append('name', name);
+      body.append('image', image);
+      body.append('category_id', String(selectedCategoryId));
+      if (description) body.append('description', description);
+      if (cover) body.append('cover', cover);
+      if (address) body.append('address', address);
+
+      error.style.display = 'none';
+      button.disabled = true;
+      button.textContent = 'جارٍ حفظ ملف المتجر…';
+
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/store/profile', {
+          method: 'POST',
+          headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` },
+          body
+        });
+        const result = await response.json();
+        if (!response.ok) {
+          const firstError = Object.values(result.errors || {}).flat()[0];
+          throw new Error(firstError || result.message || 'تعذر حفظ ملف المتجر.');
+        }
+
+        localStorage.setItem('saey_merchant_activation_v1', JSON.stringify({status:'pending_review', owner, registration, ibanLast4:iban.slice(-4), documentName:documentFile.name, submittedAt:new Date().toISOString()}));
+        const finance = JSON.parse(localStorage.getItem('saey_merchant_finance_v1') || '{}');
+        finance.bank = {...(finance.bank || {}), holder:owner, iban};
+        localStorage.setItem('saey_merchant_finance_v1', JSON.stringify(finance));
+        location.href = '17-distributor-dashboard.html';
+      } catch (requestError) {
+        error.textContent = requestError instanceof TypeError
+          ? 'تعذر الاتصال بالخادم. تحقق من تشغيل API ثم أعد المحاولة.'
+          : requestError.message;
+        error.style.display = 'block';
+        button.disabled = false;
+        button.textContent = 'إرسال للمراجعة والمتابعة';
+      }
     });
   </script>
 

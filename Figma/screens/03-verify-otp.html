@@ -150,6 +150,7 @@
           const registerResult=await registerResponse.json();
           if(!registerResponse.ok){const firstError=Object.values(registerResult.errors||{}).flat()[0];throw new Error(firstError||registerResult.message||'تعذر إنشاء الحساب.');}
           sessionStorage.setItem('saey_signup_draft',JSON.stringify({phone_code:signupDraft.phone_code,phone:signupDraft.phone,email:signupDraft.email,userId:registerResult.data?.id}));
+          localStorage.setItem('saey_api_token',registerResult.data?.access_token||'');
         } else {
           localStorage.setItem('saey_otp_verified_at',new Date().toISOString());
         }

@@ -37,6 +37,7 @@ class AuthApiController extends Controller
     public function store(RegisterUserRequest $request): JsonResponse
     {
         $user = $this->service->register($request->validated(), app()->getLocale());
+        $user->setAttribute('access_token', auth('api')->login($user));
 
         return jsonSuccess(
             RegisteredUserResource::make($user),

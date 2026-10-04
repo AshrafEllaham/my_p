@@ -2341,18 +2341,18 @@
         file: '04-account-type.html',
         title: 'اختر نوع الحساب',
         titleEn: 'Select Account Type',
-        tags: ['Account Type', 'Distributor Role', 'Personal Role', 'Mint Badge'],
-        desc: 'تحديد طبيعة استخدام التطبيق بين حساب شخصي وحساب موزع معتمد مع شارة موصى به للتجار وعلامة صح.',
-        descEn: 'Select account role between Personal and Verified Distributor, highlighting the distributor card with mint badge and checkmark.',
+        tags: ['Account Type', 'Store Role', 'User Role', 'Mint Badge'],
+        desc: 'تحديد طبيعة استخدام التطبيق بين حساب شخصي وحساب متجر، ثم حفظ النوع والموقع الاختياري عبر API العام.',
+        descEn: 'Select a user or store account, then save the type and optional location through the public API.',
         notes: [
-          'كارت حساب موزع محدد بإطار أسود 2px مع شارة "موصى به للتجار" وعلامة صح ✓',
+          'كارت حساب متجر محدد بإطار أسود 2px مع شارة "موصى به للتجار" وعلامة صح ✓',
           'أيقونات زرقاء مخصصة (مستخدم للمشتريات وشاحنة للموزع)',
-          'تنبيه رسمي بأن حساب الموزع يتطلب مراجعة وقبول الإدارة'
+          'يحفظ زر المتابعة نوع الحساب والموقع الاختياري في الحساب المسجل عبر PATCH /api/accounts/{account}/type'
         ],
         notesEn: [
-          'Distributor card highlighted with 2px black border, mint badge, and black checkmark ✓',
+          'Store card highlighted with 2px black border, mint badge, and black checkmark ✓',
           'Custom squircle icons (user for personal, truck for distributor)',
-          'Administrative approval requirement notice'
+          'Continue saves the account type and optional location through PATCH /api/accounts/{account}/type'
         ]
       },
       {
@@ -2386,17 +2386,17 @@
         title: 'توثيق حساب الموزع',
         titleEn: 'Distributor KYC & Setup',
         tags: ['Distributor KYC', 'Commercial Register', 'Store Setup', 'Approval'],
-        desc: 'إدخال بيانات المتجر الأساسية لإكمال ملف المتجر في سعي.',
-        descEn: 'Register distributor storefront details and commercial register for admin approval.',
+        desc: 'إدخال بيانات المتجر الأساسية وحفظ الاسم والصورة والتصنيف والبيانات الاختيارية عبر API ملف المتجر.',
+        descEn: 'Save the store name, image, category, and optional profile data through the store profile API.',
         notes: [
           'مدخلات متداخلة لاسم المؤسسة ورقم السجل التجاري',
           'تنبيه إداري بزمن المراجعة خلال 24 ساعة عمل',
-          'زر إرسال طلب التوثيق للمراجعة'
+          'يحفظ النموذج ملف المتجر عبر POST /api/store/profile قبل إرسال بيانات التوثيق للمراجعة'
         ],
         notesEn: [
           'Nested card inputs for business name and commercial register',
           '24-hour SLA verification notice card',
-          'Clear 24-hour review timeline notification'
+          'The form saves the profile through POST /api/store/profile before continuing to review'
         ]
       },
       {
@@ -2735,17 +2735,17 @@
       title: 'إكمال الملف الشخصي',
       titleEn: 'Complete Personal Profile',
       tags: ['Personal Profile', 'Avatar', 'Name', 'Address'],
-      desc: 'استكمال صورة المستخدم واسمه وعنوانه بعد اختيار الحساب الشخصي.',
-      descEn: 'Complete the avatar, full name, and address after selecting a personal account.',
+      desc: 'استكمال اسم المستخدم وصورته المطلوبة وعنوانه الاختياري وحفظها عبر API الملف الشخصي.',
+      descEn: 'Save the required user name and image plus the optional address through the profile API.',
       notes: [
         'تظهر فقط عند اختيار «حساب شخصي»',
         'تتضمن الصورة والاسم والعنوان',
-        'زر بدء التسوق ينقل المستخدم للواجهة الرئيسية'
+        'زر بدء التسوق يحفظ البيانات عبر POST /api/user/profile ثم ينقل المستخدم للرئيسية'
       ],
       notesEn: [
         'Shown only after selecting a personal account',
         'Includes avatar, name, and address',
-        'Start shopping continues to the app home'
+        'Start shopping saves through POST /api/user/profile before continuing home'
       ]
     });
 

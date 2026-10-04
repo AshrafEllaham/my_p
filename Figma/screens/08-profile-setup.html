@@ -39,12 +39,13 @@
     <!-- Avatar Upload Section -->
     <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 18px;">
       <div style="position: relative;">
-        <div id="userAvatarWrap" style="width: 92px; height: 92px; border-radius: 28px; background: #F1F5F9; border: 3px solid #FFFFFF; box-shadow: 0 8px 24px rgba(15,23,42,0.08); display: grid; place-items: center; color: #000000; overflow: hidden; cursor: pointer;">
+        <div id="userAvatarWrap" role="button" tabindex="0" aria-label="اختيار الصورة الشخصية" style="width: 92px; height: 92px; border-radius: 28px; background: #F1F5F9; border: 3px solid #FFFFFF; box-shadow: 0 8px 24px rgba(15,23,42,0.08); display: grid; place-items: center; color: #000000; overflow: hidden; cursor: pointer; background-size: cover; background-position: center;">
           <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="8" r="4"/>
             <path d="M20 21a8 8 0 0 0-16 0"/>
           </svg>
         </div>
+        <input id="userImage" type="file" accept="image/jpeg,image/png,image/webp" hidden>
         <div style="position: absolute; bottom: -2px; left: -2px; width: 28px; height: 28px; border-radius: 50%; background: #000000; border: 2.5px solid #FFFFFF; color: #FFFFFF; display: grid; place-items: center; box-shadow: 0 2px 6px rgba(0, 0, 0,0.35); cursor: pointer;">
           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
@@ -52,7 +53,7 @@
           </svg>
         </div>
       </div>
-      <span style="font-size: 12px; font-weight: 700; color: #000000; cursor: pointer;">تغيير الصورة الشخصية</span>
+      <span style="font-size: 12px; font-weight: 700; color: #000000; cursor: pointer;">الصورة الشخصية مطلوبة</span>
     </div>
 
     <!-- Full Name Input -->
@@ -88,12 +89,79 @@
     </p>
 
     <div style="margin-top: auto; margin-bottom: 20px;">
-      <a class="barq-btn-primary" href="08-user-home.html">بدء التسوق</a>
+      <p class="auth-form-error" id="profileError" hidden></p>
+      <button class="barq-btn-primary" id="saveProfileButton" type="button">بدء التسوق</button>
     </div>
 
   </main>
 
   <div class="home-bar"><div class="home-bar-pill"></div></div>
+
+  <script>
+    const userAvatarWrap = document.getElementById('userAvatarWrap');
+    const userImage = document.getElementById('userImage');
+    const saveProfileButton = document.getElementById('saveProfileButton');
+    const profileError = document.getElementById('profileError');
+
+    userAvatarWrap.addEventListener('click', () => userImage.click());
+    userAvatarWrap.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        userImage.click();
+      }
+    });
+    userImage.addEventListener('change', () => {
+      const file = userImage.files[0];
+      if (!file) return;
+      userAvatarWrap.style.backgroundImage = `url('${URL.createObjectURL(file)}')`;
+      userAvatarWrap.querySelector('svg').style.display = 'none';
+    });
+
+    saveProfileButton.addEventListener('click', async () => {
+      const token = localStorage.getItem('saey_api_token');
+      const name = document.getElementById('fullName').value.trim();
+      const image = userImage.files[0];
+      const address = document.getElementById('address').value.trim();
+
+      if (!token || name.length < 2 || !image) {
+        profileError.textContent = !token
+          ? 'انتهت جلسة التسجيل. أعد إنشاء الحساب ثم حاول مرة أخرى.'
+          : 'أدخل الاسم واختر الصورة الشخصية للمتابعة.';
+        profileError.hidden = false;
+        return;
+      }
+
+      const body = new FormData();
+      body.append('name', name);
+      body.append('image', image);
+      if (address) body.append('address', address);
+
+      profileError.hidden = true;
+      saveProfileButton.disabled = true;
+      saveProfileButton.textContent = 'جارٍ حفظ الملف…';
+
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/user/profile', {
+          method: 'POST',
+          headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` },
+          body
+        });
+        const result = await response.json();
+        if (!response.ok) {
+          const firstError = Object.values(result.errors || {}).flat()[0];
+          throw new Error(firstError || result.message || 'تعذر حفظ الملف الشخصي.');
+        }
+        location.href = '08-user-home.html';
+      } catch (requestError) {
+        profileError.textContent = requestError instanceof TypeError
+          ? 'تعذر الاتصال بالخادم. تحقق من تشغيل API ثم أعد المحاولة.'
+          : requestError.message;
+        profileError.hidden = false;
+        saveProfileButton.disabled = false;
+        saveProfileButton.textContent = 'بدء التسوق';
+      }
+    });
+  </script>
 
 </body>
 </html>

@@ -19,6 +19,8 @@ class RegisteredUserResource extends JsonResource
             'phone' => $this->phone,
             'status' => $this->status?->value,
             'verification_required' => false,
+            'access_token' => $this->access_token,
+            'token_type' => 'bearer',
         ];
     }
 }

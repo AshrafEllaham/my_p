@@ -8,6 +8,6 @@ enum AccountTypeEnum: string
 {
     use HasValues;
 
-    case Personal = 'personal';
-    case Merchant = 'merchant';
+    case User = 'user';
+    case Store = 'store';
 }
