@@ -3,70 +3,72 @@
 @section('page-title', __('admin.developer_tools.terminal'))
 
 @section('content')
-    <section class="admin-hero">
+    <section class="admin-hero developer-page-hero">
         <div>
             <span class="admin-eyebrow">{{ __('admin.developer_tools.eyebrow') }}</span>
             <h1>{{ __('admin.developer_tools.terminal') }}</h1>
             <p>{{ __('admin.developer_tools.terminal_description') }}</p>
         </div>
         <a class="admin-button admin-button--secondary" href="{{ route('admin.developer.commands.index') }}">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 5l-4 14"/></svg>
             {{ __('admin.developer_tools.command_list') }}
         </a>
     </section>
 
-    <section class="admin-panel developer-terminal" aria-label="{{ __('admin.developer_tools.terminal') }}">
+    <section class="developer-terminal" aria-label="{{ __('admin.developer_tools.terminal') }}">
         <div class="developer-terminal__topline">
             <div class="developer-terminal__lights" aria-hidden="true"><i></i><i></i><i></i></div>
-            <span>{{ __('admin.developer_tools.project_console') }}</span>
-            <span class="developer-terminal__access">{{ __('admin.developer_tools.developer_access') }}</span>
+            <div class="developer-terminal__identity">
+                <strong>{{ __('admin.developer_tools.project_console') }}</strong>
+                <span dir="ltr">artisan</span>
+            </div>
+            <span class="developer-terminal__access"><i aria-hidden="true"></i>{{ __('admin.developer_tools.developer_access') }}</span>
         </div>
 
         <div class="developer-terminal__controls">
-            <label for="developer-command">{{ __('admin.developer_tools.select_command') }}</label>
-            <select id="developer-command" class="admin-field__control">
-                <option value="">{{ __('admin.developer_tools.choose_command') }}</option>
-                @foreach ($commands as $command)
-                    <option value="{{ $command->command }}">{{ $command->command }}</option>
-                @endforeach
-            </select>
+            <div class="developer-terminal__control-heading">
+                <div>
+                    <span class="developer-terminal__eyebrow">{{ __('admin.developer_tools.execution_workspace') }}</span>
+                    <h2>{{ __('admin.developer_tools.select_command') }}</h2>
+                </div>
+                <span class="developer-terminal__command-count">{{ __('admin.developer_tools.command_count', ['count' => $commands->count()]) }}</span>
+            </div>
+            <div class="developer-terminal__command-picker">
+                <label for="developer-command">{{ __('admin.developer_tools.command') }}</label>
+                <input id="developer-command" class="admin-field__control" type="text" list="developer-command-options" maxlength="255" autocomplete="off" placeholder="{{ __('admin.developer_tools.command_placeholder') }}" aria-describedby="developer-command-hint">
+                <datalist id="developer-command-options">
+                    @foreach ($commands as $command)
+                        <option value="{{ $command->command }}"></option>
+                    @endforeach
+                </datalist>
+                <p id="developer-command-hint" class="developer-terminal__hint">{{ __('admin.developer_tools.command_format_help') }}</p>
+            </div>
             <div class="developer-terminal__actions">
                 <button id="run-command" type="button" class="admin-button admin-button--primary" disabled>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7V5Z"/></svg>
                     {{ __('admin.developer_tools.run_command') }}
                 </button>
                 <button id="clear-output" type="button" class="admin-button admin-button--secondary">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 14h10l1-14M9 7V4h6v3"/></svg>
                     {{ __('admin.developer_tools.clear_output') }}
                 </button>
-                <span id="command-status" role="status" aria-live="polite"></span>
+                <span id="command-status" role="status" aria-live="polite">{{ __('admin.developer_tools.awaiting_execution') }}</span>
             </div>
         </div>
 
-        <pre id="command-output" class="developer-terminal__output" dir="ltr" aria-live="polite">{{ __('admin.developer_tools.terminal_ready') }}</pre>
-        <p class="developer-terminal__note">{{ __('admin.developer_tools.safety_note') }}</p>
+        <div class="developer-terminal__output-wrap">
+            <div class="developer-terminal__output-heading">
+                <span>{{ __('admin.developer_tools.output') }}</span>
+                <span class="developer-terminal__output-state"><i aria-hidden="true"></i>{{ __('admin.developer_tools.console_ready') }}</span>
+            </div>
+            <pre id="command-output" class="developer-terminal__output" dir="ltr" aria-live="polite">{{ __('admin.developer_tools.terminal_ready') }}</pre>
+        </div>
+        <p class="developer-terminal__note">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 6v5c0 5 3.4 8.3 8 10 4.6-1.7 8-5 8-10V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>
+            {{ __('admin.developer_tools.safety_note') }}
+        </p>
     </section>
 @endsection
-
-@push('css')
-    <style>
-        .developer-terminal { overflow: hidden; padding: 0; background: #111827; color: #e5e7eb; }
-        .developer-terminal__topline { display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 18px; border-bottom: 1px solid #263244; color: #9ca3af; font-size: 11px; }
-        .developer-terminal__lights { display: flex; gap: 6px; }
-        .developer-terminal__lights i { width: 8px; height: 8px; border-radius: 50%; background: #f87171; }
-        .developer-terminal__lights i:nth-child(2) { background: #fbbf24; }
-        .developer-terminal__lights i:nth-child(3) { background: #34d399; }
-        .developer-terminal__access { margin-inline-start: auto; }
-        .developer-terminal__controls { padding: 20px; }
-        .developer-terminal__controls label { display: block; margin-bottom: 8px; color: #d1d5db; font-size: 12px; font-weight: 800; }
-        .developer-terminal__controls select { background: #0b1220; color: #f9fafb; }
-        .developer-terminal__actions { display: flex; align-items: center; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
-        .developer-terminal__actions .admin-button--secondary { color: #e5e7eb; border-color: #374151; background: #1f2937; }
-        .developer-terminal__actions button:disabled { cursor: not-allowed; opacity: .5; }
-        #command-status { color: #9ca3af; font-size: 12px; }
-        .developer-terminal__output { min-height: 280px; max-height: 520px; overflow: auto; margin: 0 20px; padding: 18px; border: 1px solid #263244; border-radius: 10px; background: #080d16; color: #d1fae5; white-space: pre-wrap; overflow-wrap: anywhere; font: 12px/1.7 ui-monospace, SFMono-Regular, Menlo, monospace; }
-        .developer-terminal__note { margin: 12px 20px 20px; color: #9ca3af; font-size: 11px; line-height: 1.6; }
-        html[dir="rtl"] .developer-terminal__output { text-align: left; }
-        @media (max-width: 600px) { .developer-terminal__output { min-height: 220px; margin-inline: 12px; } .developer-terminal__controls { padding: 14px; } .developer-terminal__note { margin-inline: 12px; } }
-    </style>
-@endpush
 
 @push('js')
     <script>
@@ -77,8 +79,8 @@
             const output = document.getElementById('command-output');
             const status = document.getElementById('command-status');
 
-            command.addEventListener('change', () => {
-                runButton.disabled = !command.value;
+            command.addEventListener('input', () => {
+                runButton.disabled = !command.value.trim();
                 status.textContent = '';
             });
 
@@ -88,9 +90,9 @@
             });
 
             runButton.addEventListener('click', async () => {
-                if (!command.value || runButton.disabled) return;
+                if (!command.value.trim() || runButton.disabled) return;
 
-                const selectedCommand = command.value;
+                const selectedCommand = command.value.trim();
                 runButton.disabled = true;
                 status.textContent = @json(__('admin.developer_tools.running'));
                 output.textContent += `\n$ ${selectedCommand}\n`;

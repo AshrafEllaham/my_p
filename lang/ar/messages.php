@@ -33,6 +33,11 @@ return [
     ],
     'validation_failed' => 'تعذر التحقق من البيانات المدخلة.',
     'validation' => [
+        'developer_command' => [
+            'format' => 'اكتب أمرًا بصيغة php artisan command، دون استخدام صياغة shell.',
+            'duplicate' => 'هذا الأمر مسجل بالفعل.',
+            'unavailable' => 'أمر Artisan المحدد غير مسجل أو غير متاح.',
+        ],
         'phone_code' => [
             'required' => 'كود الدولة مطلوب.',
             'string' => 'كود الدولة يجب أن يكون نصًا.',

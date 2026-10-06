@@ -13,14 +13,21 @@ class CommandRepository extends MainRepository
         $this->model = $model;
     }
 
-    /** @param list<string> $allowedCommands
-     * @return Collection<int, Command>
-     */
-    public function listAllowed(array $allowedCommands): Collection
+    /** @return Collection<int, Command> */
+    public function listAll(): Collection
     {
         return $this->model->query()
-            ->whereIn('command', $allowedCommands)
             ->orderBy('id')
             ->get(['id', 'command']);
+    }
+
+    public function updateCommand(int $id, string $command): void
+    {
+        $this->model->query()->findOrFail($id)->update(['command' => $command]);
+    }
+
+    public function deleteCommand(int $id): void
+    {
+        $this->model->query()->findOrFail($id)->delete();
     }
 }

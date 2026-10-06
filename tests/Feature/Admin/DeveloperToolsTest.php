@@ -4,6 +4,7 @@ namespace Tests\Feature\Admin;
 
 use App\Enums\AdminTypeEnum;
 use App\Models\Admin\Admin;
+use App\Models\Admin\Command;
 use Database\Seeders\CommandSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter;
@@ -41,12 +42,17 @@ class DeveloperToolsTest extends TestCase
             ->assertOk()
             ->assertSee(__('admin.navigation.developer_tools'))
             ->assertSee('php artisan migrate')
-            ->assertSee(__('admin.developer_tools.command_list'));
+            ->assertSee(__('admin.developer_tools.command_list'))
+            ->assertSee(__('admin.developer_tools.add_command'))
+            ->assertSee(__('admin.developer_tools.edit_command'))
+            ->assertSee(__('admin.developer_tools.delete_command'));
 
         $this->actingAs($developer, 'admin')
             ->get(route('admin.developer.terminal.index'))
             ->assertOk()
-            ->assertSee(__('admin.developer_tools.terminal_ready'));
+            ->assertSee(__('admin.developer_tools.terminal_ready'))
+            ->assertSee('developer-command-options')
+            ->assertSee(__('admin.developer_tools.command_format_help'));
 
         $this->actingAs($developer, 'admin')
             ->postJson(route('admin.developer.terminal.run'), ['command' => 'php artisan about'])
@@ -91,7 +97,70 @@ class DeveloperToolsTest extends TestCase
         $this->actingAs($developer, 'admin')
             ->postJson(route('admin.developer.terminal.run'), ['command' => 'php artisan migrate && whoami'])
             ->assertUnprocessable()
-            ->assertJsonValidationErrors('command');
+            ->assertJsonValidationErrors('command')
+            ->assertJsonPath('errors.command.0', __('messages.validation.developer_command.format'));
+    }
+
+    public function test_developer_can_manage_registered_artisan_commands(): void
+    {
+        $developer = Admin::query()->create([
+            'name' => 'Developer',
+            'email' => 'developer@example.com',
+            'password' => 'password123',
+            'admin_type' => AdminTypeEnum::Developer,
+            'is_active' => true,
+        ]);
+        $this->seed(CommandSeeder::class);
+
+        $this->actingAs($developer, 'admin')
+            ->post(route('admin.developer.commands.store'), ['command' => 'php artisan route:list'])
+            ->assertRedirect(route('admin.developer.commands.index'));
+
+        $command = Command::query()->where('command', 'php artisan route:list')->firstOrFail();
+
+        $this->actingAs($developer, 'admin')
+            ->put(route('admin.developer.commands.update', $command->id), ['command' => 'php artisan list'])
+            ->assertRedirect(route('admin.developer.commands.index'));
+
+        $this->assertDatabaseHas('commands', ['id' => $command->id, 'command' => 'php artisan list']);
+
+        $this->actingAs($developer, 'admin')
+            ->delete(route('admin.developer.commands.destroy', $command->id))
+            ->assertRedirect(route('admin.developer.commands.index'));
+
+        $this->assertDatabaseMissing('commands', ['id' => $command->id]);
+    }
+
+    public function test_terminal_can_run_a_registered_artisan_command_not_saved_in_the_picker(): void
+    {
+        $developer = Admin::query()->create([
+            'name' => 'Developer',
+            'email' => 'developer@example.com',
+            'password' => 'password123',
+            'admin_type' => AdminTypeEnum::Developer,
+            'is_active' => true,
+        ]);
+
+        $this->actingAs($developer, 'admin')
+            ->postJson(route('admin.developer.terminal.run'), ['command' => 'php artisan list'])
+            ->assertOk()
+            ->assertJsonPath('successful', true);
+    }
+
+    public function test_developer_cannot_save_an_unregistered_artisan_command(): void
+    {
+        $developer = Admin::query()->create([
+            'name' => 'Developer',
+            'email' => 'developer@example.com',
+            'password' => 'password123',
+            'admin_type' => AdminTypeEnum::Developer,
+            'is_active' => true,
+        ]);
+
+        $this->actingAs($developer, 'admin')
+            ->from(route('admin.developer.commands.index'))
+            ->post(route('admin.developer.commands.store'), ['command' => 'php artisan command:does-not-exist'])
+            ->assertSessionHasErrors('command');
     }
 
     public function test_log_viewer_is_restricted_to_developer_accounts(): void

@@ -31,6 +31,9 @@ Route::group([
         Route::put('/profile', [ProfileController::class, 'update'])->name('admin.profile.update');
         Route::prefix('developer')->name('admin.developer.')->middleware('developer')->group(function (): void {
             Route::get('/commands', [CommandController::class, 'index'])->name('commands.index');
+            Route::post('/commands', [CommandController::class, 'store'])->name('commands.store');
+            Route::put('/commands/{command}', [CommandController::class, 'update'])->name('commands.update');
+            Route::delete('/commands/{command}', [CommandController::class, 'destroy'])->name('commands.destroy');
             Route::get('/terminal', [TerminalController::class, 'index'])->name('terminal.index');
             Route::post('/terminal', [TerminalController::class, 'run'])->name('terminal.run');
         });

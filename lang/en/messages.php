@@ -33,6 +33,11 @@ return [
     ],
     'validation_failed' => 'The submitted data is invalid.',
     'validation' => [
+        'developer_command' => [
+            'format' => 'Enter a command in the form php artisan command without shell syntax.',
+            'duplicate' => 'This command is already registered.',
+            'unavailable' => 'The selected Artisan command is not registered or available.',
+        ],
         'phone_code' => [
             'required' => 'The country calling code is required.',
             'string' => 'The country calling code must be a string.',
