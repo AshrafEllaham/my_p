@@ -12,7 +12,7 @@ class EnsureDeveloperAdmin
     public function handle(Request $request, Closure $next): Response
     {
         abort_unless(
-            (int) $request->user('admin')?->admin_type === AdminTypeEnum::Developer->value,
+            $request->user('admin')?->admin_type === AdminTypeEnum::Developer,
             Response::HTTP_FORBIDDEN
         );
 

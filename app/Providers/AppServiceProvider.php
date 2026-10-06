@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Contracts\Sai\SocialIdentityVerifier;
+use App\Enums\AdminTypeEnum;
 use App\Services\Sai\OidcSocialIdentityVerifier;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
 use Illuminate\Support\ServiceProvider;
@@ -35,7 +36,7 @@ class AppServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom($paths);
 
         LogViewer::auth(function ($request) {
-            return true;
+            return $request->user('admin')?->admin_type === AdminTypeEnum::Developer;
         });
     }
 }

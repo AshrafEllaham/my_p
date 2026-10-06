@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\CountryController;
+use App\Http\Controllers\Admin\Developer\CommandController;
+use App\Http\Controllers\Admin\Developer\TerminalController;
 use App\Http\Controllers\Admin\GovernorateController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\MainCategoryController;
@@ -27,6 +29,11 @@ Route::group([
         Route::get('/dashboard', [HomeController::class, 'index'])->name('admin.index');
         Route::get('/profile', [ProfileController::class, 'edit'])->name('admin.profile.edit');
         Route::put('/profile', [ProfileController::class, 'update'])->name('admin.profile.update');
+        Route::prefix('developer')->name('admin.developer.')->middleware('developer')->group(function (): void {
+            Route::get('/commands', [CommandController::class, 'index'])->name('commands.index');
+            Route::get('/terminal', [TerminalController::class, 'index'])->name('terminal.index');
+            Route::post('/terminal', [TerminalController::class, 'run'])->name('terminal.run');
+        });
         Route::resources([
             'countries' => CountryController::class,
             'governorates' => GovernorateController::class,

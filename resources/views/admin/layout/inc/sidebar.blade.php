@@ -73,6 +73,26 @@
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12l2 5-8 4-8-4Z"/><path d="M4 8v10l8 4 8-4V8M12 12v10"/></svg>
             <span>{{ __('admin.navigation.orders') }}</span>
         </span>
+        @if (auth('admin')->user()?->admin_type === \App\Enums\AdminTypeEnum::Developer)
+            <details class="admin-nav-group {{ request()->routeIs('admin.developer.*') ? 'is-active' : '' }}" @if (request()->routeIs('admin.developer.*')) open @endif>
+                <summary class="admin-nav__item admin-nav-group__trigger">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 7-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/></svg>
+                    <span>{{ __('admin.navigation.developer_tools') }}</span>
+                    <svg class="admin-nav-group__chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg>
+                </summary>
+                <div class="admin-nav-group__menu">
+                    <a class="admin-nav__subitem {{ request()->routeIs('admin.developer.commands.*') ? 'is-active' : '' }}" href="{{ route('admin.developer.commands.index') }}" @if (request()->routeIs('admin.developer.commands.*')) aria-current="page" @endif>
+                        <span>{{ __('admin.developer_tools.commands') }}</span>
+                    </a>
+                    <a class="admin-nav__subitem {{ request()->routeIs('admin.developer.terminal.*') ? 'is-active' : '' }}" href="{{ route('admin.developer.terminal.index') }}" @if (request()->routeIs('admin.developer.terminal.*')) aria-current="page" @endif>
+                        <span>{{ __('admin.developer_tools.terminal') }}</span>
+                    </a>
+                    <a class="admin-nav__subitem" href="{{ url(config('log-viewer.route_path', 'log-viewer')) }}" target="_blank" rel="noopener">
+                        <span>{{ __('admin.developer_tools.log_viewer') }}</span>
+                    </a>
+                </div>
+            </details>
+        @endif
     </nav>
 </aside>
 <button class="admin-sidebar-overlay" type="button" data-sidebar-close aria-label="{{ __('admin.actions.close') }}"></button>
