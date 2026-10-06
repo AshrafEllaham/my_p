@@ -7,6 +7,7 @@ use App\Models\Admin\Admin;
 use App\Models\Admin\Command;
 use Database\Seeders\CommandSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter;
 use Mcamara\LaravelLocalization\Middleware\LocaleSessionRedirect;
 use Tests\TestCase;
@@ -41,17 +42,25 @@ class DeveloperToolsTest extends TestCase
             ->get(route('admin.developer.commands.index'))
             ->assertOk()
             ->assertSee(__('admin.navigation.developer_tools'))
-            ->assertSee('php artisan migrate')
-            ->assertSee(__('admin.developer_tools.command_list'))
+            ->assertSee('data-admin-datatable', false)
             ->assertSee(__('admin.developer_tools.add_command'))
-            ->assertSee(__('admin.developer_tools.edit_command'))
-            ->assertSee(__('admin.developer_tools.delete_command'));
+            ->assertDontSee('developer-page-hero', false);
+
+        $this->actingAs($developer, 'admin')
+            ->getJson(route('admin.developer.commands.index'), ['X-Requested-With' => 'XMLHttpRequest'])
+            ->assertOk()
+            ->assertJsonStructure(['data', 'recordsTotal', 'recordsFiltered']);
 
         $this->actingAs($developer, 'admin')
             ->get(route('admin.developer.terminal.index'))
             ->assertOk()
             ->assertSee(__('admin.developer_tools.terminal_ready'))
-            ->assertSee('developer-command-options')
+            ->assertSee('id="developer-command"', false)
+            ->assertSee('aria-controls="developer-command-menu"', false)
+            ->assertSee(__('admin.developer_tools.search_commands'))
+            ->assertSee('id="developer-custom-command-field" class="developer-terminal__custom-command" hidden', false)
+            ->assertSee(__('admin.developer_tools.write_command'))
+            ->assertSee('value="php artisan migrate"', false)
             ->assertSee(__('admin.developer_tools.command_format_help'));
 
         $this->actingAs($developer, 'admin')
@@ -176,5 +185,78 @@ class DeveloperToolsTest extends TestCase
         ]);
 
         $this->actingAs($admin, 'admin')->get('/log-viewer')->assertForbidden();
+    }
+
+    public function test_command_bottom_sheets_and_ajax_crud(): void
+    {
+        $developer = Admin::factory()->create(['admin_type' => AdminTypeEnum::Developer]);
+        $this->actingAs($developer, 'admin');
+
+        $this->getJson(route('admin.developer.commands.create'))
+            ->assertOk()
+            ->assertJsonPath('status', true)
+            ->assertSee('data-catalog-form');
+
+        $this->postJson(route('admin.developer.commands.store'), ['command' => 'php artisan about'])
+            ->assertOk()
+            ->assertJsonPath('message', __('admin.developer_tools.command_created'));
+
+        $command = Command::query()->where('command', 'php artisan about')->firstOrFail();
+        $this->getJson(route('admin.developer.commands.edit', $command->id))
+            ->assertOk()
+            ->assertSee('php artisan about')
+            ->assertSee('data-form-errors');
+
+        $this->putJson(route('admin.developer.commands.update', $command->id), ['command' => 'php artisan list'])
+            ->assertOk()
+            ->assertJsonPath('message', __('admin.developer_tools.command_updated'));
+        $this->assertDatabaseHas('commands', ['id' => $command->id, 'command' => 'php artisan list']);
+
+        $this->deleteJson(route('admin.developer.commands.destroy', $command->id))
+            ->assertOk()
+            ->assertJsonPath('message', __('admin.developer_tools.command_deleted'));
+        $this->assertDatabaseMissing('commands', ['id' => $command->id]);
+    }
+
+    public function test_command_sheet_validation_is_translated_in_both_languages(): void
+    {
+        $developer = Admin::factory()->create(['admin_type' => AdminTypeEnum::Developer]);
+        $this->actingAs($developer, 'admin');
+
+        foreach (['ar', 'en'] as $locale) {
+            app()->setLocale($locale);
+            LaravelLocalization::setLocale($locale);
+            $this->withSession(['locale' => $locale])
+                ->postJson(route('admin.developer.commands.store'), ['command' => 'php artisan list && whoami'])
+                ->assertUnprocessable()
+                ->assertJsonPath('errors.command.0', trans('messages.validation.developer_command.format', [], $locale));
+
+            $this->postJson(route('admin.developer.commands.store'), [])
+                ->assertUnprocessable()
+                ->assertJsonPath('errors.command.0', trans('messages.validation.developer_command.required', [], $locale));
+
+            $this->get(route('admin.developer.commands.index'))
+                ->assertOk()
+                ->assertSee('lang="'.$locale.'"', false)
+                ->assertSee(trans('admin.developer_tools.add_command', [], $locale));
+            $this->get(route('admin.developer.terminal.index'))
+                ->assertOk()
+                ->assertSee('dir="'.($locale === 'ar' ? 'rtl' : 'ltr').'"', false)
+                ->assertDontSee('developer-page-hero', false)
+                ->assertSee(trans('admin.developer_tools.write_command', [], $locale))
+                ->assertSee(trans('admin.developer_tools.custom_command', [], $locale));
+        }
+    }
+
+    public function test_regular_admin_cannot_open_command_sheets_or_mutate_commands(): void
+    {
+        $admin = Admin::factory()->create(['admin_type' => AdminTypeEnum::Admin]);
+        $this->actingAs($admin, 'admin');
+
+        $this->getJson(route('admin.developer.commands.create'))->assertForbidden();
+        $this->getJson(route('admin.developer.commands.edit', 1))->assertForbidden();
+        $this->postJson(route('admin.developer.commands.store'), ['command' => 'php artisan about'])->assertForbidden();
+        $this->putJson(route('admin.developer.commands.update', 1), ['command' => 'php artisan about'])->assertForbidden();
+        $this->deleteJson(route('admin.developer.commands.destroy', 1))->assertForbidden();
     }
 }

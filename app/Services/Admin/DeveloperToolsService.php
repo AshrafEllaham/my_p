@@ -4,6 +4,7 @@ namespace App\Services\Admin;
 
 use App\Models\Admin\Command;
 use App\Repositories\Admin\CommandRepository;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Validation\ValidationException;
@@ -18,6 +19,16 @@ class DeveloperToolsService
     public function getCommands(): Collection
     {
         return $this->commands->listAll();
+    }
+
+    public function commandListQuery(): Builder
+    {
+        return $this->commands->listQuery();
+    }
+
+    public function findCommand(int $id): Command
+    {
+        return $this->commands->findCommand($id);
     }
 
     public function createCommand(string $command): void

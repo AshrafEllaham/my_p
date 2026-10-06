@@ -3,45 +3,73 @@
 @section('page-title', __('admin.developer_tools.terminal'))
 
 @section('content')
-    <section class="admin-hero developer-page-hero">
-        <div>
-            <span class="admin-eyebrow">{{ __('admin.developer_tools.eyebrow') }}</span>
-            <h1>{{ __('admin.developer_tools.terminal') }}</h1>
-            <p>{{ __('admin.developer_tools.terminal_description') }}</p>
-        </div>
+    <div class="developer-page-toolbar">
+        <p>{{ __('admin.developer_tools.terminal_description') }}</p>
         <a class="admin-button admin-button--secondary" href="{{ route('admin.developer.commands.index') }}">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 5l-4 14"/></svg>
             {{ __('admin.developer_tools.command_list') }}
         </a>
-    </section>
+    </div>
 
     <section class="developer-terminal" aria-label="{{ __('admin.developer_tools.terminal') }}">
         <div class="developer-terminal__topline">
             <div class="developer-terminal__lights" aria-hidden="true"><i></i><i></i><i></i></div>
             <div class="developer-terminal__identity">
                 <strong>{{ __('admin.developer_tools.project_console') }}</strong>
-                <span dir="ltr">artisan</span>
+                <span dir="ltr">{{ __('admin.developer_tools.artisan') }}</span>
             </div>
             <span class="developer-terminal__access"><i aria-hidden="true"></i>{{ __('admin.developer_tools.developer_access') }}</span>
         </div>
 
         <div class="developer-terminal__controls">
-            <div class="developer-terminal__control-heading">
-                <div>
-                    <span class="developer-terminal__eyebrow">{{ __('admin.developer_tools.execution_workspace') }}</span>
-                    <h2>{{ __('admin.developer_tools.select_command') }}</h2>
-                </div>
-                <span class="developer-terminal__command-count">{{ __('admin.developer_tools.command_count', ['count' => $commands->count()]) }}</span>
-            </div>
             <div class="developer-terminal__command-picker">
-                <label for="developer-command">{{ __('admin.developer_tools.command') }}</label>
-                <input id="developer-command" class="admin-field__control" type="text" list="developer-command-options" maxlength="255" autocomplete="off" placeholder="{{ __('admin.developer_tools.command_placeholder') }}" aria-describedby="developer-command-hint">
-                <datalist id="developer-command-options">
-                    @foreach ($commands as $command)
-                        <option value="{{ $command->command }}"></option>
-                    @endforeach
-                </datalist>
-                <p id="developer-command-hint" class="developer-terminal__hint">{{ __('admin.developer_tools.command_format_help') }}</p>
+                <label id="developer-command-label" for="developer-command-trigger">{{ __('admin.developer_tools.command') }}</label>
+                <input id="developer-command" type="hidden" value="">
+                <div class="developer-command-dropdown" id="developer-command-dropdown">
+                    <button id="developer-command-trigger" class="developer-command-dropdown__trigger" type="button"
+                            aria-haspopup="dialog" aria-expanded="false" aria-controls="developer-command-menu"
+                            aria-labelledby="developer-command-label developer-command-selection" aria-describedby="developer-command-hint">
+                        <span class="developer-command-dropdown__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m7 7 5 5-5 5M14 17h4"/></svg></span>
+                        <span id="developer-command-selection">{{ __('admin.developer_tools.choose_command') }}</span>
+                        <svg class="developer-command-dropdown__chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg>
+                    </button>
+                    <div id="developer-command-menu" class="developer-command-dropdown__menu" role="dialog"
+                         aria-labelledby="developer-command-label" hidden>
+                        <div class="developer-command-dropdown__search">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg>
+                            <input id="developer-command-search" type="search" autocomplete="off" spellcheck="false"
+                                   aria-label="{{ __('admin.developer_tools.search_commands') }}"
+                                   placeholder="{{ __('admin.developer_tools.search_commands') }}">
+                        </div>
+                        <div class="developer-command-dropdown__heading">{{ __('admin.developer_tools.command_list') }}</div>
+                        <div class="developer-command-dropdown__list">
+                            @foreach ($commands as $command)
+                                <button class="developer-command-dropdown__option" type="button" data-command-value="{{ $command->command }}" aria-pressed="false">
+                                    <span class="developer-command-dropdown__prompt" aria-hidden="true">$</span>
+                                    <code dir="ltr">{{ $command->command }}</code>
+                                    <svg class="developer-command-dropdown__check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
+                                </button>
+                            @endforeach
+                            <p id="developer-command-no-results" class="developer-command-dropdown__empty" role="status" hidden>{{ __('admin.developer_tools.no_matching_commands') }}</p>
+                        </div>
+                        <button class="developer-command-dropdown__option developer-command-dropdown__custom" type="button" data-command-value="__custom__" aria-pressed="false">
+                            <span class="developer-command-dropdown__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>
+                            <span><strong>{{ __('admin.developer_tools.write_command') }}</strong><small>{{ __('admin.developer_tools.write_command_help') }}</small></span>
+                            <svg class="developer-command-dropdown__check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <p id="developer-command-hint" class="developer-terminal__hint">{{ __('admin.developer_tools.command_picker_help') }}</p>
+                <div id="developer-custom-command-field" class="developer-terminal__custom-command" hidden>
+                    <label for="developer-custom-command">{{ __('admin.developer_tools.custom_command') }}</label>
+                    <div class="admin-field__control developer-terminal__input">
+                        <span aria-hidden="true">$</span>
+                        <input id="developer-custom-command" dir="ltr" spellcheck="false" type="text" maxlength="255"
+                               autocomplete="off" disabled placeholder="{{ __('admin.developer_tools.command_placeholder') }}"
+                               aria-describedby="developer-custom-command-hint">
+                    </div>
+                    <p id="developer-custom-command-hint" class="developer-terminal__hint">{{ __('admin.developer_tools.command_format_help') }}</p>
+                </div>
             </div>
             <div class="developer-terminal__actions">
                 <button id="run-command" type="button" class="admin-button admin-button--primary" disabled>
@@ -73,14 +101,109 @@
 @push('js')
     <script>
         (() => {
-            const command = document.getElementById('developer-command');
+            const picker = document.getElementById('developer-command');
+            const dropdown = document.getElementById('developer-command-dropdown');
+            const trigger = document.getElementById('developer-command-trigger');
+            const selection = document.getElementById('developer-command-selection');
+            const menu = document.getElementById('developer-command-menu');
+            const search = document.getElementById('developer-command-search');
+            const noResults = document.getElementById('developer-command-no-results');
+            const options = Array.from(menu.querySelectorAll('[data-command-value]'));
+            const command = document.getElementById('developer-custom-command');
+            const customField = document.getElementById('developer-custom-command-field');
             const runButton = document.getElementById('run-command');
             const clearButton = document.getElementById('clear-output');
             const output = document.getElementById('command-output');
             const status = document.getElementById('command-status');
 
+            let running = false;
+
+            const isCustomCommand = () => picker.value === '__custom__';
+            const selectedCommandValue = () => isCustomCommand() ? command.value.trim() : picker.value;
+            const updateRunButton = () => {
+                runButton.disabled = running || !selectedCommandValue();
+            };
+
+            const filterCommands = () => {
+                const query = search.value.trim().toLowerCase();
+                let matches = 0;
+                options.forEach((option) => {
+                    if (option.dataset.commandValue === '__custom__') return;
+                    option.hidden = !option.dataset.commandValue.toLowerCase().includes(query);
+                    if (!option.hidden) matches++;
+                });
+                noResults.hidden = matches > 0;
+            };
+            const closeMenu = (restoreFocus = false) => {
+                menu.hidden = true;
+                trigger.setAttribute('aria-expanded', 'false');
+                if (restoreFocus) trigger.focus();
+            };
+            const openMenu = () => {
+                if (running) return;
+                menu.hidden = false;
+                trigger.setAttribute('aria-expanded', 'true');
+                search.value = '';
+                filterCommands();
+                search.focus();
+            };
+            trigger.addEventListener('click', () => menu.hidden ? openMenu() : closeMenu(true));
+            trigger.addEventListener('keydown', (event) => {
+                if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+                    event.preventDefault();
+                    openMenu();
+                }
+            });
+            search.addEventListener('input', filterCommands);
+            options.forEach((option) => {
+                option.addEventListener('click', () => {
+                    if (running) return;
+                    picker.value = option.dataset.commandValue;
+                    selection.textContent = isCustomCommand()
+                        ? @json(__('admin.developer_tools.write_command'))
+                        : picker.value;
+                    selection.dir = isCustomCommand() ? document.documentElement.dir : 'ltr';
+                    selection.classList.toggle('is-command', !isCustomCommand());
+                    options.forEach((item) => item.setAttribute('aria-pressed', String(item === option)));
+                    closeMenu(true);
+                    picker.dispatchEvent(new Event('change'));
+                });
+            });
+            menu.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    closeMenu(true);
+                    return;
+                }
+                if (!['ArrowDown', 'ArrowUp'].includes(event.key)) return;
+                event.preventDefault();
+                const visible = options.filter((option) => !option.hidden);
+                const index = visible.indexOf(document.activeElement);
+                const next = event.key === 'ArrowDown'
+                    ? (index + 1) % visible.length
+                    : (index <= 0 ? visible.length - 1 : index - 1);
+                visible[next]?.focus();
+            });
+            document.addEventListener('click', (event) => {
+                if (!dropdown.contains(event.target)) closeMenu();
+            });
+            dropdown.addEventListener('focusout', (event) => {
+                if (!dropdown.contains(event.relatedTarget)) closeMenu();
+            });
+
+            picker.addEventListener('change', () => {
+                const custom = isCustomCommand();
+                customField.hidden = !custom;
+                command.disabled = !custom;
+                picker.dir = picker.value && !custom ? 'ltr' : document.documentElement.dir;
+                status.textContent = '';
+                updateRunButton();
+                if (custom) command.focus();
+            });
+
             command.addEventListener('input', () => {
-                runButton.disabled = !command.value.trim();
+                updateRunButton();
                 status.textContent = '';
             });
 
@@ -89,10 +212,23 @@
                 status.textContent = '';
             });
 
-            runButton.addEventListener('click', async () => {
-                if (!command.value.trim() || runButton.disabled) return;
+            command.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    runButton.click();
+                }
+            });
 
-                const selectedCommand = command.value.trim();
+            runButton.addEventListener('click', async () => {
+                if (running || !selectedCommandValue() || runButton.disabled) return;
+
+                const selectedCommand = selectedCommandValue();
+                closeMenu();
+                trigger.disabled = true;
+                picker.disabled = true;
+                running = true;
+                command.readOnly = true;
+                clearButton.disabled = true;
                 runButton.disabled = true;
                 status.textContent = @json(__('admin.developer_tools.running'));
                 output.textContent += `\n$ ${selectedCommand}\n`;
@@ -116,8 +252,13 @@
                     output.textContent += `${@json(__('admin.developer_tools.request_failed'))}\n`;
                     status.textContent = @json(__('admin.developer_tools.failed'));
                 } finally {
-                    command.value = '';
-                    runButton.disabled = true;
+                    running = false;
+                    command.readOnly = false;
+                    clearButton.disabled = false;
+                    trigger.disabled = false;
+                    picker.disabled = false;
+                    updateRunButton();
+                    (isCustomCommand() ? command : trigger).focus();
                     output.scrollTop = output.scrollHeight;
                 }
             });

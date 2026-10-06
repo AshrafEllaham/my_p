@@ -34,6 +34,10 @@ return [
     'validation_failed' => 'The submitted data is invalid.',
     'validation' => [
         'developer_command' => [
+            'label' => 'Command',
+            'required' => 'Enter an Artisan command.',
+            'string' => 'The command must be text.',
+            'max' => 'The command must not exceed 255 characters.',
             'format' => 'Enter a command in the form php artisan command without shell syntax.',
             'duplicate' => 'This command is already registered.',
             'unavailable' => 'The selected Artisan command is not registered or available.',

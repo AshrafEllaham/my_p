@@ -4,6 +4,7 @@ namespace App\Repositories\Admin;
 
 use App\Models\Admin\Command;
 use App\Repositories\MainRepository;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 class CommandRepository extends MainRepository
@@ -19,6 +20,16 @@ class CommandRepository extends MainRepository
         return $this->model->query()
             ->orderBy('id')
             ->get(['id', 'command']);
+    }
+
+    public function listQuery(): Builder
+    {
+        return $this->model->query()->select(['id', 'command']);
+    }
+
+    public function findCommand(int $id): Command
+    {
+        return $this->model->query()->select(['id', 'command'])->findOrFail($id);
     }
 
     public function updateCommand(int $id, string $command): void

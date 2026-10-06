@@ -46,7 +46,7 @@ class SaveDeveloperCommandRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'command' => __('admin.developer_tools.command'),
+            'command' => __('messages.validation.developer_command.label'),
         ];
     }
 
@@ -54,6 +54,9 @@ class SaveDeveloperCommandRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'command.required' => __('messages.validation.developer_command.required'),
+            'command.string' => __('messages.validation.developer_command.string'),
+            'command.max' => __('messages.validation.developer_command.max'),
             'command.unique' => __('messages.validation.developer_command.duplicate'),
         ];
     }

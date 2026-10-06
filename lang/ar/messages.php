@@ -34,6 +34,10 @@ return [
     'validation_failed' => 'تعذر التحقق من البيانات المدخلة.',
     'validation' => [
         'developer_command' => [
+            'label' => 'الأمر',
+            'required' => 'أدخل أمر Artisan.',
+            'string' => 'يجب أن يكون الأمر نصًا.',
+            'max' => 'يجب ألا يتجاوز الأمر 255 حرفًا.',
             'format' => 'اكتب أمرًا بصيغة php artisan command، دون استخدام صياغة shell.',
             'duplicate' => 'هذا الأمر مسجل بالفعل.',
             'unavailable' => 'أمر Artisan المحدد غير مسجل أو غير متاح.',
