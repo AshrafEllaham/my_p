@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\Auth\LoginController;
+use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\Developer\CommandController;
@@ -45,6 +46,7 @@ Route::group([
             'cities' => CityController::class,
             'main-categories' => MainCategoryController::class,
             'sub-categories' => SubCategoryController::class,
+            'banners' => BannerController::class,
         ], [
             'as' => 'admin',
         ]);

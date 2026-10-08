@@ -43,6 +43,8 @@ routes/api/
 
 استخدم namespace فرعيًا مناسبًا للـ role أو domain عند الحاجة، مع الحفاظ على نفس التقسيم في جميع الطبقات.
 
+- كل migration ينشئ جدولًا جديدًا يجب أن يصاحبه في نفس التغيير Model للجدول، وRepository يمتد من `MainRepository`، وService يحقن الـ Repository. ضع الملفات في namespaces ومجلدات المجال المناسبة، ولا تكتفِ بإنشاء الجدول حتى لو لم يُطلب endpoint بعد.
+
 ## قواعد الطبقات
 
 ### Model
@@ -211,8 +213,8 @@ routes/api/
 
 ## Responses والـ Helpers
 
-- `jsonSuccess($data, $msg)` للرد الناجح، ويقبل Model أو Resource أو array.
-- `generalReturn($request, $query, Resource::class, $msg)` للقوائم، ويطبق pagination عندما تكون `pagination=on`.
+- استخدم `jsonSuccess($data, $msg)` لإرجاع بيانات كاملة لعنصر أو كيان، مثل تفاصيل عنصر أو ملف المستخدم أو المتجر، سواء كانت البيانات Model أو Resource أو array.
+- استخدم `generalReturn($request, $query, Resource::class, $msg)` لإرجاع القوائم التي تدعم pagination، مثل المنتجات؛ يطبق pagination عندما تكون `pagination=on`.
 - `jsonPaginate($paginator, $msg)` لرد pagination جاهز.
 - حافظ على شكل response موحد، واستخدم مفاتيح الترجمة بدل النصوص المضمنة مباشرة.
 

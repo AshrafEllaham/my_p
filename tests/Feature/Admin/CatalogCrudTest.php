@@ -40,6 +40,7 @@ class CatalogCrudTest extends TestCase
             'cities' => ['admin.cities.index'],
             'main categories' => ['admin.main-categories.index'],
             'subcategories' => ['admin.sub-categories.index'],
+            'banners' => ['admin.banners.index'],
         ];
     }
 

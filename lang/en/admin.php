@@ -53,6 +53,7 @@ return [
         'cities' => 'Cities',
         'main_categories' => 'Main categories',
         'sub_categories' => 'Subcategories',
+        'banners' => 'Banners',
         'settings' => 'Settings',
         'developer_tools' => 'Developer tools',
     ],
@@ -183,6 +184,11 @@ return [
             'choose_governorate' => 'Choose a governorate',
             'choose_main_category' => 'Choose a main category',
         ],
+        'filters' => [
+            'title' => 'Filter results',
+            'all' => 'All',
+            'reset' => 'Reset',
+        ],
         'status' => [
             'active' => 'Active',
             'inactive' => 'Inactive',
@@ -230,6 +236,42 @@ return [
             'last' => 'Last',
             'next' => 'Next',
             'previous' => 'Previous',
+        ],
+    ],
+    'banners' => [
+        'title' => 'Banners',
+        'description' => 'Manage banner images and choose which account type can see them.',
+        'create' => 'Add banner',
+        'file_help' => 'Upload a JPG, PNG, or WEBP image up to 10 MB.',
+        'drop_file' => 'Add a banner image from your device or drop it here',
+        'replace_file' => 'Drop an image or click to replace the current one',
+        'clear_file' => 'Clear selection',
+        'dropify_error' => 'The image could not be loaded.',
+        'file_size_error' => 'The image exceeds the maximum allowed size ({{ value }}).',
+        'file_type_error' => 'This image format is not supported. Allowed formats: {{ value }}.',
+        'choose_type' => 'Choose an account type',
+        'image_alt' => 'Banner image',
+        'fields' => [
+            'file' => 'Banner image',
+            'type' => 'Target account type',
+            'created_at' => 'Created at',
+        ],
+        'filters' => [
+            'type_label' => 'Target account type',
+            'all_types' => 'All types',
+        ],
+        'types' => [
+            'store' => 'Store account',
+            'user' => 'User account',
+        ],
+        'messages' => [
+            'upload_failed' => 'The banner image could not be saved. Please try again.',
+        ],
+        'validation' => [
+            'attributes' => [
+                'file' => 'banner image',
+                'type' => 'target account type',
+            ],
         ],
     ],
     'profile' => [

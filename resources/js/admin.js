@@ -288,6 +288,23 @@ if (catalogPage instanceof HTMLElement && catalogTable instanceof HTMLTableEleme
         ajax: {
             url: config.ajax,
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            data: (d) => {
+                const filterControls = catalogPage.querySelectorAll('[data-filter-control]');
+                filterControls.forEach((control) => {
+                    const name = control.getAttribute('name');
+                    if (!name) return;
+
+                    if (control instanceof HTMLInputElement && control.type === 'radio') {
+                        if (control.checked && control.value !== '') {
+                            d[name] = control.value;
+                        }
+                    } else if (control instanceof HTMLSelectElement || control instanceof HTMLInputElement) {
+                        if (control.value !== '') {
+                            d[name] = control.value;
+                        }
+                    }
+                });
+            },
         },
         columns,
         serverSide: true,
@@ -296,6 +313,31 @@ if (catalogPage instanceof HTMLElement && catalogTable instanceof HTMLTableEleme
         order: [[0, 'desc']],
         pageLength: 10,
         language: config.language || {},
+    });
+
+    const filterControls = catalogPage.querySelectorAll('[data-filter-control]');
+    filterControls.forEach((control) => {
+        control.addEventListener('change', () => {
+            if (control instanceof HTMLInputElement && control.type === 'radio') {
+                const group = catalogPage.querySelectorAll(`input[type="radio"][name="${control.name}"]`);
+                group.forEach((radio) => {
+                    const tab = radio.closest('.admin-filter-tab');
+                    if (tab) {
+                        tab.classList.toggle('is-active', radio.checked);
+                    }
+                });
+            }
+
+            const url = new URL(window.location.href);
+            if (control.value !== '') {
+                url.searchParams.set(control.name, control.value);
+            } else {
+                url.searchParams.delete(control.name);
+            }
+            window.history.replaceState({}, '', url.toString());
+
+            catalogDataTable?.ajax.reload();
+        });
     });
 }
 
@@ -459,6 +501,42 @@ const responseErrors = (payload, fallback) => {
     return [payload?.message || fallback];
 };
 
+const initializeImageDropify = (container) => {
+    const jquery = window.jQuery;
+    if (typeof jquery !== 'function' || typeof jquery.fn?.dropify !== 'function') return;
+
+    container.querySelectorAll('input.dropify').forEach((input) => {
+        if (!(input instanceof HTMLInputElement) || jquery(input).data('dropify')) return;
+
+        const $input = jquery(input);
+        $input.dropify({
+            maxFileSize: '10M',
+            allowedFileExtensions: ['jpg', 'jpeg', 'png', 'webp'],
+            messages: {
+                default: input.dataset.dropifyDefault,
+                replace: input.dataset.dropifyReplace,
+                remove: input.dataset.dropifyRemove,
+                error: input.dataset.dropifyError,
+            },
+            tpl: {
+                clearButton: '<button type="button" class="dropify-clear" aria-label="{{ remove }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="m19 6-1 14H6L5 6"/><path d="M10 11v5M14 11v5"/></svg></button>',
+            },
+            error: {
+                fileSize: input.dataset.dropifyFileSizeError,
+                fileExtension: input.dataset.dropifyFileTypeError,
+            },
+        });
+
+        $input.on('dropify.afterClear', (event, instance) => {
+            const defaultFile = instance.settings.defaultFile;
+            if (!defaultFile) return;
+
+            instance.file.name = instance.cleanFilename(defaultFile);
+            instance.setPreview(instance.isImage(), defaultFile);
+        });
+    });
+};
+
 const openCatalogModal = async (url, heading) => {
     if (!(adminModal instanceof HTMLElement) || !(adminModalContent instanceof HTMLElement)) return;
 
@@ -480,7 +558,8 @@ const openCatalogModal = async (url, heading) => {
         }
 
         adminModalContent.innerHTML = payload.data.html;
-        adminModalContent.querySelector('input, select, textarea')?.focus();
+        initializeImageDropify(adminModalContent);
+        adminModalContent.querySelector('input:not(.dropify), select, textarea')?.focus();
     } catch (error) {
         const alert = document.createElement('div');
         alert.className = 'admin-alert admin-alert--danger';

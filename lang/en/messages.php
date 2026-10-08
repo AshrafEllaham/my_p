@@ -17,6 +17,9 @@ return [
     'account' => [
         'type_updated' => 'The account type and location were updated successfully.',
     ],
+    'banners' => [
+        'listed' => 'Banners were retrieved successfully.',
+    ],
     'profile' => [
         'user_updated' => 'The user profile was updated successfully.',
         'store_updated' => 'The store profile was saved successfully.',
@@ -97,6 +100,11 @@ return [
         'account_type' => [
             'required' => 'The account type is required.',
             'enum' => 'The account type must be user or store.',
+        ],
+        'banner_type' => [
+            'label' => 'The banner audience type',
+            'string' => 'The banner audience type must be text.',
+            'enum' => 'The banner audience type must be user or store.',
         ],
         'country_id' => [
             'required_with' => 'The country is required when a governorate or city is submitted.',
