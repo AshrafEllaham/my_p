@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
         loading: 'Loading application settings...',
         empty: 'This content is not available yet.',
         error: 'Could not load application settings.',
-        openPage: 'Open page',
         retry: 'Try again',
         back: 'Back to account',
       }
@@ -22,12 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
         loading: 'جارٍ تحميل إعدادات التطبيق...',
         empty: 'هذا المحتوى غير متاح حاليًا.',
         error: 'تعذر تحميل إعدادات التطبيق.',
-        openPage: 'فتح الصفحة',
         retry: 'إعادة المحاولة',
         back: 'العودة إلى حسابي',
       };
   const title = copy[field];
   const content = document.getElementById('settingsContentText');
+  const webview = document.getElementById('settingsWebview');
   const state = document.getElementById('settingsLoadState');
   const retry = document.getElementById('settingsRetry');
   const back = document.getElementById('settingsBackLink');
@@ -39,6 +38,13 @@ document.addEventListener('DOMContentLoaded', () => {
   back.href = `15-account.html?lang=${language}${params.has('theme') ? `&theme=${encodeURIComponent(params.get('theme'))}` : ''}`;
   back.setAttribute('aria-label', copy.back);
   content.style.whiteSpace = 'pre-line';
+  webview.title = title;
+  webview.addEventListener('load', () => {
+    if (!webview.hasAttribute('src')) return;
+    webview.hidden = false;
+    state.hidden = true;
+  });
+  webview.addEventListener('error', () => showState(copy.error, true));
   retry.textContent = copy.retry;
 
   function showState(message, canRetry = false) {
@@ -51,6 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
     showState(copy.loading);
     retry.hidden = true;
     content.textContent = '';
+    webview.hidden = true;
+    webview.removeAttribute('src');
 
     try {
       const response = await fetch('http://127.0.0.1:8000/api/settings', {
@@ -67,17 +75,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const isPageUrl = /^https?:\/\//i.test(value);
       if (isPageUrl) {
-        const pageUrl = new URL(value);
-        const link = document.createElement('a');
-        link.href = pageUrl.href;
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer';
-        link.textContent = copy.openPage;
-        content.replaceChildren(link);
+        webview.src = new URL(value).href;
       } else {
         content.textContent = value;
+        content.hidden = false;
+        state.hidden = true;
       }
-      state.hidden = true;
     } catch (error) {
       showState(error.message || copy.error, true);
     }

@@ -3625,8 +3625,11 @@ table.dataTable thead>tr>th.dt-orderable-desc:hover {
 .dropify-wrapper input.dropify { position: absolute; inset: 0; z-index: 3; width: 100%; height: 100%; padding: 0; opacity: 0; cursor: pointer; }
 .dropify-wrapper .dropify-message { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 8px; padding: 18px; text-align: center; pointer-events: none; }
 .dropify-wrapper .dropify-message .file-icon { display: none; }
-.dropify-wrapper .dropify-message p { margin: 0; color: var(--ink); font-size: 13px; font-weight: 650; }
+.dropify-wrapper .dropify-upload-icon { display: inline-grid; place-items: center; width: 44px; height: 44px; margin-bottom: 2px; border-radius: 12px; background: var(--surface-muted, rgba(148, 163, 184, 0.12)); color: var(--muted); transition: background-color 160ms ease, color 160ms ease; }
+.dropify-wrapper:hover .dropify-upload-icon, .dropify-wrapper:focus-within .dropify-upload-icon { background: var(--action-accent-soft, rgba(37, 99, 235, 0.1)); color: var(--action-accent, #2563eb); }
+.dropify-wrapper .dropify-upload-icon svg { width: 22px; height: 22px; }
 .dropify-wrapper .dropify-error { display: none; margin: 0; color: var(--danger); font-size: 11px; }
+.dropify-wrapper.has-error { border-color: var(--danger) !important; background-color: var(--danger-soft, rgba(239, 68, 68, 0.05)); }
 .dropify-wrapper.has-error .dropify-error { display: block; }
 .dropify-wrapper .dropify-preview { position: absolute; inset: 0; z-index: 2; overflow: hidden; background: var(--surface); pointer-events: none; }
 .dropify-wrapper .dropify-render { position: absolute; inset: 0; display: grid; place-items: center; padding: 10px; }
@@ -3950,6 +3953,17 @@ html[data-theme="dark"] .dt-container .dt-paging .dt-paging-button.disabled:acti
 .admin-settings-actions { display: flex; justify-content: flex-end; margin-top: 18px; }
 .admin-settings-actions svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 @media (max-width: 850px) { .admin-settings-languages { grid-template-columns: 1fr; } }
+.admin-settings-images-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.admin-settings-image-card { display: flex; flex-direction: column; gap: 12px; padding: 16px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); transition: border-color 160ms ease, box-shadow 160ms ease; }
+.admin-settings-image-card:hover { border-color: var(--action-accent-soft); }
+.admin-settings-image-card__header { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.admin-settings-image-card__title { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 700; color: var(--ink); cursor: pointer; }
+.admin-settings-image-card__title svg { width: 17px; height: 17px; color: var(--action-accent); flex-shrink: 0; }
+.admin-settings-image-card__badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; background: var(--action-accent-soft); color: var(--action-accent); }
+.admin-settings-image-card__badge--empty { background: var(--surface-muted, rgba(148, 163, 184, 0.12)); color: var(--muted); }
+.admin-settings-image-card .admin-field__help { margin-top: 2px; font-size: 11.5px; color: var(--muted); line-height: 1.5; }
+@media (max-width: 1024px) { .admin-settings-images-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .admin-settings-images-grid { grid-template-columns: 1fr; } }
 .admin-form-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; flex: 1 0 auto; }
 .admin-form-grid__full { grid-column: 1 / -1; }
 .admin-field__control select, .admin-field__control textarea { width: 100%; color: var(--ink); border: 0; outline: 0; background: transparent; font: inherit; font-size: 13px; font-weight: 650; }

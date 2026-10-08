@@ -18,16 +18,15 @@ class SettingsRepository extends MainRepository
     {
         return $this->getModel()->newQuery()
             ->with('translations')
-            ->find(self::SINGLETON_ID);
+            ->first();
     }
 
     /** @param array<string, mixed> $data */
     public function saveSingleton(array $data): Settings
     {
-        $settings = $this->getModel()->newQuery()->find(self::SINGLETON_ID);
+        $settings = $this->getModel()->newQuery()->first();
         if ($settings === null) {
             $settings = $this->getModel()->newInstance();
-            $settings->setAttribute('id', self::SINGLETON_ID);
         }
 
         $settings->fill($data);

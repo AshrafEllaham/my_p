@@ -1,0 +1,96 @@
+.settings-content-view .status-bar {
+  display: none;
+}
+
+.settings-content-view .view-page {
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  padding: 0;
+  overflow: hidden;
+}
+
+.settings-content-view .view-head {
+  position: fixed;
+  z-index: 5;
+  top: 12px;
+  right: 12px;
+  left: 12px;
+  margin: 0;
+  padding: 4px 8px;
+  border: 1px solid rgba(225, 232, 241, .8);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, .94);
+  box-shadow: 0 5px 18px rgba(15, 23, 42, .12);
+  backdrop-filter: blur(12px);
+}
+
+.settings-content-view .settings-webview-card {
+  position: fixed;
+  z-index: 1;
+  inset: 0;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: #fff;
+}
+
+.settings-content-view .settings-webview-card iframe {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  background: #fff;
+}
+
+.settings-content-view .settings-webview-card iframe[hidden] {
+  display: none;
+}
+
+.settings-content-view #settingsLoadState {
+  position: fixed;
+  z-index: 3;
+  top: 50%;
+  left: 50%;
+  width: min(86vw, 360px);
+  margin: 0;
+  padding: 14px;
+  transform: translate(-50%, -50%);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .96);
+  box-shadow: 0 8px 28px rgba(15, 23, 42, .14);
+}
+
+.settings-content-view #settingsLoadState[hidden] {
+  display: none;
+}
+
+.settings-content-view #settingsRetry {
+  position: fixed;
+  z-index: 3;
+  top: calc(50% + 42px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.settings-content-view #settingsContentText:not([hidden]) {
+  position: fixed;
+  z-index: 2;
+  inset: 76px 16px 16px;
+  overflow: auto;
+  padding: 16px;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.contact-form-card {
+  margin-bottom: 24px;
+}

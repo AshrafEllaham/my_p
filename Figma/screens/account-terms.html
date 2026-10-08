@@ -8,8 +8,9 @@
   <link rel="stylesheet" href="account-view.css">
   <link rel="stylesheet" href="uber-ui.css">
   <link rel="stylesheet" href="user-experience.css">
+  <link rel="stylesheet" href="settings-content.css">
 </head>
-<body class="saey-account-view" data-settings-field="terms_conditions">
+<body class="saey-account-view settings-content-view" data-settings-field="terms_conditions">
   <div class="status-bar"><span class="status-time">9:41</span><div class="status-icons">▮▮ ◔ ▰</div></div>
   <main class="view-page">
     <header class="view-head">
@@ -17,7 +18,7 @@
       <h1>الشروط والأحكام</h1>
       <span class="view-head-spacer"></span>
     </header>
-    <article class="view-card legal-card"><p id="settingsContentText">جارٍ التحميل...</p></article>
+    <article class="view-card legal-card settings-webview-card"><iframe id="settingsWebview" title="الشروط والأحكام" loading="eager" hidden></iframe><p id="settingsContentText" hidden></p></article>
     <p id="settingsLoadState" role="status" aria-live="polite">جارٍ تحميل إعدادات التطبيق...</p>
     <button type="button" id="settingsRetry" hidden>إعادة المحاولة</button>
   </main>

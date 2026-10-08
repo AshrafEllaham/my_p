@@ -1,2 +1,50 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>سعي — تواصل معنا</title><link rel="stylesheet" href="auth.css"><link rel="stylesheet" href="account-view.css">  <link rel="stylesheet" href="uber-ui.css">
-<link rel="stylesheet" href="user-experience.css"></head><body class="saey-account-view"><div class="status-bar"><span class="status-time">9:41</span><div class="status-icons">▮▮ ◔ ▰</div></div><main class="view-page"><header class="view-head"><a class="view-back" href="15-account.html" aria-label="رجوع"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a><h1>تواصل معنا</h1><span class="view-head-spacer"></span></header><p class="view-intro">فريق سعي جاهز يساعدك في أي سؤال أو مشكلة تواجهك.</p><section class="view-card"><a class="contact-option" href="mailto:support@saey.app"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><div><strong>البريد الإلكتروني</strong><small>support@saey.app</small></div></a><a class="contact-option" href="tel:16000"><svg viewBox="0 0 24 24"><path d="M6.5 3h3l1.5 4-2 1.5a15 15 0 0 0 6.5 6.5l1.5-2 4 1.5v3c0 1.1-.9 2-2 2C10.7 19.5 4.5 13.3 4.5 5c0-1.1.9-2 2-2Z"/></svg><div><strong>خدمة العملاء</strong><small>16000 · يوميًا من 9 ص إلى 9 م</small></div></a></section><section class="view-card"><h2 class="view-card-title">تابع سعي</h2><div class="contact-socials"><a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="إنستجرام"><span>IG</span><strong>Instagram</strong></a><a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="فيسبوك"><span>f</span><strong>Facebook</strong></a><a href="https://wa.me/201000000000" target="_blank" rel="noreferrer" aria-label="واتساب"><span>WA</span><strong>WhatsApp</strong></a></div></section><form class="view-card" id="contactForm"><h2 class="view-card-title">أرسل رسالة</h2><div class="view-field"><label class="view-label" for="contactName">الاسم</label><input class="view-input" id="contactName" type="text" required></div><div class="view-field"><label class="view-label" for="contactEmail">البريد الإلكتروني</label><input class="view-input" id="contactEmail" type="email" dir="ltr" required></div><div class="view-field"><label class="view-label" for="contactSubject">عنوان الرسالة</label><input class="view-input" id="contactSubject" type="text" required></div><div class="view-field"><label class="view-label" for="contactMessage">الرسالة</label><textarea class="view-textarea" id="contactMessage" placeholder="اكتب تفاصيل طلبك أو استفسارك" required></textarea></div><p class="view-message" id="contactStatus" hidden></p><button class="view-button" type="submit">إرسال الرسالة</button></form></main><script>document.getElementById('contactForm').onsubmit=event=>{event.preventDefault();const status=document.getElementById('contactStatus'),message=document.getElementById('contactMessage').value.trim();if(message.length<10){status.textContent='اكتب تفاصيل أكثر عن طلبك.';status.className='view-message error';status.hidden=false;return;}localStorage.setItem('saey_last_support_message',JSON.stringify({name:document.getElementById('contactName').value,email:document.getElementById('contactEmail').value,subject:document.getElementById('contactSubject').value,message,date:new Date().toISOString()}));status.textContent='تم إرسال رسالتك، وسنتواصل معك قريبًا.';status.className='view-message success';status.hidden=false;event.currentTarget.reset();};</script><script src="user-experience.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>سعي — تواصل معنا</title>
+  <link rel="stylesheet" href="auth.css">
+  <link rel="stylesheet" href="account-view.css">
+  <link rel="stylesheet" href="uber-ui.css">
+  <link rel="stylesheet" href="user-experience.css">
+</head>
+<body class="saey-account-view">
+  <div class="status-bar"><span class="status-time">9:41</span><div class="status-icons">▮▮ ◔ ▰</div></div>
+  <main class="view-page">
+    <header class="view-head">
+      <a class="view-back" id="contactBackLink" href="15-account.html" aria-label="رجوع"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a>
+      <h1 id="contactTitle">تواصل معنا</h1>
+      <span class="view-head-spacer"></span>
+    </header>
+    <p class="view-intro" id="contactIntro">بيانات التواصل الرسمية وروابط حسابات سعي.</p>
+    <section class="view-card" aria-labelledby="contactInfoTitle">
+      <h2 class="view-card-title" id="contactInfoTitle">معلومات التواصل</h2>
+      <a class="contact-option" id="contactWhatsapp" target="_blank" rel="noopener noreferrer" hidden><svg viewBox="0 0 24 24"><path d="M20 11.8a8 8 0 0 1-11.8 7L4 20l1.2-4A8 8 0 1 1 20 11.8Z"/><path d="M9 9c.5 2 2 3.5 4 4l1-1 2 1c-.4 1.5-1.4 2-2.5 1.8-3-.6-5.5-3.1-6.1-6.1C7.2 7.6 7.7 6.6 9.2 6.2l1 2Z"/></svg><div><strong id="whatsappLabel">واتساب</strong><small id="whatsappValue"></small></div></a>
+      <a class="contact-option" id="contactPhone" hidden><svg viewBox="0 0 24 24"><path d="M6.5 3h3l1.5 4-2 1.5a15 15 0 0 0 6.5 6.5l1.5-2 4 1.5v3c0 1.1-.9 2-2 2C10.7 19.5 4.5 13.3 4.5 5c0-1.1.9-2 2-2Z"/></svg><div><strong id="phoneLabel">الهاتف</strong><small id="phoneValue"></small></div></a>
+      <a class="contact-option" id="contactOtherPhone" hidden><svg viewBox="0 0 24 24"><path d="M6.5 3h3l1.5 4-2 1.5a15 15 0 0 0 6.5 6.5l1.5-2 4 1.5v3c0 1.1-.9 2-2 2C10.7 19.5 4.5 13.3 4.5 5c0-1.1.9-2 2-2Z"/></svg><div><strong id="otherPhoneLabel">هاتف إضافي</strong><small id="otherPhoneValue"></small></div></a>
+      <a class="contact-option" id="contactEmail" hidden><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><div><strong id="emailLabel">البريد الإلكتروني</strong><small id="emailValue"></small></div></a>
+      <div class="contact-load-state" id="contactLoadState" role="status" aria-live="polite"><span class="faq-spinner" id="contactSpinner"></span><p id="contactStateText">جارٍ تحميل بيانات التواصل...</p><button id="contactRetry" type="button" hidden>إعادة المحاولة</button></div>
+    </section>
+    <section class="view-card" aria-labelledby="socialsTitle">
+      <h2 class="view-card-title" id="socialsTitle">تابع سعي</h2>
+      <div class="contact-socials">
+        <a id="instagramLink" target="_blank" rel="noopener noreferrer" aria-label="إنستجرام" hidden><span>IG</span><strong>Instagram</strong></a>
+        <a id="facebookLink" target="_blank" rel="noopener noreferrer" aria-label="فيسبوك" hidden><span>f</span><strong>Facebook</strong></a>
+      </div>
+      <p class="settings-load-state" id="socialsEmpty" hidden>لا توجد روابط اجتماعية متاحة حاليًا.</p>
+    </section>
+    <form class="view-card contact-form-card" id="contactForm">
+      <h2 class="view-card-title" id="contactFormTitle">أرسل رسالة</h2>
+      <div class="view-field"><label class="view-label" id="contactNameLabel" for="contactName">الاسم</label><input class="view-input" id="contactName" name="name" type="text" required></div>
+      <div class="view-field"><label class="view-label" id="contactEmailLabel" for="contactFormEmail">البريد الإلكتروني</label><input class="view-input" id="contactFormEmail" name="email" type="email" dir="ltr" required></div>
+      <div class="view-field"><label class="view-label" id="contactSubjectLabel" for="contactSubject">عنوان الرسالة</label><input class="view-input" id="contactSubject" name="subject" type="text" required></div>
+      <div class="view-field"><label class="view-label" id="contactMessageLabel" for="contactMessage">الرسالة</label><textarea class="view-textarea" id="contactMessage" name="message" placeholder="اكتب تفاصيل طلبك أو استفسارك" required></textarea></div>
+      <p class="view-message" id="contactStatus" role="status" aria-live="polite" hidden></p>
+      <button class="view-button" id="contactSubmit" type="submit">إرسال الرسالة</button>
+    </form>
+  </main>
+  <script src="account-contact.js"></script>
+  <script src="user-experience.js"></script>
+</body>
+</html>
