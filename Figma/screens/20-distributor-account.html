@@ -92,6 +92,7 @@
 
   <script src="user-state.js"></script>
   <script src="merchant-state.js"></script>
+  <script src="account-api.js"></script>
   <script>
     const bindSheet=(trigger,sheet,close,save,selector,onSave)=>{const box=document.getElementById(sheet),options=[...box.querySelectorAll(selector)];document.getElementById(trigger).onclick=()=>{box.classList.add('visible');box.setAttribute('aria-hidden','false')};document.getElementById(close).onclick=()=>box.classList.remove('visible');box.onclick=e=>{if(e.target===box)box.classList.remove('visible')};options.forEach(option=>option.onclick=()=>options.forEach(item=>item.classList.toggle('active',item===option)));document.getElementById(save).onclick=()=>{onSave(box.querySelector(`${selector}.active`));box.classList.remove('visible')}};
     bindSheet('languageRow','languageSheet','closeLanguageSheet','saveLanguage','.language-option',option=>document.querySelector('#languageRow small').textContent=option.dataset.language);
@@ -99,7 +100,7 @@
     bindSheet('themeRow','themeSheet','closeThemeSheet','saveTheme','[data-theme-option]',option=>applyTheme(option.dataset.themeOption));
     const merchantFinance=SaeyMerchant.finance(),merchantInventory=SaeyMerchant.inventory();document.getElementById('accountFinanceBalance').textContent=`${Number(merchantFinance.available).toLocaleString('ar-EG')} ج.م`;const attentionCount=merchantInventory.filter(item=>item.stock<=item.threshold).length;document.getElementById('accountLowStock').textContent=`${attentionCount.toLocaleString('ar-EG')} تحتاج متابعة`;const storedStoreName=localStorage.getItem('saey_store_name')||'نقطة ستور';document.getElementById('accountStoreName').textContent=storedStoreName;document.getElementById('accountStoreRowName').textContent=storedStoreName;
     const activeCoupons=SaeyState.coupons().filter(item=>item.enabled&&new Date(`${item.expiresAt}T23:59:59`)>=new Date()).length;document.getElementById('activeCouponsCount').textContent=`${activeCoupons.toLocaleString('ar-EG')} نشط`;const activeCompetitions=SaeyState.competitions().filter(item=>item.merchant==='نقطة ستور'&&item.status==='active'&&!item.winnerId).length;document.getElementById('activeCompetitionsCount').textContent=`${activeCompetitions.toLocaleString('ar-EG')} نشطة`;
-    document.getElementById('logoutButton').onclick=()=>location.href='01-login.html';
+    document.getElementById('logoutButton').onclick=async event=>{const button=event.currentTarget;button.disabled=true;try{await SaeyAccountApi.request('/logout','POST');SaeyAccountApi.clearToken();location.href='01-login.html'}catch(error){window.alert(error.message||'تعذر تسجيل الخروج. حاول مرة أخرى.');button.disabled=false}};
   </script>
 </body>
 </html>

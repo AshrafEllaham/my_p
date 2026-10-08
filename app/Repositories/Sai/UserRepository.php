@@ -3,6 +3,7 @@
 namespace App\Repositories\Sai;
 
 use App\Enums\SocialLoginProviderEnum;
+use App\Enums\UserStatusEnum;
 use App\Helpers\ImageHelper;
 use App\Models\Sai\SocialAccount;
 use App\Models\Sai\User;
@@ -50,6 +51,16 @@ class UserRepository extends MainRepository
             ->first();
     }
 
+    public function findTrashedByEmail(string $email): ?User
+    {
+        return $this->query()->onlyTrashed()->where('email', $email)->first();
+    }
+
+    public function findTrashedBySocialId(string $socialId): ?User
+    {
+        return $this->query()->onlyTrashed()->where('social_id', $socialId)->first();
+    }
+
     public function findBySocialIdentity(SocialLoginProviderEnum $provider, string $socialId): ?User
     {
         return SocialAccount::query()
@@ -91,6 +102,24 @@ class UserRepository extends MainRepository
         $user->forceFill(['last_login_at' => now()])->save();
     }
 
+    public function updatePassword(User $user, string $password): void
+    {
+        $user->forceFill(['password' => $password])->save();
+    }
+
+    public function updateStatus(User $user, UserStatusEnum $status): void
+    {
+        $user->forceFill(['status' => $status])->save();
+    }
+
+    public function lockForUpdate(int|string $id): User
+    {
+        /** @var User $user */
+        $user = $this->query()->lockForUpdate()->findOrFail($id);
+
+        return $user;
+    }
+
     public function updatePhone(User $user, string $phoneCode, string $phone): void
     {
         $user->forceFill([
@@ -123,5 +152,10 @@ class UserRepository extends MainRepository
     public function deleteRecord(int|string $id): bool
     {
         return (bool) $this->findOrFail($id)->delete();
+    }
+
+    public function softDelete(User $user): bool
+    {
+        return (bool) $user->delete();
     }
 }

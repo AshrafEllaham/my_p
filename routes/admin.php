@@ -25,7 +25,6 @@ Route::group([
     Route::middleware('guest:admin')->group(function (): void {
         Route::get('/login', [LoginController::class, 'show'])->name('admin.login');
         Route::post('/login', [LoginController::class, 'login'])
-            ->middleware('throttle:5,1')
             ->name('admin.login.post');
     });
 

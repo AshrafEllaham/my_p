@@ -150,11 +150,14 @@
       offers_enabled: ['العروض والكوبونات', 'العروض المناسبة وتنبيهات انتهاء الكوبون'],
     };
     let values = {};
+    let changed = {};
     const render = () => {
       container.innerHTML = Object.entries(labels).map(([key, text]) => '<div class="setting-toggle-row"><div><strong>' + text[0] + '</strong><small>' + text[1] + '</small></div><button class="view-switch ' + (values[key] ? 'active' : '') + '" data-api-key="' + key + '" aria-label="' + (values[key] ? 'إيقاف ' : 'تفعيل ') + text[0] + '"></button></div>').join('');
       container.querySelectorAll('[data-api-key]').forEach(button => {
         button.onclick = () => {
-          values[button.dataset.apiKey] = !values[button.dataset.apiKey];
+          const key = button.dataset.apiKey;
+          values[key] = !values[key];
+          changed[key] = values[key];
           render();
         };
       });
@@ -168,20 +171,26 @@
       try {
         const result = await request('/api/notifications/preferences');
         values = result.data;
+        changed = {};
         render();
       } catch (error) {
         SaeyUX.state(container, {type: 'error', title: 'تعذر تحميل الإعدادات', message: error.message, action: 'إعادة المحاولة', onAction: load});
       }
     };
     saveButton.onclick = async () => {
+      if (Object.keys(changed).length === 0) {
+        SaeyUX.success('لا توجد تغييرات لحفظها');
+        return;
+      }
       saveButton.disabled = true;
       try {
         const result = await request('/api/notifications/preferences', {
-          method: 'PUT',
+          method: 'PATCH',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(values),
+          body: JSON.stringify(changed),
         });
         values = result.data;
+        changed = {};
         render();
         SaeyUX.success('تم حفظ إعدادات الإشعارات');
       } catch (error) {

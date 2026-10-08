@@ -4967,3 +4967,9 @@ html[data-theme] .admin-bottom-sheet .admin-form-actions .admin-button--primary:
     white-space: pre-wrap;
     overflow-wrap: anywhere;
 }
+
+.admin-catalog-image-preview {
+    max-width: 240px;
+    max-height: 160px;
+    object-fit: contain;
+}

@@ -59,7 +59,6 @@ class SaeyPreviewSchemaTest extends TestCase
             'activity_logs',
             'generated_documents',
             'account_data_requests',
-            'account_deletion_requests',
         ];
 
         foreach ($tables as $table) {

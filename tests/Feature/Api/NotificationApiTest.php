@@ -125,6 +125,40 @@ class NotificationApiTest extends TestCase
         ]);
     }
 
+    public function test_account_can_update_one_notification_preference_without_overwriting_others(): void
+    {
+        $user = UserFactory::new()->create();
+        $token = $this->tokenFor($user);
+
+        $this->withToken($token)
+            ->getJson('/api/notifications/preferences')
+            ->assertOk();
+
+        $this->withToken($token)
+            ->patchJson('/api/notifications/preferences', ['chats_enabled' => false])
+            ->assertOk()
+            ->assertJsonPath('data.chats_enabled', false)
+            ->assertJsonPath('data.orders_enabled', true)
+            ->assertJsonPath('data.offers_enabled', true);
+
+        $this->assertDatabaseHas('notification_preferences', [
+            'user_id' => $user->id,
+            'chats_enabled' => false,
+            'orders_enabled' => true,
+            'offers_enabled' => true,
+        ]);
+
+        $this->withToken($token)
+            ->patchJson('/api/notifications/preferences', ['chats_enabled' => true])
+            ->assertOk()
+            ->assertJsonPath('data.chats_enabled', true);
+
+        $this->assertDatabaseHas('notification_preferences', [
+            'user_id' => $user->id,
+            'chats_enabled' => true,
+        ]);
+    }
+
     public function test_notification_validation_messages_are_localized(): void
     {
         $user = UserFactory::new()->create();
@@ -134,13 +168,25 @@ class NotificationApiTest extends TestCase
             ->withToken($token)
             ->getJson('/api/notifications?per_page=101')
             ->assertUnprocessable()
-            ->assertJsonPath('errors.per_page.0', __('messages.validation.notifications_per_page.max'));
+            ->assertJsonPath('message', __('messages.validation.notifications_per_page.max'));
 
         $this->withHeader('Accept-Language', 'ar')
             ->withToken($token)
             ->putJson('/api/notifications/preferences', [])
             ->assertUnprocessable()
-            ->assertJsonPath('errors.orders_enabled.0', __('messages.validation.notification_preference.required'));
+            ->assertJsonPath('message', __('messages.validation.notification_preference.required'));
+
+        $this->withHeader('Accept-Language', 'en')
+            ->withToken($token)
+            ->patchJson('/api/notifications/preferences', ['chats_enabled' => 'enabled'])
+            ->assertUnprocessable()
+            ->assertJsonPath('message', __('messages.validation.notification_preference.boolean'));
+
+        $this->withHeader('Accept-Language', 'ar')
+            ->withToken($token)
+            ->patchJson('/api/notifications/preferences', [])
+            ->assertUnprocessable()
+            ->assertJsonPath('message', __('messages.validation.notification_preference.at_least_one'));
     }
 
     public function test_notification_preview_screens_use_the_shared_api_routes(): void
@@ -159,6 +205,7 @@ class NotificationApiTest extends TestCase
         $this->assertStringContainsString('notifications-api.js', $settingsScreen);
         $this->assertStringContainsString('/api/notifications/read-all', $apiScript);
         $this->assertStringContainsString('/api/notifications/preferences', $apiScript);
+        $this->assertStringContainsString("method: 'PATCH'", $apiScript);
     }
 
     private function createNotification(User $user, string $title): Notification

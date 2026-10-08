@@ -7,7 +7,7 @@
     @if ($category->image)
         <div class="admin-detail-list__full">
             <dt>{{ __('admin.catalog.fields.image') }}</dt>
-            <dd><img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($category->image) }}" alt="{{ $category->name }}" style="max-width: 240px; max-height: 160px; object-fit: contain"></dd>
+            <dd><img class="admin-catalog-image-preview" src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($category->image) }}" alt="{{ $category->name }}"></dd>
         </div>
     @endif
     <div><dt>{{ __('admin.catalog.fields.sort_order') }}</dt><dd>{{ $category->sort_order }}</dd></div>

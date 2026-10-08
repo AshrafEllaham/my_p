@@ -98,6 +98,7 @@
     </section>
   </div>
 
+  <script src="account-api.js"></script>
   <script>
     const languageSheet = document.getElementById('languageSheet');
     const languageLabel = document.querySelector('#languageRow small');
@@ -144,8 +145,17 @@
     });
     applyAccountTheme(selectedTheme, false);
     document.getElementById('accountWalletBalance').textContent = `${Number(localStorage.getItem('saey_wallet_balance') || 4500).toLocaleString('ar-EG')} ج.م`;
-    document.getElementById('logoutButton').addEventListener('click', () => {
-      window.location.href = '01-login.html';
+    document.getElementById('logoutButton').addEventListener('click', async event => {
+      const button = event.currentTarget;
+      button.disabled = true;
+      try {
+        await SaeyAccountApi.request('/logout', 'POST');
+        SaeyAccountApi.clearToken();
+        window.location.href = '01-login.html';
+      } catch (error) {
+        window.alert(error.message || 'تعذر تسجيل الخروج. حاول مرة أخرى.');
+        button.disabled = false;
+      }
     });
   </script>
   <script src="user-experience.js"></script>

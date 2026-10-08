@@ -3,12 +3,11 @@
 namespace App\Services\Sai;
 
 use App\Contracts\Sai\SocialIdentityVerifier;
-use App\Enums\SocialLoginProviderEnum;
 use App\Enums\OtpPurposeEnum;
 use App\Enums\UserStatusEnum;
 use App\Models\Sai\User;
-use App\Repositories\Sai\UserRepository;
 use App\Repositories\Sai\OneTimePasswordRepository;
+use App\Repositories\Sai\UserRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -59,7 +58,7 @@ class UserAuthenticationService
         return $user;
     }
 
-     /** @param array{phone_code: string, phone: string, email: string, password: string, password_confirmation: string} $data */
+    /** @param array{phone_code: string, phone: string, email: string, password: string, password_confirmation: string} $data */
     public function register(array $data, string $locale): User
     {
         return DB::transaction(function () use ($data, $locale): User {
@@ -90,17 +89,29 @@ class UserAuthenticationService
     /** @param array<string, string|null> $data */
     public function loginBySocial(array $data): User|array
     {
-        $user = $this->userRepository->getWhereFirst([
-            ['social_id', $data['social_id']]
-        ]);
+        $deletedUser = $this->userRepository->findTrashedBySocialId($data['social_id']);
 
-        if (!$user && isset($data['email'])) {
-            $user = $this->userRepository->getWhereFirst([
-                ['email', $data['email']]
+        if ($deletedUser === null && isset($data['email'])) {
+            $deletedUser = $this->userRepository->findTrashedByEmail(mb_strtolower($data['email']));
+        }
+
+        if ($deletedUser !== null) {
+            throw ValidationException::withMessages([
+                'identity' => __('messages.auth.account_unavailable'),
             ]);
         }
 
-        if (!$user) {
+        $user = $this->userRepository->getWhereFirst([
+            ['social_id', $data['social_id']],
+        ]);
+
+        if (! $user && isset($data['email'])) {
+            $user = $this->userRepository->getWhereFirst([
+                ['email', $data['email']],
+            ]);
+        }
+
+        if (! $user) {
             // لو عميل جديد اعمل تسجيل بياناته
             $user = $this->userRepository->createRecord([
                 'email' => $data['email'] ?? null,
@@ -112,6 +123,11 @@ class UserAuthenticationService
             ]);
         }
 
+        if ($user->status !== UserStatusEnum::Active) {
+            throw ValidationException::withMessages([
+                'identity' => __('messages.auth.account_unavailable'),
+            ]);
+        }
 
         return $user;
     }

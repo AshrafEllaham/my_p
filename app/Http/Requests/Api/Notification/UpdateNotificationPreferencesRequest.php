@@ -3,20 +3,42 @@
 namespace App\Http\Requests\Api\Notification;
 
 use App\Http\Requests\ApiRequest;
+use Illuminate\Validation\Validator;
 
 class UpdateNotificationPreferencesRequest extends ApiRequest
 {
-
     /** @return array<string, array<int, string>> */
     public function rules(): array
     {
+        $presence = $this->isMethod('PATCH') ? 'sometimes' : 'required';
+
         return [
-            'orders_enabled' => ['required', 'boolean'],
-            'pickup_enabled' => ['required', 'boolean'],
-            'returns_enabled' => ['required', 'boolean'],
-            'chats_enabled' => ['required', 'boolean'],
-            'offers_enabled' => ['required', 'boolean'],
+            'orders_enabled' => [$presence, 'boolean'],
+            'pickup_enabled' => [$presence, 'boolean'],
+            'returns_enabled' => [$presence, 'boolean'],
+            'chats_enabled' => [$presence, 'boolean'],
+            'offers_enabled' => [$presence, 'boolean'],
         ];
+    }
+
+    public function after(): array
+    {
+        return [function (Validator $validator): void {
+            $preferenceFields = [
+                'orders_enabled',
+                'pickup_enabled',
+                'returns_enabled',
+                'chats_enabled',
+                'offers_enabled',
+            ];
+
+            if ($this->isMethod('PATCH') && array_intersect($preferenceFields, array_keys($this->all())) === []) {
+                $validator->errors()->add(
+                    'preferences',
+                    __('messages.validation.notification_preference.at_least_one'),
+                );
+            }
+        }];
     }
 
     /** @return array<string, string> */

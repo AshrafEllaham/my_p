@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\AccountController;
 use App\Http\Controllers\Api\AccountTypeController;
 use App\Http\Controllers\Api\AuthApiController;
 use App\Http\Controllers\Api\BannerController;
 use App\Http\Controllers\Api\CatalogLookupController;
+use App\Http\Controllers\Api\ChangePasswordController;
 use App\Http\Controllers\Api\ContactUsController;
 use App\Http\Controllers\Api\FaqController;
 use App\Http\Controllers\Api\NotificationController;
@@ -45,6 +47,10 @@ Route::group([], function () {
     // -------------------------------------------------------
     Route::group(['middleware' => ['auth:api', 'throttle:60,1']], function () {
 
+        Route::post('/logout', [AccountController::class, 'logout']);
+        Route::delete('/account', [AccountController::class, 'destroy']);
+        Route::put('/change-password', [ChangePasswordController::class, 'update']);
+
         // ############################ notifications ############################
         Route::get('/notifications', [NotificationController::class, 'index']);
         Route::patch('/notifications/read-all', [NotificationController::class, 'markAllAsRead']);
@@ -53,6 +59,7 @@ Route::group([], function () {
         Route::delete('/notifications', [NotificationController::class, 'destroyAll']);
         Route::get('/notifications/preferences', [NotificationPreferenceController::class, 'show']);
         Route::put('/notifications/preferences', [NotificationPreferenceController::class, 'update']);
+        Route::patch('/notifications/preferences', [NotificationPreferenceController::class, 'update']);
 
         // ############################ chat ############################
     });

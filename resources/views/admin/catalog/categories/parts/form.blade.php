@@ -41,6 +41,7 @@
                 name="image"
                 type="file"
                 accept="image/jpeg,image/png,image/webp"
+                data-max-file-size="10M"
                 data-default-file="{{ $category?->image ? \Illuminate\Support\Facades\Storage::disk('public')->url($category->image) : '' }}"
                 data-dropify-default="{{ __('admin.catalog.drop_file') }}"
                 data-dropify-replace="{{ __('admin.catalog.replace_file') }}"

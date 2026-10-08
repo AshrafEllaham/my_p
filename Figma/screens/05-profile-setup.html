@@ -38,6 +38,14 @@
       background: var(--barq-blue-soft);
       color: var(--barq-blue);
     }
+    .barq-dropdown-item[aria-disabled="true"] {
+      color: var(--barq-light);
+      cursor: default;
+    }
+    .barq-dropdown-item[aria-disabled="true"]:hover {
+      background: transparent;
+      color: var(--barq-light);
+    }
     .barq-select-box[aria-disabled="true"] {
       background: #F8FAFC;
       color: var(--barq-light);
@@ -85,7 +93,7 @@
     <!-- Country Selector Card -->
     <div class="barq-select-card" style="position: relative;">
       <label class="barq-input-label">الدولة</label>
-      <div class="barq-select-box" id="countryBox" role="button" tabindex="0" aria-haspopup="listbox" aria-expanded="false" aria-controls="countryMenu">
+      <div class="barq-select-box" id="countryBox" role="button" tabindex="0" aria-haspopup="listbox" aria-expanded="false" aria-disabled="true" aria-controls="countryMenu">
         <div class="barq-select-value placeholder" id="countryValue">جارٍ تحميل الدول…</div>
         <div class="barq-select-chevron">
           <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
@@ -152,13 +160,22 @@
     let selectedGovernorateId = null;
     let selectedCityId = null;
 
-    const listData = async path => {
-      const response = await fetch(`${apiBaseUrl}/${path}`, {
-        headers: { Accept: 'application/json', 'Accept-Language': 'ar' }
+    const locationError = document.getElementById('locationError');
+    let governorateRequestId = 0;
+    let cityRequestId = 0;
+
+    const listData = async (path, params = {}) => {
+      const query = new URLSearchParams(params);
+      const queryString = query.toString();
+      const url = `${apiBaseUrl}/${path}${queryString ? `?${queryString}` : ''}`;
+      const response = await fetch(url, {
+        headers: { Accept: 'application/json', 'Accept-Language': 'ar' },
+        cache: 'no-store'
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.message || 'تعذر تحميل بيانات الموقع.');
-      return result.data || [];
+      if (!Array.isArray(result.data)) throw new Error('استجابة بيانات الموقع غير صالحة.');
+      return result.data;
     };
     const createOption = (item, label, key) => {
       const option = document.createElement('div');
@@ -174,7 +191,19 @@
       [countryBox, govBox, cityBox].forEach(box => box.setAttribute('aria-expanded', 'false'));
     };
     const setOptions = (menu, items, label, key) => {
+      if (items.length === 0) {
+        setMenuMessage(menu, 'لا توجد خيارات متاحة.');
+        return;
+      }
+
       menu.replaceChildren(...items.map(item => createOption(item, label(item), key)));
+    };
+    const setMenuMessage = (menu, message) => {
+      const item = document.createElement('div');
+      item.className = 'barq-dropdown-item';
+      item.setAttribute('aria-disabled', 'true');
+      item.textContent = message;
+      menu.replaceChildren(item);
     };
     const setPlaceholder = (element, text) => {
       element.textContent = text;
@@ -213,41 +242,69 @@
     countryMenu.addEventListener('click', async event => {
       const item = event.target.closest('[data-country-id]');
       if (!item) return;
+      locationError.hidden = true;
       selectedCountryId = Number(item.dataset.countryId);
       selectedGovernorateId = null;
       selectedCityId = null;
+      const requestId = ++governorateRequestId;
+      cityRequestId++;
       countryValue.textContent = item.textContent;
       countryValue.classList.remove('placeholder');
-      setPlaceholder(govValue, 'اختر المحافظة');
+      setPlaceholder(govValue, 'جارٍ تحميل المحافظات…');
       setPlaceholder(cityValue, 'اختر المدينة');
-      govBox.setAttribute('aria-disabled', 'false');
+      setMenuMessage(govMenu, 'جارٍ تحميل المحافظات…');
+      govBox.setAttribute('aria-disabled', 'true');
       cityBox.setAttribute('aria-disabled', 'true');
       cityMenu.replaceChildren();
       closeMenus();
       try {
-        const governorates = await listData(`governorates?country_id=${selectedCountryId}`);
+        const governorates = await listData('governorates', { country_id: String(selectedCountryId) });
+        if (requestId !== governorateRequestId || selectedCountryId !== Number(item.dataset.countryId)) return;
         setOptions(govMenu, governorates, option => option.name, 'governorateId');
+        if (governorates.length > 0) {
+          setPlaceholder(govValue, 'اختر المحافظة');
+          govBox.setAttribute('aria-disabled', 'false');
+        } else {
+          setPlaceholder(govValue, 'لا توجد محافظات');
+        }
       } catch (error) {
-        document.getElementById('locationError').textContent = error.message;
-        document.getElementById('locationError').hidden = false;
+        if (requestId !== governorateRequestId) return;
+        setPlaceholder(govValue, 'تعذر تحميل المحافظات');
+        setMenuMessage(govMenu, 'تعذر تحميل المحافظات. اختر الدولة للمحاولة مرة أخرى.');
+        locationError.textContent = error.message;
+        locationError.hidden = false;
       }
     });
-    govMenu.addEventListener('click', event => {
+    govMenu.addEventListener('click', async event => {
       const item = event.target.closest('[data-governorate-id]');
-      if (item) {
-        selectedGovernorateId = Number(item.dataset.governorateId);
-        selectedCityId = null;
-        govValue.textContent = item.textContent;
-        govValue.classList.remove('placeholder');
-        setPlaceholder(cityValue, 'اختر المدينة');
-        cityBox.setAttribute('aria-disabled', 'false');
-        closeMenus();
-        listData(`cities?governorate_id=${selectedGovernorateId}`).then(cities => {
-          setOptions(cityMenu, cities, option => option.name, 'cityId');
-        }).catch(error => {
-          document.getElementById('locationError').textContent = error.message;
-          document.getElementById('locationError').hidden = false;
-        });
+      if (!item) return;
+      locationError.hidden = true;
+      selectedGovernorateId = Number(item.dataset.governorateId);
+      selectedCityId = null;
+      const requestId = ++cityRequestId;
+      govValue.textContent = item.textContent;
+      govValue.classList.remove('placeholder');
+      setPlaceholder(cityValue, 'جارٍ تحميل المدن…');
+      setMenuMessage(cityMenu, 'جارٍ تحميل المدن…');
+      cityBox.setAttribute('aria-disabled', 'true');
+      closeMenus();
+
+      try {
+        const cities = await listData('cities', { governorate_id: String(selectedGovernorateId) });
+        if (requestId !== cityRequestId || selectedGovernorateId !== Number(item.dataset.governorateId)) return;
+        setOptions(cityMenu, cities, option => option.name, 'cityId');
+        if (cities.length > 0) {
+          setPlaceholder(cityValue, 'اختر المدينة');
+          cityBox.setAttribute('aria-disabled', 'false');
+        } else {
+          setPlaceholder(cityValue, 'لا توجد مدن');
+        }
+      } catch (error) {
+        if (requestId !== cityRequestId) return;
+        setPlaceholder(cityValue, 'تعذر تحميل المدن');
+        setMenuMessage(cityMenu, 'تعذر تحميل المدن. اختر المحافظة للمحاولة مرة أخرى.');
+        locationError.textContent = error.message;
+        locationError.hidden = false;
       }
     });
     cityMenu.addEventListener('click', event => {
@@ -268,15 +325,36 @@
       cityBox.setAttribute('aria-expanded', 'false');
     });
 
-    listData('countries').then(countries => {
-      setOptions(countryMenu, countries, country => [country.flag, country.name].filter(Boolean).join(' '), 'countryId');
-      const defaultCountry = countries.find(country => country.code === 'EG' || country.phone_code === '+20') || countries[0];
-      if (defaultCountry) countryMenu.querySelector(`[data-country-id="${defaultCountry.id}"]`)?.click();
-    }).catch(error => {
-      const locationError = document.getElementById('locationError');
-      locationError.textContent = error.message;
-      locationError.hidden = false;
+    const loadCountries = async () => {
+      setPlaceholder(countryValue, 'جارٍ تحميل الدول…');
+      setMenuMessage(countryMenu, 'جارٍ تحميل الدول…');
+      countryBox.setAttribute('aria-disabled', 'true');
+      try {
+        const countries = await listData('countries');
+        setOptions(countryMenu, countries, country => [country.flag, country.name].filter(Boolean).join(' '), 'countryId');
+        if (countries.length === 0) {
+          setPlaceholder(countryValue, 'لا توجد دول متاحة');
+          return;
+        }
+
+        countryBox.setAttribute('aria-disabled', 'false');
+        const defaultCountry = countries.find(country => country.code === 'EG' || country.phone_code === '+20') || countries[0];
+        countryMenu.querySelector(`[data-country-id="${defaultCountry.id}"]`)?.click();
+      } catch (error) {
+        setPlaceholder(countryValue, 'تعذر تحميل الدول');
+        setMenuMessage(countryMenu, 'تعذر تحميل الدول. اضغط هنا لإعادة المحاولة.');
+        countryBox.setAttribute('aria-disabled', 'false');
+        locationError.textContent = error.message;
+        locationError.hidden = false;
+      }
+    };
+    countryBox.addEventListener('click', event => {
+      if (countryValue.textContent === 'تعذر تحميل الدول') {
+        event.stopPropagation();
+        loadCountries();
+      }
     });
+    loadCountries();
 
     const saveLocation = async skipLocation => {
       const signupDraft = JSON.parse(sessionStorage.getItem('saey_signup_draft') || 'null');

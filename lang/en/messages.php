@@ -10,12 +10,16 @@ return [
         'login_success' => 'You are now signed in.',
         'social_login_success' => 'You are now signed in with your social account.',
         'credentials_invalid' => 'The sign-in details are incorrect or the account is unavailable.',
+        'password_updated' => 'The password was changed successfully.',
+        'current_password_invalid' => 'The current password is incorrect.',
+        'logout_success' => 'You have been logged out.',
         'social_token_invalid' => 'The social identity could not be verified.',
         'social_account_already_linked' => 'This email is linked to another social sign-in method. Sign in with the linked method first.',
         'account_unavailable' => 'This account is unavailable for sign-in.',
     ],
     'account' => [
         'type_updated' => 'The account type and location were updated successfully.',
+        'deleted' => 'The account was deleted successfully.',
     ],
     'banners' => [
         'listed' => 'Banners were retrieved successfully.',
@@ -52,6 +56,11 @@ return [
     ],
     'validation_failed' => 'The submitted data is invalid.',
     'validation' => [
+        'change_password' => [
+            'current_password_required' => 'The current password is required.',
+            'current_password_string' => 'The current password must be text.',
+            'password_different' => 'The new password must be different from the current password.',
+        ],
         'contact_us' => [
             'attributes' => [
                 'name' => 'name',
@@ -279,7 +288,8 @@ return [
             'max' => 'The page size must not exceed 100.',
         ],
         'notification_preference' => [
-            'required' => 'Every notification preference is required.',
+            'required' => 'All notification preferences are required when replacing them.',
+            'at_least_one' => 'Choose at least one notification preference to update.',
             'boolean' => 'Every notification preference must be true or false.',
         ],
     ],
