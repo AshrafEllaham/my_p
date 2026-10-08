@@ -140,6 +140,7 @@
       <!-- Secondary Button: تخطي الآن -->
       <button class="barq-btn-secondary" id="skipLocationButton" type="button">تخطي الآن</button>
     </div>
+    <p class="auth-form-error" id="locationError" hidden></p>
 
   </main>
 
@@ -239,19 +240,47 @@
       cityBox.setAttribute('aria-expanded', 'false');
     });
 
-    document.getElementById('saveLocationButton').addEventListener('click', () => {
-      sessionStorage.setItem('saey_onboarding_location', JSON.stringify({
-        country_id: 1,
-        ...(selectedGovernorateId ? { governorate_id: selectedGovernorateId } : {}),
-        ...(selectedCity ? { city: selectedCity } : {})
-      }));
-      location.href = '04-account-type.html';
-    });
+    const saveLocation = async skipLocation => {
+      const signupDraft = JSON.parse(sessionStorage.getItem('saey_signup_draft') || 'null');
+      const error = document.getElementById('locationError');
+      const buttons = [document.getElementById('saveLocationButton'), document.getElementById('skipLocationButton')];
+      if (!signupDraft?.userId || !signupDraft?.accountType) {
+        location.href = '04-account-type.html';
+        return;
+      }
 
-    document.getElementById('skipLocationButton').addEventListener('click', () => {
-      sessionStorage.removeItem('saey_onboarding_location');
-      location.href = '04-account-type.html';
-    });
+      error.hidden = true;
+      buttons.forEach(button => { button.disabled = true; });
+      try {
+        const locationData = skipLocation
+          ? {}
+          : { country_id: 1, ...(selectedGovernorateId ? { governorate_id: selectedGovernorateId } : {}) };
+        const response = await fetch(`http://127.0.0.1:8000/api/accounts/${signupDraft.userId}/type`, {
+          method: 'PATCH',
+          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ account_type: signupDraft.accountType, ...locationData })
+        });
+        const result = await response.json();
+        if (!response.ok) {
+          const firstError = Object.values(result.errors || {}).flat()[0];
+          throw new Error(firstError || result.message || 'تعذر حفظ الموقع. حاول مرة أخرى.');
+        }
+
+        sessionStorage.removeItem('saey_onboarding_location');
+        const nextPage = signupDraft.name
+          ? signupDraft.accountType === 'store' ? '17-distributor-dashboard.html' : '08-user-home.html'
+          : signupDraft.accountType === 'store' ? '06-distributor-setup.html' : '08-profile-setup.html';
+        location.href = nextPage;
+      } catch (requestError) {
+        error.textContent = requestError instanceof TypeError
+          ? 'تعذر الاتصال بالخادم. تحقق من تشغيل API ثم أعد المحاولة.'
+          : requestError.message;
+        error.hidden = false;
+        buttons.forEach(button => { button.disabled = false; });
+      }
+    };
+    document.getElementById('saveLocationButton').addEventListener('click', () => saveLocation(false));
+    document.getElementById('skipLocationButton').addEventListener('click', () => saveLocation(true));
   </script>
 </body>
 </html>

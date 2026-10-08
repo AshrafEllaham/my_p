@@ -18,10 +18,10 @@ class RegisteredUserResource extends JsonResource
             'email' => $this->email,
             'phone_code' => $this->phone_code,
             'phone' => $this->phone,
+            'account_type' => $this->account_type?->value,
+            'onboarding' => $this->resource->getAttribute('onboarding'),
             'status' => $this->status?->value,
-            'verification_required' => false,
             'access_token' => $this->access_token,
-            'token_type' => 'bearer',
         ];
     }
 }

@@ -21,6 +21,25 @@ class UserAuthenticationService
         private readonly SocialIdentityVerifier $socialIdentityVerifier,
     ) {}
 
+    /** @return array{is_complete: bool, next_step: string, account_type: string|null} */
+    public function onboardingStatus(User $user): array
+    {
+        $accountType = $user->account_type?->value;
+        $hasName = is_string($user->name) && trim($user->name) !== '';
+
+        $nextStep = match (true) {
+            $accountType === null => 'select_account_type',
+            ! $hasName => 'complete_profile',
+            default => 'home',
+        };
+
+        return [
+            'is_complete' => $nextStep === 'home',
+            'next_step' => $nextStep,
+            'account_type' => $accountType,
+        ];
+    }
+
     /** @param array<string, string|null> $data */
     public function loginWithPassword(array $data): User
     {

@@ -221,28 +221,11 @@
 
     </div>
 
-    <div class="barq-input-card">
-      <label class="barq-input-label" for="ownerName">اسم المسؤول عن المتجر <span style="color:#EF4444">*</span></label>
-      <div class="barq-input-inner"><input id="ownerName" type="text" placeholder="الاسم كما يظهر في مستند الهوية"></div>
-    </div>
-    <div class="barq-input-card">
-      <label class="barq-input-label" for="merchantRegistration">رقم التسجيل أو السجل <span style="color:#EF4444">*</span></label>
-      <div class="barq-input-inner"><input id="merchantRegistration" type="text" inputmode="numeric" dir="ltr" placeholder="رقم التسجيل القانوني للنشاط"></div>
-    </div>
-    <div class="barq-input-card">
-      <label class="barq-input-label" for="merchantIban">حساب تسوية المبيعات (IBAN) <span style="color:#EF4444">*</span></label>
-      <div class="barq-input-inner"><input id="merchantIban" type="text" dir="ltr" autocomplete="off" placeholder="EG00 0000 0000 0000 0000 0000 000"></div>
-    </div>
-    <div class="barq-input-card">
-      <label class="barq-input-label" for="merchantDocument">مستند إثبات النشاط <span style="color:#EF4444">*</span></label>
-      <div class="barq-input-inner"><input id="merchantDocument" type="file" accept="image/png,image/jpeg,application/pdf"></div>
-      <small style="display:block;margin-top:6px;color:#64748B;font-size:11px;line-height:1.6">تُستخدم البيانات لمراجعة المتجر وتجهيز التسويات. تظهر لوحة المتجر بحالة «قيد المراجعة» حتى الاعتماد.</small>
-    </div>
     <p id="activationError" style="display:none;margin:0;padding:10px;border-radius:10px;background:#FEF2F2;color:#B91C1C;font-size:12px;font-weight:700"></p>
 
     <!-- CTA Button -->
     <div class="store-setup-cta" style="margin-top: 18px; margin-bottom: 24px;">
-      <button class="barq-btn-primary" type="button" id="saveStoreBtn">إرسال للمراجعة والمتابعة</button>
+      <button class="barq-btn-primary" type="button" id="saveStoreBtn">حفظ ومتابعة</button>
     </div>
 
   </main>
@@ -336,10 +319,6 @@
       const cover = coverInput.files[0];
       const description = storeDesc.value.trim();
       const address = document.getElementById('storeAddress').value.trim();
-      const owner = document.getElementById('ownerName').value.trim();
-      const registration = document.getElementById('merchantRegistration').value.trim();
-      const iban = document.getElementById('merchantIban').value.replace(/\s+/g, '').toUpperCase();
-      const documentFile = document.getElementById('merchantDocument').files[0];
       const error = document.getElementById('activationError');
 
       if (!token || name.length < 2 || !image || !selectedCategoryId) {
@@ -349,12 +328,6 @@
         error.style.display = 'block';
         return;
       }
-      if (owner.length < 3 || registration.length < 5 || !/^EG[A-Z0-9]{20,40}$/.test(iban) || !documentFile) {
-        error.textContent = 'أكمل بيانات المسؤول ورقم التسجيل وIBAN صحيح وارفع مستند إثبات النشاط.';
-        error.style.display = 'block';
-        return;
-      }
-
       const body = new FormData();
       body.append('name', name);
       body.append('image', image);
@@ -379,10 +352,6 @@
           throw new Error(firstError || result.message || 'تعذر حفظ ملف المتجر.');
         }
 
-        localStorage.setItem('saey_merchant_activation_v1', JSON.stringify({status:'pending_review', owner, registration, ibanLast4:iban.slice(-4), documentName:documentFile.name, submittedAt:new Date().toISOString()}));
-        const finance = JSON.parse(localStorage.getItem('saey_merchant_finance_v1') || '{}');
-        finance.bank = {...(finance.bank || {}), holder:owner, iban};
-        localStorage.setItem('saey_merchant_finance_v1', JSON.stringify(finance));
         location.href = '17-distributor-dashboard.html';
       } catch (requestError) {
         error.textContent = requestError instanceof TypeError
@@ -390,7 +359,7 @@
           : requestError.message;
         error.style.display = 'block';
         button.disabled = false;
-        button.textContent = 'إرسال للمراجعة والمتابعة';
+        button.textContent = 'حفظ ومتابعة';
       }
     });
   </script>

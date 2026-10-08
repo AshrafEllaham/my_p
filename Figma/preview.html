@@ -2129,8 +2129,7 @@
       </div>
 
       <div class="stage-meta" aria-hidden="true">
-        <div class="stage-meta-title"><span id="stageMetaLabel">معاينة الشاشة</span><strong id="stageMetaTitle">تسجيل
-            الدخول</strong></div>
+        <div class="stage-meta-title"><span id="stageMetaLabel">معاينة الشاشة</span><strong id="stageMetaTitle">شاشة البداية والترحيب</strong></div>
         <span class="stage-device-chip">iPhone 17 Pro Max · 440 × 956</span>
       </div>
 
@@ -2142,7 +2141,7 @@
             <div class="phone-btn-vol-up"></div>
             <div class="phone-btn-vol-down"></div>
             <div class="phone-btn-power"></div>
-            <iframe id="phoneViewportIframe" class="phone-screen-iframe" src="screens/01-login.html"
+            <iframe id="phoneViewportIframe" class="phone-screen-iframe" src="screens/00-splash.html"
               title="شاشة الموبايل"></iframe>
             <div class="phone-loading" id="phoneLoading" aria-hidden="true">
               <div class="phone-loading-content">
@@ -2199,8 +2198,8 @@
         <div class="current-label">
           <span id="currentScreenLabel">● شاشة حالية (HTML & CSS)</span>
         </div>
-        <h1 class="current-title" id="screenTitle">تسجيل الدخول</h1>
-        <div class="file-path-badge" id="screenFilePath">screens/01-login.html</div>
+        <h1 class="current-title" id="screenTitle">شاشة البداية والترحيب</h1>
+        <div class="file-path-badge" id="screenFilePath">screens/00-splash.html</div>
       </div>
 
       <div class="tags-row" id="tagsContainer">
@@ -2225,7 +2224,7 @@
   <div class="code-modal-overlay" id="codeModal">
     <div class="code-box">
       <div class="code-header">
-        <div class="code-title" id="codeModalTitle">screens/01-login.html</div>
+        <div class="code-title" id="codeModalTitle">screens/00-splash.html</div>
         <div class="code-actions">
           <button class="btn-copy-code" onclick="copyModalCode()">📋 نسخ الكود</button>
           <button class="btn-close-modal" onclick="closeCodeModal()" aria-label="إغلاق">
@@ -2383,20 +2382,20 @@
         section: 'الدخول',
         sectionEn: 'Auth & Onboarding',
         file: '06-distributor-setup.html',
-        title: 'توثيق حساب الموزع',
-        titleEn: 'Distributor KYC & Setup',
-        tags: ['Distributor KYC', 'Commercial Register', 'Store Setup', 'Approval'],
+        title: 'إعداد ملف المتجر',
+        titleEn: 'Store Profile Setup',
+        tags: ['Store Profile', 'Merchant Setup'],
         desc: 'إدخال بيانات المتجر الأساسية وحفظ الاسم والصورة والتصنيف والبيانات الاختيارية عبر API ملف المتجر.',
         descEn: 'Save the store name, image, category, and optional profile data through the store profile API.',
         notes: [
-          'مدخلات متداخلة لاسم المؤسسة ورقم السجل التجاري',
-          'تنبيه إداري بزمن المراجعة خلال 24 ساعة عمل',
-          'يحفظ النموذج ملف المتجر عبر POST /api/store/profile قبل إرسال بيانات التوثيق للمراجعة'
+          'إعداد غلاف المتجر والشعار والاسم والتصنيف والوصف والعنوان',
+          'لا تطلب الشاشة بيانات مسؤول المتجر أو التسجيل أو المستندات أو IBAN',
+          'يحفظ النموذج ملف المتجر عبر POST /api/store/profile ثم ينتقل إلى لوحة المتجر'
         ],
         notesEn: [
-          'Nested card inputs for business name and commercial register',
-          '24-hour SLA verification notice card',
-          'The form saves the profile through POST /api/store/profile before continuing to review'
+          'Set the store cover, logo, name, category, description, and address',
+          'The screen does not request owner, registration, document, or IBAN details',
+          'The form saves the store profile through POST /api/store/profile and opens the dashboard'
         ]
       },
       {
@@ -3001,7 +3000,7 @@
         badge.style.color = '#059669';
       }
     }
-    let currentIndex = 0;
+    let currentIndex = Math.max(0, screens.findIndex(screen => screen.file === '00-splash.html'));
     let searchQuery = '';
     let autoSyncEnabled = true;
     let toastTimeout = null;

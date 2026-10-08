@@ -40,6 +40,7 @@ class AuthApiController extends Controller
     {
         $user = $this->authenticationService->register($request->validated(), app()->getLocale());
         $user->setAttribute('access_token', auth('api')->login($user));
+        $user->setAttribute('onboarding', $this->authenticationService->onboardingStatus($user));
 
         return jsonSuccess(
             RegisteredUserResource::make($user),
@@ -51,6 +52,7 @@ class AuthApiController extends Controller
     {
         $user = $this->authenticationService->loginWithPassword($request->validated());
         $user->setAttribute('access_token', auth('api')->login($user));
+        $user->setAttribute('onboarding', $this->authenticationService->onboardingStatus($user));
 
         return jsonSuccess(
             RegisteredUserResource::make($user),
@@ -62,6 +64,7 @@ class AuthApiController extends Controller
     {
         $user = $this->authenticationService->loginBySocial($request->validated());
         $user->setAttribute('access_token', auth('api')->login($user));
+        $user->setAttribute('onboarding', $this->authenticationService->onboardingStatus($user));
 
         return jsonSuccess(
             RegisteredUserResource::make($user),

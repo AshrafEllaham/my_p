@@ -106,7 +106,6 @@
 
     continueBtn.addEventListener('click', async () => {
       const signupDraft = JSON.parse(sessionStorage.getItem('saey_signup_draft') || 'null');
-      const locationData = JSON.parse(sessionStorage.getItem('saey_onboarding_location') || '{}');
 
       if (!signupDraft?.userId) {
         accountTypeError.textContent = 'أكمل إنشاء الحساب أولًا حتى يمكن حفظ نوع الحساب.';
@@ -123,7 +122,7 @@
         const response = await fetch(`http://127.0.0.1:8000/api/accounts/${signupDraft.userId}/type`, {
           method: 'PATCH',
           headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-          body: JSON.stringify({ account_type: selectedAccountType, ...locationData })
+          body: JSON.stringify({ account_type: selectedAccountType })
         });
         const result = await response.json();
 
@@ -134,13 +133,9 @@
 
         sessionStorage.setItem('saey_signup_draft', JSON.stringify({
           ...signupDraft,
-          accountType: result.data?.account_type,
-          countryId: result.data?.country_id,
-          governorateId: result.data?.governorate_id,
-          cityId: result.data?.city_id
+          accountType: result.data?.account_type
         }));
-        sessionStorage.removeItem('saey_onboarding_location');
-        location.href = selectedAccountType === 'store' ? '06-distributor-setup.html' : '08-profile-setup.html';
+        location.href = '05-profile-setup.html';
       } catch (requestError) {
         accountTypeError.textContent = requestError instanceof TypeError
           ? 'تعذر الاتصال بالخادم. تحقق من تشغيل API ثم أعد المحاولة.'

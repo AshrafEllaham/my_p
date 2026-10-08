@@ -2,24 +2,10 @@
 
 namespace App\Http\Requests\Api\Notification;
 
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Exceptions\HttpResponseException;
+use App\Http\Requests\ApiRequest;
 
-class UpdateNotificationPreferencesRequest extends FormRequest
+class UpdateNotificationPreferencesRequest extends ApiRequest
 {
-    public function authorize(): bool
-    {
-        return true;
-    }
-
-    protected function failedValidation(Validator $validator): never
-    {
-        throw new HttpResponseException(response()->json([
-            'message' => __('messages.validation_failed'),
-            'errors' => $validator->errors(),
-        ], 422));
-    }
 
     /** @return array<string, array<int, string>> */
     public function rules(): array

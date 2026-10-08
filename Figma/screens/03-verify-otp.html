@@ -149,8 +149,10 @@
           const registerResponse=await fetch('http://127.0.0.1:8000/api/register',{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify(signupDraft)});
           const registerResult=await registerResponse.json();
           if(!registerResponse.ok){const firstError=Object.values(registerResult.errors||{}).flat()[0];throw new Error(firstError||registerResult.message||'تعذر إنشاء الحساب.');}
-          sessionStorage.setItem('saey_signup_draft',JSON.stringify({phone_code:signupDraft.phone_code,phone:signupDraft.phone,email:signupDraft.email,userId:registerResult.data?.id}));
+          sessionStorage.setItem('saey_signup_draft',JSON.stringify({phone_code:signupDraft.phone_code,phone:signupDraft.phone,email:signupDraft.email,userId:registerResult.data?.id,name:registerResult.data?.name,accountType:registerResult.data?.account_type}));
           localStorage.setItem('saey_api_token',registerResult.data?.access_token||'');
+          location.href=registerResult.data?.onboarding?.next_step==='select_account_type'?'04-account-type.html':'08-user-home.html';
+          return;
         } else {
           localStorage.setItem('saey_otp_verified_at',new Date().toISOString());
         }

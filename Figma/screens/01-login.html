@@ -256,13 +256,29 @@
 
     function saveLoginSession(data) {
       localStorage.setItem('saey_api_token', data.access_token);
+      const signupDraft = JSON.parse(sessionStorage.getItem('saey_signup_draft') || 'null') || {};
+      sessionStorage.setItem('saey_signup_draft', JSON.stringify({
+        ...signupDraft,
+        userId: data.id,
+        name: data.name,
+        accountType: data.account_type,
+      }));
       localStorage.setItem('saey_session', JSON.stringify({
         userId: data.id,
+        name: data.name,
+        accountType: data.account_type,
         email: data.email,
         phone: data.phone,
         date: new Date().toISOString(),
       }));
-      location.href = '08-user-home.html';
+      const onboarding = data.onboarding || {};
+      if (onboarding.next_step === 'select_account_type') {
+        location.href = '04-account-type.html';
+      } else if (onboarding.next_step === 'complete_profile') {
+        location.href = onboarding.account_type === 'store' ? '06-distributor-setup.html' : '08-profile-setup.html';
+      } else {
+        location.href = onboarding.account_type === 'store' ? '17-distributor-dashboard.html' : '08-user-home.html';
+      }
     }
 
     async function postLogin(endpoint, payload) {

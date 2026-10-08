@@ -77,8 +77,8 @@ if (! function_exists('jsonApiValid')) {
 
         return response()->json([
             'code' => $code,
-            'message' => $msg !== '' ? $msg : ($messages[0] ?? ''),
-        ]);
+            'message' => $msg !== '' ? $msg : ($messages[0] ?? __('messages.validation_failed')),
+        ], $code);
     }
 }
 
