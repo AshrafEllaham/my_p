@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="icon" href="{{ asset('assets/brand/saey-mark.svg') }}" type="image/svg+xml">
+    <link rel="icon" href="{{ get_file(setting()->fav_icon ?: 'assets/brand/saey-mark.svg') }}">
     <title>@yield('page-title', __('admin.dashboard')) | {{ __('admin.app_name') }}</title>
     @include('admin.layout.inc._css')
     @stack('css')

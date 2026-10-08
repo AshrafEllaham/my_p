@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Contracts\Sai\SocialIdentityVerifier;
 use App\Enums\AdminTypeEnum;
+use App\Models\Sai\Settings;
+use App\Repositories\Sai\SettingsRepository;
 use App\Services\Sai\OidcSocialIdentityVerifier;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
 use Illuminate\Support\ServiceProvider;
@@ -20,6 +22,9 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(SocialIdentityVerifier::class, OidcSocialIdentityVerifier::class);
+        $this->app->singleton('settings', function ($app): Settings {
+            return $app->make(SettingsRepository::class)->getSingleton() ?? new Settings;
+        });
     }
 
     /**

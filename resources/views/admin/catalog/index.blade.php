@@ -47,44 +47,7 @@
         <div class="admin-alert admin-alert--danger admin-catalog__notice" data-catalog-error hidden role="alert"></div>
 
         <div class="admin-panel admin-catalog__panel">
-            @if (!empty($filters))
-                <div class="admin-catalog__filters" data-catalog-filters>
-                    @foreach ($filters as $filter)
-                        <div class="admin-filter-group" data-filter-group="{{ $filter['name'] }}">
-                            <span class="admin-filter-group__label">
-                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
-                                <span>{{ $filter['label'] }}</span>
-                            </span>
-                            @if (($filter['type'] ?? 'tabs') === 'select')
-                                <div class="admin-field__control admin-field__control--select admin-filter-select">
-                                    <select name="{{ $filter['name'] }}" data-filter-control aria-label="{{ $filter['label'] }}">
-                                        <option value="">{{ $filter['all_label'] ?? __('admin.catalog.filters.all') }}</option>
-                                        @foreach ($filter['options'] as $value => $label)
-                                            <option value="{{ $value }}" @selected((string)($filter['value'] ?? '') === (string)$value)>
-                                                {{ $label }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            @else
-                                <div class="admin-filter-tabs" role="radiogroup" aria-label="{{ $filter['label'] }}">
-                                    @php $activeVal = (string)($filter['value'] ?? ''); @endphp
-                                    <label class="admin-filter-tab {{ $activeVal === '' ? 'is-active' : '' }}">
-                                        <input type="radio" name="{{ $filter['name'] }}" value="" data-filter-control {{ $activeVal === '' ? 'checked' : '' }}>
-                                        <span>{{ $filter['all_label'] ?? __('admin.catalog.filters.all') }}</span>
-                                    </label>
-                                    @foreach ($filter['options'] as $value => $label)
-                                        <label class="admin-filter-tab {{ $activeVal === (string)$value ? 'is-active' : '' }}">
-                                            <input type="radio" name="{{ $filter['name'] }}" value="{{ $value }}" data-filter-control {{ $activeVal === (string)$value ? 'checked' : '' }}>
-                                            <span>{{ $label }}</span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                            @endif
-                        </div>
-                    @endforeach
-                </div>
-            @endif
+            @include('admin.catalog.parts.filters')
 
             <div class="admin-table-wrap">
                 <table class="admin-table" data-admin-datatable>

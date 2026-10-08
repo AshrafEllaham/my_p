@@ -16,4 +16,9 @@ class FaqService
     {
         return $this->repository->getForType($type);
     }
+
+    public function listQuery(?AccountTypeEnum $type)
+    {
+        return $this->repository->getQueryBuilderForType($type);
+    }
 }

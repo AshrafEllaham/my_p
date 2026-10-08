@@ -501,30 +501,49 @@ const responseErrors = (payload, fallback) => {
     return [payload?.message || fallback];
 };
 
-const initializeImageDropify = (container) => {
+const initializeImageDropify = (container = document) => {
     const jquery = window.jQuery;
     if (typeof jquery !== 'function' || typeof jquery.fn?.dropify !== 'function') return;
 
-    container.querySelectorAll('input.dropify').forEach((input) => {
+    const root = container || document;
+    const inputs = root instanceof HTMLInputElement && root.matches('input.dropify')
+        ? [root]
+        : Array.from(root.querySelectorAll('input.dropify'));
+
+    inputs.forEach((input) => {
         if (!(input instanceof HTMLInputElement) || jquery(input).data('dropify')) return;
 
         const $input = jquery(input);
+        const maxFileSize = input.dataset.maxFileSize || '5M';
+        const height = input.dataset.height ? parseInt(input.dataset.height, 10) : null;
+
         $input.dropify({
-            maxFileSize: '10M',
+            maxFileSize: maxFileSize,
             allowedFileExtensions: ['jpg', 'jpeg', 'png', 'webp'],
             messages: {
-                default: input.dataset.dropifyDefault,
-                replace: input.dataset.dropifyReplace,
-                remove: input.dataset.dropifyRemove,
-                error: input.dataset.dropifyError,
+                default: input.dataset.dropifyDefault || '',
+                replace: input.dataset.dropifyReplace || '',
+                remove: input.dataset.dropifyRemove || '',
+                error: input.dataset.dropifyError || '',
             },
             tpl: {
-                clearButton: '<button type="button" class="dropify-clear" aria-label="{{ remove }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="m19 6-1 14H6L5 6"/><path d="M10 11v5M14 11v5"/></svg></button>',
+                message: '<div class="dropify-message"><span class="dropify-upload-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span><p>{{ default }}</p></div>',
+                clearButton: `<button type="button" class="dropify-clear" aria-label="${input.dataset.dropifyRemove || 'Remove'}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="m19 6-1 14H6L5 6"/><path d="M10 11v5M14 11v5"/></svg></button>`,
             },
             error: {
-                fileSize: input.dataset.dropifyFileSizeError,
-                fileExtension: input.dataset.dropifyFileTypeError,
+                fileSize: input.dataset.dropifyFileSizeError || '',
+                fileExtension: input.dataset.dropifyFileTypeError || '',
             },
+            ...(height ? { height } : {}),
+        });
+
+        const wrapper = $input.closest('.dropify-wrapper');
+        if (input.classList.contains('has-error')) {
+            wrapper.addClass('has-error');
+        }
+
+        $input.on('dropify.fileReady', () => {
+            wrapper.removeClass('has-error');
         });
 
         $input.on('dropify.afterClear', (event, instance) => {
@@ -536,6 +555,15 @@ const initializeImageDropify = (container) => {
         });
     });
 };
+
+window.initializeImageDropify = initializeImageDropify;
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => initializeImageDropify(document));
+} else {
+    initializeImageDropify(document);
+}
+window.addEventListener('load', () => initializeImageDropify(document));
 
 const openCatalogModal = async (url, heading) => {
     if (!(adminModal instanceof HTMLElement) || !(adminModalContent instanceof HTMLElement)) return;

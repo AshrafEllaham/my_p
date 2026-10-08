@@ -5,6 +5,7 @@ namespace App\Repositories\Sai;
 use App\Enums\AccountTypeEnum;
 use App\Models\Sai\Faq;
 use App\Repositories\MainRepository;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 class FaqRepository extends MainRepository
@@ -30,5 +31,19 @@ class FaqRepository extends MainRepository
         $faqs = $query->get();
 
         return $faqs;
+    }
+
+    public function getQueryBuilderForType(?AccountTypeEnum $type): Builder
+    {
+        $query = $this->getModel()->newQuery()
+            ->select(['id', 'type'])
+            ->with('translations')
+            ->orderBy('id');
+
+        if ($type !== null) {
+            $query->where('type', $type->value);
+        }
+
+        return $query;
     }
 }

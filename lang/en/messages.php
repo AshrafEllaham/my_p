@@ -23,6 +23,9 @@ return [
     'faqs' => [
         'listed' => 'FAQs were retrieved successfully.',
     ],
+    'settings' => [
+        'loaded' => 'Application settings were retrieved successfully.',
+    ],
     'profile' => [
         'user_updated' => 'The user profile was updated successfully.',
         'store_updated' => 'The store profile was saved successfully.',
@@ -113,6 +116,47 @@ return [
             'label' => 'The FAQ audience type',
             'string' => 'The FAQ audience type must be text.',
             'enum' => 'The FAQ audience type must be user or store.',
+        ],
+        'settings' => [
+            'attributes' => [
+                'fav_icon' => 'favicon',
+                'logo_header' => 'header logo',
+                'logo_footer' => 'footer logo',
+                'whatsapp' => 'WhatsApp number or URL',
+                'phone' => 'phone number',
+                'other_phone' => 'other phone number',
+                'email' => 'email address',
+                'facebook' => 'Facebook URL',
+                'instagram' => 'Instagram URL',
+                'ar.website_name' => 'website name in Arabic',
+                'en.website_name' => 'website name in English',
+                'ar.about_app' => 'About the app in Arabic',
+                'ar.privacy' => 'Privacy policy in Arabic',
+                'ar.terms_conditions' => 'Terms and conditions in Arabic',
+                'en.about_app' => 'About the app in English',
+                'en.privacy' => 'Privacy policy in English',
+                'en.terms_conditions' => 'Terms and conditions in English',
+            ],
+            'image' => [
+                'image' => 'The uploaded file must be an image.',
+                'mimes' => 'The image must be a JPG, JPEG, PNG, or WEBP file.',
+                'max' => 'The image must not be larger than 5 MB.',
+                'uploaded' => 'The image could not be uploaded. Check its size and try again.',
+            ],
+            'contact' => [
+                'string' => 'Contact details must be text.',
+                'max' => 'Contact details are too long.',
+                'email' => 'Enter a valid email address.',
+                'url' => 'Enter a valid URL starting with http or https.',
+            ],
+            'translations' => [
+                'required' => 'This field is required in both Arabic and English.',
+                'array' => 'The translation data is invalid.',
+                'string' => 'The content must be text.',
+            ],
+            'website_name' => [
+                'max' => 'The website name must not exceed 255 characters.',
+            ],
         ],
         'country_id' => [
             'required_with' => 'The country is required when a governorate or city is submitted.',

@@ -88,7 +88,7 @@ if (! function_exists('get_file')) {
         }
 
         if ($path === 'logo') {
-            $path = setting()->logo ?? 'assets/default/Sai.png';
+            $path = setting()->logo_header ?? 'assets/default/Sai.png';
         }
 
         if (! $path) {

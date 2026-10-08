@@ -50,19 +50,7 @@ class FaqController extends Controller
                 ['data' => 'type_label', 'name' => 'faqs.type', 'title' => __('admin.faqs.fields.type')],
                 ['data' => 'actions', 'name' => 'actions', 'title' => __('admin.catalog.fields.actions'), 'orderable' => false, 'searchable' => false],
             ],
-            'filters' => [
-                [
-                    'name' => 'type',
-                    'type' => 'select',
-                    'label' => __('admin.faqs.filters.type_label'),
-                    'all_label' => __('admin.catalog.filters.all'),
-                    'value' => (string) $request->query('type', ''),
-                    'options' => [
-                        AccountTypeEnum::User->value => __('admin.banners.types.user'),
-                        AccountTypeEnum::Store->value => __('admin.banners.types.store'),
-                    ],
-                ],
-            ],
+            'filters' => $this->accountTypeFilter($request),
         ]);
     }
 

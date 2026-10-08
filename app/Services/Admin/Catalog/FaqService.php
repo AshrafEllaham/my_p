@@ -15,7 +15,7 @@ class FaqService
         private readonly DatabaseManager $database,
     ) {}
 
-    public function dataTableQuery(string $locale, ?AccountTypeEnum $type): Builder
+    public function dataTableQuery(string $locale, ?AccountTypeEnum $type = null): Builder
     {
         return $this->repository->dataTableQuery($locale, $type);
     }

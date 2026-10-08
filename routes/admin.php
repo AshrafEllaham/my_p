@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\GovernorateController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\MainCategoryController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -31,6 +32,8 @@ Route::group([
         Route::get('/dashboard', [HomeController::class, 'index'])->name('admin.index');
         Route::get('/profile', [ProfileController::class, 'edit'])->name('admin.profile.edit');
         Route::put('/profile', [ProfileController::class, 'update'])->name('admin.profile.update');
+        Route::get('/settings', [SettingsController::class, 'edit'])->name('admin.settings.edit');
+        Route::put('/settings', [SettingsController::class, 'update'])->name('admin.settings.update');
         Route::prefix('developer')->name('admin.developer.')->middleware('developer')->group(function (): void {
             Route::get('/commands', [CommandController::class, 'index'])->name('commands.index');
             Route::get('/commands/create', [CommandController::class, 'create'])->name('commands.create');

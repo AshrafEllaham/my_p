@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
   const params = new URLSearchParams(window.location.search);
   const type = params.get('type') === 'store' ? 'store' : 'user';
-  const language = params.get('lang') === 'en' ? 'en' : 'ar';
+  const savedLanguage = params.get('lang') || localStorage.getItem('souq_lang') || 'ar';
+  const language = savedLanguage === 'en' ? 'en' : 'ar';
   const apiBaseUrl = 'http://127.0.0.1:8000/api';
   const list = document.getElementById('faqList');
   const state = document.getElementById('faqLoadState');
@@ -9,7 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const spinner = state.querySelector('.faq-spinner');
   const retry = document.getElementById('faqRetry');
   const copy = language === 'en'
-    ? {
+      ? {
+        title: 'Frequently asked questions',
         userIntro: 'Quick answers about shopping, pickup, and contacting stores.',
         storeIntro: 'Quick answers about managing your store on Saey.',
         loading: 'Loading frequently asked questions...',
@@ -18,7 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
         retry: 'Try again',
         back: type === 'store' ? 'Back to store account' : 'Back to account',
       }
-    : {
+      : {
+        title: 'الأسئلة الشائعة',
         userIntro: 'إجابات سريعة عن الشراء والاستلام والتواصل مع المتاجر.',
         storeIntro: 'إجابات سريعة عن إدارة متجرك على سعي.',
         loading: 'جارٍ تحميل الأسئلة الشائعة...',
@@ -30,9 +33,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.documentElement.lang = language;
   document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+  document.title = `${language === 'en' ? 'Saey' : 'سعي'} — ${copy.title}`;
+  document.querySelector('.view-head h1').textContent = copy.title;
   document.getElementById('faqIntro').textContent = type === 'store' ? copy.storeIntro : copy.userIntro;
   const backLink = document.getElementById('faqBackLink');
-  backLink.href = type === 'store' ? '20-distributor-account.html' : '15-account.html';
+  const backParams = new URLSearchParams({lang: language});
+  if (params.has('theme')) backParams.set('theme', params.get('theme'));
+  backLink.href = `${type === 'store' ? '20-distributor-account.html' : '15-account.html'}?${backParams.toString()}`;
   backLink.setAttribute('aria-label', copy.back);
   retry.textContent = copy.retry;
 
@@ -79,5 +86,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   retry.addEventListener('click', loadFaqs);
+  window.addEventListener('message', (event) => {
+    if (event.data?.type !== 'SET_LANG' || !['ar', 'en'].includes(event.data.lang)) return;
+
+    const nextParams = new URLSearchParams(window.location.search);
+    nextParams.set('lang', event.data.lang);
+    window.location.search = nextParams.toString();
+  });
   loadFaqs();
 });

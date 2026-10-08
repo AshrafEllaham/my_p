@@ -52,18 +52,7 @@ class BannerController extends Controller
                 ['data' => 'type_label', 'name' => 'banners.type', 'title' => __('admin.banners.fields.type')],
                 ['data' => 'actions', 'name' => 'actions', 'title' => __('admin.catalog.fields.actions'), 'orderable' => false, 'searchable' => false],
             ],
-            'filters' => [
-                [
-                    'name' => 'type',
-                    'label' => __('admin.banners.filters.type_label'),
-                    'all_label' => __('admin.banners.filters.all_types'),
-                    'value' => (string) $request->query('type', ''),
-                    'options' => [
-                        AccountTypeEnum::User->value => __('admin.banners.types.user'),
-                        AccountTypeEnum::Store->value => __('admin.banners.types.store'),
-                    ],
-                ],
-            ],
+            'filters' => $this->accountTypeFilter($request),
         ]);
     }
 

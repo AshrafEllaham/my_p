@@ -2898,20 +2898,28 @@
       { id: 87, num: '62', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: 'order-dispute-status.html', title: 'متابعة مشكلة الطلب', titleEn: 'Order Dispute Status', tags: ['Dispute', 'Resolution', 'Support'], desc: 'متابعة مشكلة أوقفت إتمام الطلب، مع قرار المراجعة وإضافة المعلومات المطلوبة.', descEn: 'Track an issue that paused completion, review the decision, and provide requested information.', notes: ['حالة النزاع', 'قرار واضح', 'إضافة رد المستخدم'], notesEn: ['Dispute status', 'Clear decision', 'Customer response'] }
     );
 
+    screens.push(
+      { id: 88, num: '12.1', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: 'account-faq.html', screenType: 'user', title: 'الأسئلة الشائعة للمستخدم', titleEn: 'User FAQs', tags: ['FAQs', 'User', 'Help'], desc: 'إجابات الأسئلة الشائعة للمستخدم، محمّلة من واجهة API حسب نوع الحساب.', descEn: 'Frequently asked questions for users, loaded from the API for the selected account type.', notes: ['يفتح من حساب المستخدم', 'يطلب /api/faqs?type=user', 'يعرض التحميل والفراغ والخطأ وإعادة المحاولة'], notesEn: ['Opened from the user account', 'Requests /api/faqs?type=user', 'Shows loading, empty, error, and retry states'] },
+      { id: 89, num: '31.1', section: 'الموزع', sectionEn: 'Distributor Portal', file: 'account-faq.html', screenType: 'store', title: 'الأسئلة الشائعة للمتجر', titleEn: 'Store FAQs', tags: ['FAQs', 'Store', 'Help'], desc: 'إجابات الأسئلة الشائعة للمتجر، محمّلة من واجهة API حسب نوع الحساب.', descEn: 'Frequently asked questions for stores, loaded from the API for the selected account type.', notes: ['يفتح من حساب المتجر', 'يطلب /api/faqs?type=store', 'يعرض التحميل والفراغ والخطأ وإعادة المحاولة'], notesEn: ['Opened from the store account', 'Requests /api/faqs?type=store', 'Shows loading, empty, error, and retry states'] },
+      { id: 90, num: '12.2', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: 'account-about.html', title: 'عن التطبيق', titleEn: 'About Saey', tags: ['Settings', 'About'], desc: 'نبذة التطبيق محمّلة من إعدادات النظام عبر API.', descEn: 'Application overview loaded from the settings API.', notes: ['يطلب /api/settings', 'يعرض about_app حسب اللغة', 'يعرض حالات التحميل والخطأ وإعادة المحاولة'], notesEn: ['Requests /api/settings', 'Displays about_app in the selected language', 'Handles loading, error, and retry states'] },
+      { id: 91, num: '12.3', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: 'account-privacy.html', title: 'سياسة الخصوصية', titleEn: 'Privacy Policy', tags: ['Settings', 'Privacy'], desc: 'سياسة الخصوصية محمّلة من إعدادات النظام عبر API.', descEn: 'Privacy policy loaded from the settings API.', notes: ['يطلب /api/settings', 'يعرض privacy حسب اللغة', 'يعرض حالات التحميل والخطأ وإعادة المحاولة'], notesEn: ['Requests /api/settings', 'Displays privacy in the selected language', 'Handles loading, error, and retry states'] },
+      { id: 92, num: '12.4', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: 'account-terms.html', title: 'الشروط والأحكام', titleEn: 'Terms and Conditions', tags: ['Settings', 'Terms'], desc: 'الشروط والأحكام محمّلة من إعدادات النظام عبر API.', descEn: 'Terms and conditions loaded from the settings API.', notes: ['يطلب /api/settings', 'يعرض terms_conditions حسب اللغة', 'يعرض حالات التحميل والخطأ وإعادة المحاولة'], notesEn: ['Requests /api/settings', 'Displays terms_conditions in the selected language', 'Handles loading, error, and retry states'] }
+    );
+
     // الشاشات الحالية المعتمدة في العارض.
     const authScreenFiles = new Set([
       '00-splash.html', '00-splash-01.html', '00-splash-02.html',
       '01-login.html', '02-signup.html', '03-verify-otp.html',
       '04-account-type.html', '05-profile-setup.html',
       '06-distributor-setup.html', '07-forgot-password.html', '07-reset-password.html', '08-profile-setup.html', '08-user-home.html', '27-competitions.html', '27-competition-details.html', '15-account.html', '16-orders.html',
-      '09-categories.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '17-wallet.html', '18-wallet-transactions.html', '19-store-details.html', '13-notifications.html', '14-chat-conversation.html', '14-chats.html', '20-checkout.html', '21-order-details.html', 'order-dispute-status.html', '22-rate-order.html', '23-search-results.html', '24-category-details.html', '25-product-reviews.html', '26-return-request.html', '26-return-status.html', '26-order-receipt.html', 'account-notification-settings.html', 'account-data.html', '17-distributor-dashboard.html', '18-distributor-products.html', '18-distributor-product-details.html', '18-add-product.html', '19-distributor-ads.html', '19-add-ad.html', '19-ad-review.html', 'distributor-ad-details.html', '20-distributor-account.html', 'merchant-activation-status.html', '20-distributor-coupons.html', '20-distributor-coupon-details.html', '20-distributor-competitions.html', '20-distributor-competition-details.html', '20-distributor-store-profile.html', '20-distributor-reviews.html', '21-distributor-orders.html', '21-distributor-order-details.html', '22-distributor-inventory.html', '22-distributor-finance.html', '23-distributor-returns.html', '23-distributor-disputes.html', '23-distributor-reports.html', '23-distributor-documents.html', '23-distributor-customers.html', '23-distributor-team.html', '24-distributor-notifications.html', '24-distributor-policies.html', '24-distributor-activity.html'
+      '09-categories.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '17-wallet.html', '18-wallet-transactions.html', '19-store-details.html', '13-notifications.html', '14-chat-conversation.html', '14-chats.html', '20-checkout.html', '21-order-details.html', 'order-dispute-status.html', '22-rate-order.html', '23-search-results.html', '24-category-details.html', '25-product-reviews.html', '26-return-request.html', '26-return-status.html', '26-order-receipt.html', 'account-notification-settings.html', 'account-data.html', 'account-faq.html', 'account-about.html', 'account-privacy.html', 'account-terms.html', '17-distributor-dashboard.html', '18-distributor-products.html', '18-distributor-product-details.html', '18-add-product.html', '19-distributor-ads.html', '19-add-ad.html', '19-ad-review.html', 'distributor-ad-details.html', '20-distributor-account.html', 'merchant-activation-status.html', '20-distributor-coupons.html', '20-distributor-coupon-details.html', '20-distributor-competitions.html', '20-distributor-competition-details.html', '20-distributor-store-profile.html', '20-distributor-reviews.html', '21-distributor-orders.html', '21-distributor-order-details.html', '22-distributor-inventory.html', '22-distributor-finance.html', '23-distributor-returns.html', '23-distributor-disputes.html', '23-distributor-reports.html', '23-distributor-documents.html', '23-distributor-customers.html', '23-distributor-team.html', '24-distributor-notifications.html', '24-distributor-policies.html', '24-distributor-activity.html'
     ]);
     const authScreenOrder = [
       '17-distributor-dashboard.html', '23-distributor-reports.html', '18-distributor-products.html', '22-distributor-inventory.html', '18-distributor-product-details.html', '21-distributor-orders.html', '21-distributor-order-details.html', '23-distributor-returns.html', '23-distributor-disputes.html', '19-distributor-ads.html', '18-add-product.html', '19-add-ad.html', '19-ad-review.html', 'distributor-ad-details.html', '20-distributor-competitions.html', '20-distributor-competition-details.html', '20-distributor-account.html', 'merchant-activation-status.html', '22-distributor-finance.html', '23-distributor-documents.html', '23-distributor-customers.html', '23-distributor-team.html', '24-distributor-notifications.html', '24-distributor-policies.html', '24-distributor-activity.html', '20-distributor-coupons.html', '20-distributor-coupon-details.html', '20-distributor-store-profile.html', '20-distributor-reviews.html',
       '00-splash.html', '00-splash-01.html', '00-splash-02.html',
       '01-login.html', '02-signup.html', '03-verify-otp.html',
       '04-account-type.html', '05-profile-setup.html', '08-profile-setup.html',
-      '06-distributor-setup.html', '08-user-home.html', '27-competitions.html', '27-competition-details.html', '15-account.html', '16-orders.html', '20-checkout.html', '21-order-details.html', 'order-dispute-status.html', '26-order-receipt.html', '26-return-request.html', '26-return-status.html', '22-rate-order.html', '17-wallet.html', '18-wallet-transactions.html', '19-store-details.html', '09-categories.html', '24-category-details.html', '23-search-results.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '25-product-reviews.html', '13-notifications.html', 'account-notification-settings.html', 'account-data.html', '14-chat-conversation.html', '14-chats.html', '07-forgot-password.html', '07-reset-password.html'
+      '06-distributor-setup.html', '08-user-home.html', '27-competitions.html', '27-competition-details.html', '15-account.html', 'account-faq.html', 'account-about.html', 'account-privacy.html', 'account-terms.html', '16-orders.html', '20-checkout.html', '21-order-details.html', 'order-dispute-status.html', '26-order-receipt.html', '26-return-request.html', '26-return-status.html', '22-rate-order.html', '17-wallet.html', '18-wallet-transactions.html', '19-store-details.html', '09-categories.html', '24-category-details.html', '23-search-results.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '25-product-reviews.html', '13-notifications.html', 'account-notification-settings.html', 'account-data.html', '14-chat-conversation.html', '14-chats.html', '07-forgot-password.html', '07-reset-password.html'
     ];
     screens.splice(0, screens.length, ...screens
       .filter(screen => authScreenFiles.has(screen.file))
@@ -2920,6 +2928,17 @@
     const urlParams = new URLSearchParams(window.location.search);
     let currentLang = urlParams.get('lang') || localStorage.getItem('souq_lang') || 'ar';
     let currentTheme = urlParams.get('theme') || localStorage.getItem('souq_theme') || 'light';
+
+    function screenKey(screen) {
+      return `${screen.file}|${screen.screenType || ''}`;
+    }
+
+    function screenUrl(screen, cacheBust = true) {
+      const params = new URLSearchParams({ lang: currentLang, theme: currentTheme });
+      if (screen.screenType) params.set('type', screen.screenType);
+      if (cacheBust) params.set('v', Date.now());
+      return `screens/${screen.file}?${params.toString()}`;
+    }
 
     function applyTheme(theme) {
       currentTheme = theme;
@@ -2957,9 +2976,9 @@
         } catch (e) { }
       }
       // Reload the active screen so the preview theme is applied after its document is ready.
-      if (iframe && screens[currentIndex] && iframe.getAttribute('data-loaded-file') === screens[currentIndex].file) {
+      if (iframe && screens[currentIndex] && iframe.getAttribute('data-loaded-file') === screenKey(screens[currentIndex])) {
         setPhoneLoading(true);
-        iframe.src = `screens/${screens[currentIndex].file}?lang=${currentLang}&theme=${currentTheme}&v=${Date.now()}`;
+        iframe.src = screenUrl(screens[currentIndex]);
       }
       syncIframeTheme();
     }
@@ -3373,8 +3392,8 @@
       const s = screens[currentIndex];
       const iframe = document.getElementById('phoneViewportIframe');
       setPhoneLoading(true);
-      iframe.src = `screens/${s.file}?lang=${currentLang}&theme=${currentTheme}&v=${Date.now()}`;
-      iframe.setAttribute('data-loaded-file', s.file);
+      iframe.src = screenUrl(s);
+      iframe.setAttribute('data-loaded-file', screenKey(s));
 
       const now = new Date();
       const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -3404,11 +3423,11 @@
 
       // Update phone iframe source directly with language query param
       const iframe = document.getElementById('phoneViewportIframe');
-      const targetSrc = `screens/${s.file}?lang=${currentLang}&theme=${currentTheme}&v=${Date.now()}`;
+      const targetSrc = screenUrl(s);
 
       // If same file, postMessage is instantaneous; else load src
       bindPhoneFrame();
-      if (iframe.getAttribute('data-loaded-file') === s.file) {
+      if (iframe.getAttribute('data-loaded-file') === screenKey(s)) {
         try {
           iframe.contentWindow.postMessage({ type: 'SET_LANG', lang: currentLang }, '*');
           syncIframeTheme();
@@ -3419,7 +3438,7 @@
       } else {
         setPhoneLoading(true);
         iframe.src = targetSrc;
-        iframe.setAttribute('data-loaded-file', s.file);
+        iframe.setAttribute('data-loaded-file', screenKey(s));
       }
 
       // Update Left Panel Details
@@ -3433,7 +3452,7 @@
 
       const directLink = document.getElementById('openDirectFileLink');
       if (directLink) {
-        directLink.href = `screens/${s.file}?lang=${currentLang}&theme=${currentTheme}`;
+        directLink.href = screenUrl(s, false);
       }
 
       const statusEl = document.getElementById('syncStatusText');

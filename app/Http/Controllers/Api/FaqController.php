@@ -20,9 +20,6 @@ class FaqController extends Controller
             ? AccountTypeEnum::from($data['type'])
             : null;
 
-        return jsonSuccess(
-            FaqResource::collection($this->service->list($type)),
-            __('messages.faqs.listed'),
-        );
+      return generalReturn($request, $this->service->listQuery($type), FaqResource::class, __('messages.faqs.listed'));
     }
 }

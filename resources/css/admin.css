@@ -3442,24 +3442,27 @@ html[data-theme="light"] .admin-nav__subitem.is-active { color: #fff; background
     align-items: center;
     gap: 16px;
     margin-bottom: 20px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid var(--border);
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface-strong, var(--surface));
 }
 
 .admin-filter-group {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
     flex-wrap: wrap;
 }
 
 .admin-filter-group__label {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 7px;
     color: var(--muted);
     font-size: 12px;
     font-weight: 800;
+    user-select: none;
 }
 
 .admin-filter-group__label svg {
@@ -3472,10 +3475,12 @@ html[data-theme="light"] .admin-nav__subitem.is-active { color: #fff; background
     display: inline-flex;
     align-items: center;
     padding: 4px;
-    background: var(--surface-strong, var(--surface));
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
     gap: 4px;
+    max-width: 100%;
+    overflow-x: auto;
 }
 
 .admin-filter-tab {
@@ -3483,6 +3488,7 @@ html[data-theme="light"] .admin-nav__subitem.is-active { color: #fff; background
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 7px;
     min-height: 34px;
     padding: 0 14px;
     border-radius: 8px;
@@ -3492,6 +3498,15 @@ html[data-theme="light"] .admin-nav__subitem.is-active { color: #fff; background
     cursor: pointer;
     transition: background-color 140ms ease, color 140ms ease, box-shadow 140ms ease;
     user-select: none;
+    white-space: nowrap;
+}
+
+.admin-filter-tab svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    opacity: 0.75;
+    transition: opacity 140ms ease, transform 140ms ease;
 }
 
 .admin-filter-tab input[type="radio"] {
@@ -3507,6 +3522,10 @@ html[data-theme="light"] .admin-nav__subitem.is-active { color: #fff; background
     background: rgba(127, 127, 127, 0.08);
 }
 
+.admin-filter-tab:hover svg {
+    opacity: 1;
+}
+
 .admin-filter-tab.is-active {
     color: #fff;
     background: #000;
@@ -3514,10 +3533,24 @@ html[data-theme="light"] .admin-nav__subitem.is-active { color: #fff; background
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
 }
 
+.admin-filter-tab.is-active svg {
+    opacity: 1;
+    color: #fff;
+}
+
+html[data-theme="dark"] .admin-filter-tabs {
+    background: rgba(255, 255, 255, 0.035);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
 html[data-theme="dark"] .admin-filter-tab.is-active {
     color: #000;
     background: #fff;
     box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+}
+
+html[data-theme="dark"] .admin-filter-tab.is-active svg {
+    color: #000;
 }
 
 .admin-filter-select {
@@ -3904,6 +3937,19 @@ html[data-theme="dark"] .dt-container .dt-paging .dt-paging-button.disabled:acti
 }
 
 .admin-catalog-form { display: flex; flex-direction: column; gap: 20px; min-height: 100%; }
+.admin-settings-section { margin-top: 18px; padding: 22px; }
+.admin-settings-section .admin-section__heading { margin-bottom: 18px; }
+.admin-settings-section .admin-section__heading h2 { margin: 0; font-size: 17px; }
+.admin-settings-languages { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.admin-settings-language { display: grid; gap: 14px; min-width: 0; margin: 0; padding: 16px; border: 1px solid var(--border); border-radius: 14px; }
+.admin-settings-language legend { padding: 0 8px; color: var(--ink); font-weight: 800; }
+.admin-settings-language textarea,.admin-settings-page .admin-input { width: 100%; min-height: 44px; padding: 11px 12px; color: var(--ink); border: 1px solid var(--border); border-radius: 10px; background: var(--surface); font: inherit; }
+.admin-settings-language textarea { min-height: 118px; resize: vertical; }
+.admin-settings-language textarea:focus,.admin-settings-page .admin-input:focus { outline: 2px solid rgba(0,0,0,.12); border-color: var(--ink); }
+.admin-settings-page .has-error { border-color: var(--danger) !important; }
+.admin-settings-actions { display: flex; justify-content: flex-end; margin-top: 18px; }
+.admin-settings-actions svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+@media (max-width: 850px) { .admin-settings-languages { grid-template-columns: 1fr; } }
 .admin-form-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; flex: 1 0 auto; }
 .admin-form-grid__full { grid-column: 1 / -1; }
 .admin-field__control select, .admin-field__control textarea { width: 100%; color: var(--ink); border: 0; outline: 0; background: transparent; font: inherit; font-size: 13px; font-weight: 650; }
