@@ -203,9 +203,13 @@ class NotificationApiTest extends TestCase
         $this->assertStringContainsString('notifications-api.js', $userScreen);
         $this->assertStringContainsString('notifications-api.js', $storeScreen);
         $this->assertStringContainsString('notifications-api.js', $settingsScreen);
+        $this->assertStringContainsString('id="preferences" aria-live="polite"', $settingsScreen);
+        $this->assertStringContainsString('id="savePreferences" hidden', $settingsScreen);
         $this->assertStringContainsString('/api/notifications/read-all', $apiScript);
         $this->assertStringContainsString('/api/notifications/preferences', $apiScript);
         $this->assertStringContainsString("method: 'PATCH'", $apiScript);
+        $this->assertStringContainsString("href: '01-login.html'", $apiScript);
+        $this->assertStringContainsString("href: '#retry-preferences'", $apiScript);
     }
 
     private function createNotification(User $user, string $title): Notification

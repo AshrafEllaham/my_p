@@ -1,9 +1,6 @@
 (function () {
-  const token = localStorage.getItem('saey_api_token');
-  const headers = {
-    Accept: 'application/json',
-    Authorization: 'Bearer ' + token,
-  };
+  const apiBaseUrl = 'http://127.0.0.1:8000/api';
+  const getToken = () => localStorage.getItem('saey_api_token');
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
     '&': '&amp;',
     '<': '&lt;',
@@ -12,12 +9,34 @@
     "'": '&#039;',
   })[character]);
   const request = async (url, options = {}) => {
-    const response = await fetch(url, {
-      ...options,
-      headers: {...headers, ...(options.headers || {})},
-    });
-    const result = await response.json();
-    if (!response.ok) throw new Error(result.message || 'تعذر تنفيذ الطلب.');
+    const token = getToken();
+    if (!token) {
+      const error = new Error('سجل الدخول للمتابعة.');
+      error.status = 401;
+      throw error;
+    }
+    let response;
+    try {
+      response = await fetch(apiBaseUrl + url.replace(/^\/api(?=\/)/, ''), {
+        ...options,
+        headers: {
+          Accept: 'application/json',
+          'Accept-Language': document.documentElement.lang || 'ar',
+          Authorization: 'Bearer ' + token,
+          ...(options.headers || {}),
+        },
+      });
+    } catch (cause) {
+      const error = new Error('تعذر الاتصال بالخادم. تحقق من تشغيل واجهة API ثم أعد المحاولة.');
+      error.cause = cause;
+      throw error;
+    }
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      const error = new Error(result.message || 'تعذر تنفيذ الطلب.');
+      error.status = response.status;
+      throw error;
+    }
 
     return result;
   };
@@ -59,7 +78,7 @@
     };
 
     const load = async () => {
-      if (!token) {
+      if (!getToken()) {
         SaeyUX.state(groups, {type: 'error', title: 'انتهت الجلسة', message: 'سجل الدخول لعرض إشعاراتك.'});
         return;
       }
@@ -108,7 +127,7 @@
       });
     };
     const load = async () => {
-      if (!token) {
+      if (!getToken()) {
         SaeyUI.renderState(container, {title: 'انتهت الجلسة', message: 'سجل الدخول لعرض إشعارات المتجر.'});
         return;
       }
@@ -140,7 +159,41 @@
   const initPreferences = () => {
     const container = document.getElementById('preferences');
     const saveButton = document.getElementById('savePreferences');
+    const message = document.getElementById('preferencesMessage');
     if (!container || !saveButton) return;
+
+    saveButton.hidden = true;
+
+    const showLoginState = () => {
+      SaeyUX.state(container, {
+        type: 'error',
+        title: 'انتهت الجلسة',
+        message: 'سجل الدخول لعرض إعدادات الإشعارات وتعديلها.',
+        action: 'تسجيل الدخول',
+        href: '01-login.html',
+      });
+      saveButton.hidden = true;
+    };
+    const showRetryState = error => {
+      SaeyUX.state(container, {
+        type: 'error',
+        title: 'تعذر تحميل الإعدادات',
+        message: error.message,
+        action: 'إعادة المحاولة',
+        href: '#retry-preferences',
+      });
+      container.querySelector('.ux-state a')?.addEventListener('click', event => {
+        event.preventDefault();
+        load();
+      });
+      saveButton.hidden = true;
+    };
+    const showSaveError = text => {
+      if (!message) return;
+      message.textContent = text;
+      message.className = 'view-message error';
+      message.hidden = false;
+    };
 
     const labels = {
       orders_enabled: ['تحديثات الطلبات', 'التأكيد والتجهيز وتغيّر الحالة'],
@@ -153,6 +206,8 @@
     let changed = {};
     const render = () => {
       container.innerHTML = Object.entries(labels).map(([key, text]) => '<div class="setting-toggle-row"><div><strong>' + text[0] + '</strong><small>' + text[1] + '</small></div><button class="view-switch ' + (values[key] ? 'active' : '') + '" data-api-key="' + key + '" aria-label="' + (values[key] ? 'إيقاف ' : 'تفعيل ') + text[0] + '"></button></div>').join('');
+      saveButton.hidden = false;
+      if (message) message.hidden = true;
       container.querySelectorAll('[data-api-key]').forEach(button => {
         button.onclick = () => {
           const key = button.dataset.apiKey;
@@ -163,18 +218,20 @@
       });
     };
     const load = async () => {
-      if (!token) {
-        SaeyUX.state(container, {type: 'error', title: 'انتهت الجلسة', message: 'سجل الدخول لتعديل الإعدادات.'});
+      if (!getToken()) {
+        showLoginState();
         return;
       }
       SaeyUX.loading(container);
+      saveButton.hidden = true;
       try {
         const result = await request('/api/notifications/preferences');
         values = result.data;
         changed = {};
         render();
       } catch (error) {
-        SaeyUX.state(container, {type: 'error', title: 'تعذر تحميل الإعدادات', message: error.message, action: 'إعادة المحاولة', onAction: load});
+        if (error.status === 401) showLoginState();
+        else showRetryState(error);
       }
     };
     saveButton.onclick = async () => {
@@ -183,6 +240,7 @@
         return;
       }
       saveButton.disabled = true;
+      if (message) message.hidden = true;
       try {
         const result = await request('/api/notifications/preferences', {
           method: 'PATCH',
@@ -194,7 +252,8 @@
         render();
         SaeyUX.success('تم حفظ إعدادات الإشعارات');
       } catch (error) {
-        SaeyUX.state(container, {type: 'error', title: 'تعذر حفظ الإعدادات', message: error.message});
+        if (error.status === 401) showLoginState();
+        else showSaveError(error.message);
       } finally {
         saveButton.disabled = false;
       }
