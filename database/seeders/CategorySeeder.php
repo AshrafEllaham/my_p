@@ -11,7 +11,6 @@ class CategorySeeder extends Seeder
     {
         $categories = [
             [
-                'icon' => 'shirt',
                 'sort_order' => 1,
                 'ar' => [
                     'name' => 'الأزياء والملابس',
@@ -45,7 +44,6 @@ class CategorySeeder extends Seeder
                 ],
             ],
             [
-                'icon' => 'smartphone',
                 'sort_order' => 2,
                 'ar' => [
                     'name' => 'الإلكترونيات',
@@ -79,7 +77,6 @@ class CategorySeeder extends Seeder
                 ],
             ],
             [
-                'icon' => 'watch',
                 'sort_order' => 3,
                 'ar' => [
                     'name' => 'الإكسسوارات',
@@ -109,7 +106,6 @@ class CategorySeeder extends Seeder
                 ],
             ],
             [
-                'icon' => 'car',
                 'sort_order' => 4,
                 'ar' => [
                     'name' => 'محركات وقطع غيار',
@@ -143,7 +139,6 @@ class CategorySeeder extends Seeder
                 ],
             ],
             [
-                'icon' => 'coffee',
                 'sort_order' => 5,
                 'ar' => [
                     'name' => 'الأطعمة والمشروبات',
@@ -188,7 +183,6 @@ class CategorySeeder extends Seeder
             if (! $parent) {
                 $parent = Category::create([
                     'parent_id' => null,
-                    'icon' => $catData['icon'],
                     'sort_order' => $catData['sort_order'],
                     'is_active' => true,
                     'ar' => $catData['ar'],
@@ -196,7 +190,6 @@ class CategorySeeder extends Seeder
                 ]);
             } else {
                 $parent->update([
-                    'icon' => $catData['icon'],
                     'sort_order' => $catData['sort_order'],
                     'is_active' => true,
                     'ar' => $catData['ar'],

@@ -9,14 +9,7 @@
         $imageFields = ['fav_icon', 'logo_header', 'logo_footer'];
     @endphp
 
-    <section class="admin-settings-page" aria-labelledby="settings-title">
-        <div class="admin-catalog__heading">
-            <div>
-                <span class="admin-eyebrow">{{ __('admin.navigation.settings') }}</span>
-                <h1 id="settings-title">{{ $oneObjectTitle }}</h1>
-                <p>{{ __('admin.site_settings.description') }}</p>
-            </div>
-        </div>
+    <section class="admin-settings-page" aria-labelledby="settings-identity-title">
 
         @if (session('success'))
             <div class="admin-alert admin-alert--success" role="status">

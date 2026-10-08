@@ -96,7 +96,6 @@ class MainCategoryController extends Controller
             'columns' => [
                 ['data' => 'id', 'name' => 'categories.id', 'title' => '#'],
                 ['data' => 'name', 'name' => 'category_translation.name', 'title' => __('admin.catalog.fields.name')],
-                ['data' => 'icon', 'name' => 'categories.icon', 'title' => __('admin.catalog.fields.icon')],
                 ['data' => 'children_count', 'name' => 'children_count', 'title' => __('admin.catalog.fields.sub_categories_count'), 'searchable' => false],
                 ['data' => 'sort_order', 'name' => 'categories.sort_order', 'title' => __('admin.catalog.fields.sort_order')],
                 ['data' => 'is_active', 'name' => 'categories.is_active', 'title' => __('admin.catalog.fields.status'), 'type' => 'status'],

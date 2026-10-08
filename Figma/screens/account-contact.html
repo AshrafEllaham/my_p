@@ -36,10 +36,10 @@
     </section>
     <form class="view-card contact-form-card" id="contactForm">
       <h2 class="view-card-title" id="contactFormTitle">أرسل رسالة</h2>
-      <div class="view-field"><label class="view-label" id="contactNameLabel" for="contactName">الاسم</label><input class="view-input" id="contactName" name="name" type="text" required></div>
-      <div class="view-field"><label class="view-label" id="contactEmailLabel" for="contactFormEmail">البريد الإلكتروني</label><input class="view-input" id="contactFormEmail" name="email" type="email" dir="ltr" required></div>
-      <div class="view-field"><label class="view-label" id="contactSubjectLabel" for="contactSubject">عنوان الرسالة</label><input class="view-input" id="contactSubject" name="subject" type="text" required></div>
-      <div class="view-field"><label class="view-label" id="contactMessageLabel" for="contactMessage">الرسالة</label><textarea class="view-textarea" id="contactMessage" name="message" placeholder="اكتب تفاصيل طلبك أو استفسارك" required></textarea></div>
+      <div class="view-field"><label class="view-label" id="contactNameLabel" for="contactName">الاسم</label><input class="view-input" id="contactName" name="name" type="text" maxlength="150" required></div>
+      <div class="view-field"><label class="view-label" id="contactEmailLabel" for="contactFormEmail">البريد الإلكتروني</label><input class="view-input" id="contactFormEmail" name="email" type="email" maxlength="255" dir="ltr" required></div>
+      <div class="view-field"><label class="view-label" id="contactSubjectLabel" for="contactSubject">عنوان الرسالة</label><input class="view-input" id="contactSubject" name="subject" type="text" maxlength="255" required></div>
+      <div class="view-field"><label class="view-label" id="contactMessageLabel" for="contactMessage">الرسالة</label><textarea class="view-textarea" id="contactMessage" name="message" minlength="10" maxlength="5000" placeholder="اكتب تفاصيل طلبك أو استفسارك" required></textarea></div>
       <p class="view-message" id="contactStatus" role="status" aria-live="polite" hidden></p>
       <button class="view-button" id="contactSubmit" type="submit">إرسال الرسالة</button>
     </form>

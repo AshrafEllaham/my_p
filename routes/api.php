@@ -3,6 +3,8 @@
 use App\Http\Controllers\Api\AccountTypeController;
 use App\Http\Controllers\Api\AuthApiController;
 use App\Http\Controllers\Api\BannerController;
+use App\Http\Controllers\Api\CatalogLookupController;
+use App\Http\Controllers\Api\ContactUsController;
 use App\Http\Controllers\Api\FaqController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\NotificationPreferenceController;
@@ -24,6 +26,12 @@ Route::group([], function () {
         Route::get('/banners', [BannerController::class, 'index'])->middleware('throttle:60,1');
         Route::get('/faqs', [FaqController::class, 'index'])->middleware('throttle:60,1');
         Route::get('/settings', [SettingsController::class, 'show'])->middleware('throttle:60,1');
+        Route::get('/main-categories', [CatalogLookupController::class, 'mainCategories'])->middleware('throttle:60,1');
+        Route::get('/sub-categories', [CatalogLookupController::class, 'subCategories'])->middleware('throttle:60,1');
+        Route::get('/countries', [CatalogLookupController::class, 'countries'])->middleware('throttle:60,1');
+        Route::get('/governorates', [CatalogLookupController::class, 'governorates'])->middleware('throttle:60,1');
+        Route::get('/cities', [CatalogLookupController::class, 'cities'])->middleware('throttle:60,1');
+        Route::post('/contact-us', [ContactUsController::class, 'store'])->middleware('throttle:5,1');
         Route::post('/send-otp', [AuthApiController::class, 'sendOtp'])->middleware('throttle:3,1');
         Route::post('/confirm-otp', [AuthApiController::class, 'confirmOtp'])->middleware('throttle:10,1');
         Route::post('/register', [AuthApiController::class, 'store'])->middleware('throttle:5,1');

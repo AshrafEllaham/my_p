@@ -22,7 +22,7 @@
   </div>
   <main class="catalog-page">
     <header class="catalog-header">
-      <a class="catalog-back" href="08-user-home.html" aria-label="رجوع">
+      <a class="catalog-back" id="catalogBack" href="08-user-home.html" aria-label="رجوع">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
       </a>
       <h1>كل الأقسام</h1>
@@ -32,8 +32,9 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
       <input id="categorySearch" type="search" placeholder="ابحث في الأقسام">
     </label>
-    <p class="catalog-subtitle">اختر القسم الذي يناسب احتياجك</p>
-    <section class="catalog-grid">
+    <p class="catalog-subtitle" id="catalogSubtitle">اختر القسم الذي يناسب احتياجك</p>
+    <p class="catalog-subtitle" id="catalogMessage" role="status" hidden></p>
+    <section class="catalog-grid" id="catalogGrid" aria-live="polite">
       <a class="catalog-category" href="24-category-details.html?category=أزياء%20وملابس">
         <span class="catalog-category-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
@@ -105,6 +106,127 @@
     <a href="16-orders.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="m9 13 2 2 4-4"/></svg></span><span>الطلبات</span></a>
     <a href="15-account.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></span><span>حسابي</span></a>
   </nav>
-  <script>const categorySearch=document.getElementById('categorySearch'),categories=[...document.querySelectorAll('.catalog-category')];categorySearch.addEventListener('input',()=>{const q=categorySearch.value.trim();categories.forEach(item=>item.hidden=q&&!item.textContent.includes(q));});</script>
+  <script>
+    const catalogApiBase = 'http://127.0.0.1:8000/api';
+    const categorySearch = document.getElementById('categorySearch');
+    const catalogGrid = document.getElementById('catalogGrid');
+    const catalogTitle = document.querySelector('.catalog-header h1');
+    const catalogSubtitle = document.getElementById('catalogSubtitle');
+    const catalogMessage = document.getElementById('catalogMessage');
+    const catalogBack = document.getElementById('catalogBack');
+    let mainCategories = [];
+    let visibleCategories = [];
+    let selectedMainCategory = null;
+
+    const fetchCategories = async path => {
+      const response = await fetch(`${catalogApiBase}/${path}`, {
+        headers: { Accept: 'application/json', 'Accept-Language': 'ar' }
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || 'تعذر تحميل الأقسام.');
+      return result.data || [];
+    };
+    const categoryIcon = () => {
+      const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      icon.setAttribute('viewBox', '0 0 24 24');
+      icon.setAttribute('fill', 'none');
+      icon.setAttribute('stroke', 'currentColor');
+      icon.setAttribute('stroke-width', '1.9');
+      icon.setAttribute('stroke-linecap', 'round');
+      icon.setAttribute('stroke-linejoin', 'round');
+      [['3','3'],['14','3'],['3','14'],['14','14']].forEach(([x,y]) => {
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', x); rect.setAttribute('y', y);
+        rect.setAttribute('width', '7'); rect.setAttribute('height', '7'); rect.setAttribute('rx', '1.5');
+        icon.append(rect);
+      });
+      return icon;
+    };
+    const renderCategories = () => {
+      const query = categorySearch.value.trim().toLocaleLowerCase();
+      const items = visibleCategories.filter(category => !query || category.name?.toLocaleLowerCase().includes(query));
+      catalogGrid.replaceChildren(...items.map(category => {
+        const link = document.createElement('a');
+        link.className = 'catalog-category';
+        link.href = `24-category-details.html?category=${encodeURIComponent(category.name || '')}&category_id=${encodeURIComponent(category.id)}`;
+        link.dataset.categoryId = category.id;
+        const icon = document.createElement('span');
+        icon.className = 'catalog-category-icon';
+        if (category.image) {
+          const image = document.createElement('img');
+          image.src = category.image;
+          image.alt = '';
+          icon.append(image);
+        } else {
+          icon.append(categoryIcon());
+        }
+        const name = document.createTextNode(category.name || '');
+        const hint = document.createElement('small');
+        hint.textContent = selectedMainCategory ? 'عرض المنتجات' : 'عرض الأقسام';
+        link.append(icon, name, hint);
+        return link;
+      }));
+    };
+    const showMainCategories = () => {
+      selectedMainCategory = null;
+      visibleCategories = mainCategories;
+      catalogTitle.textContent = 'كل الأقسام';
+      catalogSubtitle.textContent = 'اختر القسم الذي يناسب احتياجك';
+      catalogBack.href = '08-user-home.html';
+      catalogBack.setAttribute('aria-label', 'رجوع للرئيسية');
+      catalogMessage.hidden = true;
+      renderCategories();
+    };
+    const showSubCategories = async category => {
+      catalogMessage.hidden = false;
+      catalogMessage.textContent = 'جارٍ تحميل الأقسام الفرعية…';
+      try {
+        const children = await fetchCategories(`sub-categories?main_category_id=${encodeURIComponent(category.id)}`);
+        if (!children.length) {
+          location.href = `24-category-details.html?category=${encodeURIComponent(category.name || '')}&category_id=${encodeURIComponent(category.id)}`;
+          return;
+        }
+        selectedMainCategory = category;
+        visibleCategories = children;
+        catalogTitle.textContent = category.name;
+        catalogSubtitle.textContent = 'اختر قسمًا فرعيًا';
+        catalogBack.href = '#';
+        catalogBack.setAttribute('aria-label', 'العودة إلى الأقسام الرئيسية');
+        catalogMessage.hidden = true;
+        categorySearch.value = '';
+        renderCategories();
+      } catch (error) {
+        catalogMessage.textContent = error.message;
+      }
+    };
+    catalogGrid.addEventListener('click', event => {
+      const link = event.target.closest('[data-category-id]');
+      if (!link) return;
+      event.preventDefault();
+      const category = visibleCategories.find(item => String(item.id) === link.dataset.categoryId);
+      if (!category) return;
+      if (selectedMainCategory) {
+        location.href = link.href;
+      } else {
+        showSubCategories(category);
+      }
+    });
+    catalogBack.addEventListener('click', event => {
+      if (!selectedMainCategory) return;
+      event.preventDefault();
+      showMainCategories();
+    });
+    categorySearch.addEventListener('input', renderCategories);
+    catalogGrid.replaceChildren();
+    catalogMessage.textContent = 'جارٍ تحميل الأقسام…';
+    catalogMessage.hidden = false;
+    fetchCategories('main-categories').then(categories => {
+      mainCategories = categories;
+      showMainCategories();
+    }).catch(error => {
+      catalogMessage.textContent = error.message;
+      catalogMessage.hidden = false;
+    });
+  </script>
 </body>
 </html>

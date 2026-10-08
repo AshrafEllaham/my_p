@@ -5,7 +5,7 @@
 @section('content')
     @php
         $dataTableConfig = [
-            'ajax' => $dataUrl,
+            'ajax' => route('admin.contact-us.index'),
             'columns' => $columns,
             'language' => [
                 'search' => __('admin.catalog.datatable.search'),
@@ -13,6 +13,7 @@
                 'lengthMenu' => __('admin.catalog.datatable.length_menu'),
                 'info' => __('admin.catalog.datatable.info'),
                 'infoEmpty' => __('admin.catalog.datatable.info_empty'),
+                'emptyTable' => __('admin.contact_us.empty'),
                 'zeroRecords' => __('admin.catalog.datatable.zero_records'),
                 'processing' => __('admin.catalog.datatable.processing'),
                 'paginate' => [
@@ -24,32 +25,10 @@
             ],
         ];
     @endphp
-    <section class="admin-catalog" aria-labelledby="catalog-title"
-             data-catalog-page
-             data-active-label="{{ __('admin.catalog.status.active') }}"
-             data-inactive-label="{{ __('admin.catalog.status.inactive') }}"
-             data-delete-confirm="{{ __('admin.catalog.messages.delete_confirm') }}"
-             data-generic-error="{{ __('admin.catalog.messages.generic_error') }}">
-        <div class="admin-catalog__toolbar">
-            <div class="admin-catalog__toolbar-title">
-                <h1 id="catalog-title">{{ $oneObjectTitle }}</h1>
-                @if (!empty($pageDescription))
-                    <p>{{ $pageDescription }}</p>
-                @endif
-            </div>
-            <button class="admin-button admin-button--primary" type="button"
-                    data-modal-url="{{ $createUrl }}" data-modal-heading="{{ $createLabel }}">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-                <span>{{ $createLabel }}</span>
-            </button>
-        </div>
 
-        <div class="admin-alert admin-alert--success admin-catalog__notice" data-catalog-notice hidden role="status"></div>
-        <div class="admin-alert admin-alert--danger admin-catalog__notice" data-catalog-error hidden role="alert"></div>
+    <section class="admin-catalog admin-contact-messages" aria-label="{{ $oneObjectTitle }}" data-catalog-page>
 
         <div class="admin-panel admin-catalog__panel">
-            @include('admin.catalog.parts.filters')
-
             <div class="admin-table-wrap">
                 <table class="admin-table" data-admin-datatable>
                     <thead>

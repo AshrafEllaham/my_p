@@ -18,7 +18,6 @@ class CategoryFactory extends Factory
 
         return [
             'parent_id' => null,
-            'icon' => 'box',
             'image' => null,
             'is_active' => true,
             'sort_order' => fake()->numberBetween(0, 100),

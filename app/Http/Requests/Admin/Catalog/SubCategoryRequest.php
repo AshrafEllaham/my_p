@@ -17,7 +17,7 @@ class SubCategoryRequest extends FormRequest
     {
         return [
             'parent_id' => ['required', 'integer', Rule::exists('categories', 'id')],
-            'icon' => ['nullable', 'string', 'max:255'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:10240'],
             'sort_order' => ['required', 'integer', 'min:0', 'max:4294967295'],
             'is_active' => ['required', 'boolean'],
             'ar' => ['required', 'array'],

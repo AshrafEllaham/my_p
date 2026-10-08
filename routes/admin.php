@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CityController;
+use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\Developer\CommandController;
 use App\Http\Controllers\Admin\Developer\TerminalController;
@@ -34,6 +35,8 @@ Route::group([
         Route::put('/profile', [ProfileController::class, 'update'])->name('admin.profile.update');
         Route::get('/settings', [SettingsController::class, 'edit'])->name('admin.settings.edit');
         Route::put('/settings', [SettingsController::class, 'update'])->name('admin.settings.update');
+        Route::get('/contact-us', [ContactUsController::class, 'index'])->name('admin.contact-us.index');
+        Route::delete('/contact-us/{contactUs}', [ContactUsController::class, 'destroy'])->name('admin.contact-us.destroy');
         Route::prefix('developer')->name('admin.developer.')->middleware('developer')->group(function (): void {
             Route::get('/commands', [CommandController::class, 'index'])->name('commands.index');
             Route::get('/commands/create', [CommandController::class, 'create'])->name('commands.create');

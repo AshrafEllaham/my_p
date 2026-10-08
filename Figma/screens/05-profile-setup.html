@@ -83,37 +83,27 @@
     </section>
 
     <!-- Country Selector Card -->
-    <div class="barq-select-card">
+    <div class="barq-select-card" style="position: relative;">
       <label class="barq-input-label">الدولة</label>
-      <div class="barq-select-box" id="countryBox">
-        <div class="barq-select-value">
-          <span style="font-size: 20px;">🇪🇬</span>
-          <span>مصر</span>
-        </div>
+      <div class="barq-select-box" id="countryBox" role="button" tabindex="0" aria-haspopup="listbox" aria-expanded="false" aria-controls="countryMenu">
+        <div class="barq-select-value placeholder" id="countryValue">جارٍ تحميل الدول…</div>
         <div class="barq-select-chevron">
           <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
         </div>
       </div>
+      <div class="barq-dropdown-menu" id="countryMenu" role="listbox" aria-label="الدول"></div>
     </div>
 
     <!-- Governorate Selector Card -->
     <div class="barq-select-card" style="position: relative;">
       <label class="barq-input-label">المحافظة</label>
-      <div class="barq-select-box" id="govBox" role="button" tabindex="0" aria-haspopup="listbox" aria-expanded="false" aria-controls="govMenu">
+      <div class="barq-select-box" id="govBox" role="button" tabindex="0" aria-haspopup="listbox" aria-expanded="false" aria-controls="govMenu" aria-disabled="true">
         <div class="barq-select-value placeholder" id="govValue">اختر المحافظة</div>
         <div class="barq-select-chevron">
           <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
         </div>
       </div>
-      <div class="barq-dropdown-menu" id="govMenu" role="listbox" aria-label="المحافظات">
-        <div class="barq-dropdown-item" role="option" tabindex="0" data-gov="القاهرة" data-gov-id="1">القاهرة</div>
-        <div class="barq-dropdown-item" role="option" tabindex="0" data-gov="الجيزة" data-gov-id="2">الجيزة</div>
-        <div class="barq-dropdown-item" role="option" tabindex="0" data-gov="الإسكندرية" data-gov-id="3">الإسكندرية</div>
-        <div class="barq-dropdown-item" role="option" tabindex="0" data-gov="الشرقية" data-gov-id="6">الشرقية</div>
-        <div class="barq-dropdown-item" role="option" tabindex="0" data-gov="الدقهلية" data-gov-id="5">الدقهلية</div>
-        <div class="barq-dropdown-item" role="option" tabindex="0" data-gov="القليوبية" data-gov-id="4">القليوبية</div>
-        <div class="barq-dropdown-item" role="option" tabindex="0" data-gov="البحيرة" data-gov-id="9">البحيرة</div>
-      </div>
+      <div class="barq-dropdown-menu" id="govMenu" role="listbox" aria-label="المحافظات"></div>
     </div>
 
     <!-- City Selector Card -->
@@ -148,29 +138,53 @@
   <div class="home-bar"><div class="home-bar-pill"></div></div>
 
   <script>
+    const apiBaseUrl = 'http://127.0.0.1:8000/api';
+    const countryBox = document.getElementById('countryBox');
+    const countryMenu = document.getElementById('countryMenu');
+    const countryValue = document.getElementById('countryValue');
     const govBox = document.getElementById('govBox');
     const govMenu = document.getElementById('govMenu');
     const govValue = document.getElementById('govValue');
     const cityBox = document.getElementById('cityBox');
     const cityMenu = document.getElementById('cityMenu');
     const cityValue = document.getElementById('cityValue');
-    const cityOptions = {
-      'القاهرة': ['مدينة نصر', 'مصر الجديدة', 'المعادي', 'وسط البلد'],
-      'الجيزة': ['الدقي', 'المهندسين', 'الهرم', '6 أكتوبر'],
-      'الإسكندرية': ['سموحة', 'سيدي جابر', 'العجمي', 'المنتزه'],
-      'الشرقية': ['الزقازيق', 'بلبيس', 'منيا القمح'],
-      'الدقهلية': ['المنصورة', 'ميت غمر', 'طلخا'],
-      'القليوبية': ['بنها', 'شبرا الخيمة', 'قليوب'],
-      'البحيرة': ['دمنهور', 'كفر الدوار', 'إيتاي البارود']
-    };
+    let selectedCountryId = null;
     let selectedGovernorateId = null;
-    let selectedCity = '';
+    let selectedCityId = null;
+
+    const listData = async path => {
+      const response = await fetch(`${apiBaseUrl}/${path}`, {
+        headers: { Accept: 'application/json', 'Accept-Language': 'ar' }
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || 'تعذر تحميل بيانات الموقع.');
+      return result.data || [];
+    };
+    const createOption = (item, label, key) => {
+      const option = document.createElement('div');
+      option.className = 'barq-dropdown-item';
+      option.setAttribute('role', 'option');
+      option.tabIndex = 0;
+      option.dataset[key] = item.id;
+      option.textContent = label;
+      return option;
+    };
+    const closeMenus = () => {
+      [countryMenu, govMenu, cityMenu].forEach(menu => menu.classList.remove('open'));
+      [countryBox, govBox, cityBox].forEach(box => box.setAttribute('aria-expanded', 'false'));
+    };
+    const setOptions = (menu, items, label, key) => {
+      menu.replaceChildren(...items.map(item => createOption(item, label(item), key)));
+    };
+    const setPlaceholder = (element, text) => {
+      element.textContent = text;
+      element.classList.add('placeholder');
+    };
 
     const toggleMenu = (box, menu) => {
       if (box.getAttribute('aria-disabled') === 'true') return;
       const shouldOpen = !menu.classList.contains('open');
-      [govMenu, cityMenu].forEach(item => item.classList.remove('open'));
-      [govBox, cityBox].forEach(item => item.setAttribute('aria-expanded', 'false'));
+      closeMenus();
       menu.classList.toggle('open', shouldOpen);
       box.setAttribute('aria-expanded', String(shouldOpen));
     };
@@ -193,51 +207,75 @@
         }
       });
     };
-    const renderCityOptions = governorate => {
-      cityMenu.replaceChildren(...(cityOptions[governorate] || []).map(city => {
-        const option = document.createElement('div');
-        option.className = 'barq-dropdown-item';
-        option.setAttribute('role', 'option');
-        option.tabIndex = 0;
-        option.dataset.city = city;
-        option.textContent = city;
-        return option;
-      }));
-    };
-
+    bindDropdown(countryBox, countryMenu);
     bindDropdown(govBox, govMenu);
     bindDropdown(cityBox, cityMenu);
+    countryMenu.addEventListener('click', async event => {
+      const item = event.target.closest('[data-country-id]');
+      if (!item) return;
+      selectedCountryId = Number(item.dataset.countryId);
+      selectedGovernorateId = null;
+      selectedCityId = null;
+      countryValue.textContent = item.textContent;
+      countryValue.classList.remove('placeholder');
+      setPlaceholder(govValue, 'اختر المحافظة');
+      setPlaceholder(cityValue, 'اختر المدينة');
+      govBox.setAttribute('aria-disabled', 'false');
+      cityBox.setAttribute('aria-disabled', 'true');
+      cityMenu.replaceChildren();
+      closeMenus();
+      try {
+        const governorates = await listData(`governorates?country_id=${selectedCountryId}`);
+        setOptions(govMenu, governorates, option => option.name, 'governorateId');
+      } catch (error) {
+        document.getElementById('locationError').textContent = error.message;
+        document.getElementById('locationError').hidden = false;
+      }
+    });
     govMenu.addEventListener('click', event => {
-      const item = event.target.closest('[data-gov]');
+      const item = event.target.closest('[data-governorate-id]');
       if (item) {
-        const gov = item.dataset.gov;
-        selectedGovernorateId = Number(item.dataset.govId);
-        selectedCity = '';
-        govValue.textContent = gov;
+        selectedGovernorateId = Number(item.dataset.governorateId);
+        selectedCityId = null;
+        govValue.textContent = item.textContent;
         govValue.classList.remove('placeholder');
-        govMenu.classList.remove('open');
-        govBox.setAttribute('aria-expanded', 'false');
-        cityValue.textContent = 'اختر المدينة';
-        cityValue.classList.add('placeholder');
+        setPlaceholder(cityValue, 'اختر المدينة');
         cityBox.setAttribute('aria-disabled', 'false');
-        renderCityOptions(gov);
+        closeMenus();
+        listData(`cities?governorate_id=${selectedGovernorateId}`).then(cities => {
+          setOptions(cityMenu, cities, option => option.name, 'cityId');
+        }).catch(error => {
+          document.getElementById('locationError').textContent = error.message;
+          document.getElementById('locationError').hidden = false;
+        });
       }
     });
     cityMenu.addEventListener('click', event => {
-      const item = event.target.closest('[data-city]');
+      const item = event.target.closest('[data-city-id]');
       if (!item) return;
-      selectedCity = item.dataset.city;
-      cityValue.textContent = selectedCity;
+      selectedCityId = Number(item.dataset.cityId);
+      cityValue.textContent = item.textContent;
       cityValue.classList.remove('placeholder');
-      cityMenu.classList.remove('open');
-      cityBox.setAttribute('aria-expanded', 'false');
+      closeMenus();
     });
 
     document.addEventListener('click', (e) => {
+      if (!countryBox.contains(e.target) && !countryMenu.contains(e.target)) countryMenu.classList.remove('open');
       if (!govBox.contains(e.target) && !govMenu.contains(e.target)) govMenu.classList.remove('open');
       if (!cityBox.contains(e.target) && !cityMenu.contains(e.target)) cityMenu.classList.remove('open');
+      countryBox.setAttribute('aria-expanded', 'false');
       govBox.setAttribute('aria-expanded', 'false');
       cityBox.setAttribute('aria-expanded', 'false');
+    });
+
+    listData('countries').then(countries => {
+      setOptions(countryMenu, countries, country => [country.flag, country.name].filter(Boolean).join(' '), 'countryId');
+      const defaultCountry = countries.find(country => country.code === 'EG' || country.phone_code === '+20') || countries[0];
+      if (defaultCountry) countryMenu.querySelector(`[data-country-id="${defaultCountry.id}"]`)?.click();
+    }).catch(error => {
+      const locationError = document.getElementById('locationError');
+      locationError.textContent = error.message;
+      locationError.hidden = false;
     });
 
     const saveLocation = async skipLocation => {
@@ -252,9 +290,11 @@
       error.hidden = true;
       buttons.forEach(button => { button.disabled = true; });
       try {
-        const locationData = skipLocation
-          ? {}
-          : { country_id: 1, ...(selectedGovernorateId ? { governorate_id: selectedGovernorateId } : {}) };
+        const locationData = skipLocation ? {} : {
+          ...(selectedCountryId ? { country_id: selectedCountryId } : {}),
+          ...(selectedGovernorateId ? { governorate_id: selectedGovernorateId } : {}),
+          ...(selectedCityId ? { city_id: selectedCityId } : {})
+        };
         const response = await fetch(`http://127.0.0.1:8000/api/accounts/${signupDraft.userId}/type`, {
           method: 'PATCH',
           headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },

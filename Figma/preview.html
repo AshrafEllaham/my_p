@@ -2364,15 +2364,15 @@
         titleEn: 'Location Selection',
         tags: ['Location Setup', 'Country Flag', 'Governorate Dropdown', 'City Dropdown', 'Skip Option'],
         desc: 'اختيار الدولة والمحافظة والمدينة لتخصيص تجربة التوزيع مع قوائم مترابطة وزر تخطي الآن.',
-        descEn: 'Select Country (Egypt 🇪🇬), governorate, and its city to customize delivery and distribution coverage.',
+        descEn: 'Select a country, governorate, and city loaded from the public API to customize the app experience.',
         notes: [
-          'قائمة منسدلة لاختيار الدولة مع إبراز علم مصر 🇪🇬',
-          'قائمة منسدلة للمحافظات المصرية، تليها قائمة مدن تتغير حسب المحافظة المختارة',
+          'تُحمّل قائمة الدول عبر GET /api/countries، ثم المحافظات والمدن حسب الاختيار من GET /api/governorates وGET /api/cities',
+          'اختيار الدولة الافتراضية من البيانات المتاحة، ثم حفظ معرّفات الدولة والمحافظة والمدينة المختارة',
           'زر متابعة رئيسي أسود مع خيار "تخطي الآن" الثانوي'
         ],
         notesEn: [
-          'Country selector card featuring the Egyptian flag 🇪🇬',
-          'Interactive governorate selector followed by a city dropdown filtered to that governorate',
+          'Loads countries from GET /api/countries, then filters governorates and cities with GET /api/governorates and GET /api/cities',
+          'Defaults to an available country and saves selected country, governorate, and city IDs',
           'Primary black "Continue" button and secondary outline "Skip Now" button'
         ]
       },
@@ -2839,7 +2839,7 @@
     });
 
     screens.push(
-      { id: 25, num: '12', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '09-categories.html', title: 'كل الأقسام', titleEn: 'All Categories', tags: ['Categories', 'Discovery'], desc: 'صفحة تصفح جميع أقسام سعي.', descEn: 'Browse every Saey category.', notes: ['شبكة أقسام', 'بحث في الأقسام'], notesEn: ['Category grid', 'Category search'] },
+      { id: 25, num: '12', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '09-categories.html', title: 'كل الأقسام', titleEn: 'All Categories', tags: ['Categories', 'Discovery'], desc: 'صفحة تصفح الأقسام الرئيسية والفرعية المحملة من API.', descEn: 'Browse main and subcategories loaded from the API.', notes: ['تحميل الأقسام الرئيسية عبر GET /api/main-categories', 'تحميل الأقسام الفرعية حسب القسم الرئيسي عبر GET /api/sub-categories', 'بحث في الأقسام'], notesEn: ['Loads main categories from GET /api/main-categories', 'Loads child categories from GET /api/sub-categories filtered by parent', 'Category search'] },
       { id: 26, num: '13', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '10-featured-products.html', title: 'منتجات مميزة', titleEn: 'Featured Products', tags: ['Products', 'Catalog'], desc: 'كتالوج للمنتجات المميزة مع السعر والتقييم.', descEn: 'Featured product catalog with prices and ratings.', notes: ['شبكة منتجات', 'سعر قبل وبعد الخصم'], notesEn: ['Product grid', 'Original and discounted price'] },
       { id: 27, num: '14', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '11-featured-stores.html', title: 'متاجر مميزة', titleEn: 'Featured Stores', tags: ['Stores', 'Discovery'], desc: 'قائمة بالمتاجر المميزة القريبة من المستخدم.', descEn: 'A list of featured stores near the user.', notes: ['بحث عن متجر', 'المسافة وحالة المتجر'], notesEn: ['Store search', 'Distance and store status'] },
       { id: 28, num: '15', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '12-product-details.html', title: 'تفاصيل المنتج', titleEn: 'Product Details', tags: ['Product', 'Pickup', 'Favorite'], desc: 'تفاصيل المنتج مع الصور والمخزون الموحد والمتجر وزر الإضافة للطلب.', descEn: 'Product information, single stock availability, store details, and add-to-order action.', notes: ['شارة خصم ومفضلة', 'كمية واحدة بدون مقاسات أو ألوان', 'استلام من المتجر فقط'], notesEn: ['Discount and favorite', 'Single quantity without variants', 'Store pickup only'] },
@@ -2904,7 +2904,7 @@
       { id: 90, num: '12.2', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: 'account-about.html', title: 'عن التطبيق', titleEn: 'About Saey', tags: ['Settings', 'About'], desc: 'صفحة «عن سعي» تفتح من إعدادات النظام داخل WebView.', descEn: 'The About Saey page opens from system settings in an embedded webview.', notes: ['يطلب /api/settings', 'يعرض about_app حسب اللغة داخل WebView', 'يعرض حالات التحميل والخطأ وإعادة المحاولة'], notesEn: ['Requests /api/settings', 'Displays about_app for the selected language in a webview', 'Handles loading, error, and retry states'] },
       { id: 91, num: '12.3', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: 'account-privacy.html', title: 'سياسة الخصوصية', titleEn: 'Privacy Policy', tags: ['Settings', 'Privacy'], desc: 'سياسة الخصوصية تفتح من إعدادات النظام داخل WebView.', descEn: 'The privacy policy opens from system settings in an embedded webview.', notes: ['يطلب /api/settings', 'يعرض privacy حسب اللغة داخل WebView', 'يعرض حالات التحميل والخطأ وإعادة المحاولة'], notesEn: ['Requests /api/settings', 'Displays privacy for the selected language in a webview', 'Handles loading, error, and retry states'] },
       { id: 92, num: '12.4', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: 'account-terms.html', title: 'الشروط والأحكام', titleEn: 'Terms and Conditions', tags: ['Settings', 'Terms'], desc: 'الشروط والأحكام محمّلة من إعدادات النظام عبر API.', descEn: 'Terms and conditions loaded from the settings API.', notes: ['يطلب /api/settings', 'يعرض terms_conditions داخل WebView', 'يعرض حالات التحميل والخطأ وإعادة المحاولة'], notesEn: ['Requests /api/settings', 'Displays terms_conditions in an embedded webview', 'Handles loading, error, and retry states'] },
-      { id: 93, num: '12.5', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: 'account-contact.html', title: 'تواصل معنا', titleEn: 'Contact Us', tags: ['Settings', 'Contact', 'Socials'], desc: 'معلومات التواصل وروابط الشبكات الاجتماعية محمّلة من إعدادات النظام عبر API.', descEn: 'Contact information and social links are loaded from the settings API.', notes: ['يطلب /api/settings', 'يعرض الهاتف والبريد وواتساب', 'يعرض روابط فيسبوك وإنستجرام مع التحميل والخطأ وإعادة المحاولة'], notesEn: ['Requests /api/settings', 'Displays phone, email, and WhatsApp', 'Displays Facebook and Instagram with loading, error, and retry states'] }
+      { id: 93, num: '12.5', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: 'account-contact.html', title: 'تواصل معنا', titleEn: 'Contact Us', tags: ['Settings', 'Contact', 'Socials'], desc: 'تحميل بيانات التواصل من الإعدادات وإرسال رسائل النموذج إلى API.', descEn: 'Loads contact details from settings and submits contact form messages to the API.', notes: ['يطلب /api/settings لعرض بيانات التواصل والشبكات الاجتماعية', 'يرسل النموذج إلى POST /api/contact-us', 'يعرض حالات الإرسال والنجاح وأخطاء التحقق'], notesEn: ['Requests /api/settings for contact details and social links', 'Submits the form to POST /api/contact-us', 'Handles sending, success, and validation errors'] }
     );
 
     // الشاشات الحالية المعتمدة في العارض.

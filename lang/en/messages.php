@@ -23,8 +23,18 @@ return [
     'faqs' => [
         'listed' => 'FAQs were retrieved successfully.',
     ],
+    'catalog' => [
+        'main_categories_listed' => 'Main categories were retrieved successfully.',
+        'sub_categories_listed' => 'Subcategories were retrieved successfully.',
+        'countries_listed' => 'Countries were retrieved successfully.',
+        'governorates_listed' => 'Governorates were retrieved successfully.',
+        'cities_listed' => 'Cities were retrieved successfully.',
+    ],
     'settings' => [
         'loaded' => 'Application settings were retrieved successfully.',
+    ],
+    'contact_us' => [
+        'created' => 'Your message was sent successfully.',
     ],
     'profile' => [
         'user_updated' => 'The user profile was updated successfully.',
@@ -42,6 +52,36 @@ return [
     ],
     'validation_failed' => 'The submitted data is invalid.',
     'validation' => [
+        'contact_us' => [
+            'attributes' => [
+                'name' => 'name',
+                'email' => 'email address',
+                'subject' => 'subject',
+                'message' => 'message',
+            ],
+            'name' => [
+                'required' => 'The name is required.',
+                'string' => 'The name must be text.',
+                'max' => 'The name must not exceed 150 characters.',
+            ],
+            'email' => [
+                'required' => 'The email address is required.',
+                'string' => 'The email address must be text.',
+                'email' => 'Enter a valid email address.',
+                'max' => 'The email address must not exceed 255 characters.',
+            ],
+            'subject' => [
+                'required' => 'The subject is required.',
+                'string' => 'The subject must be text.',
+                'max' => 'The subject must not exceed 255 characters.',
+            ],
+            'message' => [
+                'required' => 'The message is required.',
+                'string' => 'The message must be text.',
+                'min' => 'The message must contain at least 10 characters.',
+                'max' => 'The message must not exceed 5,000 characters.',
+            ],
+        ],
         'developer_command' => [
             'label' => 'Command',
             'required' => 'Enter an Artisan command.',
@@ -116,6 +156,34 @@ return [
             'label' => 'The FAQ audience type',
             'string' => 'The FAQ audience type must be text.',
             'enum' => 'The FAQ audience type must be user or store.',
+        ],
+        'catalog_lookup' => [
+            'pagination' => [
+                'label' => 'pagination mode',
+                'string' => 'The pagination mode must be text.',
+                'in' => 'The pagination mode must be on or off.',
+            ],
+            'limit_per_page' => [
+                'label' => 'items per page',
+                'integer' => 'The items per page value must be an integer.',
+                'min' => 'The items per page value must be at least 1.',
+                'max' => 'The items per page value must not exceed 100.',
+            ],
+            'main_category_id' => [
+                'label' => 'main category ID',
+                'integer' => 'The main category ID must be an integer.',
+                'exists' => 'The selected active main category was not found.',
+            ],
+            'country_id' => [
+                'label' => 'country ID',
+                'integer' => 'The country ID must be an integer.',
+                'exists' => 'The selected active country was not found.',
+            ],
+            'governorate_id' => [
+                'label' => 'governorate ID',
+                'integer' => 'The governorate ID must be an integer.',
+                'exists' => 'The selected active governorate was not found.',
+            ],
         ],
         'settings' => [
             'attributes' => [

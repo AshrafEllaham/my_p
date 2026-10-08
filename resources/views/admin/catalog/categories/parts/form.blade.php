@@ -2,7 +2,7 @@
     $ar = $category?->translate('ar', false);
     $en = $category?->translate('en', false);
 @endphp
-<form class="admin-catalog-form" action="{{ $action }}" method="POST" data-catalog-form data-no-loader>
+<form class="admin-catalog-form" action="{{ $action }}" method="POST" enctype="multipart/form-data" data-catalog-form data-no-loader>
     @csrf
     @if ($method !== 'POST')
         @method($method)
@@ -33,10 +33,24 @@
             <div class="admin-field__control"><input id="category-en-name" name="en[name]"
                     value="{{ old('en.name', $en?->name) }}" dir="ltr" required></div>
         </div>
-        <div class="admin-field">
-            <label for="category-icon">{{ __('admin.catalog.fields.icon') }}</label>
-            <div class="admin-field__control"><input id="category-icon" name="icon"
-                    value="{{ old('icon', $category?->icon) }}" dir="ltr"></div>
+        <div class="admin-field admin-form-grid__full">
+            <label for="category-image">{{ __('admin.catalog.fields.image') }}</label>
+            <input
+                id="category-image"
+                class="dropify"
+                name="image"
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                data-default-file="{{ $category?->image ? \Illuminate\Support\Facades\Storage::disk('public')->url($category->image) : '' }}"
+                data-dropify-default="{{ __('admin.catalog.drop_file') }}"
+                data-dropify-replace="{{ __('admin.catalog.replace_file') }}"
+                data-dropify-remove="{{ __('admin.catalog.clear_file') }}"
+                data-dropify-error="{{ __('admin.catalog.dropify_error') }}"
+                data-dropify-file-size-error="{{ __('admin.catalog.file_size_error') }}"
+                data-dropify-file-type-error="{{ __('admin.catalog.file_type_error') }}"
+                aria-describedby="category-image-help"
+            >
+            <small id="category-image-help" class="admin-field__help">{{ __('admin.catalog.image_help') }}</small>
         </div>
         <div class="admin-field">
             <label for="category-sort-order">{{ __('admin.catalog.fields.sort_order') }}</label>

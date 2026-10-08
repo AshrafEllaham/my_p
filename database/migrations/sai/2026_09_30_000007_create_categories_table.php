@@ -12,7 +12,6 @@ return new class extends Migration
         Schema::create('categories', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('parent_id')->nullable()->constrained('categories')->cascadeOnDelete();
-            $table->string('icon')->nullable();
             $table->string('image')->nullable();
             $table->boolean('is_active')->default(true)->index();
             $table->unsignedInteger('sort_order')->default(0)->index();

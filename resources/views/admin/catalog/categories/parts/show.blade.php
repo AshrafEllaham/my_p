@@ -4,7 +4,12 @@
     @endif
     <div><dt>{{ __('admin.catalog.fields.name_ar') }}</dt><dd>{{ $category->translate('ar', false)?->name }}</dd></div>
     <div><dt>{{ __('admin.catalog.fields.name_en') }}</dt><dd dir="ltr">{{ $category->translate('en', false)?->name }}</dd></div>
-    <div><dt>{{ __('admin.catalog.fields.icon') }}</dt><dd dir="ltr">{{ $category->icon ?: '—' }}</dd></div>
+    @if ($category->image)
+        <div class="admin-detail-list__full">
+            <dt>{{ __('admin.catalog.fields.image') }}</dt>
+            <dd><img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($category->image) }}" alt="{{ $category->name }}" style="max-width: 240px; max-height: 160px; object-fit: contain"></dd>
+        </div>
+    @endif
     <div><dt>{{ __('admin.catalog.fields.sort_order') }}</dt><dd>{{ $category->sort_order }}</dd></div>
     @unless ($isSubCategory)
         <div><dt>{{ __('admin.catalog.fields.sub_categories_count') }}</dt><dd>{{ $category->children_count }}</dd></div>

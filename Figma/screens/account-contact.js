@@ -11,7 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
         retry: 'Try again', back: 'Back to account',
         formTitle: 'Send a message', name: 'Name', subject: 'Subject', message: 'Message',
         messagePlaceholder: 'Describe your request or question', send: 'Send message',
-        messageTooShort: 'Please add more details to your message.', messageSent: 'Your message was saved. We will contact you soon.',
+        sending: 'Sending...', sendError: 'The message could not be sent. Please try again.',
+        messageTooShort: 'Please add more details to your message.', messageSent: 'Your message was sent successfully.',
       }
     : {
         title: 'تواصل معنا', intro: 'بيانات التواصل الرسمية وروابط حسابات سعي.',
@@ -22,7 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
         retry: 'إعادة المحاولة', back: 'العودة إلى حسابي',
         formTitle: 'أرسل رسالة', name: 'الاسم', subject: 'عنوان الرسالة', message: 'الرسالة',
         messagePlaceholder: 'اكتب تفاصيل طلبك أو استفسارك', send: 'إرسال الرسالة',
-        messageTooShort: 'اكتب تفاصيل أكثر عن طلبك.', messageSent: 'تم حفظ رسالتك، وسنتواصل معك قريبًا.',
+        sending: 'جارٍ الإرسال...', sendError: 'تعذر إرسال الرسالة. حاول مرة أخرى.',
+        messageTooShort: 'اكتب تفاصيل أكثر عن طلبك.', messageSent: 'تم إرسال رسالتك بنجاح.',
       };
   const byId = (id) => document.getElementById(id);
   const contactState = byId('contactLoadState');
@@ -62,26 +64,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
   byId('contactForm').addEventListener('submit', (event) => {
     event.preventDefault();
-    const message = byId('contactMessage').value.trim();
+    const form = event.currentTarget;
     const status = byId('contactStatus');
-    if (message.length < 10) {
-      status.textContent = copy.messageTooShort;
-      status.className = 'view-message error';
-      status.hidden = false;
-      return;
-    }
+    const submit = byId('contactSubmit');
+    status.hidden = true;
+    submit.disabled = true;
+    submit.textContent = copy.sending;
 
-    localStorage.setItem('saey_last_support_message', JSON.stringify({
-      name: byId('contactName').value.trim(),
-      email: byId('contactFormEmail').value.trim(),
-      subject: byId('contactSubject').value.trim(),
-      message,
-      date: new Date().toISOString(),
-    }));
-    status.textContent = copy.messageSent;
-    status.className = 'view-message success';
-    status.hidden = false;
-    event.currentTarget.reset();
+    fetch('http://127.0.0.1:8000/api/contact-us', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Accept-Language': language,
+      },
+      body: JSON.stringify({
+        name: byId('contactName').value.trim(),
+        email: byId('contactFormEmail').value.trim(),
+        subject: byId('contactSubject').value.trim(),
+        message: byId('contactMessage').value.trim(),
+      }),
+    })
+      .then(async (response) => {
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(payload.message || copy.sendError);
+        status.textContent = payload.message || copy.messageSent;
+        status.className = 'view-message success';
+        status.hidden = false;
+        form.reset();
+      })
+      .catch((error) => {
+        status.textContent = error instanceof TypeError ? copy.sendError : (error.message || copy.sendError);
+        status.className = 'view-message error';
+        status.hidden = false;
+      })
+      .finally(() => {
+        submit.disabled = false;
+        submit.textContent = copy.send;
+      });
   });
 
   function setContactValue(rowId, valueId, value, href) {

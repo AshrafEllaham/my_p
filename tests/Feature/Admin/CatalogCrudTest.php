@@ -8,6 +8,8 @@ use App\Models\Sai\City;
 use App\Models\Sai\Country;
 use App\Models\Sai\Governorate;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter;
 use Mcamara\LaravelLocalization\Middleware\LocaleSessionRedirect;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -188,7 +190,6 @@ class CatalogCrudTest extends TestCase
     public function test_admin_can_manage_main_and_subcategories_without_accidental_cascade_deletion(): void
     {
         $mainPayload = [
-            'icon' => 'device-mobile',
             'sort_order' => 1,
             'is_active' => true,
             'ar' => ['name' => 'الإلكترونيات', 'description' => 'الأجهزة الحديثة'],
@@ -203,7 +204,6 @@ class CatalogCrudTest extends TestCase
 
         $this->actingAs($this->admin, 'admin')->postJson(route('admin.sub-categories.store'), [
             'parent_id' => $main->id,
-            'icon' => 'phone',
             'sort_order' => 2,
             'is_active' => true,
             'ar' => ['name' => 'الهواتف', 'description' => null],
@@ -224,7 +224,6 @@ class CatalogCrudTest extends TestCase
 
         $this->actingAs($this->admin, 'admin')->postJson(route('admin.sub-categories.store'), [
             'parent_id' => $sub->id,
-            'icon' => null,
             'sort_order' => 3,
             'is_active' => true,
             'ar' => ['name' => 'مستوى ثالث', 'description' => null],
@@ -241,7 +240,6 @@ class CatalogCrudTest extends TestCase
 
         $this->actingAs($this->admin, 'admin')->putJson(route('admin.sub-categories.update', $sub), [
             'parent_id' => $main->id,
-            'icon' => 'phone',
             'sort_order' => 4,
             'is_active' => false,
             'ar' => ['name' => 'الهواتف المحمولة', 'description' => null],
@@ -252,6 +250,67 @@ class CatalogCrudTest extends TestCase
 
         $this->actingAs($this->admin, 'admin')->deleteJson(route('admin.sub-categories.destroy', $sub))->assertOk();
         $this->actingAs($this->admin, 'admin')->deleteJson(route('admin.main-categories.destroy', $main))->assertOk();
+    }
+
+    public function test_category_crud_stores_replaces_and_deletes_uploaded_images(): void
+    {
+        Storage::fake('public');
+
+        $this->actingAs($this->admin, 'admin')->post(route('admin.main-categories.store'), [
+            'image' => UploadedFile::fake()->image('main.jpg'),
+            'sort_order' => 1,
+            'is_active' => true,
+            'ar' => ['name' => 'رئيسي', 'description' => null],
+            'en' => ['name' => 'Main', 'description' => null],
+        ])->assertOk();
+
+        $main = Category::query()->whereNull('parent_id')->firstOrFail();
+        $oldPath = $main->image;
+        $this->assertNotNull($oldPath);
+        Storage::disk('public')->assertExists($oldPath);
+
+        $this->actingAs($this->admin, 'admin')->post(route('admin.main-categories.update', $main), [
+            '_method' => 'PUT',
+            'image' => UploadedFile::fake()->image('main-updated.png'),
+            'sort_order' => 1,
+            'is_active' => true,
+            'ar' => ['name' => 'رئيسي معدل', 'description' => null],
+            'en' => ['name' => 'Updated main', 'description' => null],
+        ])->assertOk();
+
+        $main->refresh();
+        $newPath = $main->image;
+        $this->assertNotSame($oldPath, $newPath);
+        Storage::disk('public')->assertMissing($oldPath);
+        Storage::disk('public')->assertExists($newPath);
+
+        $this->actingAs($this->admin, 'admin')->post(route('admin.sub-categories.store'), [
+            'parent_id' => $main->id,
+            'image' => UploadedFile::fake()->image('sub.jpg'),
+            'sort_order' => 1,
+            'is_active' => true,
+            'ar' => ['name' => 'فرعي', 'description' => null],
+            'en' => ['name' => 'Sub', 'description' => null],
+        ])->assertOk();
+
+        $sub = Category::query()->where('parent_id', $main->id)->firstOrFail();
+        Storage::disk('public')->assertExists($sub->image);
+
+        $this->actingAs($this->admin, 'admin')->deleteJson(route('admin.sub-categories.destroy', $sub))->assertOk();
+        Storage::disk('public')->assertMissing($sub->image);
+    }
+
+    public function test_category_create_modal_renders_dropify_image_input_without_icon_field(): void
+    {
+        $response = $this->actingAs($this->admin, 'admin')
+            ->getJson(route('admin.main-categories.create'))
+            ->assertOk()
+            ->assertJsonPath('status', true);
+
+        $html = $response->json('data.html');
+        $this->assertStringContainsString('class="dropify"', $html);
+        $this->assertStringContainsString('name="image"', $html);
+        $this->assertStringNotContainsString('name="icon"', $html);
     }
 
     public function test_yajra_datatable_returns_localized_joined_data_without_lazy_loading(): void
