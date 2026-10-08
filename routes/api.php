@@ -18,12 +18,12 @@ Route::group([], function () {
     // Public Routes (no auth required)
     // -------------------------------------------------------
     Route::group([], function () {
-        Route::post('/send-otp', [AuthApiController::class, 'sendOtp'])->middleware('throttle:3,1')->name('auth.send-otp');
-        Route::post('/confirm-otp', [AuthApiController::class, 'confirmOtp'])->middleware('throttle:10,1')->name('auth.confirm-otp');
-        Route::post('/register', [AuthApiController::class, 'store'])->middleware('throttle:5,1')->name('user.register');
-        Route::post('/login', [AuthApiController::class, 'login'])->middleware('throttle:5,1')->name('user.login');
-        Route::post('/social-login', [AuthApiController::class, 'socialLogin'])->middleware('throttle:10,1')->name('user.social-login');
-        Route::patch('/accounts/{account}/type', [AccountTypeController::class, 'update'])->whereNumber('account')->middleware('throttle:10,1')->name('account.type.update');
+        Route::post('/send-otp', [AuthApiController::class, 'sendOtp'])->middleware('throttle:3,1');
+        Route::post('/confirm-otp', [AuthApiController::class, 'confirmOtp'])->middleware('throttle:10,1');
+        Route::post('/register', [AuthApiController::class, 'store'])->middleware('throttle:5,1');
+        Route::post('/login', [AuthApiController::class, 'login'])->middleware('throttle:5,1');
+        Route::post('/social-login', [AuthApiController::class, 'socialLogin'])->middleware('throttle:10,1');
+        Route::patch('/accounts/{account}/type', [AccountTypeController::class, 'update'])->whereNumber('account')->middleware('throttle:10,1');
     });
 
     // -------------------------------------------------------
@@ -32,14 +32,13 @@ Route::group([], function () {
     Route::group(['middleware' => ['auth:api', 'throttle:60,1']], function () {
 
         // ############################ notifications ############################
-        Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
-        Route::patch('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
+        Route::get('/notifications', [NotificationController::class, 'index']);
+        Route::patch('/notifications/read-all', [NotificationController::class, 'markAllAsRead']);
         Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])
-            ->whereUuid('notification')
-            ->name('notifications.read');
-        Route::delete('/notifications', [NotificationController::class, 'destroyAll'])->name('notifications.destroy-all');
-        Route::get('/notifications/preferences', [NotificationPreferenceController::class, 'show'])->name('notifications.preferences.show');
-        Route::put('/notifications/preferences', [NotificationPreferenceController::class, 'update'])->name('notifications.preferences.update');
+            ->whereUuid('notification');
+        Route::delete('/notifications', [NotificationController::class, 'destroyAll']);
+        Route::get('/notifications/preferences', [NotificationPreferenceController::class, 'show']);
+        Route::put('/notifications/preferences', [NotificationPreferenceController::class, 'update']);
 
         // ############################ chat ############################
     });

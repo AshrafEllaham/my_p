@@ -127,7 +127,8 @@ routes/api/
 
 - ملفات API مقسمة حسب الدور أو المجال تحت `routes/api/`، مثل `teacher.php`, `assistant.php`, `course.php`, `user.php`, و`school.php`.
 - كل route group محمي بـ `auth:api` و`throttle:60,1` وأي middleware خاص بالدور.
-- استخدم أسماء routes واضحة وRESTful، ولا تضع closures تحتوي logic.
+- لا تسمِّ مسارات API؛ لا تستخدم `->name()` في `routes/api.php` أو الملفات التابعة داخل `routes/api/`.
+- استخدم مسارات واضحة وRESTful، ولا تضع closures تحتوي logic.
 
 ### متطلبات إلزامية لكل API Endpoint
 
