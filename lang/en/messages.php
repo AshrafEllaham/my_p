@@ -20,6 +20,9 @@ return [
     'banners' => [
         'listed' => 'Banners were retrieved successfully.',
     ],
+    'faqs' => [
+        'listed' => 'FAQs were retrieved successfully.',
+    ],
     'profile' => [
         'user_updated' => 'The user profile was updated successfully.',
         'store_updated' => 'The store profile was saved successfully.',
@@ -105,6 +108,11 @@ return [
             'label' => 'The banner audience type',
             'string' => 'The banner audience type must be text.',
             'enum' => 'The banner audience type must be user or store.',
+        ],
+        'faq_type' => [
+            'label' => 'The FAQ audience type',
+            'string' => 'The FAQ audience type must be text.',
+            'enum' => 'The FAQ audience type must be user or store.',
         ],
         'country_id' => [
             'required_with' => 'The country is required when a governorate or city is submitted.',

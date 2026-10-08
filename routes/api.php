@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AccountTypeController;
 use App\Http\Controllers\Api\AuthApiController;
 use App\Http\Controllers\Api\BannerController;
+use App\Http\Controllers\Api\FaqController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\NotificationPreferenceController;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +21,7 @@ Route::group([], function () {
     // -------------------------------------------------------
     Route::group([], function () {
         Route::get('/banners', [BannerController::class, 'index'])->middleware('throttle:60,1');
+        Route::get('/faqs', [FaqController::class, 'index'])->middleware('throttle:60,1');
         Route::post('/send-otp', [AuthApiController::class, 'sendOtp'])->middleware('throttle:3,1');
         Route::post('/confirm-otp', [AuthApiController::class, 'confirmOtp'])->middleware('throttle:10,1');
         Route::post('/register', [AuthApiController::class, 'store'])->middleware('throttle:5,1');

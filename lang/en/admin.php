@@ -54,6 +54,7 @@ return [
         'main_categories' => 'Main categories',
         'sub_categories' => 'Subcategories',
         'banners' => 'Banners',
+        'faqs' => 'FAQs',
         'settings' => 'Settings',
         'developer_tools' => 'Developer tools',
     ],
@@ -271,6 +272,38 @@ return [
             'attributes' => [
                 'file' => 'banner image',
                 'type' => 'target account type',
+            ],
+        ],
+    ],
+    'faqs' => [
+        'title' => 'FAQs',
+        'description' => 'Manage questions and answers by account type in Arabic and English.',
+        'create' => 'Add question',
+        'choose_type' => 'Choose an account type',
+        'fields' => [
+            'question' => 'Question',
+            'answer' => 'Answer',
+            'type' => 'Account type',
+            'question_ar' => 'Question in Arabic',
+            'question_en' => 'Question in English',
+            'answer_ar' => 'Answer in Arabic',
+            'answer_en' => 'Answer in English',
+        ],
+        'filters' => [
+            'type_label' => 'Target account type',
+            'all_types' => 'All types',
+        ],
+        'types' => [
+            'user' => 'User account',
+            'store' => 'Store account',
+        ],
+        'validation' => [
+            'attributes' => [
+                'type' => 'account type',
+                'ar.question' => 'question in Arabic',
+                'en.question' => 'question in English',
+                'ar.answer' => 'answer in Arabic',
+                'en.answer' => 'answer in English',
             ],
         ],
     ],

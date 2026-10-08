@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\Developer\CommandController;
 use App\Http\Controllers\Admin\Developer\TerminalController;
+use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\GovernorateController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\MainCategoryController;
@@ -47,6 +48,7 @@ Route::group([
             'main-categories' => MainCategoryController::class,
             'sub-categories' => SubCategoryController::class,
             'banners' => BannerController::class,
+            'faqs' => FaqController::class,
         ], [
             'as' => 'admin',
         ]);
