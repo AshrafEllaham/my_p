@@ -319,6 +319,45 @@
     const sheetEditText = document.getElementById('sheetEditText');
 
     let currentCard = null;
+    const adApiToken = localStorage.getItem('saey_api_token');
+    const adApiBase = localStorage.getItem('saey_api_base') || '/api/store';
+    const adApiRequest = async (path, options = {}) => {
+      const response = await fetch(`${adApiBase}${path}`, {
+        ...options,
+        headers: { Accept: 'application/json', 'Accept-Language': document.documentElement.lang || 'ar', ...(options.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }), Authorization: `Bearer ${adApiToken}`, ...(options.headers || {}) }
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(payload.message || 'تعذر تنفيذ الطلب. تحقق من البيانات وحاول مرة أخرى.');
+      return payload;
+    };
+
+    const statusLabels = { active: 'نشط', paused: 'موقوف', scheduled: 'مجدول', draft: 'مسودة', pending_review: 'قيد المراجعة', completed: 'منتهي', rejected: 'مرفوض' };
+    const renderAdCards = ads => {
+      const list = document.querySelector('.ads-campaign-list');
+      list.replaceChildren();
+      ads.forEach(ad => {
+        const card = document.createElement('article');
+        card.className = `ad-card ${ad.status === 'active' ? 'campaign-active' : ad.status === 'draft' ? 'campaign-draft' : 'campaign-ended'}`;
+        card.dataset.adId = ad.id;
+        card.dataset.title = ad.title;
+        card.dataset.status = ad.status;
+        card.innerHTML = '<button class="ad-card-menu" type="button" aria-label="خيارات الإعلان" onclick="openAdSheetForCard(this)"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button><a class="ad-card-link" href="distributor-ad-details.html"><div class="ad-art"><span class="ad-status-badge"></span><div><small></small><strong></strong></div><i></i></div><div class="ad-body"><div class="ad-meta"><span></span><time></time></div><div class="ad-stats"><div><span>المشاهدات</span><b>—</b></div><div><span>النقرات</span><b>—</b></div><div><span>التكلفة</span><b></b></div></div></div></a>';
+        card.querySelector('.ad-status-badge').textContent = statusLabels[ad.status] || ad.status;
+        card.querySelector('.ad-art small').textContent = ad.caption || 'إعلان المتجر';
+        card.querySelector('.ad-art strong').textContent = ad.title;
+        card.querySelector('.ad-meta span').textContent = ({ home: 'الصفحة الرئيسية', category: 'داخل القسم', storefront: 'صفحة المتجر' })[ad.placement] || ad.placement;
+        card.querySelector('.ad-meta time').textContent = ad.starts_at ? new Date(ad.starts_at).toLocaleDateString('ar-EG') : 'بدون موعد بدء';
+        card.querySelector('.ad-stats div:last-child b').textContent = `${ad.cost} ${ad.currency}`;
+        card.querySelector('.ad-card-link').href = `distributor-ad-details.html?ad=${encodeURIComponent(ad.id)}`;
+        list.append(card);
+      });
+    };
+    const loadStoreAds = async status => {
+      const query = new URLSearchParams({ pagination: 'on' });
+      if (status) query.set('status', status);
+      const result = await adApiRequest(`/ads?${query}`);
+      renderAdCards(result.data || []);
+    };
 
     const openSheet = () => backdrop.classList.add('open');
     const closeSheet = () => {
@@ -333,19 +372,23 @@
 
       sheetTitle.textContent = `خيارات: ${title}`;
 
-      if (status === 'active') {
+      if (status === 'active' || status === 'scheduled') {
         sheetToggleText.textContent = 'إيقاف الإعلان مؤقتًا';
         sheetToggleIcon.innerHTML = '<circle cx="12" cy="12" r="9"/><path d="M9 9h6v6H9z"/>';
         sheetEditText.textContent = 'تعديل الإعلان';
-      } else if (status === 'ended') {
+      } else if (status === 'paused') {
         sheetToggleText.textContent = 'إعادة تفعيل الإعلان';
         sheetToggleIcon.innerHTML = '<circle cx="12" cy="12" r="9"/><polygon points="10,8 16,12 10,16"/>';
         sheetEditText.textContent = 'تعديل وتجديد الحملة';
-      } else {
+      } else if (status === 'draft') {
         sheetToggleText.textContent = 'نشر الإعلان الآن';
         sheetToggleIcon.innerHTML = '<path d="m5 12 5 5L20 7"/>';
         sheetEditText.textContent = 'استكمال المسودة';
+      } else {
+        sheetToggleText.textContent = 'لا يمكن تبديل الحالة';
+        sheetToggleIcon.innerHTML = '<circle cx="12" cy="12" r="9"/><path d="M9 9h6v6H9z"/>';
       }
+      document.getElementById('sheetEditLink').href = currentCard.dataset.adId ? `19-add-ad.html?edit=${currentCard.dataset.adId}` : '19-add-ad.html?mode=edit';
 
       openSheet();
     }
@@ -353,6 +396,13 @@
     backdrop.addEventListener('click', e => { if (e.target === backdrop) closeSheet(); });
 
     document.getElementById('sheetToggleState').addEventListener('click', () => {
+      if (adApiToken && currentCard?.dataset.adId) {
+        adApiRequest(`/ads/${currentCard.dataset.adId}/toggle`, { method: 'PATCH' })
+          .then(result => { const ad = result.data; currentCard.dataset.status = ad.status; currentCard.querySelector('.ad-status-badge').textContent = statusLabels[ad.status] || ad.status; currentCard.classList.toggle('campaign-active', ad.status === 'active'); currentCard.classList.toggle('campaign-ended', ad.status !== 'active'); })
+          .catch(error => alert(error.message))
+          .finally(closeSheet);
+        return;
+      }
       if (currentCard) {
         const badge = currentCard.querySelector('.ad-status-badge');
         const isCurrentlyActive = currentCard.classList.contains('campaign-active');
@@ -373,7 +423,9 @@
 
     document.getElementById('sheetDelete').addEventListener('click', () => {
       if (confirm('هل تريد حذف هذه الحملة الإعلانية نهائيًا؟')) {
-        if (currentCard) currentCard.remove();
+        if (adApiToken && currentCard?.dataset.adId) {
+          adApiRequest(`/ads/${currentCard.dataset.adId}`, { method: 'DELETE' }).then(() => currentCard?.remove()).catch(error => alert(error.message));
+        } else if (currentCard) currentCard.remove();
       }
       closeSheet();
     });
@@ -388,6 +440,11 @@
         document.querySelectorAll('.ads-tabs button').forEach(item => item.classList.remove('active'));
         button.classList.add('active');
         const state = button.dataset.state;
+        if (adApiToken) {
+          const apiStatus = state === 'ended' ? 'completed' : state === 'all' ? null : state;
+          loadStoreAds(apiStatus).catch(error => alert(error.message));
+          return;
+        }
         adCards.forEach(card => {
           card.hidden = state !== 'all' && adState(card) !== state;
         });
@@ -408,6 +465,7 @@
         ? 'مرتبة حسب أعلى مشاهدة'
         : 'مرتبة حسب الأحدث';
     });
+    if (adApiToken) loadStoreAds().catch(error => alert(error.message));
   </script>
 </body>
 </html>

@@ -9,6 +9,7 @@ use App\Enums\MediaTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Ad extends Model
@@ -73,5 +74,10 @@ class Ad extends Model
     public function walletTransaction(): BelongsTo
     {
         return $this->belongsTo(WalletTransaction::class, 'wallet_transaction_id');
+    }
+
+    public function dailyMetrics(): HasMany
+    {
+        return $this->hasMany(AdDailyMetric::class, 'ad_id');
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Store\StoreAdController;
 use App\Http\Controllers\Api\Store\StoreProductController;
 use App\Http\Controllers\Api\Store\StoreProfileController;
 use App\Http\Controllers\Api\Store\StoreReviewController;
@@ -27,5 +28,12 @@ Route::group([], function () {
         Route::patch('/products/{product}', [StoreProductController::class, 'update'])->whereNumber('product');
         Route::patch('/products/{product}/hide', [StoreProductController::class, 'toggleVisibility'])->whereNumber('product');
         Route::delete('/products/{product}', [StoreProductController::class, 'destroy'])->whereNumber('product');
+        Route::get('/ad-packages', [StoreAdController::class, 'packages']);
+        Route::get('/ads', [StoreAdController::class, 'index']);
+        Route::get('/ads/{ad}', [StoreAdController::class, 'show'])->whereNumber('ad');
+        Route::post('/ads', [StoreAdController::class, 'store']);
+        Route::patch('/ads/{ad}', [StoreAdController::class, 'update'])->whereNumber('ad');
+        Route::patch('/ads/{ad}/toggle', [StoreAdController::class, 'toggle'])->whereNumber('ad');
+        Route::delete('/ads/{ad}', [StoreAdController::class, 'destroy'])->whereNumber('ad');
     });
 });
