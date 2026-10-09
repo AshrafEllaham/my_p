@@ -58,11 +58,11 @@ class StoreProductController extends Controller
         return jsonSuccess(StoreProductResource::make($updatedProduct), __('messages.products.updated'));
     }
 
-    public function hide(int $product): JsonResponse
+    public function toggleVisibility(int $product): JsonResponse
     {
-        $hiddenProduct = $this->service->hide((int) auth('api')->id(), $product);
+        $updatedProduct = $this->service->toggleVisibility((int) auth('api')->id(), $product);
 
-        return jsonSuccess(StoreProductResource::make($hiddenProduct), __('messages.products.hidden'));
+        return jsonSuccess(StoreProductResource::make($updatedProduct), __('messages.products.visibility_toggled'));
     }
 
     public function destroy(int $product): JsonResponse

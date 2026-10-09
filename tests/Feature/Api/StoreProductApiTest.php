@@ -415,7 +415,7 @@ class StoreProductApiTest extends TestCase
         $this->assertDatabaseCount('product_features', 1);
     }
 
-    public function test_store_owner_can_hide_and_republish_a_product(): void
+    public function test_store_owner_can_toggle_product_between_hidden_and_published(): void
     {
         $store = UserFactory::new()->create(['account_type' => AccountTypeEnum::Store]);
         $category = Category::factory()->create(['is_active' => true]);
@@ -424,11 +424,12 @@ class StoreProductApiTest extends TestCase
 
         $this->withToken($token)->patchJson('/api/store/products/'.$product->id.'/hide')
             ->assertOk()
-            ->assertJsonPath('message', __('messages.products.hidden'))
+            ->assertJsonPath('message', __('messages.products.visibility_toggled'))
             ->assertJsonPath('data.status', ProductStatusEnum::Hidden->value);
 
-        $this->withToken($token)->patchJson('/api/store/products/'.$product->id, ['publish' => true])
+        $this->withToken($token)->patchJson('/api/store/products/'.$product->id.'/hide')
             ->assertOk()
+            ->assertJsonPath('message', __('messages.products.visibility_toggled'))
             ->assertJsonPath('data.status', ProductStatusEnum::Published->value);
     }
 
@@ -495,6 +496,9 @@ class StoreProductApiTest extends TestCase
         $this->assertStringContainsString("storeProductRequest(productId, 'DELETE')", $list);
         $this->assertStringContainsString("storeProductRequest(productId, 'PATCH', '/hide')", $list);
         $this->assertStringContainsString("productActionRequest('PATCH', '/hide')", $details);
+        $this->assertStringContainsString("addEventListener('click', toggleProductVisibility)", $details);
+        $this->assertStringContainsString("product.status === 'hidden'", $list);
+        $this->assertStringContainsString("result.data.status === 'hidden'", $details);
         $this->assertStringContainsString("fetch('/api/store/products/' + encodeURIComponent(productId)", $details);
         $this->assertStringContainsString('setProductDetails(result.data)', $details);
         $this->assertStringNotContainsString('const products = {', $details);

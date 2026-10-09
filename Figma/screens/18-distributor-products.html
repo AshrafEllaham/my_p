@@ -129,15 +129,20 @@
         const state = card.querySelector('.product-state');
         button.disabled = true;
         try {
-          await storeProductRequest(productId, 'PATCH', '/hide');
-          state.textContent = 'مخفي';
-          state.className = 'product-state hidden-state';
-          card.classList.add('product-hidden');
-          button.querySelector('span').textContent = 'تم الإخفاء';
-          showProductActionMessage('تم إخفاء المنتج عن العملاء.');
+          const result = await storeProductRequest(productId, 'PATCH', '/hide');
+          const product = result.data;
+          const [statusLabel, statusClass] = productStatusLabels[product.status] || [product.status, 'draft-state'];
+          const isHidden = product.status === 'hidden';
+          state.textContent = statusLabel;
+          state.className = `product-state ${statusClass}`;
+          card.dataset.state = product.status;
+          card.classList.toggle('product-hidden', isHidden);
+          button.querySelector('span').textContent = isHidden ? 'نشر' : 'إخفاء';
+          showProductActionMessage(isHidden ? 'تم إخفاء المنتج عن العملاء.' : 'تم نشر المنتج للعملاء.');
           closeProductMenus();
         } catch (error) {
           showProductActionMessage(error.message || 'تعذر إخفاء المنتج. حاول مرة أخرى.');
+        } finally {
           button.disabled = false;
         }
       });

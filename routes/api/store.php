@@ -25,7 +25,7 @@ Route::group([], function () {
         Route::get('/products/{product}/reviews', [StoreReviewController::class, 'index'])->whereNumber('product');
         Route::post('/products', [StoreProductController::class, 'store']);
         Route::patch('/products/{product}', [StoreProductController::class, 'update'])->whereNumber('product');
-        Route::patch('/products/{product}/hide', [StoreProductController::class, 'hide'])->whereNumber('product');
+        Route::patch('/products/{product}/hide', [StoreProductController::class, 'toggleVisibility'])->whereNumber('product');
         Route::delete('/products/{product}', [StoreProductController::class, 'destroy'])->whereNumber('product');
     });
 });

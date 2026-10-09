@@ -145,6 +145,7 @@
       image.hidden = !primaryImage?.path;
       image.alt = product.name || '';
       setText('insightProductStatus', productStatus);
+      updateProductVisibility(product.status);
       setText('insightProductCategory', product.category?.name || '—');
       setText('insightProductName', product.name || '—');
       setText('insightProductPrice', money(product.price));
@@ -270,38 +271,29 @@
     document.addEventListener('click', closeActionsMenu);
     document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeActionsMenu(); });
 
-    const updateProductVisibility = (isVisible) => {
-      const status = isVisible ? 'منشور' : 'مخفي';
+    const updateProductVisibility = (productStatus) => {
+      const status = productStatusLabels[productStatus] || productStatus;
+      const isHidden = productStatus === 'hidden';
       setText('insightProductStatus', status);
       setText('productDetailStatus', status);
-      document.getElementById('insightProductStatus').classList.toggle('is-hidden', !isVisible);
+      document.getElementById('insightProductStatus').classList.toggle('is-hidden', isHidden);
+      document.getElementById('hideProductAction').hidden = isHidden;
+      document.getElementById('showProductAction').hidden = !isHidden;
       closeActionsMenu();
     };
-    document.getElementById('hideProductAction').addEventListener('click', async event => {
+    const toggleProductVisibility = async event => {
       const button = event.currentTarget;
       button.disabled = true;
       try {
-        await productActionRequest('PATCH', '/hide');
-        updateProductVisibility(false);
-        showActionMessage('تم إخفاء المنتج عن العملاء.');
+        const result = await productActionRequest('PATCH', '/hide');
+        updateProductVisibility(result.data.status);
+        showActionMessage(result.data.status === 'hidden' ? 'تم إخفاء المنتج عن العملاء.' : 'تم نشر المنتج للعملاء.');
       } catch (error) {
-        showActionMessage(error.message || 'تعذر إخفاء المنتج. حاول مرة أخرى.', true);
+        showActionMessage(error.message || 'تعذر تحديث ظهور المنتج. حاول مرة أخرى.', true);
       } finally { button.disabled = false; }
-    });
-    document.getElementById('showProductAction').addEventListener('click', async event => {
-      const button = event.currentTarget;
-      button.disabled = true;
-      const payload = new FormData();
-      payload.append('_method', 'PATCH');
-      payload.append('publish', '1');
-      try {
-        await productActionRequest('POST', '', payload);
-        updateProductVisibility(true);
-        showActionMessage('تم إظهار المنتج للعملاء.');
-      } catch (error) {
-        showActionMessage(error.message || 'تعذر إظهار المنتج. حاول مرة أخرى.', true);
-      } finally { button.disabled = false; }
-    });
+    };
+    document.getElementById('hideProductAction').addEventListener('click', toggleProductVisibility);
+    document.getElementById('showProductAction').addEventListener('click', toggleProductVisibility);
     if (pageParams.get('menu') === 'open') actionsToggle.click();
   </script>
 </body>

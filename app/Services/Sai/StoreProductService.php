@@ -138,13 +138,19 @@ class StoreProductService
         });
     }
 
-    public function hide(int $storeId, int|string $productId): Model
+    public function toggleVisibility(int $storeId, int|string $productId): Model
     {
         $this->assertStoreOwner($storeId);
 
-        return $this->products->updateForStore($productId, $storeId, [
-            'status' => ProductStatusEnum::Hidden,
-        ]);
+        return DB::transaction(function () use ($storeId, $productId): Model {
+            $product = $this->products->lockForStoreWithMediaAndFeatures($productId, $storeId);
+            $publish = $product->status === ProductStatusEnum::Hidden;
+
+            return $this->products->updateForStore($productId, $storeId, [
+                'status' => $publish ? ProductStatusEnum::Published : ProductStatusEnum::Hidden,
+                'published_at' => $publish ? ($product->published_at ?? now()) : $product->published_at,
+            ]);
+        });
     }
 
     public function delete(int $storeId, int|string $productId): bool

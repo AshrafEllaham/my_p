@@ -52,6 +52,7 @@ return [
         'created' => 'The product was created successfully.',
         'updated' => 'The product was updated successfully.',
         'hidden' => 'The product was hidden from customers.',
+        'visibility_toggled' => 'The product visibility was updated successfully.',
         'deleted' => 'The product was deleted successfully.',
     ],
     'reviews' => [
