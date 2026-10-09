@@ -30,7 +30,7 @@
 
     <label class="waffarha-search products-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg><input type="search" placeholder="ابحث باسم المنتج أو القسم"><button id="openProductFilters" type="button" aria-label="فتح فلاتر المنتجات" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2m4 0h10M14 12h6M4 12h2"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg></button></label>
 
-    <div class="catalog-filters" role="group" aria-label="فلترة المنتجات"><button class="active">الكل <b>١٢٤</b></button><button>منشور <b>١١٦</b></button><button>قيد المراجعة <b>٤</b></button><button>مسودة <b>٤</b></button></div>
+    <div class="catalog-filters" role="group" aria-label="فلترة المنتجات"><button class="active" data-product-status="all">الكل <b>١٢٤</b></button><button data-product-status="published">منشور <b>١١٦</b></button><button data-product-status="pending_review">قيد المراجعة <b>٤</b></button><button data-product-status="draft">مسودة <b>٤</b></button></div>
 
     <div class="catalog-section-head"><div><h2>الكتالوج</h2><small>مرتبة حسب آخر تحديث</small></div><button type="button"><svg viewBox="0 0 24 24"><path d="M8 6h12M4 6h.01M8 12h12M4 12h.01M8 18h12M4 18h.01"/></svg>ترتيب</button></div>
 
@@ -64,7 +64,8 @@
       <span class="product-filter-handle"></span>
       <header class="product-filter-header"><div><h2 id="productFilterTitle">تصفية المنتجات</h2><p>اختر ما تريد عرضه في الكتالوج</p></div><button id="closeProductFilters" type="button" aria-label="إغلاق التصفية"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button></header>
 
-      <div class="product-filter-group" data-filter-group="state"><strong>حالة المنتج</strong><div><button class="selected" type="button" data-value="all">كل الحالات</button><button type="button" data-value="published">منشور</button><button type="button" data-value="review">قيد المراجعة</button><button type="button" data-value="draft">مسودة</button></div></div>
+      <div class="product-filter-group" data-filter-group="state"><strong>حالة المنتج</strong><div><button class="selected" type="button" data-value="all">كل الحالات</button><button type="button" data-value="published">منشور</button><button type="button" data-value="pending_review">قيد المراجعة</button><button type="button" data-value="draft">مسودة</button></div></div>
+      <div class="product-filter-group"><label for="productCategoryFilter"><strong>القسم الفرعي</strong></label><select id="productCategoryFilter" style="width:100%;height:44px;padding:0 12px;border:1px solid #E1E8F1;border-radius:10px;background:#FFF;color:#0F172A;font:700 13px 'Cairo'"><option value="all">كل الأقسام الفرعية</option></select></div>
       <div class="product-filter-group" data-filter-group="stock"><strong>حالة المخزون</strong><div><button class="selected" type="button" data-value="all">الكل</button><button type="button" data-value="available">متوفر</button><button type="button" data-value="low">مخزون منخفض</button><button type="button" data-value="out">نفد المخزون</button></div></div>
       <div class="product-filter-group" data-filter-group="sort"><strong>ترتيب المنتجات</strong><div><button class="selected" type="button" data-value="recent">الأحدث</button><button type="button" data-value="orders">الأكثر طلبًا</button><button type="button" data-value="views">الأكثر مشاهدة</button></div></div>
 
@@ -74,6 +75,34 @@
 
   <nav class="saey-bottom-nav market-nav"><a href="17-distributor-dashboard.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22v-9h6v9"/></svg></span><span>الرئيسية</span></a><a class="active" aria-current="page" href="18-distributor-products.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><rect width="7" height="7" x="3" y="3" rx="1.5"/><rect width="7" height="7" x="14" y="3" rx="1.5"/><rect width="7" height="7" x="14" y="14" rx="1.5"/><rect width="7" height="7" x="3" y="14" rx="1.5"/></svg></span><span>منتجاتي</span></a><a href="21-distributor-orders.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4M9 10h6"/></svg></span><span>الطلبات</span></a><a href="19-distributor-ads.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="m4 12 15-7v14L4 12Z"/><path d="M4 12v5a2 2 0 0 0 2 2M19 10h2a2 2 0 0 1 0 4h-2"/></svg></span><span>إعلاناتي</span></a><a href="20-distributor-account.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></span><span>حسابي</span></a></nav>
   <script>
+    const productCards = [...document.querySelectorAll('.merchant-product-card')];
+    const apiToken = localStorage.getItem('saey_api_token');
+    const selectedProductId = new URLSearchParams(location.search).get('product_id');
+    if (selectedProductId && productCards[0]) productCards[0].dataset.productId = selectedProductId;
+    const showProductActionMessage = message => {
+      let notice = document.getElementById('productActionNotice');
+      if (!notice) {
+        notice = document.createElement('p');
+        notice.id = 'productActionNotice';
+        notice.setAttribute('role', 'status');
+        notice.setAttribute('aria-live', 'polite');
+        notice.style.cssText = 'margin:8px 15px;padding:10px 12px;border-radius:10px;background:#F1F5F9;color:#334155;font-size:12px;font-weight:700';
+        document.querySelector('.catalog-overview').after(notice);
+      }
+      notice.textContent = message;
+      notice.hidden = false;
+    };
+    const storeProductRequest = async (productId, method, path = '') => {
+      if (!apiToken) throw new Error('سجل الدخول بحساب المتجر لتنفيذ هذا الإجراء.');
+      const response = await fetch('/api/store/products/' + encodeURIComponent(productId) + path, {
+        method,
+        headers: {'Accept':'application/json','Accept-Language':document.documentElement.lang || 'ar','Authorization':'Bearer '+apiToken},
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.message || 'تعذر تنفيذ الإجراء على المنتج.');
+      return result;
+    };
+
     const closeProductMenus = () => document.querySelectorAll('.merchant-product-card.menu-open').forEach((card) => {
       card.classList.remove('menu-open');
       card.querySelector('.product-menu-trigger').setAttribute('aria-expanded', 'false');
@@ -93,49 +122,70 @@
     });
 
     document.querySelectorAll('.hide-product').forEach((button) => {
-      button.addEventListener('click', () => {
+      button.addEventListener('click', async () => {
         const card = button.closest('.merchant-product-card');
+        const productId = card.dataset.productId;
+        if (!productId) return showProductActionMessage('تعذر تحديد المنتج. افتح هذه الصفحة مع product_id صالح.');
         const state = card.querySelector('.product-state');
-        if (!state.dataset.originalText) {
-          state.dataset.originalText = state.textContent;
-          state.dataset.originalClass = state.className;
+        button.disabled = true;
+        try {
+          await storeProductRequest(productId, 'PATCH', '/hide');
+          state.textContent = 'مخفي';
+          state.className = 'product-state hidden-state';
+          card.classList.add('product-hidden');
+          button.querySelector('span').textContent = 'تم الإخفاء';
+          showProductActionMessage('تم إخفاء المنتج عن العملاء.');
+          closeProductMenus();
+        } catch (error) {
+          showProductActionMessage(error.message || 'تعذر إخفاء المنتج. حاول مرة أخرى.');
+          button.disabled = false;
         }
-        const isHidden = card.classList.toggle('product-hidden');
-        state.textContent = isHidden ? 'مخفي' : state.dataset.originalText;
-        state.className = isHidden ? 'product-state hidden-state' : state.dataset.originalClass;
-        button.querySelector('span').textContent = isHidden ? 'إظهار' : 'إخفاء';
-        closeProductMenus();
       });
     });
 
     document.querySelectorAll('.delete-product').forEach((button) => {
-      button.addEventListener('click', () => {
-        if (window.confirm('هل تريد حذف هذا المنتج؟')) button.closest('.merchant-product-card').remove();
+      button.addEventListener('click', async () => {
+        const card = button.closest('.merchant-product-card');
+        const productId = card.dataset.productId;
+        if (!productId) return showProductActionMessage('تعذر تحديد المنتج. افتح هذه الصفحة مع product_id صالح.');
+        if (!window.confirm('هل تريد حذف هذا المنتج؟')) return;
+        button.disabled = true;
+        try {
+          await storeProductRequest(productId, 'DELETE');
+          card.remove();
+          updateResultCount();
+          showProductActionMessage('تم حذف المنتج.');
+        } catch (error) {
+          showProductActionMessage(error.message || 'تعذر حذف المنتج. حاول مرة أخرى.');
+          button.disabled = false;
+        }
       });
     });
 
     const filterBackdrop = document.getElementById('productFilterBackdrop');
     const openFiltersButton = document.getElementById('openProductFilters');
-    const productCards = [...document.querySelectorAll('.merchant-product-card')];
-
     productCards.forEach((card) => {
       card.setAttribute('role', 'link');
       card.setAttribute('tabindex', '0');
       const openDetails = (event) => {
         if (event.target.closest('.product-menu-trigger,.product-actions-menu')) return;
-        location.href = `18-distributor-product-details.html?product=${card.dataset.product}`;
+        const productId = card.dataset.productId ? `&product_id=${encodeURIComponent(card.dataset.productId)}` : '';
+        location.href = `18-distributor-product-details.html?product=${card.dataset.product}${productId}`;
       };
       card.addEventListener('click', openDetails);
       card.addEventListener('keydown', (event) => { if (event.key === 'Enter') openDetails(event); });
+      const editLink = card.querySelector('.product-actions-menu a');
+      editLink.addEventListener('click', event => {
+        if (!card.dataset.productId) {
+          event.preventDefault();
+          showProductActionMessage('تعذر تحديد المنتج. افتح هذه الصفحة مع product_id صالح.');
+          return;
+        }
+        editLink.href = `18-add-product.html?mode=edit&product_id=${encodeURIComponent(card.dataset.productId)}`;
+      });
     });
 
     const selectedFilter = (group) => document.querySelector(`[data-filter-group="${group}"] .selected`).dataset.value;
-    const matchingCards = () => {
-      const state = selectedFilter('state');
-      const stock = selectedFilter('stock');
-      return productCards.filter((card) => (state === 'all' || card.dataset.state === state) && (stock === 'all' || card.dataset.stock === stock));
-    };
-    const updateResultCount = () => { document.getElementById('filteredProductsCount').textContent = matchingCards().length.toLocaleString('ar-EG'); };
     const openFilterSheet = () => {
       filterBackdrop.hidden = false;
       requestAnimationFrame(() => filterBackdrop.classList.add('open'));
@@ -151,7 +201,6 @@
       button.addEventListener('click', () => {
         button.parentElement.querySelectorAll('button').forEach((item) => item.classList.remove('selected'));
         button.classList.add('selected');
-        updateResultCount();
       });
     });
 
@@ -162,18 +211,142 @@
       document.querySelectorAll('.product-filter-group').forEach((group) => {
         group.querySelectorAll('button').forEach((button, index) => button.classList.toggle('selected', index === 0));
       });
-      updateResultCount();
+      document.getElementById('productCategoryFilter').value = 'all';
+      document.querySelector('.products-search input').value = '';
     });
     document.getElementById('applyProductFilters').addEventListener('click', () => {
-      const visibleCards = matchingCards();
-      productCards.forEach((card) => { card.hidden = !visibleCards.includes(card); });
-      const hasActiveFilters = selectedFilter('state') !== 'all' || selectedFilter('stock') !== 'all' || selectedFilter('sort') !== 'recent';
+      const selectedStatus = selectedFilter('state');
+      document.querySelectorAll('.catalog-filters [data-product-status]').forEach(item => item.classList.toggle('active', item.dataset.productStatus === selectedStatus));
+      const hasActiveFilters = selectedFilter('state') !== 'all'
+        || document.getElementById('productCategoryFilter').value !== 'all'
+        || selectedFilter('stock') !== 'all'
+        || selectedFilter('sort') !== 'recent'
+        || document.querySelector('.products-search input').value.trim() !== '';
       openFiltersButton.classList.toggle('filter-active', hasActiveFilters);
+      loadStoreProducts(1, readProductFilters()).catch(error => showProductActionMessage(error.message));
       closeFilterSheet();
+    });
+    document.querySelectorAll('.catalog-filters [data-product-status]').forEach(button => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.catalog-filters [data-product-status]').forEach(item => item.classList.toggle('active', item === button));
+        const statusFilter = document.querySelector('[data-filter-group="state"]');
+        statusFilter.querySelectorAll('button').forEach(item => item.classList.toggle('selected', item.dataset.value === button.dataset.productStatus));
+        if (button.dataset.productStatus === 'all') statusFilter.querySelector('[data-value="all"]').classList.add('selected');
+        loadStoreProducts(1, readProductFilters()).catch(error => showProductActionMessage(error.message));
+      });
     });
 
     document.addEventListener('click', closeProductMenus);
     document.addEventListener('keydown', (event) => { if (event.key === 'Escape') { closeProductMenus(); closeFilterSheet(); } });
+
+    const productListPagination = document.createElement('nav');
+    productListPagination.id = 'productListPagination';
+    productListPagination.setAttribute('aria-label', 'صفحات المنتجات');
+    productListPagination.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:12px;margin:12px 15px 24px;color:#64748B;font-size:12px;font-weight:700';
+    document.querySelector('.merchant-products-grid').after(productListPagination);
+    let productListPage = 1;
+    let activeProductFilters = {};
+    const productStatusLabels = {
+      draft: ['مسودة', 'draft-state'],
+      pending_review: ['قيد المراجعة', 'review-state'],
+      published: ['منشور', 'published'],
+      hidden: ['مخفي', 'hidden-state'],
+      out_of_stock: ['نفد المخزون', 'draft-state'],
+    };
+    const readProductFilters = () => {
+      const filters = {};
+      const status = selectedFilter('state');
+      const categoryId = document.getElementById('productCategoryFilter').value;
+      const stockStatus = selectedFilter('stock');
+      const orderBy = selectedFilter('sort');
+      const search = document.querySelector('.products-search input').value.trim();
+      if (status !== 'all') filters.status = status;
+      if (categoryId !== 'all') filters.category_id = categoryId;
+      if (stockStatus !== 'all') filters.stock_status = stockStatus;
+      if (orderBy !== 'recent') filters.order_by = orderBy;
+      if (search) filters.search = search;
+      return filters;
+    };
+    const loadStoreProducts = async (page = 1, filters = activeProductFilters) => {
+      if (!apiToken) throw new Error('سجل الدخول بحساب المتجر لعرض المنتجات.');
+      activeProductFilters = filters;
+      const query = new URLSearchParams({limit_per_page:String(productCards.length),page:String(page),...filters});
+      const response = await fetch(`/api/store/products?${query.toString()}`, {
+        headers: {'Accept':'application/json','Accept-Language':document.documentElement.lang || 'ar','Authorization':'Bearer '+apiToken},
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.message || 'تعذر تحميل منتجات المتجر.');
+      const products = result.data || [];
+      productCards.forEach((card, index) => {
+        const product = products[index];
+        if (!product) { card.hidden = true; return; }
+        card.hidden = false;
+        card.dataset.productId = product.id;
+        card.dataset.product = product.slug || String(product.id);
+        card.dataset.state = product.status === 'pending_review' ? 'review' : product.status;
+        const lowStockThreshold = Number(product.low_stock_threshold ?? 5);
+        card.dataset.stock = product.stock_quantity === 0 ? 'out' : (product.stock_quantity <= lowStockThreshold ? 'low' : 'available');
+        const status = productStatusLabels[product.status] || [product.status, 'draft-state'];
+        const state = card.querySelector('.product-state');
+        state.textContent = status[0];
+        state.className = `product-state ${status[1]}`;
+        card.classList.toggle('product-hidden', product.status === 'hidden');
+        const image = card.querySelector('.merchant-product-image img');
+        const imagePath = product.media?.[0]?.path;
+        image.hidden = !imagePath;
+        if (imagePath) image.src = imagePath.startsWith('http') || imagePath.startsWith('/') ? imagePath : `/storage/${imagePath}`;
+        image.alt = product.name;
+        card.querySelector('.product-menu-trigger').setAttribute('aria-label', `خيارات ${product.name}`);
+        const body = card.querySelector('.merchant-product-body');
+        body.querySelector('small').textContent = product.category?.name || `القسم ${product.category_id}`;
+        body.querySelector('h3').textContent = product.name;
+        body.querySelector('.merchant-product-price strong').textContent = `${Number(product.price).toLocaleString('ar-EG')} ج.م`;
+        const stock = body.querySelector('.merchant-product-price span');
+        stock.textContent = product.stock_quantity === 0 ? 'نفد المخزون' : `المخزون ${Number(product.stock_quantity).toLocaleString('ar-EG')}`;
+        stock.classList.toggle('low-stock', product.stock_quantity > 0 && product.stock_quantity <= lowStockThreshold);
+      });
+      productListPage = result.current_page || page;
+      document.querySelector('.catalog-overview-main strong').textContent = Number(result.total_products_count || 0).toLocaleString('ar-EG');
+      document.querySelector('.catalog-overview-main span b').textContent = `+${Number(result.total_new_products_this_month_count || 0).toLocaleString('ar-EG')}`;
+      document.querySelector('.catalog-overview-side article strong').textContent = Number(result.total_published_products_count || 0).toLocaleString('ar-EG');
+      document.querySelector('.catalog-overview-side a strong').textContent = `${Number(result.low_stock_products_count || 0).toLocaleString('ar-EG')} منخفض`;
+      document.getElementById('filteredProductsCount').textContent = Number(result.total || 0).toLocaleString('ar-EG');
+      productListPagination.replaceChildren();
+      if ((result.last_page || 1) > 1) {
+        const previous = document.createElement('button');
+        previous.type = 'button'; previous.textContent = 'السابق'; previous.disabled = productListPage <= 1;
+        previous.addEventListener('click', () => loadStoreProducts(productListPage - 1, activeProductFilters).catch(error => showProductActionMessage(error.message)));
+        const label = document.createElement('span'); label.textContent = `صفحة ${productListPage} من ${result.last_page}`;
+        const next = document.createElement('button');
+        next.type = 'button'; next.textContent = 'التالي'; next.disabled = productListPage >= result.last_page;
+        next.addEventListener('click', () => loadStoreProducts(productListPage + 1, activeProductFilters).catch(error => showProductActionMessage(error.message)));
+        [previous, next].forEach(button => button.style.cssText = 'border:1px solid #E2E8F0;border-radius:9px;background:#fff;padding:8px 12px;color:#0F172A;font:inherit;cursor:pointer');
+        productListPagination.append(previous, label, next);
+      }
+    };
+    const loadSubcategories = async () => {
+      const response = await fetch('/api/sub-categories?pagination=off', {headers: {'Accept':'application/json','Accept-Language':document.documentElement.lang || 'ar'}});
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.message || 'تعذر تحميل الأقسام الفرعية.');
+      const select = document.getElementById('productCategoryFilter');
+      (result.data || []).forEach(category => {
+        const option = document.createElement('option');
+        option.value = category.id;
+        option.textContent = category.name;
+        select.append(option);
+      });
+    };
+    let productSearchTimer;
+    document.querySelector('.products-search input').addEventListener('input', () => {
+      clearTimeout(productSearchTimer);
+      productSearchTimer = setTimeout(() => {
+        const filters = readProductFilters();
+        openFiltersButton.classList.toggle('filter-active', Object.keys(filters).length > 0);
+        loadStoreProducts(1, filters).catch(error => showProductActionMessage(error.message));
+      }, 350);
+    });
+    loadSubcategories().catch(error => showProductActionMessage(error.message));
+    loadStoreProducts().catch(error => showProductActionMessage(error.message || 'تعذر تحميل منتجات المتجر.'));
   </script>
 </body>
 </html>

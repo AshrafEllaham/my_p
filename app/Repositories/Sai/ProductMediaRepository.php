@@ -48,4 +48,25 @@ class ProductMediaRepository extends MainRepository
     {
         return (bool) $this->findOrFail($id)->delete();
     }
+
+    public function countForProduct(int|string $productId): int
+    {
+        return $this->query()->where('product_id', $productId)->count();
+    }
+
+    /** @param array<int, array<string, mixed>> $records */
+    public function createManyRecords(array $records): void
+    {
+        if ($records === []) {
+            return;
+        }
+
+        $timestamp = now();
+        $records = array_map(fn (array $record): array => $record + [
+            'created_at' => $timestamp,
+            'updated_at' => $timestamp,
+        ], $records);
+
+        $this->query()->insert($records);
+    }
 }

@@ -372,6 +372,7 @@ body:not(.saey-home) .status-bar { width:min(100%,393px); height:30px; margin:0 
 .product-tab-panel.active { animation:product-tab-in .2s ease; }
 @keyframes product-tab-in { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:none; } }
 .product-success-card { display:grid; grid-template-columns:92px minmax(0,1fr); align-items:center; gap:13px; margin-top:11px; padding:14px; border-radius:19px; background:#000; color:#FFF; box-shadow:0 13px 28px rgba(0,0,0,.2); }
+.product-success-card.product-details-summary { grid-template-columns:minmax(0,1fr); }
 .success-score-ring { --angle:calc(var(--score) * 3.6deg); width:84px; height:84px; display:grid; place-items:center; border-radius:50%; background:conic-gradient(#10B981 var(--angle),rgba(255,255,255,.16) 0); }
 .success-score-ring::before { content:''; grid-area:1/1; width:66px; height:66px; border-radius:50%; background:#000; }
 .success-score-ring > span { z-index:1; grid-area:1/1; text-align:center; }

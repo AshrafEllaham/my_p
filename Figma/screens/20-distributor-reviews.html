@@ -1325,34 +1325,165 @@
   <script>
     const starTabs = document.querySelectorAll('.reviews-star-tab');
     const periodPills = document.querySelectorAll('.period-pill');
-    const reviewCards = document.querySelectorAll('#reviewsList .review-card');
+    const reviewsList = document.getElementById('reviewsList');
     const countLabel = document.getElementById('reviewsCountLabel');
     const emptyState = document.getElementById('reviewsEmpty');
-
+    const apiToken = localStorage.getItem('saey_api_token');
+    const productId = new URLSearchParams(location.search).get('product_id');
     let currentStars = 'all';
     let currentPeriod = 'all';
+    let currentPage = 1;
+    let lastPage = 1;
+    const pager = document.createElement('div');
+    pager.id = 'reviewsPagination';
+    pager.style.cssText = 'display:flex;justify-content:center;align-items:center;gap:12px;padding:14px';
+    reviewsList.after(pager);
 
-    function applyFilters() {
-      let visibleCount = 0;
-      reviewCards.forEach(card => {
-        const starMatch = (currentStars === 'all' || card.dataset.stars === currentStars);
-        const periodMatch = (currentPeriod === 'all' || card.dataset.period === currentPeriod);
-        const isShown = starMatch && periodMatch;
-
-        card.hidden = !isShown;
-        if (isShown) visibleCount++;
+    const showReviewsMessage = (message, isError = false) => {
+      let notice = document.getElementById('reviewsApiNotice');
+      if (!notice) {
+        notice = document.createElement('p');
+        notice.id = 'reviewsApiNotice';
+        notice.setAttribute('role', 'status');
+        notice.setAttribute('aria-live', 'polite');
+        notice.style.cssText = 'margin:8px 14px;padding:10px 12px;border-radius:10px;font-size:12px;font-weight:700';
+        document.querySelector('.reviews-summary').after(notice);
+      }
+      notice.style.background = isError ? '#FEF2F2' : '#F1F5F9';
+      notice.style.color = isError ? '#B91C1C' : '#334155';
+      notice.textContent = message;
+      notice.hidden = false;
+    };
+    const number = value => Number(value || 0).toLocaleString(document.documentElement.lang === 'en' ? 'en' : 'ar-EG');
+    const starsMarkup = rating => Array.from({length:5}, (_, index) => `<svg viewBox="0 0 24 24" class="${index < rating ? '' : 'empty'}" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`).join('');
+    const relativeDate = value => {
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return '';
+      const days = Math.max(0, Math.floor((Date.now() - date.getTime()) / 86400000));
+      if (days === 0) return 'اليوم';
+      if (days === 1) return 'أمس';
+      if (days < 7) return `منذ ${number(days)} أيام`;
+      return new Intl.DateTimeFormat(document.documentElement.lang || 'ar', {year:'numeric',month:'short',day:'numeric'}).format(date);
+    };
+    const createReviewCard = review => {
+      const card = document.createElement('article');
+      card.className = 'review-card';
+      const head = document.createElement('div');
+      head.className = 'review-card-head';
+      const avatar = document.createElement('div');
+      avatar.className = 'review-avatar';
+      avatar.textContent = (review.customer?.name || '؟').trim().charAt(0) || '؟';
+      const meta = document.createElement('div');
+      meta.className = 'review-card-meta';
+      const top = document.createElement('div');
+      top.className = 'review-card-top-row';
+      const name = document.createElement('strong');
+      name.textContent = review.customer?.name || 'عميل';
+      const date = document.createElement('time');
+      date.textContent = relativeDate(review.created_at);
+      top.append(name, date);
+      const rating = document.createElement('div');
+      rating.className = 'review-stars-wrap';
+      rating.innerHTML = starsMarkup(Number(review.rating || 0));
+      meta.append(top, rating);
+      head.append(avatar, meta);
+      card.append(head);
+      if (review.product?.name) {
+        const product = document.createElement('div');
+        product.className = 'review-product-chip';
+        product.textContent = review.product.name;
+        card.append(product);
+      }
+      if (review.comment) {
+        const comment = document.createElement('p');
+        comment.textContent = review.comment;
+        card.append(comment);
+      }
+      return card;
+    };
+    const updateSummary = summary => {
+      const total = Number(summary.total_reviews || 0);
+      const average = summary.average_rating == null ? '—' : Number(summary.average_rating).toFixed(1);
+      document.querySelector('.reviews-big-score strong').textContent = average;
+      document.querySelector('.reviews-big-score small').textContent = `من ${number(total)} تقييمًا`;
+      document.querySelector('.reviews-summary-sub .reviews-sub-stat:nth-child(1) strong').textContent = number(total);
+      document.querySelector('.reviews-summary-sub .reviews-sub-stat:nth-child(3) strong').textContent = `${number(summary.customer_satisfaction_percentage)}%`;
+      document.querySelector('.reviews-summary-sub .reviews-sub-stat:nth-child(5) strong').textContent = `+${number(summary.new_this_month_count)}`;
+      const distribution = summary.rating_distribution || [];
+      document.querySelectorAll('.reviews-bar-row').forEach((row, index) => {
+        const ratingValue = 5 - index;
+        const count = Number(distribution.find(item => Number(item.rating) === ratingValue)?.total || 0);
+        row.querySelector('small').textContent = number(count);
+        row.querySelector('.reviews-bar-fill').style.width = `${total ? (count / total) * 100 : 0}%`;
       });
-
-      countLabel.textContent = `عرض ${visibleCount} تقييمًا`;
-      emptyState.classList.toggle('is-visible', visibleCount === 0);
-    }
+      starTabs.forEach(tab => {
+        const value = tab.dataset.stars;
+        const count = value === 'all' ? total : Number(distribution.find(item => Number(item.rating) === Number(value))?.total || 0);
+        tab.querySelector('b').textContent = number(count);
+      });
+    };
+    const renderPagination = () => {
+      pager.replaceChildren();
+      if (lastPage <= 1) return;
+      const button = (label, page, disabled) => {
+        const element = document.createElement('button');
+        element.type = 'button';
+        element.textContent = label;
+        element.disabled = disabled;
+        element.style.cssText = 'border:1px solid #E1E8F1;border-radius:9px;background:#fff;padding:8px 12px;color:#0F172A;font:700 12px Cairo;cursor:pointer';
+        element.addEventListener('click', () => loadStoreReviews(page));
+        return element;
+      };
+      pager.append(button('السابق', currentPage - 1, currentPage <= 1));
+      const label = document.createElement('span');
+      label.textContent = `صفحة ${number(currentPage)} من ${number(lastPage)}`;
+      label.style.fontSize = '12px';
+      pager.append(label, button('التالي', currentPage + 1, currentPage >= lastPage));
+    };
+    const loadStoreReviews = async (page = 1) => {
+      if (!productId) {
+        reviewsList.replaceChildren();
+        showReviewsMessage('افتح التقييمات من تفاصيل المنتج لعرض تقييماته.', true);
+        return;
+      }
+      if (!apiToken) {
+        reviewsList.replaceChildren();
+        showReviewsMessage('سجل الدخول بحساب المتجر لعرض التقييمات.', true);
+        return;
+      }
+      const query = new URLSearchParams({page:String(page),limit_per_page:'10',period:currentPeriod});
+      if (currentStars !== 'all') query.set('rating', currentStars);
+      showReviewsMessage('جارٍ تحميل التقييمات…');
+      try {
+        const response = await fetch(`/api/store/products/${encodeURIComponent(productId)}/reviews?${query}`, {
+          headers: {'Accept':'application/json','Accept-Language':document.documentElement.lang || 'ar','Authorization':'Bearer '+apiToken},
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(result.message || 'تعذر تحميل تقييمات المتجر.');
+        document.getElementById('reviewsApiNotice')?.remove();
+        const reviews = result.data || [];
+        reviewsList.replaceChildren(...reviews.map(createReviewCard));
+        currentPage = Number(result.current_page || page);
+        lastPage = Number(result.last_page || 1);
+        const reviewsTotal = Number(result.total || 0);
+        countLabel.textContent = `عرض ${number(reviewsTotal)} تقييمًا`;
+        emptyState.classList.toggle('is-visible', reviews.length === 0);
+        updateSummary(result.summary || {});
+        renderPagination();
+      } catch (error) {
+        reviewsList.replaceChildren();
+        pager.replaceChildren();
+        emptyState.classList.remove('is-visible');
+        showReviewsMessage(error.message || 'تعذر تحميل تقييمات المتجر.', true);
+      }
+    };
 
     starTabs.forEach(tab => {
       tab.addEventListener('click', () => {
         starTabs.forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
         currentStars = tab.dataset.stars;
-        applyFilters();
+        loadStoreReviews(1);
       });
     });
 
@@ -1361,9 +1492,14 @@
         periodPills.forEach(p => p.classList.remove('active'));
         pill.classList.add('active');
         currentPeriod = pill.dataset.period;
-        applyFilters();
+        loadStoreReviews(1);
       });
     });
+
+    updateSummary({});
+    countLabel.textContent = 'عرض 0 تقييمًا';
+    reviewsList.replaceChildren();
+    loadStoreReviews().catch(error => showReviewsMessage(error.message, true));
 
     // ── Reply Sheet ──
     const replyBackdrop = document.getElementById('replyBackdrop');

@@ -62,7 +62,7 @@
         <label class="discount-switch"><span><strong>إضافة خصم</strong><small>اعرض سعرًا مخفضًا لفترة محددة</small></span><input id="discountToggle" type="checkbox"><i></i></label>
         <div class="discount-fields" id="discountFields">
           <label class="editor-field" for="discountValue"><span>نسبة الخصم</span><div class="editor-control"><input id="discountValue" type="number" min="1" max="90" placeholder="١٠"><b>%</b></div></label>
-          <label class="editor-field" for="discountEnd"><span>ينتهي في</span><div class="editor-control"><input id="discountEnd" type="text" inputmode="numeric" placeholder="يوم / شهر / سنة" maxlength="10"><svg class="date-field-icon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg></div></label>
+          <label class="editor-field" for="discountEnd"><span>ينتهي في</span><div class="editor-control"><input id="discountEnd" type="datetime-local"><svg class="date-field-icon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg></div></label>
         </div>
       </section>
 
@@ -75,38 +75,57 @@
   <footer class="product-editor-actions"><button class="save-draft-button" type="button" id="saveDraft">حفظ كمسودة</button><button class="publish-product-button" type="submit" form="productForm" id="publishProduct"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span>حفظ ونشر المنتج</span></button></footer>
 
   <script>
-    const categoryMap = {
-      'أجهزة وإلكترونيات': ['موبايلات', 'لابتوبات', 'سماعات', 'ساعات ذكية', 'إكسسوارات إلكترونية'],
-      'مواد غذائية وتوزيع': ['مشروبات', 'بقالة', 'حلويات', 'ألبان', 'مجمدات'],
-      'أزياء وملابس': ['ملابس رجالي', 'ملابس حريمي', 'أحذية', 'حقائب وإكسسوارات', 'ملابس أطفال'],
-      'عناية ومنظفات': ['عناية شخصية', 'عناية بالبشرة', 'عناية بالشعر', 'منظفات منزلية', 'عطور'],
-      'أدوات منزلية ومكتبية': ['أدوات مطبخ', 'ديكور', 'أدوات مكتبية', 'تخزين وتنظيم', 'مفروشات'],
-      'قطع غيار ومعدات': ['قطع غيار سيارات', 'معدات صناعية', 'أدوات يدوية', 'مستلزمات صيانة', 'إطارات وبطاريات']
-    };
-
     const params = new URLSearchParams(location.search);
     const isEditMode = params.get('mode') === 'edit';
-    const storeCategory = localStorage.getItem('saeyStoreCategory') || 'أزياء وملابس';
-    const subCategories = categoryMap[storeCategory] || categoryMap['أزياء وملابس'];
+    const productId = params.get('product_id');
+    const isUpdateMode = isEditMode && Boolean(productId);
     const subCategorySelect = document.getElementById('subCategory');
-
-    subCategorySelect.innerHTML = `<option value="">اختر القسم</option>${subCategories.map((category) => `<option value="${category}">${category}</option>`).join('')}`;
+    const token = localStorage.getItem('saey_api_token');
+    const showFormError = message => {
+      let notice = document.getElementById('productFormNotice');
+      if (!notice) {
+        notice = document.createElement('p');
+        notice.id = 'productFormNotice';
+        notice.setAttribute('role', 'alert');
+        notice.style.cssText = 'padding:10px 12px;border-radius:10px;background:#FEF2F2;color:#B91C1C;font-size:12px;font-weight:700';
+        document.querySelector('.product-editor-form').prepend(notice);
+      }
+      notice.textContent = message;
+      notice.hidden = false;
+    };
+    const loadCategories = async () => {
+      try {
+        const response = await fetch('/api/sub-categories?pagination=off', {headers: {'Accept':'application/json','Accept-Language':document.documentElement.lang || 'ar'}});
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.message || 'تعذر تحميل الأقسام.');
+        const rows = result.data || [];
+        subCategorySelect.innerHTML = '<option value="">اختر القسم</option>' + rows.map(category => `<option value="${category.id}">${category.name}</option>`).join('');
+        if (!rows.length) showFormError('لا توجد أقسام متاحة لإضافة المنتج.');
+      } catch (error) {
+        showFormError(error.message || 'تعذر تحميل الأقسام. تحقق من اتصالك ثم أعد المحاولة.');
+      }
+    };
+    loadCategories();
 
     if (isEditMode) {
       document.title = 'سعي — تعديل المنتج';
       document.getElementById('editorEyebrow').textContent = 'تحديث بيانات المنتج';
       document.getElementById('editorTitle').textContent = 'تعديل المنتج';
       document.getElementById('publishProduct').querySelector('span').textContent = 'حفظ التعديلات';
-      document.getElementById('productName').value = 'جاكيت جلد طبيعي';
-      document.getElementById('productDescription').value = 'جاكيت رجالي من الجلد الطبيعي، بتصميم عملي مناسب للاستخدام اليومي.';
-      document.getElementById('productPrice').value = '1850';
-      document.getElementById('productStock').value = '18';
-      subCategorySelect.value = subCategories.includes('ملابس رجالي') ? 'ملابس رجالي' : subCategories[0];
+      if (isUpdateMode) {
+        document.querySelectorAll('#productName,#subCategory,#productDescription,#productPrice,#productStock').forEach(control => { control.required = false; });
+        document.querySelector('.required-note').hidden = true;
+        document.querySelector('.publish-row').hidden = true;
+        document.querySelector('.editor-card .editor-section-heading p').textContent = 'أدخل الحقول التي تريد تغييرها فقط';
+        document.querySelector('.media-editor-card .editor-section-heading p').textContent = 'الصور الجديدة تضاف إلى المعرض الحالي';
+        document.querySelectorAll('.editor-field > span').forEach(label => { label.textContent = label.textContent.replace(' *', ''); });
+      } else {
+        showFormError('تعذر تحديد المنتج. ارجع إلى صفحة المنتج وافتح التعديل من هناك.');
+      }
     }
 
     const featuresList = document.getElementById('featuresList');
     const featuresCount = document.getElementById('featuresCount');
-    const editFeatures = ['جلد طبيعي عالي الجودة', 'بطانة داخلية مريحة', 'مقاوم للهواء'];
 
     const updateFeaturesCount = () => {
       const count = featuresList.querySelectorAll('.feature-item').length;
@@ -131,7 +150,7 @@
       updateFeaturesCount();
     };
 
-    (isEditMode ? editFeatures : ['']).forEach(addFeatureItem);
+    [''].forEach(addFeatureItem);
     document.getElementById('addFeature').addEventListener('click', () => addFeatureItem());
 
     const description = document.getElementById('productDescription');
@@ -161,10 +180,51 @@
       });
     });
 
-    document.getElementById('saveDraft').addEventListener('click', () => location.href = '18-distributor-products.html');
+    const saveProduct = async publish => {
+      const form = document.getElementById('productForm');
+      if (!form.reportValidity()) return;
+      if (isEditMode && !isUpdateMode) return showFormError('تعذر تحديد المنتج. ارجع إلى صفحة المنتج وافتح التعديل من هناك.');
+      if (!token) return showFormError('سجل الدخول بحساب المتجر لحفظ المنتج.');
+      const button = document.getElementById('publishProduct');
+      const draftButton = document.getElementById('saveDraft');
+      button.disabled = true; draftButton.disabled = true;
+      const payload = new FormData();
+      if (isUpdateMode) payload.append('_method', 'PATCH');
+      const appendIfFilled = (key, value) => { if (String(value).trim() !== '') payload.append(key, String(value).trim()); };
+      appendIfFilled('name', document.getElementById('productName').value);
+      appendIfFilled('category_id', subCategorySelect.value);
+      appendIfFilled('description', document.getElementById('productDescription').value);
+      appendIfFilled('price', document.getElementById('productPrice').value);
+      appendIfFilled('stock_quantity', document.getElementById('productStock').value);
+      if (publish !== null) payload.append('publish', publish ? '1' : '0');
+      const featureValues = [...featuresList.querySelectorAll('.feature-item input')].map(input => input.value.trim()).filter(Boolean);
+      if (featureValues.length) featureValues.forEach(feature => payload.append('features[]', feature));
+      if (discountToggle.checked) {
+        appendIfFilled('discount_percentage', document.getElementById('discountValue').value);
+        const dateValue = document.getElementById('discountEnd').value;
+        appendIfFilled('discount_ends_at', dateValue);
+      }
+      [...document.getElementById('productImages').files].slice(0, 6).forEach(file => payload.append('images[]', file));
+      if (isUpdateMode && [...payload.keys()].length === 1) {
+        showFormError('أدخل البيانات التي تريد تحديثها ثم أعد المحاولة.');
+        button.disabled = false; draftButton.disabled = false;
+        return;
+      }
+      try {
+        const endpoint = isUpdateMode ? '/api/store/products/' + encodeURIComponent(productId) : '/api/store/products';
+        const response = await fetch(endpoint, {method:'POST', headers:{'Accept':'application/json','Accept-Language':document.documentElement.lang || 'ar','Authorization':'Bearer '+token}, body:payload});
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(result.message || Object.values(result.errors || {}).flat()[0] || 'تعذر حفظ المنتج.');
+        location.href = '18-distributor-products.html';
+      } catch (error) {
+        showFormError(error.message || 'تعذر الاتصال بالخادم. حاول مرة أخرى.');
+        button.disabled = false; draftButton.disabled = false;
+      }
+    };
+    document.getElementById('saveDraft').addEventListener('click', () => saveProduct(false));
     document.getElementById('productForm').addEventListener('submit', (event) => {
       event.preventDefault();
-      if (event.currentTarget.reportValidity()) location.href = '18-distributor-products.html';
+      saveProduct(isUpdateMode ? null : document.getElementById('publishToggle').checked);
     });
   </script>
 </body>

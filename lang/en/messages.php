@@ -46,6 +46,17 @@ return [
         'user_type_required' => 'This endpoint is available to user accounts only.',
         'store_type_required' => 'This endpoint is available to store accounts only.',
     ],
+    'products' => [
+        'listed' => 'Store products were retrieved successfully.',
+        'retrieved' => 'Product details were retrieved successfully.',
+        'created' => 'The product was created successfully.',
+        'updated' => 'The product was updated successfully.',
+        'hidden' => 'The product was hidden from customers.',
+        'deleted' => 'The product was deleted successfully.',
+    ],
+    'reviews' => [
+        'listed' => 'Product reviews were retrieved successfully.',
+    ],
     'notifications' => [
         'listed' => 'Notifications were retrieved successfully.',
         'marked_read' => 'The notification was marked as read.',
@@ -56,6 +67,20 @@ return [
     ],
     'validation_failed' => 'The submitted data is invalid.',
     'validation' => [
+        'product' => [
+            'name' => ['required' => 'The product name is required.', 'string' => 'The product name must be text.', 'min' => 'The product name must contain at least 2 characters.', 'max' => 'The product name is too long.'],
+            'category_id' => ['required' => 'Choose a category.', 'integer' => 'The category ID must be an integer.', 'exists' => 'The selected category is unavailable.'],
+            'description' => ['required' => 'The product description is required.', 'string' => 'The description must be text.', 'max' => 'The description must not exceed 300 characters.'],
+            'features' => ['array' => 'Product features must be a list.', 'max' => 'You can add up to 8 features.'],
+            'features.*' => ['required' => 'Each feature is required.', 'string' => 'Each feature must be text.', 'max' => 'A feature must not exceed 80 characters.'],
+            'price' => ['required' => 'The product price is required.', 'numeric' => 'The price must be a number.', 'gt' => 'The price must be greater than zero.', 'max' => 'The price is too large.'],
+            'stock_quantity' => ['required' => 'The available quantity is required.', 'integer' => 'The quantity must be an integer.', 'min' => 'The quantity cannot be negative.', 'max' => 'The quantity is too large.'],
+            'discount_percentage' => ['numeric' => 'The discount must be a number.', 'between' => 'The discount must be between 1 and 90 percent.'],
+            'discount_ends_at' => ['required_with' => 'Choose an end date when setting a discount.', 'date' => 'Enter a valid discount end date.', 'after' => 'The discount end date must be in the future.'],
+            'images' => ['array' => 'Product images must be a list.', 'max' => 'You can upload up to 6 images.', 'total_max' => 'A product can have up to 6 images in total.'],
+            'images.*' => ['required' => 'Each image is required.', 'image' => 'Each uploaded file must be an image.', 'mimes' => 'Images must be JPG, JPEG, PNG, or WEBP.', 'max' => 'Each image must not exceed 5 MB.', 'uploaded' => 'The image could not be uploaded. Check its size and try again.'],
+            'publish' => ['boolean' => 'Publish must be true or false.'],
+        ],
         'change_password' => [
             'current_password_required' => 'The current password is required.',
             'current_password_string' => 'The current password must be text.',
@@ -178,6 +203,11 @@ return [
                 'min' => 'The items per page value must be at least 1.',
                 'max' => 'The items per page value must not exceed 100.',
             ],
+            'page' => [
+                'label' => 'page number',
+                'integer' => 'The page number must be an integer.',
+                'min' => 'The page number must be at least 1.',
+            ],
             'main_category_id' => [
                 'label' => 'main category ID',
                 'integer' => 'The main category ID must be an integer.',
@@ -192,6 +222,45 @@ return [
                 'label' => 'governorate ID',
                 'integer' => 'The governorate ID must be an integer.',
                 'exists' => 'The selected active governorate was not found.',
+            ],
+        ],
+        'store_product_filters' => [
+            'status' => [
+                'label' => 'product status',
+                'string' => 'The product status must be text.',
+                'enum' => 'The selected product status is unavailable.',
+            ],
+            'category_id' => [
+                'label' => 'subcategory',
+                'integer' => 'The subcategory ID must be an integer.',
+                'exists' => 'The selected active subcategory was not found.',
+            ],
+            'order_by' => [
+                'label' => 'product order',
+                'string' => 'The product order must be text.',
+                'enum' => 'The selected product order is unavailable.',
+            ],
+            'search' => [
+                'label' => 'product search',
+                'string' => 'The product search must be text.',
+                'max' => 'The search text is too long.',
+            ],
+            'stock_status' => [
+                'label' => 'stock status',
+                'string' => 'The stock status must be text.',
+                'enum' => 'The selected stock status is unavailable.',
+            ],
+        ],
+        'store_review_filters' => [
+            'rating' => [
+                'label' => 'review rating',
+                'integer' => 'The review rating must be an integer.',
+                'between' => 'The review rating must be from 1 to 5.',
+            ],
+            'period' => [
+                'label' => 'review period',
+                'string' => 'The review period must be text.',
+                'enum' => 'The selected review period is unavailable.',
             ],
         ],
         'settings' => [
