@@ -670,7 +670,8 @@
         chip.className = `ad-status-chip ${isOn ? 'active' : 'ended'}`;
         setText('rowStatusValue', statusLabels[ad.status] || ad.status);
         document.getElementById('rowStatusValue').className = `ad-info-row-value ${isOn ? 'green' : ''}`;
-        setText('sheetPauseText', ad.status === 'paused' ? 'إعادة تفعيل الإعلان' : 'إيقاف الإعلان مؤقتًا');
+        setText('sheetPauseText', ad.status === 'draft' ? 'مراجعة ودفع الإعلان' : ad.status === 'paused' ? 'إعادة تفعيل الإعلان' : 'إيقاف الإعلان مؤقتًا');
+        document.getElementById('sheetPause').dataset.adStatus = ad.status;
         document.getElementById('sheetEdit').href = `19-add-ad.html?edit=${encodeURIComponent(ad.id)}`;
         if (ad.media_path) {
           const image = document.getElementById('adCreativeImage');
@@ -762,6 +763,11 @@
       if (!selectedAdId || !adApiToken) {
         detailsError.textContent = 'سجّل الدخول وافتح إعلانًا من القائمة لتغيير حالته.';
         detailsError.hidden = false;
+        closeSheet();
+        return;
+      }
+      if (document.getElementById('sheetPause').dataset.adStatus === 'draft') {
+        location.href = `19-ad-review.html?ad=${encodeURIComponent(selectedAdId)}`;
         closeSheet();
         return;
       }

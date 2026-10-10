@@ -23,6 +23,7 @@
     let pricingLoaded = false;
     let paymentMethod = 'wallet';
     let editedPackageId = null;
+    let editDataPromise = Promise.resolve(null);
     const savedDraft = JSON.parse(localStorage.getItem('saey_ad_draft') || 'null');
     const adApiToken = localStorage.getItem('saey_api_token');
     const adApiBase = localStorage.getItem('saey_api_base') || '/api/store';
@@ -166,6 +167,11 @@
           location.href = result.data.redirectUrl;
           return;
         }
+        if (!adApiToken) {
+          localStorage.setItem('saey_ad_review', JSON.stringify({ ...collectAd(), id: editId || null }));
+          location.href = '19-ad-review.html';
+          return;
+        }
         localStorage.removeItem('saey_ad_submission_key');
         location.href = '19-distributor-ads.html';
       } catch (error) {
@@ -183,7 +189,7 @@
       if (matchingOption) packageSelect.value = matchingOption.value;
     }
     if (editId && adApiToken) {
-      apiRequest(`/ads/${editId}`).then(result => {
+      editDataPromise = apiRequest(`/ads/${editId}`).then(result => {
         const ad = result.data || {};
         titleInput.value = ad.title || '';
         document.getElementById('adTitleCount').textContent = titleInput.value.length.toLocaleString('ar-EG');
@@ -198,11 +204,15 @@
         }
         document.querySelector('.ad-editor-header h1').textContent = 'تعديل الإعلان';
         document.querySelector('.ad-editor-header small').textContent = 'تحديث الحملة';
-      }).catch(error => setFeedback(error.message));
+        return ad;
+      }).catch(error => {
+        setFeedback(error.message);
+        return null;
+      });
     }
     if (adApiToken) {
-      Promise.all([apiRequest('/ad-packages'), apiRequest('/settings', {}, generalApiBase)]).then(([packages, settings]) => {
-        const selected = editedPackageId || packageSelect.value;
+      Promise.all([apiRequest('/ad-packages'), apiRequest('/settings', {}, generalApiBase), editDataPromise]).then(([packages, settings, editedAd]) => {
+        const selected = editedAd?.ad_package_id || editedPackageId || packageSelect.value;
         packageSelect.replaceChildren();
         (packages.data || []).forEach(pkg => {
           const option = document.createElement('option');

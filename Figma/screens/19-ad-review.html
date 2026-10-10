@@ -7,29 +7,36 @@
     <header class="ad-editor-header"><a href="19-add-ad.html" aria-label="العودة إلى تعديل الإعلان"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a><div><small>الخطوة الأخيرة</small><h1>مراجعة الإعلان</h1></div><span class="ad-editor-state">جاهز</span></header>
     <section class="ad-review-preview"><span>معاينة الإعلان</span><h2 id="reviewTitle">خصم ٢٥٪ على منتجات الصيف</h2><p>نقطة ستور · إعلان ممول</p><i><svg viewBox="0 0 24 24"><path d="m4 12 15-7v14L4 12ZM4 12v5a2 2 0 0 0 2 2"/></svg></i></section>
     <section class="ad-editor-card"><header><span><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM8 9h8M8 13h5"/></svg></span><div><h2>تفاصيل الحملة</h2><p>راجع الاختيارات قبل تأكيد الدفع</p></div></header><div class="ad-review-rows"><div><span>مكان الظهور</span><strong id="reviewPlacement">داخل القسم</strong></div><div><span>الباقة</span><strong id="reviewPackage">ظهور مميز · ٧ أيام</strong></div><div><span>موعد البداية</span><strong id="reviewSchedule">—</strong></div></div></section>
-    <section class="ad-editor-card" id="reviewPaymentCard"><header><span><svg viewBox="0 0 24 24"><path d="M3 7h18v12H3zM16 11h5v4h-5z"/></svg></span><div><h2>الدفع من المحفظة</h2><p>سيتم خصم التكلفة عند نشر الإعلان</p></div></header><div class="ad-payment-row"><span>الرصيد الحالي</span><strong>٢,٢٤٠ ج.م</strong></div><div class="ad-payment-row total"><span>تكلفة الإعلان</span><strong id="reviewCost">٣٥٠ ج.م</strong></div><div class="ad-payment-row"><span>الرصيد بعد الدفع</span><strong id="reviewBalance">١,٨٩٠ ج.م</strong></div></section>
+    <section class="ad-editor-card" id="reviewPaymentCard"><header><span><svg viewBox="0 0 24 24"><path d="M3 7h18v12H3zM16 11h5v4h-5z"/></svg></span><div><h2>طريقة الدفع</h2><p>اختر طريقة الدفع لإرسال الإعلان للمراجعة</p></div></header><div class="ad-payment-method-options" role="radiogroup" aria-label="طريقة الدفع"><button class="selected" type="button" role="radio" aria-checked="true" data-payment-method="wallet"><span>المحفظة</span><small>الدفع من رصيد المتجر</small></button><button type="button" role="radio" aria-checked="false" data-payment-method="online"><span>دفع إلكتروني</span><small>افتح صفحة الدفع الآمنة</small></button></div><div class="ad-payment-row"><span>الرصيد الحالي</span><strong id="reviewCurrentBalance">٢,٢٤٠ ج.م</strong></div><div class="ad-payment-row total"><span>تكلفة الإعلان</span><strong id="reviewCost">٣٥٠ ج.م</strong></div><div class="ad-payment-row" id="reviewBalanceRow"><span>الرصيد بعد الدفع</span><strong id="reviewBalance">١,٨٩٠ ج.م</strong></div></section>
     <div class="ad-review-note"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span>سيخضع الإعلان لمراجعة سعي قبل بدء الظهور للعملاء.</span></div>
   </main>
   <p class="ad-editor-feedback" id="reviewFeedback" role="alert"></p>
   <footer class="ad-editor-actions"><a class="ad-review-edit" href="19-add-ad.html">تعديل الإعلان</a><button class="ad-review-button" id="payAndPublish" type="button">دفع وإرسال للمراجعة</button></footer>
   <div class="ad-payment-success" id="paymentSuccess" hidden><span><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></span><h2>تم إرسال إعلانك للمراجعة</h2><p>سنخبرك فور اعتماده وبدء الحملة.</p><a href="19-distributor-ads.html">العودة إلى إعلاناتي</a></div>
   <script>
-    const ad = JSON.parse(localStorage.getItem('saey_ad_review') || '{}');
+    const storedAd = JSON.parse(localStorage.getItem('saey_ad_review') || '{}');
     const token = localStorage.getItem('saey_api_token');
     const apiBase = localStorage.getItem('saey_api_base') || '/api/store';
     const feedback = document.getElementById('reviewFeedback');
+    const adId = new URLSearchParams(location.search).get('ad') || storedAd.id;
+    let ad = { ...storedAd, id: adId };
     let cost = Number(ad.cost || 0);
     let balance = 2240;
     let currency = 'EGP';
+    let paymentMethod = 'wallet';
     const formatMoney = amount => `${Number(amount).toLocaleString('ar-EG')} ${currency}`;
     const renderAmounts = () => {
       document.getElementById('reviewCost').textContent = cost ? formatMoney(cost) : 'مجاني';
-      document.querySelector('.ad-payment-row.total span').textContent = cost ? 'تكلفة الإعلان' : 'تكلفة الإعلان';
-      document.querySelector('#reviewPaymentCard h2').textContent = cost ? 'الدفع من المحفظة' : 'الإرسال للمراجعة';
-      document.querySelector('#reviewPaymentCard header p').textContent = cost ? 'سيتم خصم التكلفة عند تأكيد الإرسال' : 'هذا الموضع مجاني ولا يتطلب دفعًا';
+      document.querySelector('#reviewPaymentCard header p').textContent = cost ? 'سيتم الدفع عند تأكيد الإرسال للمراجعة' : 'هذا الموضع مجاني ولا يتطلب دفعًا';
       document.getElementById('payAndPublish').textContent = cost ? 'دفع وإرسال للمراجعة' : 'إرسال الإعلان للمراجعة';
+      document.getElementById('reviewCurrentBalance').textContent = formatMoney(balance);
       document.getElementById('reviewBalance').textContent = formatMoney(balance - cost);
-      document.querySelector('.ad-payment-row strong').textContent = formatMoney(balance);
+      document.getElementById('reviewBalanceRow').hidden = paymentMethod === 'online' || cost === 0;
+      document.querySelectorAll('[data-payment-method]').forEach(button => {
+        const selected = button.dataset.paymentMethod === paymentMethod;
+        button.classList.toggle('selected', selected);
+        button.setAttribute('aria-checked', String(selected));
+      });
     };
     const showError = message => {
       feedback.className = 'ad-editor-feedback error';
@@ -59,21 +66,37 @@
     };
 
     applyAd(ad);
-    if (ad.id) document.querySelector('.ad-review-edit').href = `19-add-ad.html?edit=${encodeURIComponent(ad.id)}`;
-    if (token && ad.id) {
-      Promise.all([apiRequest(`/ads/${ad.id}`), apiRequest('/ads/wallet-balance')]).then(([details, wallet]) => {
+    if (ad.id) {
+      const editUrl = `19-add-ad.html?edit=${encodeURIComponent(ad.id)}`;
+      document.querySelector('.ad-review-edit').href = editUrl;
+      document.querySelector('.ad-editor-header a').href = editUrl;
+    }
+    if (token && adId) {
+      Promise.all([apiRequest(`/ads/${encodeURIComponent(adId)}`), apiRequest('/ads/wallet-balance')]).then(([details, wallet]) => {
         balance = Number(wallet.data?.balance || 0);
         currency = wallet.data?.currency || details.data?.currency || 'EGP';
         applyAd(details.data || {});
       }).catch(error => showError(error.message));
     }
+    document.querySelectorAll('[data-payment-method]').forEach(button => button.addEventListener('click', () => {
+      paymentMethod = button.dataset.paymentMethod;
+      renderAmounts();
+    }));
     document.getElementById('payAndPublish').addEventListener('click', async event => {
       const button = event.currentTarget;
       button.disabled = true;
       try {
         if (token) {
-          if (!ad.id) throw new Error('تعذر العثور على الإعلان لإتمام الدفع. ارجع إلى النموذج واحفظ الإعلان أولًا.');
-          await apiRequest(`/ads/${ad.id}/submit`, { method: 'POST' });
+          if (!adId) throw new Error('تعذر العثور على الإعلان. ارجع إلى قائمة الإعلانات واختر مسودة محفوظة.');
+          const result = await apiRequest(`/ads/${encodeURIComponent(adId)}/submit`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ payment_method: paymentMethod }),
+          });
+          if (result.data?.redirectUrl) {
+            location.href = result.data.redirectUrl;
+            return;
+          }
         }
         localStorage.removeItem('saey_ad_draft');
         document.getElementById('paymentSuccess').hidden = false;

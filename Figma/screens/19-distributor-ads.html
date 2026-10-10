@@ -13,6 +13,7 @@
     .ad-card { position: relative; display: block; }
     .ad-card-link { display: block; text-decoration: none; color: inherit; cursor: pointer; }
     .ad-card-link:active { opacity: .92; }
+    .ads-manager .ad-card > .resume-ad-draft { margin: 0 12px 12px; }
 
     /* ── Card menu button (clean SVG icon & standalone click target) ── */
     .ad-card-menu {
@@ -356,6 +357,13 @@
         card.querySelector('.ad-meta time').textContent = ad.starts_at ? new Date(ad.starts_at).toLocaleDateString('ar-EG') : 'بدون موعد بدء';
         card.querySelector('.ad-stats div:last-child b').textContent = `${ad.cost} ${ad.currency}`;
         card.querySelector('.ad-card-link').href = `distributor-ad-details.html?ad=${encodeURIComponent(ad.id)}`;
+        if (ad.status === 'draft') {
+          const resumeLink = document.createElement('a');
+          resumeLink.className = 'resume-ad-draft';
+          resumeLink.href = `19-add-ad.html?edit=${encodeURIComponent(ad.id)}`;
+          resumeLink.textContent = 'استكمال الإعلان';
+          card.append(resumeLink);
+        }
         list.append(card);
       });
     };
@@ -389,7 +397,7 @@
         sheetToggleIcon.innerHTML = '<circle cx="12" cy="12" r="9"/><polygon points="10,8 16,12 10,16"/>';
         sheetEditText.textContent = 'تعديل وتجديد الحملة';
       } else if (status === 'draft') {
-        sheetToggleText.textContent = 'نشر الإعلان الآن';
+        sheetToggleText.textContent = 'مراجعة ودفع الإعلان';
         sheetToggleIcon.innerHTML = '<path d="m5 12 5 5L20 7"/>';
         sheetEditText.textContent = 'استكمال المسودة';
       } else {
@@ -404,6 +412,15 @@
     backdrop.addEventListener('click', e => { if (e.target === backdrop) closeSheet(); });
 
     document.getElementById('sheetToggleState').addEventListener('click', () => {
+      if (currentCard?.dataset.status === 'draft') {
+        const adId = currentCard.dataset.adId;
+        if (adApiToken && adId) {
+          location.href = `19-ad-review.html?ad=${encodeURIComponent(adId)}`;
+        } else {
+          location.href = '19-add-ad.html?draft=1';
+        }
+        return;
+      }
       if (adApiToken && currentCard?.dataset.adId) {
         adApiRequest(`/ads/${currentCard.dataset.adId}/toggle`, { method: 'PATCH' })
           .then(result => { const ad = result.data; currentCard.dataset.status = ad.status; currentCard.querySelector('.ad-status-badge').textContent = statusLabels[ad.status] || ad.status; currentCard.classList.toggle('campaign-active', ad.status === 'active'); currentCard.classList.toggle('campaign-ended', ad.status !== 'active'); })
