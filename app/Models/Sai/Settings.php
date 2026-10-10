@@ -27,5 +27,15 @@ class Settings extends Model implements TranslatableContract
         'email',
         'facebook',
         'instagram',
+        'ad_home_price',
+        'ad_category_price',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'ad_home_price' => 'decimal:2',
+            'ad_category_price' => 'decimal:2',
+        ];
+    }
 }

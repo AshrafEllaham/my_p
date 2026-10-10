@@ -59,7 +59,14 @@ return [
         'listed' => 'Store ads were retrieved successfully.',
         'retrieved' => 'Ad details were retrieved successfully.',
         'packages_listed' => 'Active ad packages were retrieved successfully.',
-        'created' => 'The ad was saved as a draft.',
+        'wallet_balance_loaded' => 'The wallet balance was retrieved successfully.',
+        'created' => 'The ad was created successfully.',
+        'submitted' => 'The ad was submitted for review.',
+        'payment_required' => 'Complete the online payment to finish submitting the ad for review.',
+        'payment_method_locked' => 'The payment method is tied to the current payment attempt and cannot be changed.',
+        'payment_unavailable' => 'This ad payment attempt is unavailable or cannot be completed.',
+        'wallet_insufficient' => 'Your active wallet does not have enough balance in the ad currency.',
+        'submit_unavailable' => 'Only draft ads can be submitted for review.',
         'updated' => 'The ad was updated successfully.',
         'toggled' => 'The ad status was updated successfully.',
         'deleted' => 'The ad was deleted successfully.',
@@ -278,6 +285,9 @@ return [
             'media_type' => ['label' => 'media type', 'required' => 'Choose the media type.', 'string' => 'The media type must be text.', 'enum' => 'The selected media type is unavailable.'],
             'media' => ['label' => 'ad media', 'required' => 'Upload an image or video for the ad.', 'file' => 'The ad media must be a file.', 'mimes' => 'Ad media must be JPG, JPEG, PNG, WEBP, or MP4.', 'max' => 'Ad media must not exceed 20 MB.', 'uploaded' => 'The ad media could not be uploaded. Check its size and try again.'],
             'starts_at' => ['label' => 'start date', 'date' => 'Enter a valid ad start date.', 'after' => 'The ad start date must be in the future.'],
+            'submission_action' => ['label' => 'ad creation action', 'required' => 'Choose whether to save the ad as a draft or submit it for review.', 'string' => 'The ad creation action must be text.', 'enum' => 'The selected ad creation action is unavailable.', 'prohibited' => 'The creation action cannot be changed when editing an ad.'],
+            'idempotency_key' => ['label' => 'submission attempt ID', 'required' => 'A submission attempt ID is required when submitting for review.', 'uuid' => 'The submission attempt ID is invalid.'],
+            'payment_method' => ['label' => 'payment method', 'required' => 'Choose a payment method for the ad.', 'string' => 'The payment method must be text.', 'enum' => 'The selected payment method is unavailable.', 'prohibited' => 'Do not send a payment method when saving a draft or editing an ad.'],
         ],
         'store_review_filters' => [
             'rating' => [
@@ -302,6 +312,8 @@ return [
                 'email' => 'email address',
                 'facebook' => 'Facebook URL',
                 'instagram' => 'Instagram URL',
+                'ad_home_price' => 'home page ad price',
+                'ad_category_price' => 'category page ad price',
                 'ar.website_name' => 'website name in Arabic',
                 'en.website_name' => 'website name in English',
                 'ar.about_app' => 'About the app in Arabic',
@@ -330,6 +342,13 @@ return [
             ],
             'website_name' => [
                 'max' => 'The website name must not exceed 255 characters.',
+            ],
+            'ad_pricing' => [
+                'required' => 'The ad price is required.',
+                'numeric' => 'The ad price must be a number.',
+                'decimal' => 'The ad price may have no more than two decimal places.',
+                'min' => 'The ad price must be zero or greater.',
+                'max' => 'The ad price exceeds the allowed maximum.',
             ],
         ],
         'country_id' => [

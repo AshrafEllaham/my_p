@@ -51,14 +51,14 @@
                     <p>{{ __('admin.auth.login_description') }}</p>
                 </header>
 
-                <form class="admin-login__form" method="POST" action="{{ route('admin.login.post') }}" novalidate>
+                <form class="admin-login__form" method="POST" action="{{ route('admin.login.post') }}" data-admin-validate novalidate>
                     @csrf
 
                     <div class="admin-field">
                         <label for="email">{{ __('admin.auth.email') }}</label>
                         <div class="admin-field__control @error('email') has-error @enderror">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
-                            <input id="email" name="email" type="email" value="{{ old('email') }}" placeholder="admin@example.com" dir="ltr" autocomplete="username" required autofocus>
+                            <input id="email" name="email" type="email" maxlength="255" value="{{ old('email') }}" placeholder="admin@example.com" dir="ltr" autocomplete="username" required autofocus>
                         </div>
                         @error('email') <p class="admin-field__error">{{ $message }}</p> @enderror
                     </div>
@@ -67,7 +67,7 @@
                         <label for="password">{{ __('admin.auth.password') }}</label>
                         <div class="admin-field__control @error('password') has-error @enderror">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
-                            <input id="password" name="password" type="password" placeholder="••••••••" dir="ltr" autocomplete="current-password" required>
+                            <input id="password" name="password" type="password" minlength="8" maxlength="255" placeholder="••••••••" dir="ltr" autocomplete="current-password" required>
                             <button class="admin-password-toggle" type="button" data-password-toggle="password" aria-label="{{ __('admin.auth.toggle_password') }}">
                                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.5"/></svg>
                             </button>

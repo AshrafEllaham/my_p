@@ -1,4 +1,4 @@
-<form class="admin-catalog-form" action="{{ $action }}" method="POST" enctype="multipart/form-data" data-catalog-form data-no-loader>
+<form class="admin-catalog-form" action="{{ $action }}" method="POST" enctype="multipart/form-data" data-catalog-form data-admin-validate data-no-loader>
     @csrf
     @if ($method !== 'POST')
         @method($method)

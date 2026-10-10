@@ -18,7 +18,7 @@
             </div>
         @endif
 
-        <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data" data-admin-validate>
             @csrf
             @method('PUT')
 
@@ -87,8 +87,38 @@
                                 id="{{ $field }}"
                                 name="{{ $field }}"
                                 type="{{ $field === 'email' ? 'email' : (in_array($field, ['facebook', 'instagram'], true) ? 'url' : 'text') }}"
+                                maxlength="{{ $field === 'phone' || $field === 'other_phone' ? 30 : 255 }}"
                                 value="{{ old($field, $settings?->{$field}) }}"
                                 dir="{{ in_array($field, ['email', 'facebook', 'instagram', 'whatsapp', 'phone'], true) ? 'ltr' : 'auto' }}"
+                            >
+                            @error($field)<p class="admin-field__error">{{ $message }}</p>@enderror
+                        </div>
+                    @endforeach
+                </div>
+            </section>
+
+            <section class="admin-panel admin-settings-section" aria-labelledby="settings-ad-pricing-title">
+                <div class="admin-section__heading">
+                    <div>
+                        <h2 id="settings-ad-pricing-title">{{ __('admin.site_settings.ad_pricing_title') }}</h2>
+                        <p>{{ __('admin.site_settings.ad_pricing_description') }}</p>
+                    </div>
+                </div>
+                <div class="admin-form-grid">
+                    @foreach (['ad_home_price', 'ad_category_price'] as $field)
+                        <div class="admin-field">
+                            <label for="{{ $field }}">{{ __('admin.site_settings.fields.'.$field) }}</label>
+                            <input
+                                class="admin-input @error($field) has-error @enderror"
+                                id="{{ $field }}"
+                                name="{{ $field }}"
+                                type="number"
+                                min="0"
+                                max="9999999999.99"
+                                step="0.01"
+                                value="{{ old($field, $settings?->{$field}) }}"
+                                required
+                                dir="ltr"
                             >
                             @error($field)<p class="admin-field__error">{{ $message }}</p>@enderror
                         </div>

@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Sai;
 
+use App\Enums\AdPlacementEnum;
 use App\Models\Sai\Settings;
 use App\Repositories\MainRepository;
 
@@ -33,5 +34,22 @@ class SettingsRepository extends MainRepository
         $settings->save();
 
         return $settings->refresh()->load('translations');
+    }
+
+    public function adPriceForPlacement(AdPlacementEnum $placement): ?string
+    {
+        $column = match ($placement) {
+            AdPlacementEnum::Home => 'ad_home_price',
+            AdPlacementEnum::Category => 'ad_category_price',
+            AdPlacementEnum::Storefront => null,
+        };
+
+        if ($column === null) {
+            return null;
+        }
+
+        $price = $this->getModel()->newQuery()->orderBy('id')->value($column);
+
+        return $price === null ? null : (string) $price;
     }
 }

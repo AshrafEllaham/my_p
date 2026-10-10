@@ -34,6 +34,21 @@ class PaymentRepository extends MainRepository
         return $record;
     }
 
+    public function findByIdempotencyKey(string $key): ?Payment
+    {
+        return $this->query()->where('idempotency_key', $key)->first();
+    }
+
+    public function findForUpdateOrFail(int|string $id): Payment
+    {
+        return $this->query()->lockForUpdate()->findOrFail($id);
+    }
+
+    public function findAdPayment(int $adId): ?Payment
+    {
+        return $this->query()->where('ad_id', $adId)->first();
+    }
+
     /** @param array<string, mixed> $data */
     public function updateRecord(int|string $id, array $data): Model
     {
@@ -42,6 +57,15 @@ class PaymentRepository extends MainRepository
         $record->save();
 
         return $record;
+    }
+
+    /** @param array<string, mixed> $data */
+    public function updatePayment(Payment $payment, array $data): Payment
+    {
+        $payment->fill($data);
+        $payment->save();
+
+        return $payment;
     }
 
     public function deleteRecord(int|string $id): bool

@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Enums\PaymentOperationTableEnum;
+use App\Enums\PaymentStatusEnum;
 use App\Http\Controllers\Controller;
+use App\Services\Sai\AdService;
 use App\Services\Sai\SettingsService;
 use Illuminate\Contracts\View\View;
 
 class HomeController extends Controller
 {
-    public function __construct(private readonly SettingsService $settingsService) {}
+    public function __construct(
+        private readonly SettingsService $settingsService,
+        private readonly AdService $adService,
+    ) {}
 
     public function privacy(): View
     {
@@ -35,14 +41,25 @@ class HomeController extends Controller
         return view('payments.payment', ['id' => $id, 'type' => $type]);
     }
 
-    public function paymentSuccess($id, $type)
+    public function paymentSuccess(int $id, string $type): View
     {
+        if (PaymentOperationTableEnum::tryFrom($type) === PaymentOperationTableEnum::PayTrip) {
+            $status = $this->adService->completeOnlineAdPayment($id, PaymentOperationTableEnum::PayTrip);
+
+            return view($status === PaymentStatusEnum::Paid ? 'payments.payment_success' : 'payments.payment_failed');
+        }
 
         return view('payments.payment_success');
     }
 
-    public function paymentFailed($id, $type)
+    public function paymentFailed(int $id, string $type): View
     {
+        if (PaymentOperationTableEnum::tryFrom($type) === PaymentOperationTableEnum::PayTrip) {
+            $status = $this->adService->failOnlineAdPayment($id, PaymentOperationTableEnum::PayTrip);
+
+            return view($status === PaymentStatusEnum::Paid ? 'payments.payment_success' : 'payments.payment_failed');
+        }
+
         return view('payments.payment_failed');
     }
 }

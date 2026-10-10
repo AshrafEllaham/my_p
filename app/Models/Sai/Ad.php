@@ -23,6 +23,7 @@ class Ad extends Model
         'product_id',
         'category_id',
         'wallet_transaction_id',
+        'creation_idempotency_key',
         'title',
         'action_label',
         'caption',
@@ -74,6 +75,11 @@ class Ad extends Model
     public function walletTransaction(): BelongsTo
     {
         return $this->belongsTo(WalletTransaction::class, 'wallet_transaction_id');
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class, 'ad_id');
     }
 
     public function dailyMetrics(): HasMany

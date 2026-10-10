@@ -65,6 +65,14 @@
             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9" r="1.5"/><path d="m21 15-5-5L5 20"/></svg>
             <span>{{ __('admin.navigation.banners') }}</span>
         </a>
+        <a class="admin-nav__item {{ request()->routeIs('admin.ad-packages.*') ? 'is-active' : '' }}" href="{{ route('admin.ad-packages.index') }}" @if(request()->routeIs('admin.ad-packages.*')) aria-current="page" @endif>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h5"/><path d="m15 17 1.5 1.5L20 15"/></svg>
+            <span>{{ __('admin.navigation.ad_packages') }}</span>
+        </a>
+        <a class="admin-nav__item {{ request()->routeIs('admin.ads.*') ? 'is-active' : '' }}" href="{{ route('admin.ads.index') }}" @if(request()->routeIs('admin.ads.*')) aria-current="page" @endif>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 9h8M8 13h5M16 16l2 2 4-4"/></svg>
+            <span>{{ __('admin.navigation.ads_review') }}</span>
+        </a>
         <a class="admin-nav__item {{ request()->routeIs('admin.faqs.*') ? 'is-active' : '' }}" href="{{ route('admin.faqs.index') }}" @if(request()->routeIs('admin.faqs.*')) aria-current="page" @endif>
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9a2.5 2.5 0 0 1 4.8 1c0 1.7-2.4 2-2.4 4M12 17.5h.01"/></svg>
             <span>{{ __('admin.navigation.faqs') }}</span>

@@ -9,4 +9,5 @@ enum PaymentMethodEnum: string
     use HasValues;
 
     case Wallet = 'wallet';
+    case Online = 'online';
 }

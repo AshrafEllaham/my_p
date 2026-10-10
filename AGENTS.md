@@ -133,6 +133,7 @@ routes/api/
 - كل route group محمي بـ `auth:api` و`throttle:60,1` وأي middleware خاص بالدور.
 - لا تسمِّ مسارات API؛ لا تستخدم `->name()` في `routes/api.php` أو الملفات التابعة داخل `routes/api/`.
 - استخدم مسارات واضحة وRESTful، ولا تضع closures تحتوي logic.
+- أضف تعليقًا عربيًا قصيرًا فوق كل endpoint في ملفات `routes/api.php` و`routes/api/` يشرح وظيفته مباشرة. يجب أن يكون لكل route تعليق مستقل يصف ما ينفذه، ولا يُكتفى بتعليق عام على مجموعة المسارات.
 
 ### متطلبات إلزامية لكل API Endpoint
 
@@ -255,6 +256,7 @@ routes/api/
 - الـ indexes المناسبة موجودة في migrations.
 - dependencies محقونة، ومسؤولية كل class واحدة وواضحة.
 - response يستخدم Resource والـ helper المناسب.
+- كل endpoint في ملفات API routes موضح بتعليق عربي مستقل ومختصر يشرح وظيفته.
 - كل API endpoint مرتبط بتدفقه في preview وله ملف طلب داخل مجموعة Sai بالصيغة والامتداد الفعليين؛ في مجموعة Sai الحالية يكون `.yml`، ويحتوي على body عند الحاجة وشرح `docs` للحقول وقيم Enum المسموحة.
 - كل رسائل validation وتسميات الحقول المطلوبة موجودة بالمفاتيح نفسها في `lang/ar/messages.php` و`lang/en/messages.php`، ولا توجد رسائل ثابتة غير مترجمة.
 - الاختبارات ذات الصلة ناجحة.

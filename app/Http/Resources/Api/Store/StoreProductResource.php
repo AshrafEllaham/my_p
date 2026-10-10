@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Api\Store;
 
+use App\Http\Resources\Concerns\FormatsTimestamps;
 use App\Models\Sai\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -9,6 +10,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /** @mixin Product */
 class StoreProductResource extends JsonResource
 {
+    use FormatsTimestamps;
+
     /** @return array<string, mixed> */
     public function toArray(Request $request): array
     {
@@ -34,10 +37,10 @@ class StoreProductResource extends JsonResource
             'price' => $this->price,
             'original_price' => $this->original_price,
             'discount_percentage' => $this->discount_percentage,
-            'discount_ends_at' => $this->discount_ends_at?->toISOString(),
+            'discount_ends_at' => $this->formatTimestamp($this->discount_ends_at),
             'stock_quantity' => $this->stock_quantity,
             'low_stock_threshold' => $this->low_stock_threshold,
-            'published_at' => $this->published_at?->toISOString(),
+            'published_at' => $this->formatTimestamp($this->published_at),
             'media' => $this->whenLoaded('media', fn () => $this->media->map(fn ($media) => [
                 'id' => $media->id,
                 'type' => $media->type->value,

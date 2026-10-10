@@ -16,3 +16,7 @@ Route::group(
         Route::get('about-app', [HomeController::class, 'about_app'])->name('web.about_app');
     }
 );
+
+Route::get('pay-online/{id}/{type}', [HomeController::class,'pay_online'])->name('web.pay_online');
+Route::get('payment-success/{id}/{type}',[HomeController::class,'paymentSuccess'])->name("payment.success");
+Route::get('payment-failed/{id}/{type}',[HomeController::class,'paymentFailed'])->name("payment.failed");

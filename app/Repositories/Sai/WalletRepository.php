@@ -19,6 +19,35 @@ class WalletRepository extends MainRepository
         return $this->getModel()->newQuery();
     }
 
+    public function activeForOwner(int $ownerId): ?Wallet
+    {
+        return $this->query()
+            ->select(['id', 'user_id', 'currency', 'available_balance'])
+            ->where('user_id', $ownerId)
+            ->where('is_active', true)
+            ->first();
+    }
+
+    public function activeForOwnerForUpdate(int $ownerId): ?Wallet
+    {
+        return $this->query()
+            ->where('user_id', $ownerId)
+            ->where('is_active', true)
+            ->lockForUpdate()
+            ->first();
+    }
+
+    /** @return array{before: string, after: string} */
+    public function updateAvailableBalance(Wallet $wallet, string $balance): array
+    {
+        $before = (string) $wallet->available_balance;
+
+        $wallet->available_balance = $balance;
+        $wallet->save();
+
+        return ['before' => $before, 'after' => $balance];
+    }
+
     public function findOrFail(int|string $id): Model
     {
         return $this->query()->findOrFail($id);

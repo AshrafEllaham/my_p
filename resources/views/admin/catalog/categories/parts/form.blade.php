@@ -2,7 +2,7 @@
     $ar = $category?->translate('ar', false);
     $en = $category?->translate('en', false);
 @endphp
-<form class="admin-catalog-form" action="{{ $action }}" method="POST" enctype="multipart/form-data" data-catalog-form data-no-loader>
+<form class="admin-catalog-form" action="{{ $action }}" method="POST" enctype="multipart/form-data" data-catalog-form data-admin-validate data-no-loader>
     @csrf
     @if ($method !== 'POST')
         @method($method)
@@ -26,12 +26,12 @@
         <div class="admin-field">
             <label for="category-ar-name">{{ __('admin.catalog.fields.name_ar') }}</label>
             <div class="admin-field__control"><input id="category-ar-name" name="ar[name]"
-                    value="{{ old('ar.name', $ar?->name) }}" required></div>
+                    value="{{ old('ar.name', $ar?->name) }}" maxlength="255" required></div>
         </div>
         <div class="admin-field">
             <label for="category-en-name">{{ __('admin.catalog.fields.name_en') }}</label>
             <div class="admin-field__control"><input id="category-en-name" name="en[name]"
-                    value="{{ old('en.name', $en?->name) }}" dir="ltr" required></div>
+                    value="{{ old('en.name', $en?->name) }}" maxlength="255" dir="ltr" required></div>
         </div>
         <div class="admin-field admin-form-grid__full">
             <label for="category-image">{{ __('admin.catalog.fields.image') }}</label>
@@ -56,18 +56,18 @@
         <div class="admin-field">
             <label for="category-sort-order">{{ __('admin.catalog.fields.sort_order') }}</label>
             <div class="admin-field__control"><input id="category-sort-order" type="number" min="0"
-                    name="sort_order" value="{{ old('sort_order', $category?->sort_order ?? 0) }}" required></div>
+                    name="sort_order" max="4294967295" step="1" value="{{ old('sort_order', $category?->sort_order ?? 0) }}" required></div>
         </div>
         <div class="admin-field">
             <label for="category-ar-description">{{ __('admin.catalog.fields.description_ar') }}</label>
             <div class="admin-field__control admin-field__control--textarea">
-                <textarea id="category-ar-description" name="ar[description]">{{ old('ar.description', $ar?->description) }}</textarea>
+                <textarea id="category-ar-description" name="ar[description]" maxlength="5000">{{ old('ar.description', $ar?->description) }}</textarea>
             </div>
         </div>
         <div class="admin-field">
             <label for="category-en-description">{{ __('admin.catalog.fields.description_en') }}</label>
             <div class="admin-field__control admin-field__control--textarea">
-                <textarea id="category-en-description" name="en[description]" dir="ltr">{{ old('en.description', $en?->description) }}</textarea>
+                <textarea id="category-en-description" name="en[description]" maxlength="5000" dir="ltr">{{ old('en.description', $en?->description) }}</textarea>
             </div>
         </div>
         @include('admin.catalog.parts.active-field', ['isActive' => $category?->is_active ?? true])

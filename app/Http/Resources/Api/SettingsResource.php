@@ -28,10 +28,16 @@ class SettingsResource extends JsonResource
             'facebook' => $this->facebook,
             'instagram' => $this->instagram,
 
+            // ad pricing
+            'ad_pricing' => [
+                'home' => $this->ad_home_price,
+                'category' => $this->ad_category_price,
+            ],
+
             // content
-            'privacy'          => url($lang . '/privacy'),
-            'terms_conditions' => url($lang . '/terms-conditions'),
-            'about_app'        => url($lang . '/about-app'),
+            'privacy' => url($lang.'/privacy'),
+            'terms_conditions' => url($lang.'/terms-conditions'),
+            'about_app' => url($lang.'/about-app'),
         ];
     }
 }

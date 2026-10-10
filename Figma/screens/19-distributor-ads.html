@@ -106,13 +106,13 @@
         </span>
         <div>
           <small>إجمالي المشاهدات</small>
-          <strong>٥٠,٥٢٠</strong>
-          <span><b>+٣١٪</b> هذا الشهر</span>
+          <strong id="adsTotalImpressions">٥٠,٥٢٠</strong>
+          <span><b id="adsMonthlyImpressions">+٣١٪</b> هذا الشهر</span>
         </div>
       </article>
       <div class="ads-overview-side">
-        <article><span>عملاء جدد</span><strong>٣١٦</strong><small>+١٩٪</small></article>
-        <article><span>حملات نشطة</span><strong>٣</strong><small>من أصل ٦</small></article>
+        <article><span>عملاء جدد</span><strong id="adsNewCustomers">٣١٦</strong><small>محادثات بدأت</small></article>
+        <article><span>حملات نشطة</span><strong id="adsActiveCampaigns">٣</strong><small>قيد التشغيل الآن</small></article>
       </div>
     </section>
 
@@ -332,6 +332,13 @@
     };
 
     const statusLabels = { active: 'نشط', paused: 'موقوف', scheduled: 'مجدول', draft: 'مسودة', pending_review: 'قيد المراجعة', completed: 'منتهي', rejected: 'مرفوض' };
+    const updateAdsSummary = summary => {
+      const numberFormat = new Intl.NumberFormat('ar-EG');
+      document.getElementById('adsTotalImpressions').textContent = numberFormat.format(summary.total_impressions_count || 0);
+      document.getElementById('adsMonthlyImpressions').textContent = numberFormat.format(summary.total_impressions_this_month_count || 0);
+      document.getElementById('adsNewCustomers').textContent = numberFormat.format(summary.total_new_customers_count || 0);
+      document.getElementById('adsActiveCampaigns').textContent = numberFormat.format(summary.total_active_campaigns_count || 0);
+    };
     const renderAdCards = ads => {
       const list = document.querySelector('.ads-campaign-list');
       list.replaceChildren();
@@ -356,6 +363,7 @@
       const query = new URLSearchParams({ pagination: 'on' });
       if (status) query.set('status', status);
       const result = await adApiRequest(`/ads?${query}`);
+      updateAdsSummary(result);
       renderAdCards(result.data || []);
     };
 

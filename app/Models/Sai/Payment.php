@@ -15,6 +15,7 @@ class Payment extends Model
     protected $fillable = [
         'public_id',
         'order_id',
+        'ad_id',
         'wallet_transaction_id',
         'status',
         'method',
@@ -22,6 +23,7 @@ class Payment extends Model
         'currency',
         'idempotency_key',
         'provider_reference',
+        'metadata',
         'paid_at',
     ];
 
@@ -31,6 +33,7 @@ class Payment extends Model
             'status' => PaymentStatusEnum::class,
             'method' => PaymentMethodEnum::class,
             'amount' => 'decimal:2',
+            'metadata' => 'array',
             'paid_at' => 'datetime',
         ];
     }
@@ -38,6 +41,11 @@ class Payment extends Model
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class, 'order_id');
+    }
+
+    public function ad(): BelongsTo
+    {
+        return $this->belongsTo(Ad::class, 'ad_id');
     }
 
     public function walletTransaction(): BelongsTo

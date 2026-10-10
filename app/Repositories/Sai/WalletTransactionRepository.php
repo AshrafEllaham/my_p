@@ -6,6 +6,7 @@ use App\Models\Sai\WalletTransaction;
 use App\Repositories\MainRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class WalletTransactionRepository extends MainRepository
 {
@@ -32,6 +33,16 @@ class WalletTransactionRepository extends MainRepository
         $record->save();
 
         return $record;
+    }
+
+    /** @param array<string, mixed> $data */
+    public function createAdPayment(array $data, Model $ad): Model
+    {
+        return $this->createRecord($data + [
+            'public_id' => (string) Str::uuid(),
+            'reference_type' => $ad->getMorphClass(),
+            'reference_id' => $ad->getKey(),
+        ]);
     }
 
     /** @param array<string, mixed> $data */

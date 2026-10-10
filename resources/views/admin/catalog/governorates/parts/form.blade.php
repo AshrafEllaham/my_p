@@ -2,18 +2,18 @@
     $ar = $governorate?->translate('ar', false);
     $en = $governorate?->translate('en', false);
 @endphp
-<form class="admin-catalog-form" action="{{ $action }}" method="POST" data-catalog-form data-no-loader>
+<form class="admin-catalog-form" action="{{ $action }}" method="POST" data-catalog-form data-admin-validate data-no-loader>
     @csrf
     @if ($method !== 'POST') @method($method) @endif
     <div class="admin-form-errors" data-form-errors hidden></div>
     <div class="admin-form-grid">
         <div class="admin-field">
             <label for="governorate-ar-name">{{ __('admin.catalog.fields.name_ar') }}</label>
-            <div class="admin-field__control"><input id="governorate-ar-name" name="ar[name]" value="{{ old('ar.name', $ar?->name) }}" required></div>
+            <div class="admin-field__control"><input id="governorate-ar-name" name="ar[name]" value="{{ old('ar.name', $ar?->name) }}" maxlength="255" required></div>
         </div>
         <div class="admin-field">
             <label for="governorate-en-name">{{ __('admin.catalog.fields.name_en') }}</label>
-            <div class="admin-field__control"><input id="governorate-en-name" name="en[name]" value="{{ old('en.name', $en?->name) }}" dir="ltr" required></div>
+            <div class="admin-field__control"><input id="governorate-en-name" name="en[name]" value="{{ old('en.name', $en?->name) }}" maxlength="255" dir="ltr" required></div>
         </div>
         <div class="admin-field admin-form-grid__full">
             <label for="governorate-country">{{ __('admin.catalog.fields.country') }}</label>

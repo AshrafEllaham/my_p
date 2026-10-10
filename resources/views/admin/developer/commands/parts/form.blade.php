@@ -1,4 +1,4 @@
-<form class="admin-catalog-form developer-command-sheet" action="{{ $action }}" method="POST" data-catalog-form data-no-loader>
+<form class="admin-catalog-form developer-command-sheet" action="{{ $action }}" method="POST" data-catalog-form data-admin-validate data-no-loader>
     @csrf
     @if ($method !== 'POST') @method($method) @endif
     <div class="admin-form-errors" data-form-errors hidden role="alert"></div>

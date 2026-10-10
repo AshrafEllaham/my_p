@@ -2,11 +2,14 @@
 
 namespace App\Http\Resources\Api\Store;
 
+use App\Http\Resources\Concerns\FormatsTimestamps;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class StoreProductDetailsResource extends JsonResource
 {
+    use FormatsTimestamps;
+
     /** @return array<string, mixed> */
     public function toArray(Request $request): array
     {
@@ -33,7 +36,7 @@ class StoreProductDetailsResource extends JsonResource
                         'user_name' => $latestReview->relationLoaded('user') ? $latestReview->user?->name : null,
                         'rating' => $latestReview->rating,
                         'comment' => $latestReview->comment,
-                        'created_at' => $latestReview->created_at?->toISOString(),
+                        'created_at' => $this->formatTimestamp($latestReview->created_at),
                     ] : null,
                 ],
             ],

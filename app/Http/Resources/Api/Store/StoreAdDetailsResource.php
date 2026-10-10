@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Api\Store;
 
+use App\Http\Resources\Concerns\FormatsTimestamps;
 use App\Models\Sai\Ad;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -9,6 +10,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /** @mixin Ad */
 class StoreAdDetailsResource extends JsonResource
 {
+    use FormatsTimestamps;
+
     /** @return array<string, mixed> */
     public function toArray(Request $request): array
     {
@@ -29,9 +32,9 @@ class StoreAdDetailsResource extends JsonResource
             'status' => $this->status->value,
             'cost' => $this->cost,
             'currency' => $this->currency,
-            'starts_at' => $this->starts_at?->toISOString(),
-            'ends_at' => $this->ends_at?->toISOString(),
-            'created_at' => $this->created_at?->toISOString(),
+            'starts_at' => $this->formatTimestamp($this->starts_at),
+            'ends_at' => $this->formatTimestamp($this->ends_at),
+            'created_at' => $this->formatTimestamp($this->created_at),
             'package' => $this->whenLoaded('adPackage', fn () => [
                 'id' => $this->adPackage->id,
                 'name' => $this->adPackage->name,

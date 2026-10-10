@@ -30,7 +30,7 @@
                 </div>
             @endif
 
-            <form class="admin-profile-form" method="POST" action="{{ route('admin.profile.update') }}">
+            <form class="admin-profile-form" method="POST" action="{{ route('admin.profile.update') }}" data-admin-validate>
                 @csrf
                 @method('PUT')
 
@@ -39,7 +39,7 @@
                         <label for="name">{{ __('admin.profile.name') }}</label>
                         <div class="admin-field__control @error('name') has-error @enderror">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
-                            <input id="name" name="name" type="text" value="{{ old('name', $admin->name) }}" autocomplete="name" required>
+                            <input id="name" name="name" type="text" maxlength="255" value="{{ old('name', $admin->name) }}" autocomplete="name" required>
                         </div>
                         @error('name')<p class="admin-field__error">{{ $message }}</p>@enderror
                     </div>
@@ -48,7 +48,7 @@
                         <label for="email">{{ __('admin.profile.email') }}</label>
                         <div class="admin-field__control @error('email') has-error @enderror">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
-                            <input id="email" name="email" type="email" value="{{ old('email', $admin->email) }}" autocomplete="email" dir="ltr" required>
+                            <input id="email" name="email" type="email" maxlength="255" value="{{ old('email', $admin->email) }}" autocomplete="email" dir="ltr" required>
                         </div>
                         @error('email')<p class="admin-field__error">{{ $message }}</p>@enderror
                     </div>
@@ -57,7 +57,7 @@
                         <label for="phone">{{ __('admin.profile.phone') }}</label>
                         <div class="admin-field__control @error('phone') has-error @enderror">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.69 2.8a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.33 1.85.56 2.81.69A2 2 0 0 1 22 16.92Z"/></svg>
-                            <input id="phone" name="phone" type="tel" value="{{ old('phone', $admin->phone) }}" autocomplete="tel" dir="ltr">
+                            <input id="phone" name="phone" type="tel" maxlength="32" value="{{ old('phone', $admin->phone) }}" autocomplete="tel" dir="ltr">
                         </div>
                         @error('phone')<p class="admin-field__error">{{ $message }}</p>@enderror
                     </div>
@@ -84,7 +84,7 @@
                             <label for="password">{{ __('admin.profile.new_password') }}</label>
                             <div class="admin-field__control @error('password') has-error @enderror">
                                 <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
-                                <input id="password" name="password" type="password" autocomplete="new-password">
+                                <input id="password" name="password" type="password" minlength="8" maxlength="255" autocomplete="new-password">
                                 <button class="admin-password-toggle" type="button" data-password-toggle="password" aria-label="{{ __('admin.auth.toggle_password') }}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button>
                             </div>
                             @error('password')<p class="admin-field__error">{{ $message }}</p>@enderror
@@ -94,7 +94,7 @@
                             <label for="password_confirmation">{{ __('admin.profile.password_confirmation') }}</label>
                             <div class="admin-field__control">
                                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
-                                <input id="password_confirmation" name="password_confirmation" type="password" autocomplete="new-password">
+                                <input id="password_confirmation" name="password_confirmation" type="password" minlength="8" maxlength="255" autocomplete="new-password">
                                 <button class="admin-password-toggle" type="button" data-password-toggle="password_confirmation" aria-label="{{ __('admin.auth.toggle_password') }}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button>
                             </div>
                         </div>

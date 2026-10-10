@@ -917,6 +917,11 @@ document.addEventListener('submit', async (event) => {
             return;
         }
 
+        const pendingCount = catalogPage?.querySelector('[data-pending-count]');
+        if (form.hasAttribute('data-review-action') && pendingCount instanceof HTMLElement) {
+            pendingCount.textContent = String(Math.max(0, Number(pendingCount.textContent) - 1));
+        }
+
         closeAdminModal();
         showCatalogMessage('success', payload.message);
         catalogDataTable?.ajax.reload(null, false);

@@ -2,7 +2,7 @@
     $ar = $faq?->translate('ar', false);
     $en = $faq?->translate('en', false);
 @endphp
-<form class="admin-catalog-form" action="{{ $action }}" method="POST" data-catalog-form data-no-loader>
+<form class="admin-catalog-form" action="{{ $action }}" method="POST" data-catalog-form data-admin-validate data-no-loader>
     @csrf
     @if ($method !== 'POST') @method($method) @endif
     <div class="admin-form-errors" data-form-errors hidden></div>
@@ -22,11 +22,11 @@
         </div>
         <div class="admin-field">
             <label for="faq-ar-question">{{ __('admin.faqs.fields.question_ar') }}</label>
-            <div class="admin-field__control"><input id="faq-ar-question" name="ar[question]" value="{{ old('ar.question', $ar?->question) }}" required></div>
+            <div class="admin-field__control"><input id="faq-ar-question" name="ar[question]" value="{{ old('ar.question', $ar?->question) }}" maxlength="255" required></div>
         </div>
         <div class="admin-field">
             <label for="faq-en-question">{{ __('admin.faqs.fields.question_en') }}</label>
-            <div class="admin-field__control"><input id="faq-en-question" name="en[question]" value="{{ old('en.question', $en?->question) }}" dir="ltr" required></div>
+            <div class="admin-field__control"><input id="faq-en-question" name="en[question]" value="{{ old('en.question', $en?->question) }}" maxlength="255" dir="ltr" required></div>
         </div>
         <div class="admin-field">
             <label for="faq-ar-answer">{{ __('admin.faqs.fields.answer_ar') }}</label>

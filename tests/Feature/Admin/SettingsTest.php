@@ -46,6 +46,8 @@ class SettingsTest extends TestCase
             ->assertSee('name="fav_icon"', false)
             ->assertSee('name="logo_header"', false)
             ->assertSee('name="logo_footer"', false)
+            ->assertSee('name="ad_home_price"', false)
+            ->assertSee('name="ad_category_price"', false)
             ->assertSee('data-max-file-size="5M"', false)
             ->assertSee('data-height="180"', false)
             ->assertSee(__('admin.site_settings.drop_file'))
@@ -91,9 +93,9 @@ class SettingsTest extends TestCase
         $this->actingAs($this->admin, 'admin')
             ->get(route('admin.settings.edit'))
             ->assertOk()
-            ->assertSee('data-default-file="' . $expectedFaviconUrl . '"', false)
-            ->assertSee('data-default-file="' . $expectedHeaderUrl . '"', false)
-            ->assertSee('data-default-file="' . $expectedFooterUrl . '"', false)
+            ->assertSee('data-default-file="'.$expectedFaviconUrl.'"', false)
+            ->assertSee('data-default-file="'.$expectedHeaderUrl.'"', false)
+            ->assertSee('data-default-file="'.$expectedFooterUrl.'"', false)
             ->assertSee(__('admin.site_settings.current_image'));
     }
 
@@ -114,6 +116,8 @@ class SettingsTest extends TestCase
             'email' => 'admin@saey.test',
             'facebook' => 'https://facebook.com/saey',
             'instagram' => 'https://instagram.com/saey',
+            'ad_home_price' => '125.50',
+            'ad_category_price' => '75.00',
             'ar' => [
                 'website_name' => 'سعي',
                 'about_app' => 'تطبيق سعي هو منصة متكاملة للخدمات.',
@@ -145,8 +149,41 @@ class SettingsTest extends TestCase
 
         $this->assertSame('+966500000000', $settings->whatsapp);
         $this->assertSame('admin@saey.test', $settings->email);
+        $this->assertSame('125.50', $settings->ad_home_price);
+        $this->assertSame('75.00', $settings->ad_category_price);
         $this->assertSame('تطبيق سعي هو منصة متكاملة للخدمات.', $settings->translate('ar')->about_app);
         $this->assertSame('Saey app is a comprehensive platform.', $settings->translate('en')->about_app);
+    }
+
+    public function test_ad_prices_are_required_and_cannot_be_negative(): void
+    {
+        $payload = [
+            'ad_home_price' => '-1',
+            'ad_category_price' => '50.00',
+            'ar' => [
+                'website_name' => 'سعي',
+                'about_app' => 'عن التطبيق',
+                'privacy' => 'سياسة الخصوصية',
+                'terms_conditions' => 'الشروط والأحكام',
+            ],
+            'en' => [
+                'website_name' => 'Saey',
+                'about_app' => 'About app',
+                'privacy' => 'Privacy policy',
+                'terms_conditions' => 'Terms and conditions',
+            ],
+        ];
+
+        $this->actingAs($this->admin, 'admin')
+            ->from(route('admin.settings.edit'))
+            ->put(route('admin.settings.update'), $payload)
+            ->assertRedirect(route('admin.settings.edit'))
+            ->assertSessionHasErrors(['ad_home_price']);
+
+        $this->assertSame(
+            __('messages.validation.settings.ad_pricing.min'),
+            session('errors')->first('ad_home_price')
+        );
     }
 
     public function test_existing_images_are_preserved_when_updating_without_new_files(): void
@@ -178,6 +215,8 @@ class SettingsTest extends TestCase
 
         $updatePayload = [
             'phone' => '99999999',
+            'ad_home_price' => '200.00',
+            'ad_category_price' => '80.00',
             'ar' => [
                 'website_name' => 'سعي محدث',
                 'about_app' => 'عن التطبيق المحدث',
@@ -199,6 +238,7 @@ class SettingsTest extends TestCase
         $settings->refresh();
         $this->assertSame($path, $settings->fav_icon);
         $this->assertSame('99999999', $settings->phone);
+        $this->assertSame('200.00', $settings->ad_home_price);
         Storage::disk('public')->assertExists($path);
     }
 
@@ -211,6 +251,8 @@ class SettingsTest extends TestCase
 
         $payload = [
             'fav_icon' => $oversizedFile,
+            'ad_home_price' => '100.00',
+            'ad_category_price' => '50.00',
             'ar' => [
                 'website_name' => 'سعي',
                 'about_app' => 'عن التطبيق',
@@ -245,6 +287,8 @@ class SettingsTest extends TestCase
 
         $payload = [
             'logo_header' => $invalidFile,
+            'ad_home_price' => '100.00',
+            'ad_category_price' => '50.00',
             'ar' => [
                 'website_name' => 'سعي',
                 'about_app' => 'عن التطبيق',

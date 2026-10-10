@@ -3,6 +3,7 @@
 namespace App\Repositories\Sai;
 
 use App\Enums\AccountTypeEnum;
+use App\Enums\AdStatusEnum;
 use App\Models\Sai\Ad;
 use App\Models\Sai\AdDailyMetric;
 use App\Models\Sai\AdPackage;
@@ -38,9 +39,41 @@ class AdRepository extends MainRepository
             ->orderByDesc('created_at')->orderByDesc('id');
     }
 
+    /** @return array{total_impressions_count: int, total_impressions_this_month_count: int, total_new_customers_count: int, total_active_campaigns_count: int} */
+    public function summaryForStore(int $storeId): array
+    {
+        $today = now();
+        $summary = $this->query()
+            ->leftJoin('ad_daily_metrics', 'ad_daily_metrics.ad_id', '=', 'ads.id')
+            ->where('ads.store_id', $storeId)
+            ->selectRaw('COALESCE(SUM(ad_daily_metrics.impressions), 0) AS total_impressions_count')
+            ->selectRaw(
+                'COALESCE(SUM(CASE WHEN ad_daily_metrics.metric_date >= ? AND ad_daily_metrics.metric_date <= ? THEN ad_daily_metrics.impressions ELSE 0 END), 0) AS total_impressions_this_month_count',
+                [$today->copy()->startOfMonth()->toDateString(), $today->toDateString()],
+            )
+            ->selectRaw('COALESCE(SUM(ad_daily_metrics.chats_started), 0) AS total_new_customers_count')
+            ->selectRaw(
+                'COUNT(DISTINCT CASE WHEN ads.status = ? THEN ads.id END) AS total_active_campaigns_count',
+                [AdStatusEnum::Active->value],
+            )
+            ->first();
+
+        return [
+            'total_impressions_count' => (int) $summary->total_impressions_count,
+            'total_impressions_this_month_count' => (int) $summary->total_impressions_this_month_count,
+            'total_new_customers_count' => (int) $summary->total_new_customers_count,
+            'total_active_campaigns_count' => (int) $summary->total_active_campaigns_count,
+        ];
+    }
+
     public function findForStore(int|string $id, int $storeId): Model
     {
         return $this->query()->where('store_id', $storeId)->findOrFail($id);
+    }
+
+    public function findForStoreForUpdate(int|string $id, int $storeId): Model
+    {
+        return $this->query()->where('store_id', $storeId)->lockForUpdate()->findOrFail($id);
     }
 
     public function findDetailsForStore(int|string $id, int $storeId): Model
@@ -121,6 +154,13 @@ class AdRepository extends MainRepository
     public function createForStore(array $data): Model
     {
         return $this->getModel()->newQuery()->create($data);
+    }
+
+    public function findForStoreByCreationKey(string $key, int $storeId): ?Model
+    {
+        return $this->query()->where('store_id', $storeId)
+            ->where('creation_idempotency_key', $key)
+            ->first();
     }
 
     public function updateForStore(int|string $id, int $storeId, array $data): Model

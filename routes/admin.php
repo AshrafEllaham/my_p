@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\AdPackageController;
+use App\Http\Controllers\Admin\AdReviewController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CityController;
@@ -36,6 +38,10 @@ Route::group([
         Route::put('/settings', [SettingsController::class, 'update'])->name('admin.settings.update');
         Route::get('/contact-us', [ContactUsController::class, 'index'])->name('admin.contact-us.index');
         Route::delete('/contact-us/{contactUs}', [ContactUsController::class, 'destroy'])->name('admin.contact-us.destroy');
+        Route::get('/ads', [AdReviewController::class, 'index'])->name('admin.ads.index');
+        Route::get('/ads/{ad}/review', [AdReviewController::class, 'review'])->name('admin.ads.review');
+        Route::post('/ads/{ad}/approve', [AdReviewController::class, 'approve'])->name('admin.ads.approve');
+        Route::post('/ads/{ad}/reject', [AdReviewController::class, 'reject'])->name('admin.ads.reject');
         Route::prefix('developer')->name('admin.developer.')->middleware('developer')->group(function (): void {
             Route::get('/commands', [CommandController::class, 'index'])->name('commands.index');
             Route::get('/commands/create', [CommandController::class, 'create'])->name('commands.create');
@@ -53,6 +59,7 @@ Route::group([
             'main-categories' => MainCategoryController::class,
             'sub-categories' => SubCategoryController::class,
             'banners' => BannerController::class,
+            'ad-packages' => AdPackageController::class,
             'faqs' => FaqController::class,
         ], [
             'as' => 'admin',

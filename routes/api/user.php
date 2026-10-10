@@ -17,6 +17,7 @@ Route::group([], function () {
     // مسارات محمية (تتطلب تسجيل الدخول)
     // -------------------------------------------------------
     Route::group(['middleware' => ['auth:api', 'throttle:60,1']], function () {
-        Route::post('/profile', [UserProfileController::class, 'update'])->name('user.profile.update');
+        // يحدّث بيانات الملف الشخصي للمستخدم.
+        Route::post('/profile', [UserProfileController::class, 'update']);
     });
 });

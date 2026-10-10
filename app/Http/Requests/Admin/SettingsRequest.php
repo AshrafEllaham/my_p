@@ -26,6 +26,8 @@ class SettingsRequest extends FormRequest
             'email' => ['nullable', 'email', 'max:255'],
             'facebook' => ['nullable', 'url', 'max:255'],
             'instagram' => ['nullable', 'url', 'max:255'],
+            'ad_home_price' => ['required', 'numeric', 'decimal:0,2', 'min:0', 'max:9999999999.99'],
+            'ad_category_price' => ['required', 'numeric', 'decimal:0,2', 'min:0', 'max:9999999999.99'],
             'ar' => ['required', 'array:website_name,about_app,privacy,terms_conditions'],
             'ar.website_name' => ['required', 'string', 'max:255'],
             'ar.about_app' => ['required', 'string'],
@@ -59,6 +61,12 @@ class SettingsRequest extends FormRequest
         foreach (['whatsapp', 'phone', 'other_phone', 'email', 'facebook', 'instagram'] as $field) {
             foreach (['string', 'max', 'email', 'url'] as $rule) {
                 $messages["{$field}.{$rule}"] = __('messages.validation.settings.contact.'.$rule);
+            }
+        }
+
+        foreach (['ad_home_price', 'ad_category_price'] as $field) {
+            foreach (['required', 'numeric', 'decimal', 'min', 'max'] as $rule) {
+                $messages["{$field}.{$rule}"] = __('messages.validation.settings.ad_pricing.'.$rule);
             }
         }
 
