@@ -1,0 +1,476 @@
+/* Shared preview palette. Keep visual states here so light and dark screens agree. */
+:root,
+body {
+  --theme-background: #F8F9FA;
+  --theme-surface: #FFFFFF;
+  --theme-card: #FFFFFF;
+  --theme-surface-secondary: #F3F4F6;
+  --theme-surface-elevated: #F3F4F6;
+  --theme-text-primary: #1A1A1A;
+  --theme-text-secondary: #6B7280;
+  --theme-text-muted: #9CA3AF;
+  --theme-border: #E5E7EB;
+  --theme-primary: #CFAE7D;
+  --theme-primary-hover: #B8955F;
+  --theme-primary-soft: #FFF1E4;
+  --theme-success: #38B76B;
+  --theme-error: #EF4444;
+  --theme-warning: #F5B44D;
+  --theme-soft-peach: #FFF1E4;
+  --theme-soft-pink: #FDE7EE;
+  --theme-on-primary: #1A1A1A;
+  --theme-nav-active-ink: #1A1A1A;
+  --theme-shadow: 0 8px 24px rgba(26, 26, 26, .07);
+  color-scheme: light;
+}
+
+:root[data-theme="dark"],
+body.dark-mode,
+body.preview-dark-mode {
+  --theme-background: #181818;
+  --theme-surface: #202020;
+  --theme-card: #282828;
+  --theme-surface-secondary: #282828;
+  --theme-surface-elevated: #303030;
+  --theme-text-primary: #F5F5F5;
+  --theme-text-secondary: #B8B8B8;
+  --theme-text-muted: #8E8E8E;
+  --theme-border: #3A3A3A;
+  --theme-primary: #CFAE7D;
+  --theme-primary-hover: #B8955F;
+  --theme-primary-soft: #3A3228;
+  --theme-shadow: 0 8px 24px rgba(0, 0, 0, .22);
+  --theme-nav-active-ink: #CFAE7D;
+  color-scheme: dark;
+}
+
+body:is(.dark-mode, .preview-dark-mode) {
+  --primary: var(--theme-primary);
+  --primary-hover: var(--theme-primary-hover);
+  --primary-soft: var(--theme-primary-soft);
+  --primary-text: var(--theme-text-primary);
+  --bg-page: var(--theme-background);
+  --bg-ambient: var(--theme-background);
+  --card-bg: var(--theme-surface);
+  --card-border: var(--theme-border);
+  --border: var(--theme-border);
+  --border-light: var(--theme-border);
+  --input-bg: var(--theme-surface-elevated);
+  --input-border: var(--theme-border);
+  --text-main: var(--theme-text-primary);
+  --text-muted: var(--theme-text-secondary);
+  --text-light: var(--theme-text-muted);
+  --btn-dark: var(--theme-primary);
+  --flow-ink: var(--theme-text-primary);
+  --flow-muted: var(--theme-text-secondary);
+  --flow-line: var(--theme-border);
+  --flow-bg: var(--theme-background);
+  --view-ink: var(--theme-text-primary);
+  --view-muted: var(--theme-text-secondary);
+  --view-line: var(--theme-border);
+  --view-bg: var(--theme-background);
+  --ops-ink: var(--theme-text-primary);
+  --ops-muted: var(--theme-text-secondary);
+  --ops-line: var(--theme-border);
+  --ops-soft: var(--theme-surface-secondary);
+  --ux-ink: var(--theme-text-primary);
+  --ux-muted: var(--theme-text-secondary);
+  --ux-line: var(--theme-border);
+  --ux-soft: var(--theme-surface-secondary);
+  --saey-blue: var(--theme-primary);
+  --saey-blue-dark: var(--theme-primary-hover);
+  --saey-bg: var(--theme-background);
+  --saey-ink: var(--theme-text-primary);
+  --saey-muted: var(--theme-text-secondary);
+  --saey-line: var(--theme-border);
+  --account-bg: var(--theme-background);
+  --account-ink: var(--theme-text-primary);
+  --account-muted: var(--theme-text-secondary);
+  --account-line: var(--theme-border);
+  --account-blue: var(--theme-primary);
+}
+
+/* Neutral canvas, system chrome, and recurring components. */
+body:is(.saey-home, .saey-catalog, .saey-account, .saey-account-view, .saey-flow, .saey-orders, .saey-chats, .saey-conversation, .saey-notifications, .saey-product-details, .saey-wallet, .saey-wallet-transactions, .saey-contests, .saey-store-details, .saey-coupons, .saey-onboarding, .ad-editor-page, .merchant-ops, .barq-auth-body),
+body:is(.saey-home, .saey-catalog, .saey-account, .saey-account-view, .saey-flow, .saey-orders, .saey-chats, .saey-conversation, .saey-notifications, .saey-product-details, .saey-wallet, .saey-wallet-transactions, .saey-contests, .saey-store-details, .saey-coupons, .merchant-ops) :is(.home-page, .flow-page, .view-page, .ops-page) {
+  background: var(--theme-background) !important;
+  color: var(--theme-text-primary);
+}
+
+body .status-bar {
+  background: var(--theme-background) !important;
+  color: var(--theme-text-primary) !important;
+}
+body .status-bar :is(.status-time, .status-icons) { color: var(--theme-text-primary) !important; }
+
+body :is(.saey-bottom-nav, .account-list, .account-row, .view-card, .flow-card,
+  .ops-card, .ops-sheet, .bo-card, .ui-card, .order-card, .chat-row,
+  .notification-item, .youtube-ad, .home-contest-card, .nearby-store-card,
+  .store-product-card, .barq-social-btn, .barq-input-card, .barq-country-menu,
+  .language-sheet, .language-option, .account-confirm-dialog, .ui-dialog) {
+  background: var(--theme-surface) !important;
+  color: var(--theme-text-primary);
+  border-color: var(--theme-border) !important;
+}
+
+body :is(.waffarha-product, .market-product, .product-card, .trader-kpi, .order-product,
+  .quick, .nearby-store-card, .public-contest-card, .merchant-order) {
+  background: var(--theme-card) !important;
+  color: var(--theme-text-primary);
+  border-color: var(--theme-border) !important;
+}
+
+body :is(input, textarea, select, .ops-search, .ops-filter, .flow-secondary,
+  .view-input, .barq-input-inner, .barq-switch, .home-filter-sheet,
+  .waffarha-search, .search-box) {
+  border-color: var(--theme-border) !important;
+  color: var(--theme-text-primary) !important;
+}
+body :is(input, textarea, select)::placeholder { color: var(--theme-text-muted) !important; }
+body:is(.dark-mode, .preview-dark-mode) :is(input, textarea, select, .ops-search,
+  .ops-filter, .flow-secondary, .view-input, .barq-input-inner, .barq-switch,
+  .home-filter-sheet, .search-box) { background: var(--theme-surface-elevated) !important; }
+
+body :is(.barq-primary-btn, .barq-btn-primary, .flow-primary, .view-button:not(.secondary):not(.danger),
+  .ops-tabs button.active, .bo-primary, .primary-action, .youtube-ad-cta,
+  .home-apply-filters, .black-btn) {
+  background: var(--theme-primary) !important;
+  border-color: var(--theme-primary) !important;
+  color: var(--theme-on-primary) !important;
+}
+body :is(.barq-primary-btn, .barq-btn-primary, .flow-primary, .view-button:not(.secondary):not(.danger),
+  .bo-primary, .primary-action, .youtube-ad-cta, .home-apply-filters):hover {
+  background: var(--theme-primary-hover) !important;
+  border-color: var(--theme-primary-hover) !important;
+}
+
+body :is(.saey-bottom-nav, .market-nav) {
+  background: var(--theme-surface) !important;
+  border-color: var(--theme-border) !important;
+  box-shadow: var(--theme-shadow) !important;
+}
+body :is(.saey-bottom-nav, .market-nav) a { color: var(--theme-text-secondary) !important; }
+body :is(.saey-bottom-nav, .market-nav) a.active,
+body :is(.saey-bottom-nav, .market-nav) a[aria-current="page"] { color: var(--theme-text-primary) !important; }
+body :is(.saey-bottom-nav, .market-nav) a.active .nav-icon,
+body :is(.saey-bottom-nav, .market-nav) a[aria-current="page"] .nav-icon {
+  background: var(--theme-primary-soft) !important;
+  color: var(--theme-nav-active-ink) !important;
+}
+
+/* Buyer home follows the approved light/dark mockup. */
+body.saey-home .waffarha-search { background: var(--theme-surface-elevated) !important; }
+body.saey-home .waffarha-search input { background: transparent !important; }
+body.saey-home .saey-brand,
+body.saey-home :is(.section-header h2, .youtube-ad-section-head h2,
+  .waffarha-product > strong, .waffarha-product > b, .home-contest-card h3,
+  .home-contest-store strong) { color: var(--theme-text-primary) !important; }
+body.saey-home :is(.saey-brand small, .section-header small,
+  .waffarha-product > small, .home-contest-card p,
+  .youtube-ad-section-head span) { color: var(--theme-text-secondary) !important; }
+body.saey-home .youtube-ad-copy :is(strong, small, b),
+body.saey-home .youtube-ad-menu { color: #FFFFFF !important; }
+body.saey-home :is(.top-icon-button, .section-action svg) {
+  background: var(--theme-surface) !important;
+  color: var(--theme-text-primary) !important;
+  border-color: var(--theme-border) !important;
+}
+body.saey-home .saey-brand-mark,
+body.saey-home .quick-services .service-offers > span { background: var(--theme-primary) !important; color: var(--theme-on-primary) !important; }
+body.saey-home .top-icon-button i { background: var(--theme-error) !important; border-color: var(--theme-surface) !important; }
+body.saey-home .section-action { color: var(--theme-text-primary) !important; }
+body.saey-home .section-header a.section-action svg { background: var(--theme-primary-soft) !important; color: var(--theme-primary-hover) !important; stroke: currentColor !important; }
+body.saey-home .home-contest-store { border-color: var(--theme-border) !important; }
+body.saey-home .home-contest-kicker { background: var(--theme-primary-soft) !important; color: var(--theme-primary-hover) !important; }
+body.saey-home .home-banner-state {
+  background: var(--theme-surface) !important;
+  color: var(--theme-text-secondary) !important;
+  border-color: var(--theme-border) !important;
+}
+body.saey-home .home-banner-state__spinner { border-color: var(--theme-border) !important; border-top-color: var(--theme-primary) !important; }
+body.saey-home .home-banner-state button { background: var(--theme-primary) !important; color: var(--theme-on-primary) !important; }
+body.saey-home .rating { background: var(--theme-surface-elevated) !important; color: var(--theme-text-primary) !important; }
+body.saey-home .rating i { color: var(--theme-warning) !important; }
+body.saey-home .waffarha-product { box-shadow: var(--theme-shadow) !important; }
+body.saey-home .product-photo { background: var(--theme-surface-secondary) !important; }
+body.saey-home .product-photo::after { border-color: var(--theme-border) !important; }
+body.saey-home .section-recommended { background: var(--theme-background) !important; }
+body.saey-home.dark-mode :is(.section-fashion, .section-electronics, .section-home) { background: var(--theme-surface) !important; }
+body.saey-home.dark-mode :is(.section-fashion, .section-electronics, .section-home) .waffarha-product { background: var(--theme-card) !important; }
+body.saey-home.dark-mode .quick-services a { color: var(--theme-text-primary) !important; }
+body.saey-home.dark-mode .quick-services .service-categories > span { background: #253243 !important; color: #92BFFF !important; }
+body.saey-home.dark-mode .quick-services .service-stores > span { background: #20362B !important; color: var(--theme-success) !important; }
+body.saey-home.dark-mode .quick-services .service-orders > span { background: #3B2730 !important; color: #F7A8C3 !important; }
+
+body.saey-account :is(.account-section h2, .account-profile h1) { color: var(--theme-text-primary) !important; }
+body.saey-account :is(.account-greeting, .account-profile span, .account-row small) { color: var(--theme-text-secondary) !important; }
+body.saey-account .account-row { border-bottom-color: var(--theme-border) !important; }
+body.saey-account .account-icon-button { background: var(--theme-surface) !important; color: var(--theme-text-primary) !important; border-color: var(--theme-border) !important; }
+body.saey-account .account-icon-button i { background: var(--theme-error) !important; border-color: var(--theme-surface) !important; }
+body.saey-account .row-icon.blue,
+body.saey-account .row-icon.violet { background: var(--theme-primary-soft) !important; color: var(--theme-primary-hover) !important; }
+body.saey-account .row-icon.mint { color: var(--theme-success) !important; }
+body.saey-account .row-icon.peach { background: var(--theme-soft-peach) !important; color: var(--theme-primary-hover) !important; }
+body.saey-account.dark-mode .row-icon.peach { background: var(--theme-primary-soft) !important; }
+body.saey-account.dark-mode .row-arrow { stroke: var(--theme-text-muted) !important; }
+
+body.barq-auth-body .barq-input-label { color: var(--theme-text-secondary) !important; }
+body.barq-auth-body .barq-input-icon { background: var(--theme-surface-secondary) !important; color: var(--theme-text-secondary) !important; }
+body.barq-auth-body :is(.barq-switch button.active, .barq-country-option:hover) {
+  background: var(--theme-primary-soft) !important;
+  color: var(--theme-primary-hover) !important;
+}
+body.barq-auth-body.dark-mode #appleLoginTop svg path { fill: var(--theme-text-primary) !important; }
+
+body.trader-app :is(.trader-kpi-section, .trader-review, .merchant-order,
+  .catalog-overview-main, .merchant-product-card, .product-filter-sheet) {
+  background: var(--theme-surface) !important;
+  color: var(--theme-text-primary) !important;
+  border-color: var(--theme-border) !important;
+}
+body.trader-app :is(.trader-kpi, .merchant-product-image, .order-product) {
+  background: var(--theme-card) !important;
+  border-color: var(--theme-border) !important;
+}
+body.trader-app :is(.trader-section-title h2, .revenue-summary strong,
+  .orders-chart-head strong, .bar-legend b, .trader-review-head strong) {
+  color: var(--theme-text-primary) !important;
+}
+body.trader-app :is(.trader-section-title small, .revenue-summary span,
+  .revenue-summary small, .orders-chart-head small, .orders-total-row span,
+  .bar-legend, .trader-review p, .trader-review time) {
+  color: var(--theme-text-secondary) !important;
+}
+body.trader-app :is(.trader-section-title a, .revenue-summary a,
+  .orders-chart-head a) { color: var(--theme-primary-hover) !important; }
+body.trader-app .trader-stars { color: var(--theme-warning) !important; }
+body.trader-app .create-product { background: var(--theme-primary) !important; color: var(--theme-on-primary) !important; }
+body.trader-app .create-ad { background: var(--theme-primary-soft) !important; color: var(--theme-primary-hover) !important; border-color: var(--theme-primary) !important; }
+body.trader-app .trader-create-actions .create-contest { background: var(--theme-surface) !important; color: var(--theme-text-primary) !important; border-color: var(--theme-border) !important; }
+
+body.saey-catalog :is(.catalog-header h1, .catalog-product strong,
+  .catalog-store-copy h2, .filter-sheet h2) { color: var(--theme-text-primary) !important; }
+body.saey-catalog :is(.catalog-subtitle, .catalog-category small,
+  .catalog-product-category, .catalog-store-copy p, .catalog-rating,
+  .filter-label) { color: var(--theme-text-secondary) !important; }
+body.saey-catalog :is(.catalog-back, .catalog-category, .catalog-product,
+  .catalog-store, .filter-chip, .filter-sheet, .sort-option, .sheet-select) {
+  background: var(--theme-surface) !important;
+  color: var(--theme-text-primary) !important;
+  border-color: var(--theme-border) !important;
+}
+body.saey-catalog .catalog-search {
+  background: var(--theme-surface-elevated) !important;
+  border-color: var(--theme-border) !important;
+  color: var(--theme-text-primary) !important;
+}
+body.saey-catalog .catalog-search svg { stroke: var(--theme-text-secondary) !important; }
+body.saey-catalog .catalog-search input { background: transparent !important; color: var(--theme-text-primary) !important; }
+body.saey-catalog .catalog-category-icon { background: var(--theme-primary-soft) !important; color: var(--theme-primary-hover) !important; }
+body.saey-catalog .catalog-price b { color: var(--theme-text-primary) !important; }
+body.saey-catalog .catalog-rating i { color: var(--theme-warning) !important; }
+body.saey-catalog :is(.filter-chip.selected, .sort-option.selected) {
+  background: var(--theme-primary-soft) !important;
+  border-color: var(--theme-primary) !important;
+  color: var(--theme-text-primary) !important;
+}
+body.saey-catalog .apply-filters { background: var(--theme-primary) !important; color: var(--theme-on-primary) !important; }
+
+body.saey-orders .orders-head h1,
+body.saey-orders :is(.order-number, .order-store strong, .order-product strong,
+  .order-product b, .order-details-button) { color: var(--theme-text-primary) !important; }
+body.saey-orders :is(.orders-head span, .order-card-head small,
+  .order-store small, .order-product small, .order-details) {
+  color: var(--theme-text-secondary) !important;
+}
+body.saey-orders :is(.orders-back, .orders-tabs, .order-card) {
+  background: var(--theme-surface) !important;
+  color: var(--theme-text-primary) !important;
+  border-color: var(--theme-border) !important;
+}
+body.saey-orders .order-card-head,
+body.saey-orders .order-details-button { border-color: var(--theme-border) !important; }
+body.saey-orders .order-product {
+  background: var(--theme-surface-secondary) !important;
+  border-color: var(--theme-border) !important;
+  color: var(--theme-text-primary) !important;
+}
+body.saey-orders .orders-tab { color: var(--theme-text-secondary) !important; }
+body.saey-orders .orders-tab.active,
+body.saey-orders .orders-tab.active span {
+  background: var(--theme-primary-soft) !important;
+  color: var(--theme-text-primary) !important;
+}
+body.saey-orders .order-timeline span { color: var(--theme-text-muted) !important; }
+body.saey-orders .order-timeline :is(.done, .active) { color: var(--theme-text-primary) !important; }
+body.saey-orders .order-timeline i { background: var(--theme-surface) !important; border-color: var(--theme-border) !important; }
+body.saey-orders .order-timeline .done i { background: var(--theme-success) !important; border-color: var(--theme-success) !important; }
+body.saey-orders .order-timeline .active i { background: var(--theme-primary-soft) !important; border-color: var(--theme-primary) !important; color: var(--theme-text-primary) !important; }
+body.orders-v2 {
+  --order-surface: var(--theme-surface);
+  --order-soft: var(--theme-surface-secondary);
+  --order-border: var(--theme-border);
+  --order-ink: var(--theme-text-primary);
+  --order-muted: var(--theme-text-secondary);
+}
+body.orders-v2 :is(.orders-summary, .orders-filter-panel, .order-card,
+  .order-card-head, .order-timeline) {
+  background: var(--theme-surface) !important;
+  color: var(--theme-text-primary) !important;
+  border-color: var(--theme-border) !important;
+}
+body.orders-v2 :is(.order-card-arrow, .order-product, .summary-stats > span) {
+  background: var(--theme-surface-secondary) !important;
+  color: var(--theme-text-secondary) !important;
+  border-color: var(--theme-border) !important;
+}
+body.orders-v2 .order-product b { background: var(--theme-card) !important; color: var(--theme-text-primary) !important; }
+
+body.saey-product-details :is(.details-top, .details-bottom, .product-report-dialog) {
+  background: var(--theme-surface) !important;
+  color: var(--theme-text-primary) !important;
+  border-color: var(--theme-border) !important;
+}
+body.saey-product-details :is(.details-top a, .details-top button, .quantity,
+  .details-quick-info span, .seller-card, .review-card, .choice,
+  .report-close) {
+  background: var(--theme-card) !important;
+  color: var(--theme-text-primary) !important;
+  border-color: var(--theme-border) !important;
+}
+body.saey-product-details :is(.details-content h1, .details-section-title,
+  .details-rating b, .seller-card strong, .review-card strong,
+  .similar-products strong, .details-top-title) { color: var(--theme-text-primary) !important; }
+body.saey-product-details :is(.details-store, .details-rating, .details-description,
+  .details-quick-info span, .details-quick-info b, .product-features,
+  .seller-card span, .review-card p, .product-report-dialog p) {
+  color: var(--theme-text-secondary) !important;
+}
+body.saey-product-details :is(.details-prices strong, .similar-products span:last-child) {
+  color: var(--theme-text-primary) !important;
+}
+body.saey-product-details :is(.details-rating i, .review-card i) { color: var(--theme-warning) !important; }
+body.saey-product-details .details-divider { background: var(--theme-border) !important; }
+body.saey-product-details .buy-now,
+body.saey-product-details .report-submit {
+  background: var(--theme-primary) !important;
+  color: var(--theme-on-primary) !important;
+}
+body.saey-product-details .buy-now.is-confirmed { background: var(--theme-success) !important; }
+body.saey-product-details .quantity button { color: var(--theme-text-primary) !important; }
+
+body.saey-chats {
+  --chat-blue: var(--theme-primary);
+  --chat-ink: var(--theme-text-primary);
+  --chat-muted: var(--theme-text-secondary);
+  --chat-line: var(--theme-border);
+  --chat-bg: var(--theme-background);
+}
+body.saey-chats :is(.chats-head h1, .chat-section-label, .chat-copy strong,
+  .chat-empty h2, .chat-error h2) { color: var(--theme-text-primary) !important; }
+body.saey-chats :is(.chats-head span, .chat-list-head > span, .chat-copy span,
+  .chat-copy small, .chat-meta time, .chat-empty p, .chat-loading p,
+  .chat-error p) { color: var(--theme-text-secondary) !important; }
+body.saey-chats :is(.chats-back, .chat-row) {
+  background: var(--theme-card) !important;
+  color: var(--theme-text-primary) !important;
+  border-color: var(--theme-border) !important;
+}
+body.saey-chats .chat-search {
+  background: var(--theme-surface-elevated) !important;
+  color: var(--theme-text-secondary) !important;
+  border-color: var(--theme-border) !important;
+}
+body.saey-chats .chat-search input { color: var(--theme-text-primary) !important; }
+body.saey-chats .chat-search input::placeholder { color: var(--theme-text-muted) !important; }
+body.saey-chats .chat-row.unread { border-color: var(--theme-primary) !important; }
+body.saey-chats .chat-row.unread::before,
+body.saey-chats .chat-meta b,
+body.saey-chats .chat-error button { background: var(--theme-primary) !important; color: var(--theme-on-primary) !important; }
+body.saey-chats :is(.chat-copy strong em, .chat-copy small, .chat-empty > span) {
+  background: var(--theme-primary-soft) !important;
+  color: var(--theme-text-primary) !important;
+}
+body.saey-chats .chat-avatar i { background: var(--theme-success) !important; border-color: var(--theme-card) !important; }
+
+body.saey-conversation {
+  --conversation-blue: var(--theme-primary);
+  --conversation-ink: var(--theme-text-primary);
+  --conversation-muted: var(--theme-text-secondary);
+  --conversation-line: var(--theme-border);
+  --conversation-bg: var(--theme-background);
+}
+body.saey-conversation :is(.conversation-back, .conversation-product a,
+  .conversation-actions, .conversation-actions button) {
+  background: var(--theme-surface) !important;
+  color: var(--theme-text-primary) !important;
+  border-color: var(--theme-border) !important;
+}
+body.saey-conversation .conversation-product {
+  background: var(--theme-card) !important;
+  color: var(--theme-text-primary) !important;
+  border-color: var(--theme-border) !important;
+}
+body.saey-conversation :is(.conversation-identity strong, .conversation-product strong,
+  .message p, .conversation-actions h2) { color: var(--theme-text-primary) !important; }
+body.saey-conversation :is(.conversation-identity span, .conversation-product span,
+  .date-divider, .message time) { color: var(--theme-text-secondary) !important; }
+body.saey-conversation .conversation-product small { color: var(--theme-primary) !important; }
+body.saey-conversation .date-divider::before,
+body.saey-conversation .date-divider::after { background: var(--theme-border) !important; }
+body.saey-conversation .message.incoming {
+  background: var(--theme-card) !important;
+  border-color: var(--theme-border) !important;
+}
+body.saey-conversation .message.outgoing {
+  background: var(--theme-primary-soft) !important;
+  border-color: var(--theme-primary) !important;
+}
+body.saey-conversation .message.outgoing.failed {
+  background: var(--theme-soft-pink) !important;
+  border-color: var(--theme-error) !important;
+}
+body.saey-conversation .message.outgoing.failed p { color: #1A1A1A !important; }
+body.saey-conversation .message-composer {
+  background: var(--theme-surface) !important;
+  border-color: var(--theme-border) !important;
+}
+body.saey-conversation .message-composer input {
+  background: var(--theme-surface-elevated) !important;
+  color: var(--theme-text-primary) !important;
+  border-color: var(--theme-border) !important;
+}
+body.saey-conversation .message-composer input::placeholder { color: var(--theme-text-muted) !important; }
+body.saey-conversation .attach-button { color: var(--theme-text-secondary) !important; }
+body.saey-conversation .send-button { background: var(--theme-primary) !important; color: var(--theme-on-primary) !important; }
+body.saey-conversation :is(.conversation-avatar i, .conversation-identity span i) { background: var(--theme-success) !important; }
+
+body.trader-app :is(.sales-chart, .performance-metrics article,
+  .orders-summary article, .period-button) {
+  background: var(--theme-card) !important;
+  color: var(--theme-text-primary) !important;
+  border-color: var(--theme-border) !important;
+}
+body.trader-app :is(.chart-labels, .performance-metrics span,
+  .orders-summary span, .period-button, .revenue-summary span,
+  .revenue-summary small) { color: var(--theme-text-secondary) !important; }
+body.trader-app :is(.revenue-summary strong, .performance-metrics strong,
+  .orders-summary strong) { color: var(--theme-text-primary) !important; }
+body.trader-app .chart-grid-line { stroke: var(--theme-border) !important; }
+body.trader-app .chart-line,
+body.trader-app .chart-points circle { stroke: var(--theme-primary) !important; }
+body.trader-app .chart-points circle { fill: var(--theme-card) !important; }
+body.trader-app .chart-points circle:last-child { fill: var(--theme-primary) !important; }
+
+/* Avoid the old blue slate palette leaking into dark secondary content. */
+body:is(.dark-mode, .preview-dark-mode) :is(.view-intro, .flow-note, .ops-header-title p,
+  .account-greeting, .notification-copy p, .notification-time, .order-store small,
+  .chat-row p, .barq-footer, .barq-subtitle) { color: var(--theme-text-secondary) !important; }
+body:is(.dark-mode, .preview-dark-mode) :is(.view-card h1, .view-card h2,
+  .flow-card h1, .flow-card h2, .ops-card h1, .ops-card h2, .account-row strong,
+  .notification-copy h2) { color: var(--theme-text-primary) !important; }
+body:is(.dark-mode, .preview-dark-mode) :is(.flow-note, .pickup-code, .upload-box,
+  .order-product, .trader-kpi, .ui-state-icon, .document-icon) {
+  background: var(--theme-surface-secondary) !important;
+  border-color: var(--theme-border) !important;
+}

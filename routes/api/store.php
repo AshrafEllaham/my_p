@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Store\StoreAdController;
+use App\Http\Controllers\Api\Store\StoreCouponController;
 use App\Http\Controllers\Api\Store\StoreProductController;
 use App\Http\Controllers\Api\Store\StoreProfileController;
 use App\Http\Controllers\Api\Store\StoreReviewController;
@@ -25,6 +26,18 @@ Route::group([], function () {
     // مسارات محمية (تتطلب تسجيل الدخول)
     // -------------------------------------------------------
     Route::group(['middleware' => ['auth:api', 'throttle:60,1']], function () {
+        // يعرض قائمة كوبونات المتجر مع دعم التصفية والترقيم.
+        Route::get('/coupons', [StoreCouponController::class, 'index']);
+        // يعرض تفاصيل كوبون مملوك للمتجر الحالي.
+        Route::get('/coupons/{coupon}', [StoreCouponController::class, 'show'])->whereNumber('coupon');
+        // ينشئ كوبون خصم جديدًا للمتجر الحالي.
+        Route::post('/coupons', [StoreCouponController::class, 'store']);
+        // يحدّث بيانات كوبون مملوك للمتجر الحالي.
+        Route::patch('/coupons/{coupon}', [StoreCouponController::class, 'update'])->whereNumber('coupon');
+        // يبدّل كوبون المتجر بين حالتي النشط والمتوقف.
+        Route::patch('/coupons/{coupon}/toggle', [StoreCouponController::class, 'toggle'])->whereNumber('coupon');
+        // يحذف كوبونًا مملوكًا للمتجر الحالي.
+        Route::delete('/coupons/{coupon}', [StoreCouponController::class, 'destroy'])->whereNumber('coupon');
         // يحدّث بيانات ملف المتجر.
         Route::post('/profile', [StoreProfileController::class, 'update']);
         // يعرض منتجات المتجر.
