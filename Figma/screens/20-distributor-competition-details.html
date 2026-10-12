@@ -49,7 +49,7 @@
       <p class="draw-setup-copy">سيتم اختيار الفائز عشوائيًا من المشاركين الذين تتطابق إجابتهم مع الإجابة التي تدخلها.</p>
       <label class="correct-answer-field" for="correctAnswer">
         <span>الإجابة المعتمدة للسحب</span>
-        <input id="correctAnswer" type="text" maxlength="180" autocomplete="off" placeholder="اكتب الإجابة الصحيحة هنا">
+        <input id="correctAnswer" type="text" maxlength="255" autocomplete="off" placeholder="اكتب الإجابة الصحيحة هنا">
         <small>نتجاهل التشكيل، اختلاف الهمزات والمسافات الزائدة عند المقارنة.</small>
       </label>
       <div class="draw-stats" aria-live="polite">
@@ -78,122 +78,131 @@
       <div class="contest-sheet-handle"></div>
       <header><h2 id="detailEditTitle">تعديل المسابقة</h2><button class="contest-sheet-close" id="closeDetailEdit" type="button" aria-label="إغلاق">×</button></header>
       <form class="contest-form" id="detailEditForm">
-        <div class="contest-field"><label for="detailContestTitle">عنوان المسابقة</label><input id="detailContestTitle" maxlength="55" required></div>
-        <div class="contest-field"><label for="detailContestQuestion">سؤال المسابقة</label><textarea id="detailContestQuestion" maxlength="180" required></textarea></div>
-        <div class="contest-field"><label for="detailContestPrize">الجائزة</label><input id="detailContestPrize" maxlength="70" required></div>
-        <div class="contest-field"><label for="detailContestEnd">موعد انتهاء المشاركة</label><input id="detailContestEnd" type="datetime-local" required></div>
+        <div class="contest-field"><label for="detailContestTitle">عنوان المسابقة</label><input id="detailContestTitle" maxlength="120" required></div>
+        <div class="contest-field"><label for="detailContestQuestion">سؤال المسابقة</label><textarea id="detailContestQuestion" maxlength="5000" required></textarea></div>
+        <div class="contest-field"><label for="detailContestPrize">الجائزة</label><input id="detailContestPrize" maxlength="160" required></div>
+        <div class="contest-field"><label for="detailContestImage">صورة المسابقة (اختياري)</label><input id="detailContestImage" type="file" accept="image/jpeg,image/png,image/webp"><div class="competition-image-preview" id="detailContestImagePreview" hidden><img alt="معاينة صورة المسابقة"></div></div><div class="contest-field"><label for="detailContestEnd">موعد انتهاء المشاركة</label><input id="detailContestEnd" type="datetime-local" required></div>
         <p class="contest-form-error" id="detailEditError" hidden></p>
         <button class="contest-save" type="submit">حفظ التعديلات</button>
       </form>
     </section>
   </div>
 
-  <script src="user-state.js"></script>
+  <script src="competitions-api.js"></script>
   <script>
-    const id = new URLSearchParams(location.search).get('id') || 'contest-tech-01';
+    const id = new URLSearchParams(location.search).get('id');
     let currentItem;
 
-    const escapeHtml = value => String(value ?? '').replace(/[&<>'"]/g, character => ({
-      '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    const escapeHtml = value => String(value ?? '').replace(/[&<>\'"]/g, character => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;',
     })[character]);
-    const answerKey = value => SaeyState.competitionAnswerKey(value);
-    const matchingResponses = value => {
-      const key = answerKey(value);
-      return key ? (currentItem.responses || []).filter(response => answerKey(response.answer) === key) : [];
+    const statusLabels = { active: 'نشطة الآن', ended: 'انتهت', drawn: 'تم السحب', cancelled: 'ملغاة' };
+    const updateImagePreview = (input, preview) => {
+      const image = preview.querySelector('img');
+      const oldUrl = preview.dataset.objectUrl;
+      const file = input.files?.[0];
+      if (oldUrl) {
+        URL.revokeObjectURL(oldUrl);
+        delete preview.dataset.objectUrl;
+      }
+      const source = file ? URL.createObjectURL(file) : SaeyCompetitionsApi.imageUrl(input.dataset.currentImage || '');
+      if (file) preview.dataset.objectUrl = source;
+      preview.hidden = !source;
+      image.onerror = () => { preview.hidden = true; };
+      if (source) image.src = source;
+      else image.removeAttribute('src');
+    };
+    const toLocalInput = value => {
+      const date = new Date(value);
+      date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+      return date.toISOString().slice(0, 16);
     };
 
-    function renderResponses(referenceAnswer = '') {
-      const responses = currentItem.responses || [];
-      const referenceKey = answerKey(referenceAnswer);
-      responsesList.innerHTML = responses.map(response => {
-        const matches = referenceKey && answerKey(response.answer) === referenceKey;
-        return `<article class="response-row${matches ? ' matches' : ''}">
-          <span class="response-avatar">${escapeHtml(response.user.charAt(0))}</span>
-          <span class="response-copy"><strong>${escapeHtml(response.user)}</strong><small>${escapeHtml(response.answer)}</small></span>
-          <span class="response-side">${referenceKey ? `<b class="answer-match ${matches ? 'valid' : ''}">${matches ? 'مطابقة' : 'غير مطابقة'}</b>` : ''}<time>${new Date(response.createdAt).toLocaleDateString('ar-EG', { day: 'numeric', month: 'short' })}</time></span>
-        </article>`;
-      }).join('') || '<div class="responses-empty"><strong>لا توجد مشاركات بعد</strong><span>ستظهر إجابات المستخدمين هنا بمجرد مشاركتهم.</span></div>';
-    }
-
-    function updateEligibility() {
-      const value = correctAnswer.value.trim();
-      const matches = matchingResponses(value);
-      eligibleCount.textContent = value ? matches.length.toLocaleString('ar-EG') : '—';
-      renderResponses(value);
+    function updateDrawState() {
+      const answer = correctAnswer.value.trim();
+      const entryCount = Number(currentItem?.entriesCount || 0);
+      const isEnded = currentItem && new Date(currentItem.endsAt) <= new Date();
+      eligibleCount.textContent = '—';
       drawFeedback.className = 'draw-feedback';
 
-      if (!value) {
-        drawFeedback.textContent = 'اكتب الإجابة الصحيحة لعرض المشاركات المؤهلة.';
-      } else if (!matches.length) {
-        drawFeedback.textContent = 'لا توجد إجابات مطابقة. راجع صياغة الإجابة قبل السحب.';
-        drawFeedback.classList.add('error');
+      if (!isEnded) {
+        drawFeedback.textContent = 'ينتهي وقت المشاركة أولًا، وبعدها يمكنك تنفيذ السحب.';
+      } else if (entryCount === 0) {
+        drawFeedback.textContent = 'لا توجد مشاركات في هذه المسابقة حتى الآن.';
+      } else if (!answer) {
+        drawFeedback.textContent = 'اكتب الإجابة المعتمدة ثم نفّذ السحب.';
       } else {
-        drawFeedback.textContent = `${matches.length.toLocaleString('ar-EG')} ${matches.length === 1 ? 'مشارك مؤهل' : 'مشاركين مؤهلين'} للدخول في السحب.`;
-        drawFeedback.classList.add('success');
+        drawFeedback.textContent = 'سيتم التحقق من الإجابات المطابقة واختيار فائز عشوائيًا عند التنفيذ.';
       }
-      pickWinner.disabled = Boolean(currentItem.winnerId) || !matches.length;
+
+      pickWinner.disabled = !isEnded || entryCount === 0 || !answer;
     }
 
     function render() {
-      currentItem = SaeyState.competition(id);
-      const responses = currentItem.responses || [];
-      const winner = responses.find(response => response.id === currentItem.winnerId);
-      const completed = Boolean(winner);
+      const count = Number(currentItem.entriesCount || 0);
       const endDate = new Date(currentItem.endsAt);
+      const imageUrl = SaeyCompetitionsApi.imageUrl(currentItem.image);
+      const drawn = currentItem.status === 'drawn';
+      const cancelled = currentItem.status === 'cancelled';
 
-      contestDetails.innerHTML = `
-        <div class="merchant-detail-status"><span class="contest-status">${completed ? 'تم السحب' : 'نشطة الآن'}</span><span>${responses.length.toLocaleString('ar-EG')} مشاركة</span></div>
+      contestDetails.innerHTML = `${imageUrl ? `<div class="user-contest-cover competition-detail-image"><img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(currentItem.title)}"></div>` : ''}
+        <div class="merchant-detail-status"><span class="contest-status">${statusLabels[currentItem.status] || escapeHtml(currentItem.status)}</span><span>${count.toLocaleString('ar-EG')} مشاركة</span></div>
         <div class="merchant-detail-title"><small>عنوان المسابقة</small><h2>${escapeHtml(currentItem.title)}</h2></div>
         <div class="merchant-question-box"><span><svg viewBox="0 0 24 24"><path d="M9.1 9a3 3 0 1 1 5.5 1.7c-.9 1-2.6 1.4-2.6 3.3M12 18h.01"/><circle cx="12" cy="12" r="9"/></svg> سؤال المسابقة</span><strong>${escapeHtml(currentItem.question)}</strong></div>
-        <div class="merchant-detail-meta">
-          <article><span><svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18M12 8H8.5A2.5 2.5 0 1 1 11 5.5V8ZM12 8h3.5A2.5 2.5 0 1 0 13 5.5V8Z"/></svg>الجائزة</span><strong>${escapeHtml(currentItem.prize)}</strong></article>
-          <article><span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>موعد الانتهاء</span><strong>${endDate.toLocaleString('ar-EG', { day: 'numeric', month: 'long', hour: 'numeric', minute: '2-digit' })}</strong></article>
-        </div>`;
-
-      allResponsesCount.textContent = responses.length.toLocaleString('ar-EG');
-      responsesCount.textContent = `${responses.length.toLocaleString('ar-EG')} مشارك`;
-      contestDetails.classList.toggle('completed', completed);
-      winnerCard.classList.toggle('visible', completed);
-      drawCard.classList.toggle('completed', completed);
-
-      if (completed) {
-        winnerName.textContent = winner.user;
-        winnerAnswer.textContent = winner.answer;
-        winnerRule.textContent = currentItem.correctAnswer || winner.answer;
-        correctAnswer.value = currentItem.correctAnswer || winner.answer;
-        correctAnswer.disabled = true;
-        pickWinner.innerHTML = '<svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg> تم اختيار الفائز';
-      } else {
-        correctAnswer.value = '';
-        correctAnswer.disabled = false;
+        <div class="merchant-detail-meta"><article><span>الجائزة</span><strong>${escapeHtml(currentItem.prize)}</strong></article><article><span>موعد الانتهاء</span><strong>${endDate.toLocaleString('ar-EG', { day: 'numeric', month: 'long', hour: 'numeric', minute: '2-digit' })}</strong></article></div>`;
+      contestDetails.classList.toggle('completed', drawn);
+      contestDetails.classList.toggle('ended', currentItem.status === 'ended');
+      contestDetails.classList.toggle('cancelled', cancelled);
+      allResponsesCount.textContent = count.toLocaleString('ar-EG');
+      responsesCount.textContent = `${count.toLocaleString('ar-EG')} مشارك`;
+      responsesList.innerHTML = '<div class="responses-empty"><strong>إجمالي المشاركات</strong><span>يعرض النظام العدد الإجمالي، ويتحقق من الإجابات المطابقة عند تنفيذ السحب.</span></div>';
+      drawCard.hidden = drawn || cancelled;
+      winnerCard.classList.toggle('visible', drawn);
+      if (drawn) {
+        winnerName.textContent = currentItem.winner?.name || 'الفائز';
+        winnerAnswer.textContent = currentItem.winner?.answer || '';
+        winnerRule.textContent = currentItem.correctAnswer || '';
       }
-      updateEligibility();
+      updateDrawState();
     }
 
-    correctAnswer.addEventListener('input', updateEligibility);
-    pickWinner.addEventListener('click', () => {
-      const answer = correctAnswer.value.trim();
-      const matches = matchingResponses(answer);
-      if (!answer || !matches.length) return;
-      if (!confirm(`سيتم اختيار فائز عشوائيًا من ${matches.length.toLocaleString('ar-EG')} إجابة مطابقة، ولن يمكن إعادة السحب. هل تريد المتابعة؟`)) return;
-      const winner = SaeyState.pickCompetitionWinner(id, answer);
-      if (winner) render();
-    });
+    async function load() {
+      if (!id) {
+        contestDetails.innerHTML = '<p>معرّف المسابقة غير موجود.</p>';
+        return;
+      }
+      try {
+        currentItem = await SaeyCompetitionsApi.find(id);
+        render();
+      } catch (error) {
+        contestDetails.innerHTML = `<div class="merchant-contest-empty"><h3>تعذر تحميل المسابقة</h3><p>${escapeHtml(error.message)}</p><button type="button" id="retryCompetition">إعادة المحاولة</button></div>`;
+        document.getElementById('retryCompetition')?.addEventListener('click', load);
+      }
+    }
 
     const detailMenuWrap = detailMenuButton.closest('.contest-menu-wrap');
-    const closeDetailMenu = () => { detailMenuWrap.classList.remove('open'); detailMenuButton.setAttribute('aria-expanded', 'false'); };
+    const closeDetailMenu = () => {
+      detailMenuWrap.classList.remove('open');
+      detailMenuButton.setAttribute('aria-expanded', 'false');
+    };
     const openDetailEdit = () => {
       closeDetailMenu();
       detailContestTitle.value = currentItem.title;
+      detailContestImage.value = '';
+      detailContestImage.dataset.currentImage = currentItem.image || '';
+      updateImagePreview(detailContestImage, detailContestImagePreview);
       detailContestQuestion.value = currentItem.question;
       detailContestPrize.value = currentItem.prize;
-      detailContestEnd.value = String(currentItem.endsAt).slice(0, 16);
+      detailContestEnd.value = toLocalInput(currentItem.endsAt);
       detailEditError.hidden = true;
       detailEditSheet.classList.add('visible');
       detailEditSheet.setAttribute('aria-hidden', 'false');
       setTimeout(() => detailContestTitle.focus(), 200);
     };
-    const closeDetailEditSheet = () => { detailEditSheet.classList.remove('visible'); detailEditSheet.setAttribute('aria-hidden', 'true'); };
+    const closeDetailEditSheet = () => {
+      detailEditSheet.classList.remove('visible');
+      detailEditSheet.setAttribute('aria-hidden', 'true');
+    };
 
     detailMenuButton.addEventListener('click', event => {
       event.stopPropagation();
@@ -202,29 +211,69 @@
       detailMenuButton.setAttribute('aria-expanded', String(willOpen));
     });
     detailEdit.addEventListener('click', openDetailEdit);
-    detailDelete.addEventListener('click', () => {
+    detailDelete.addEventListener('click', async () => {
       closeDetailMenu();
-      if (!confirm(`هل تريد حذف مسابقة «${currentItem.title}»؟ لا يمكن التراجع عن الحذف.`)) return;
-      SaeyState.deleteCompetition(currentItem.id);
-      location.href = '20-distributor-competitions.html';
+      if (!currentItem || !confirm(`هل تريد حذف مسابقة «${currentItem.title}»؟ لا يمكن التراجع عن الحذف.`)) return;
+      try {
+        await SaeyCompetitionsApi.remove(currentItem.id);
+        location.href = '20-distributor-competitions.html';
+      } catch (error) {
+        alert(error.message);
+      }
     });
     closeDetailEdit.addEventListener('click', closeDetailEditSheet);
-    detailEditSheet.addEventListener('click', event => { if (event.target === detailEditSheet) closeDetailEditSheet(); });
-    detailEditForm.addEventListener('submit', event => {
-      event.preventDefault();
-      const title = detailContestTitle.value.trim(), question = detailContestQuestion.value.trim(), prize = detailContestPrize.value.trim();
-      if (title.length < 4 || question.length < 8 || !prize || !detailContestEnd.value) {
-        detailEditError.textContent = 'أكمل عنوان المسابقة والسؤال والجائزة وموعد الانتهاء.';
-        detailEditError.hidden = false;
-        return;
-      }
-      SaeyState.saveCompetition({ ...currentItem, title, question, prize, endsAt: detailContestEnd.value });
-      closeDetailEditSheet();
-      render();
+    detailEditSheet.addEventListener('click', event => {
+      if (event.target === detailEditSheet) closeDetailEditSheet();
     });
-    document.addEventListener('click', event => { if (!event.target.closest('.detail-menu-wrap')) closeDetailMenu(); });
+    detailContestImage.addEventListener('change', () => updateImagePreview(detailContestImage, detailContestImagePreview));
+    contestDetails.addEventListener('error', event => {
+      if (event.target.matches('.competition-detail-image img')) event.target.closest('.competition-detail-image')?.remove();
+    }, true);
+    correctAnswer.addEventListener('input', updateDrawState);
+    pickWinner.addEventListener('click', async () => {
+      const answer = correctAnswer.value.trim();
+      if (!answer || pickWinner.disabled) return;
+      if (!confirm(`سيتم اختيار فائز عشوائيًا من المشاركات المطابقة، ولا يمكن إعادة السحب. هل تريد المتابعة؟`)) return;
 
-    render();
+      pickWinner.disabled = true;
+      drawFeedback.textContent = 'جارٍ تنفيذ السحب…';
+      try {
+        const result = await SaeyCompetitionsApi.draw(currentItem.id, answer);
+        currentItem = { ...result.competition, winner: result.winner };
+        render();
+      } catch (error) {
+        updateDrawState();
+        drawFeedback.textContent = error.message;
+        drawFeedback.className = 'draw-feedback error';
+      }
+    });
+    detailEditForm.addEventListener('submit', async event => {
+      event.preventDefault();
+      const payload = {
+        title: detailContestTitle.value.trim(),
+        question: detailContestQuestion.value.trim(),
+        prize: detailContestPrize.value.trim(),
+        image: detailContestImage.files?.[0] || null,
+        endsAt: detailContestEnd.value,
+      };
+      detailEditError.hidden = true;
+      const save = detailEditForm.querySelector('.contest-save');
+      save.disabled = true;
+      try {
+        currentItem = await SaeyCompetitionsApi.update(currentItem.id, payload);
+        closeDetailEditSheet();
+        render();
+      } catch (error) {
+        detailEditError.textContent = error.message;
+        detailEditError.hidden = false;
+      } finally {
+        save.disabled = false;
+      }
+    });
+    document.addEventListener('click', event => {
+      if (!event.target.closest('.detail-menu-wrap')) closeDetailMenu();
+    });
+    load();
   </script>
 </body>
 </html>

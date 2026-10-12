@@ -81,6 +81,18 @@ return [
         'deleted' => 'The coupon was deleted successfully.',
         'toggle_unavailable' => 'Only active or paused coupons that have not expired or reached their usage limit can be toggled.',
     ],
+    'competitions' => [
+        'listed' => 'Store competitions were retrieved successfully.',
+        'retrieved' => 'Competition details were retrieved successfully.',
+        'created' => 'The competition was created successfully.',
+        'updated' => 'The competition was updated successfully.',
+        'deleted' => 'The competition was deleted successfully.',
+        'image_upload_failed' => 'The competition image could not be saved.',
+        'drawn' => 'The competition winner was selected successfully.',
+        'draw_unavailable' => 'A draw cannot be performed for this competition.',
+        'draw_not_ended' => 'A draw cannot be performed before the competition ends.',
+        'no_matching_entries' => 'There are no entries matching the approved answer.',
+    ],
     'reviews' => [
         'listed' => 'Product reviews were retrieved successfully.',
     ],
@@ -314,6 +326,18 @@ return [
             'starts_at' => ['label' => 'start date', 'date' => 'Enter a valid coupon start date.'],
             'expires_at' => ['label' => 'expiration date', 'required' => 'Choose an expiration date.', 'date' => 'Enter a valid coupon expiration date.', 'after' => 'The expiration date must be in the future.'],
             'is_active' => ['label' => 'active status', 'boolean' => 'The active status must be true or false.'],
+        ],
+        'store_competitions' => [
+            'pagination' => ['label' => 'pagination setting', 'string' => 'Pagination must be text.', 'in' => 'Pagination must be on or off.'],
+            'page' => ['label' => 'page number', 'integer' => 'The page number must be an integer.', 'min' => 'The page number must be at least 1.'],
+            'limit_per_page' => ['label' => 'page size', 'integer' => 'The page size must be an integer.', 'min' => 'The page size must be at least 1.', 'max' => 'The page size must not exceed 100.'],
+            'status' => ['label' => 'competition status', 'string' => 'The competition status must be text.', 'enum' => 'The selected competition status is unavailable.'],
+            'title' => ['label' => 'competition title', 'required' => 'The competition title is required.', 'string' => 'The title must be text.', 'min' => 'The title must contain at least 2 characters.', 'max' => 'The title must not exceed 120 characters.'],
+            'question' => ['label' => 'competition question', 'required' => 'The competition question is required.', 'string' => 'The question must be text.', 'min' => 'The question must contain at least 3 characters.', 'max' => 'The question is too long.'],
+            'prize' => ['label' => 'prize', 'required' => 'The prize is required.', 'string' => 'The prize must be text.', 'min' => 'Enter a prize description.', 'max' => 'The prize description must not exceed 160 characters.'],
+            'image' => ['label' => 'competition image', 'image' => 'The uploaded file must be an image.', 'mimes' => 'The competition image must be a JPG, JPEG, PNG, or WEBP file.', 'max' => 'The competition image must not be larger than 5 MB.'],
+            'correct_answer' => ['label' => 'approved draw answer', 'required' => 'The approved draw answer is required.', 'string' => 'The approved draw answer must be text.', 'min' => 'Enter the approved draw answer.', 'max' => 'The approved draw answer must not exceed 255 characters.'],
+            'ends_at' => ['label' => 'participation end time', 'required' => 'The participation end time is required.', 'date' => 'Enter a valid end time.', 'after' => 'The participation end time must be in the future.'],
         ],
         'store_review_filters' => [
             'rating' => [

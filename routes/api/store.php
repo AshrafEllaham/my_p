@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Store\StoreAdController;
+use App\Http\Controllers\Api\Store\StoreCompetitionController;
 use App\Http\Controllers\Api\Store\StoreCouponController;
 use App\Http\Controllers\Api\Store\StoreProductController;
 use App\Http\Controllers\Api\Store\StoreProfileController;
@@ -26,6 +27,19 @@ Route::group([], function () {
     // مسارات محمية (تتطلب تسجيل الدخول)
     // -------------------------------------------------------
     Route::group(['middleware' => ['auth:api', 'throttle:60,1']], function () {
+        // يعرض مسابقات المتجر الحالي وملخص المشاركات مع فلترة الحالة.
+        Route::get('/competitions', [StoreCompetitionController::class, 'index']);
+        // يعرض تفاصيل مسابقة مملوكة للمتجر الحالي.
+        Route::get('/competitions/{competition}', [StoreCompetitionController::class, 'show'])->whereNumber('competition');
+        // ينفذ السحب العشوائي بين المشاركات المطابقة للإجابة المعتمدة.
+        Route::post('/competitions/{competition}/draw', [StoreCompetitionController::class, 'draw'])->whereNumber('competition');
+        // ينشئ مسابقة جديدة للمتجر الحالي.
+        Route::post('/competitions', [StoreCompetitionController::class, 'store']);
+        // يحدّث بيانات مسابقة مملوكة للمتجر الحالي.
+        Route::patch('/competitions/{competition}', [StoreCompetitionController::class, 'update'])->whereNumber('competition');
+        // يحذف مسابقة مملوكة للمتجر الحالي.
+        Route::delete('/competitions/{competition}', [StoreCompetitionController::class, 'destroy'])->whereNumber('competition');
+
         // يعرض قائمة كوبونات المتجر مع دعم التصفية والترقيم.
         Route::get('/coupons', [StoreCouponController::class, 'index']);
         // يعرض تفاصيل كوبون مملوك للمتجر الحالي.

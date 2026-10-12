@@ -6,6 +6,7 @@ use App\Enums\CompetitionStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Competition extends Model
@@ -45,5 +46,10 @@ class Competition extends Model
     public function winnerUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'winner_user_id');
+    }
+
+    public function entries(): HasMany
+    {
+        return $this->hasMany(CompetitionEntry::class, 'competition_id');
     }
 }
