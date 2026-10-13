@@ -3,6 +3,7 @@
 namespace App\Repositories\Sai;
 
 use App\Enums\AccountTypeEnum;
+use App\Enums\FavoriteTypeEnum;
 use App\Enums\OrderStatusEnum;
 use App\Enums\ProductOrderByEnum;
 use App\Enums\ProductStatusEnum;
@@ -112,7 +113,7 @@ class ProductRepository extends MainRepository
     }
 
     /** @param array<string, mixed> $filters */
-    public function listForUserCatalog(array $filters, string $locale): Builder
+    public function listForUserCatalog(array $filters, string $locale, int $userId): Builder
     {
         $query = $this->query()
             ->select([
@@ -126,6 +127,9 @@ class ProductRepository extends MainRepository
             ])
             ->where('products.status', ProductStatusEnum::Published)
             ->where('products.stock_quantity', '>', 0)
+            ->withExists(['favorites as is_favorite' => fn (Builder $favoriteQuery) => $favoriteQuery
+                ->where('user_id', $userId)
+                ->where('type', FavoriteTypeEnum::Product)])
             ->whereHas('store', fn(Builder $storeQuery) => $storeQuery
                 ->where('account_type', AccountTypeEnum::Store)
                 ->where('status', UserStatusEnum::Active))

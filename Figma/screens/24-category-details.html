@@ -123,6 +123,7 @@
     }
     .cat-products-scroll::-webkit-scrollbar { display: none; }
     .cat-product-card {
+      position: relative;
       flex-shrink: 0;
       width: 130px;
       background: #fff;
@@ -138,6 +139,27 @@
       height: 100px;
       object-fit: cover;
     }
+    .cat-product-link { display: block; color: inherit; text-decoration: none; }
+    .cat-favorite-button {
+      position: absolute;
+      z-index: 1;
+      top: 7px;
+      left: 7px;
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 1px solid #E1E8F1;
+      border-radius: 50%;
+      background: rgba(255,255,255,.96);
+      color: #64748B;
+      cursor: pointer;
+    }
+    .cat-favorite-button svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .cat-favorite-button.is-favorite { background: #FEF2F2; color: #DC2626; }
+    .cat-favorite-button.is-favorite svg { fill: #DC2626; }
+    .cat-favorite-button:disabled { opacity: .55; cursor: wait; }
     .cat-product-card-body {
       padding: 8px 9px;
     }
@@ -177,6 +199,7 @@
       padding: 0 14px;
     }
     .cat-rated-card {
+      position: relative;
       background: #fff;
       border: 1px solid #E1E8F1;
       border-radius: 14px;
@@ -443,22 +466,35 @@
     let searchTimer;
     categoryTitleNode.textContent = categoryTitle;
 
-    const request = async (path, signal) => {
-      const response = await fetch(`${apiBase}/${path}`, { signal, headers: { Accept: 'application/json', 'Accept-Language': 'ar' } });
+    const request = async (path, signal, options = {}) => {
+      const token = localStorage.getItem('saey_api_token');
+      const response = await fetch(`${apiBase}/${path}`, {
+        signal,
+        method: options.method || 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Accept-Language': 'ar',
+          ...(options.body ? { 'Content-Type': 'application/json' } : {}),
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
+        ...(options.body ? { body: JSON.stringify(options.body) } : {})
+      });
       const result = await response.json();
       if (!response.ok) throw new Error(result.message || 'تعذر تحميل المنتجات.');
       return result;
     };
     const setMessage = (section, message) => { section.message.textContent = message || ''; };
     const createProductCard = (product, sort) => {
-      const card = document.createElement('a');
-      card.href = `12-product-details.html?product_id=${encodeURIComponent(product.id)}`;
+      const card = document.createElement('article');
       card.className = sort === 'most_purchased' ? 'cat-product-card' : 'cat-rated-card';
+      const link = document.createElement('a');
+      link.className = 'cat-product-link';
+      link.href = `12-product-details.html?product_id=${encodeURIComponent(product.id)}`;
       const image = document.createElement('img');
       image.src = product.image || '';
       image.alt = product.name || '';
       image.hidden = !product.image;
-      card.append(image);
+      link.append(image);
       const body = document.createElement('div');
       body.className = sort === 'most_purchased' ? 'cat-product-card-body' : 'cat-rated-card-body';
       const name = document.createElement('strong');
@@ -480,7 +516,49 @@
         sold.textContent = `${Number(product.units_sold || 0).toLocaleString('ar-EG')} مبيعة`;
         body.append(sold);
       }
-      card.append(body);
+      link.append(body);
+
+      const favoriteButton = document.createElement('button');
+      favoriteButton.type = 'button';
+      favoriteButton.className = 'cat-favorite-button';
+      favoriteButton.dataset.productFavorite = String(product.id);
+      favoriteButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.9-8.6a5.5 5.5 0 0 0-.1-7.8Z"/></svg>';
+      const setFavoriteState = isFavorite => {
+        favoriteButton.classList.toggle('is-favorite', isFavorite);
+        favoriteButton.setAttribute('aria-pressed', String(isFavorite));
+        favoriteButton.setAttribute('aria-label', isFavorite ? 'إزالة من المفضلة' : 'أضف إلى المفضلة');
+      };
+      setFavoriteState(Boolean(product.is_favorite));
+      favoriteButton.addEventListener('click', async event => {
+        event.preventDefault();
+        event.stopPropagation();
+        const token = localStorage.getItem('saey_api_token');
+        if (!token) {
+          setMessage(sections[sort], 'سجّل الدخول لإضافة المنتجات إلى المفضلة.');
+          return;
+        }
+
+        favoriteButton.disabled = true;
+        try {
+          const wasFavorite = favoriteButton.getAttribute('aria-pressed') === 'true';
+          const result = await request('favorites/toggle', null, {
+            method: 'POST',
+            body: { type: 'product', favoriteable_id: Number(product.id) }
+          });
+          product.is_favorite = Boolean(result.data?.is_favorite ?? !wasFavorite);
+          document.querySelectorAll(`[data-product-favorite="${product.id}"]`).forEach(button => {
+            button.classList.toggle('is-favorite', product.is_favorite);
+            button.setAttribute('aria-pressed', String(product.is_favorite));
+            button.setAttribute('aria-label', product.is_favorite ? 'إزالة من المفضلة' : 'أضف إلى المفضلة');
+          });
+          setMessage(sections[sort], '');
+        } catch (error) {
+          setMessage(sections[sort], error.message || 'تعذر تحديث المفضلة. حاول مرة أخرى.');
+        } finally {
+          favoriteButton.disabled = false;
+        }
+      });
+      card.append(link, favoriteButton);
       return card;
     };
     const loadSection = async (sort, reset = false) => {

@@ -3,15 +3,18 @@
 namespace Tests\Feature\Api;
 
 use App\Enums\AccountTypeEnum;
+use App\Enums\FavoriteTypeEnum;
 use App\Enums\OrderStatusEnum;
 use App\Enums\PaymentStatusEnum;
 use App\Enums\ProductStatusEnum;
 use App\Enums\UserStatusEnum;
 use App\Models\Sai\Category;
+use App\Models\Sai\Favorite;
 use App\Models\Sai\Order;
 use App\Models\Sai\OrderItem;
 use App\Models\Sai\Product;
 use App\Models\Sai\Review;
+use App\Models\Sai\Store;
 use App\Models\Sai\StorePolicyVersion;
 use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -33,6 +36,8 @@ class UserProductCatalogTest extends TestCase
         $mostPurchased = $this->createProduct($store->id, $shirts->id, 'Cotton shirt');
         $highestRated = $this->createProduct($store->id, $shoes->id, 'Running shoes');
         $outsideMainCategory = $this->createProduct($store->id, $otherCategory->id, 'Leather bag');
+
+        $this->actingAs($customer, 'api');
 
         $this->recordSale($store->id, $customer->id, $policy->id, $mostPurchased, 5);
         $this->recordSale($store->id, $customer->id, $policy->id, $mostPurchased, 100, OrderStatusEnum::Cancelled);
@@ -64,6 +69,9 @@ class UserProductCatalogTest extends TestCase
 
     public function test_user_product_filters_have_localized_validation_messages(): void
     {
+        [, $customer] = $this->createStoreAndCustomer();
+        $this->actingAs($customer, 'api');
+
         $mainCategory = Category::factory()->create();
         $otherMainCategory = Category::factory()->create();
         $subcategory = Category::factory()->subcategory($otherMainCategory)->create();
@@ -88,6 +96,99 @@ class UserProductCatalogTest extends TestCase
         $this->assertStringContainsString('sort,', $preview);
         $this->assertStringContainsString('main_category_id', $preview);
         $this->assertStringContainsString('data-show-more=', $preview);
+        $this->assertStringContainsString('is_favorite', $preview);
+        $this->assertStringContainsString("request('favorites/toggle'", $preview);
+        $this->assertStringContainsString('saey_api_token', $preview);
+    }
+
+    public function test_user_can_toggle_product_and_store_favorites_through_one_endpoint(): void
+    {
+        [$store, $customer] = $this->createStoreAndCustomer();
+        $category = Category::factory()->create();
+        $product = $this->createProduct($store->id, $category->id, 'Favorite product');
+        $this->actingAs($customer, 'api');
+
+        $this->getJson('/api/user/products?main_category_id='.$category->id)
+            ->assertOk()
+            ->assertJsonPath('data.0.is_favorite', false);
+
+        $this->postJson('/api/user/favorites/toggle', [
+            'type' => FavoriteTypeEnum::Product->value,
+            'favoriteable_id' => $product->id,
+        ])
+            ->assertOk()
+            ->assertJsonPath('data.type', FavoriteTypeEnum::Product->value)
+            ->assertJsonPath('data.favoriteable_id', $product->id)
+            ->assertJsonPath('data.is_favorite', true)
+            ->assertJsonPath('message', __('messages.user_favorites.added'));
+
+        $this->assertSame(1, Favorite::query()
+            ->where('user_id', $customer->id)
+            ->where('type', FavoriteTypeEnum::Product)
+            ->where('favoriteable_id', $product->id)
+            ->count());
+
+        $this->getJson('/api/user/products?main_category_id='.$category->id)
+            ->assertOk()
+            ->assertJsonPath('data.0.is_favorite', true);
+
+        $otherCustomer = UserFactory::new()->create([
+            'account_type' => AccountTypeEnum::User,
+            'status' => UserStatusEnum::Active,
+        ]);
+        $this->actingAs($otherCustomer, 'api')
+            ->getJson('/api/user/products?main_category_id='.$category->id)
+            ->assertOk()
+            ->assertJsonPath('data.0.is_favorite', false);
+
+        $this->actingAs($customer, 'api');
+
+        $this->postJson('/api/user/favorites/toggle', [
+            'type' => FavoriteTypeEnum::Product->value,
+            'favoriteable_id' => $product->id,
+        ])
+            ->assertOk()
+            ->assertJsonPath('data.is_favorite', false)
+            ->assertJsonPath('message', __('messages.user_favorites.removed'));
+
+        $storeRecord = Store::query()->create([
+            'owner_id' => $store->id,
+            'category_id' => $category->id,
+            'description' => 'Favorite store',
+        ]);
+
+        $this->postJson('/api/user/favorites/toggle', [
+            'type' => FavoriteTypeEnum::Store->value,
+            'favoriteable_id' => $storeRecord->id,
+        ])
+            ->assertOk()
+            ->assertJsonPath('data.type', FavoriteTypeEnum::Store->value)
+            ->assertJsonPath('data.is_favorite', true);
+
+        $this->assertDatabaseHas('favorites', [
+            'user_id' => $customer->id,
+            'type' => FavoriteTypeEnum::Store->value,
+            'favoriteable_id' => $storeRecord->id,
+        ]);
+    }
+
+    public function test_favorite_toggle_requires_authentication_and_validates_type_and_item(): void
+    {
+        $this->getJson('/api/user/products')->assertUnauthorized();
+        $this->postJson('/api/user/favorites/toggle', [])->assertUnauthorized();
+
+        [, $customer] = $this->createStoreAndCustomer();
+        $this->actingAs($customer, 'api');
+
+        $this->withHeader('Accept-Language', 'en')
+            ->postJson('/api/user/favorites/toggle', ['type' => 'other', 'favoriteable_id' => 0])
+            ->assertUnprocessable()
+            ->assertJsonPath('message', 'Favorite type must be product or store.');
+
+        $this->withHeader('Accept-Language', 'ar')
+            ->postJson('/api/user/favorites/toggle', ['type' => 'product', 'favoriteable_id' => 999999])
+            ->assertUnprocessable()
+            ->assertJsonPath('message', 'المنتج أو المتجر المحدد غير موجود.');
     }
 
     private function createStoreAndCustomer(): array

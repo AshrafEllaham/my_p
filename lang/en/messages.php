@@ -58,6 +58,10 @@ return [
     'user_products' => [
         'listed' => 'Products were retrieved successfully.',
     ],
+    'user_favorites' => [
+        'added' => 'The item was added to favorites.',
+        'removed' => 'The item was removed from favorites.',
+    ],
     'ads' => [
         'listed' => 'Store ads were retrieved successfully.',
         'retrieved' => 'Ad details were retrieved successfully.',
@@ -319,6 +323,21 @@ return [
                 'label' => 'product order',
                 'string' => 'The product order must be text.',
                 'enum' => 'Product order must be most_purchased or highest_rated.',
+            ],
+        ],
+        'favorite_toggle' => [
+            'type' => [
+                'label' => 'favorite type',
+                'required' => 'Choose whether this favorite is a product or a store.',
+                'string' => 'The favorite type must be text.',
+                'enum' => 'Favorite type must be product or store.',
+            ],
+            'favoriteable_id' => [
+                'label' => 'item ID',
+                'required' => 'The item ID is required.',
+                'integer' => 'The item ID must be an integer.',
+                'min' => 'The item ID must be greater than zero.',
+                'exists' => 'The selected product or store was not found.',
             ],
         ],
         'store_ads' => [

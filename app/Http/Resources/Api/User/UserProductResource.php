@@ -26,6 +26,7 @@ class UserProductResource extends JsonResource
             'original_price' => $this->original_price,
             'discount_percentage' => $this->discount_percentage,
             'image' => $media?->path ? get_file($media->path) : null,
+            'is_favorite' => (bool) ($this->is_favorite ?? false),
             'average_rating' => $this->average_rating === null ? null : round((float) $this->average_rating, 2),
             'reviews_count' => (int) ($this->reviews_count ?? 0),
             'units_sold' => (int) ($this->units_sold ?? 0),

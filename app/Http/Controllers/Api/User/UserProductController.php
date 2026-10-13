@@ -18,7 +18,7 @@ class UserProductController extends Controller
 
         return generalReturn(
             $request,
-            $this->service->list($filters, app()->getLocale()),
+            $this->service->list($filters, app()->getLocale(), (int) auth('api')->id()),
             UserProductResource::class,
             __('messages.user_products.listed'),
         );

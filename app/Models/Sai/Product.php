@@ -3,6 +3,7 @@
 namespace App\Models\Sai;
 
 use App\Enums\ProductStatusEnum;
+use App\Enums\FavoriteTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -64,5 +65,10 @@ class Product extends Model
     public function features(): HasMany
     {
         return $this->hasMany(ProductFeature::class)->orderBy('id');
+    }
+
+    public function favorites(): HasMany
+    {
+        return $this->hasMany(Favorite::class, 'favoriteable_id')->where('type', FavoriteTypeEnum::Product);
     }
 }
