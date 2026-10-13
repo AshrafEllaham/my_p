@@ -18,7 +18,6 @@ class CategoryLookupResource extends JsonResource
 
         return [
             'id' => $this->id,
-            'parent_id' => $this->parent_id,
             'name' => $translation?->name,
             'description' => $translation?->description,
             'image' => $this->image ? get_file($this->image) : null,

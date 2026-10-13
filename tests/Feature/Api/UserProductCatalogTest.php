@@ -1,0 +1,178 @@
+<?php
+
+namespace Tests\Feature\Api;
+
+use App\Enums\AccountTypeEnum;
+use App\Enums\OrderStatusEnum;
+use App\Enums\PaymentStatusEnum;
+use App\Enums\ProductStatusEnum;
+use App\Enums\UserStatusEnum;
+use App\Models\Sai\Category;
+use App\Models\Sai\Order;
+use App\Models\Sai\OrderItem;
+use App\Models\Sai\Product;
+use App\Models\Sai\Review;
+use App\Models\Sai\StorePolicyVersion;
+use Database\Factories\UserFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
+use Tests\TestCase;
+
+class UserProductCatalogTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_user_can_filter_category_products_and_get_independently_sorted_paginated_lists(): void
+    {
+        [$store, $customer, $policy] = $this->createStoreAndCustomer();
+        $mainCategory = Category::factory()->create();
+        $otherMainCategory = Category::factory()->create();
+        $shirts = Category::factory()->subcategory($mainCategory)->create();
+        $shoes = Category::factory()->subcategory($mainCategory)->create();
+        $otherCategory = Category::factory()->subcategory($otherMainCategory)->create();
+        $mostPurchased = $this->createProduct($store->id, $shirts->id, 'Cotton shirt');
+        $highestRated = $this->createProduct($store->id, $shoes->id, 'Running shoes');
+        $outsideMainCategory = $this->createProduct($store->id, $otherCategory->id, 'Leather bag');
+
+        $this->recordSale($store->id, $customer->id, $policy->id, $mostPurchased, 5);
+        $this->recordSale($store->id, $customer->id, $policy->id, $mostPurchased, 100, OrderStatusEnum::Cancelled);
+        $this->recordSale($store->id, $customer->id, $policy->id, $highestRated, 2);
+        $this->recordSale($store->id, $customer->id, $policy->id, $outsideMainCategory, 20);
+        $this->recordReview($store->id, $customer->id, $policy->id, $mostPurchased, 4);
+        $this->recordReview($store->id, $customer->id, $policy->id, $highestRated, 5);
+
+        $this->getJson('/api/user/products?main_category_id='.$mainCategory->id.'&sort=most_purchased&pagination=on&limit_per_page=1&page=1')
+            ->assertOk()
+            ->assertJsonPath('total', 2)
+            ->assertJsonPath('data.0.id', $mostPurchased->id)
+            ->assertJsonPath('data.0.units_sold', 5);
+
+        $this->getJson('/api/user/products?main_category_id='.$mainCategory->id.'&sort=most_purchased&pagination=on&limit_per_page=1&page=2')
+            ->assertOk()
+            ->assertJsonPath('data.0.id', $highestRated->id);
+
+        $this->getJson('/api/user/products?main_category_id='.$mainCategory->id.'&sort=highest_rated&pagination=on&limit_per_page=10')
+            ->assertOk()
+            ->assertJsonPath('data.0.id', $highestRated->id)
+            ->assertJsonPath('data.0.average_rating', 5);
+
+        $this->getJson('/api/user/products?main_category_id='.$mainCategory->id.'&sub_category_id='.$shirts->id.'&search=cotton')
+            ->assertOk()
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.id', $mostPurchased->id);
+    }
+
+    public function test_user_product_filters_have_localized_validation_messages(): void
+    {
+        $mainCategory = Category::factory()->create();
+        $otherMainCategory = Category::factory()->create();
+        $subcategory = Category::factory()->subcategory($otherMainCategory)->create();
+
+        $this->withHeader('Accept-Language', 'en')
+            ->getJson('/api/user/products?main_category_id='.$mainCategory->id.'&sub_category_id='.$subcategory->id)
+            ->assertUnprocessable()
+            ->assertJsonPath('message', 'The selected active subcategory was not found or does not belong to the selected main category.');
+
+        $this->withHeader('Accept-Language', 'ar')
+            ->getJson('/api/user/products?sort=top_rated')
+            ->assertUnprocessable()
+            ->assertJsonPath('message', 'ترتيب المنتجات يجب أن يكون most_purchased أو highest_rated.');
+    }
+
+    public function test_category_detail_preview_uses_products_endpoint_for_both_lists(): void
+    {
+        $preview = file_get_contents(base_path('Figma/screens/24-category-details.html'));
+
+        $this->assertIsString($preview);
+        $this->assertStringContainsString('products?${params}', $preview);
+        $this->assertStringContainsString('sort,', $preview);
+        $this->assertStringContainsString('main_category_id', $preview);
+        $this->assertStringContainsString('data-show-more=', $preview);
+    }
+
+    private function createStoreAndCustomer(): array
+    {
+        $store = UserFactory::new()->create([
+            'account_type' => AccountTypeEnum::Store,
+            'status' => UserStatusEnum::Active,
+        ]);
+        $customer = UserFactory::new()->create([
+            'account_type' => AccountTypeEnum::User,
+            'status' => UserStatusEnum::Active,
+        ]);
+        $policy = StorePolicyVersion::query()->create([
+            'store_id' => $store->id,
+            'version' => 1,
+            'effective_at' => now(),
+        ]);
+
+        return [$store, $customer, $policy];
+    }
+
+    private function createProduct(int $storeId, int $categoryId, string $name): Product
+    {
+        return Product::query()->create([
+            'store_id' => $storeId,
+            'category_id' => $categoryId,
+            'name' => $name,
+            'description' => $name,
+            'slug' => Str::slug($name).'-'.Str::random(6),
+            'status' => ProductStatusEnum::Published,
+            'price' => 100,
+            'stock_quantity' => 3,
+            'published_at' => now(),
+        ]);
+    }
+
+    private function recordSale(
+        int $storeId,
+        int $customerId,
+        int $policyId,
+        Product $product,
+        int $quantity,
+        OrderStatusEnum $status = OrderStatusEnum::Completed,
+    ): void {
+        $order = $this->createOrder($storeId, $customerId, $policyId, $status);
+        OrderItem::query()->create([
+            'order_id' => $order->id,
+            'product_id' => $product->id,
+            'product_name' => $product->name,
+            'unit_price' => $product->price,
+            'quantity' => $quantity,
+            'line_total' => $product->price * $quantity,
+        ]);
+    }
+
+    private function recordReview(int $storeId, int $customerId, int $policyId, Product $product, int $rating): void
+    {
+        $order = $this->createOrder($storeId, $customerId, $policyId);
+        Review::query()->create([
+            'order_id' => $order->id,
+            'user_id' => $customerId,
+            'store_id' => $storeId,
+            'product_id' => $product->id,
+            'rating' => $rating,
+            'is_visible' => true,
+        ]);
+    }
+
+    private function createOrder(
+        int $storeId,
+        int $customerId,
+        int $policyId,
+        OrderStatusEnum $status = OrderStatusEnum::Completed,
+    ): Order {
+        return Order::query()->create([
+            'public_id' => (string) Str::uuid(),
+            'number' => 'ORDER-'.Str::upper(Str::random(8)),
+            'user_id' => $customerId,
+            'store_id' => $storeId,
+            'store_policy_version_id' => $policyId,
+            'status' => $status,
+            'payment_status' => PaymentStatusEnum::Paid,
+            'subtotal' => 100,
+            'total_amount' => 100,
+            'policy_snapshot' => [],
+        ]);
+    }
+}

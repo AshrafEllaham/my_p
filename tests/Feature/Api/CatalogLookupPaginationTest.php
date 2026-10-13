@@ -45,7 +45,7 @@ class CatalogLookupPaginationTest extends TestCase
     {
         $main = Category::factory()->create();
         $otherMain = Category::factory()->create();
-        Category::factory()->subcategory($main)->create(['sort_order' => 1, 'ar' => ['name' => 'فرعي أول']]);
+        $firstSubcategory = Category::factory()->subcategory($main)->create(['sort_order' => 1, 'ar' => ['name' => 'فرعي أول']]);
         Category::factory()->subcategory($main)->create(['sort_order' => 2, 'ar' => ['name' => 'فرعي ثان']]);
         Category::factory()->subcategory($otherMain)->create();
 
@@ -54,7 +54,7 @@ class CatalogLookupPaginationTest extends TestCase
             ->assertJsonPath('total', 2)
             ->assertJsonPath('last_page', 2)
             ->assertJsonCount(1, 'data')
-            ->assertJsonPath('data.0.parent_id', $main->id);
+            ->assertJsonPath('data.0.id', $firstSubcategory->id);
     }
 
     public function test_countries_are_paginated(): void

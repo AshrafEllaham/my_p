@@ -21,9 +21,11 @@ class CatalogLookupController extends Controller
 
     public function mainCategories(ListMainCategoriesRequest $request): JsonResponse
     {
+        $data = $request->validated();
+
         return generalReturn(
             $request,
-            $this->service->mainCategories(app()->getLocale()),
+            $this->service->mainCategories(app()->getLocale(), $data['search'] ?? null),
             CategoryLookupResource::class,
             __('messages.catalog.main_categories_listed'),
         );

@@ -17,9 +17,9 @@ class CatalogLookupService
         private readonly CityLookupRepository $cities,
     ) {}
 
-    public function mainCategories(string $locale): Builder
+    public function mainCategories(string $locale, ?string $search = null): Builder
     {
-        return $this->categories->mainCategories($locale);
+        return $this->categories->mainCategories($locale, $search);
     }
 
     public function subCategories(string $locale, ?int $mainCategoryId): Builder

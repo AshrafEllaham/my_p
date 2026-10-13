@@ -13,9 +13,16 @@ class CategoryLookupRepository extends MainRepository
         $this->model = $model;
     }
 
-    public function mainCategories(string $locale): Builder
+    public function mainCategories(string $locale, ?string $search = null): Builder
     {
-        return $this->baseQuery($locale)->whereNull('parent_id');
+        return $this->baseQuery($locale)
+            ->whereNull('parent_id')
+            ->when($search !== null && $search !== '', fn (Builder $query) => $query->whereHas(
+                'translations',
+                fn (Builder $translations) => $translations
+                    ->where('locale', $locale)
+                    ->where('name', 'like', '%'.$search.'%'),
+            ));
     }
 
     public function subCategories(string $locale, ?int $mainCategoryId): Builder

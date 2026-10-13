@@ -55,6 +55,9 @@ return [
         'visibility_toggled' => 'The product visibility was updated successfully.',
         'deleted' => 'The product was deleted successfully.',
     ],
+    'user_products' => [
+        'listed' => 'Products were retrieved successfully.',
+    ],
     'ads' => [
         'listed' => 'Store ads were retrieved successfully.',
         'retrieved' => 'Ad details were retrieved successfully.',
@@ -247,8 +250,14 @@ return [
                 'integer' => 'The page number must be an integer.',
                 'min' => 'The page number must be at least 1.',
             ],
+            'search' => [
+                'label' => 'main category search',
+                'string' => 'The main category search must be text.',
+                'max' => 'The search text must not exceed 120 characters.',
+            ],
             'main_category_id' => [
                 'label' => 'main category ID',
+                'required' => 'The main category ID is required.',
                 'integer' => 'The main category ID must be an integer.',
                 'exists' => 'The selected active main category was not found.',
             ],
@@ -288,6 +297,28 @@ return [
                 'label' => 'stock status',
                 'string' => 'The stock status must be text.',
                 'enum' => 'The selected stock status is unavailable.',
+            ],
+        ],
+        'user_product_filters' => [
+            'main_category_id' => [
+                'label' => 'main category',
+                'integer' => 'The main category ID must be an integer.',
+                'exists' => 'The selected active main category was not found.',
+            ],
+            'sub_category_id' => [
+                'label' => 'subcategory',
+                'integer' => 'The subcategory ID must be an integer.',
+                'exists' => 'The selected active subcategory was not found or does not belong to the selected main category.',
+            ],
+            'search' => [
+                'label' => 'product search',
+                'string' => 'The product search must be text.',
+                'max' => 'The search text must not exceed 120 characters.',
+            ],
+            'sort' => [
+                'label' => 'product order',
+                'string' => 'The product order must be text.',
+                'enum' => 'Product order must be most_purchased or highest_rated.',
             ],
         ],
         'store_ads' => [

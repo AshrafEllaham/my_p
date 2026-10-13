@@ -98,6 +98,20 @@
       padding: 4px 10px;
       border-radius: 20px;
     }
+    .cat-section .cat-show-more {
+      border: 0;
+      cursor: pointer;
+      font: inherit;
+      font-size: 11px;
+      font-weight: 800;
+      color: #000;
+      background: #F2F2F2;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+    .cat-section .cat-show-more:disabled { opacity: .55; cursor: wait; }
+    .cat-products-message { min-height: 0; margin: 0; padding: 0 14px; color: #64748B; font-size: 12px; }
+    .cat-products-message:not(:empty) { margin: 0 14px; padding: 10px 12px; border: 1px dashed #E1E8F1; border-radius: 12px; background: #fff; }
 
     /* ── Most purchased ── */
     .cat-products-scroll {
@@ -181,42 +195,6 @@
     .cat-rated-card-body .cat-rated-price { font-size: 12px; font-weight: 900; }
     .cat-rated-card-body .cat-rated-stars { font-size: 10px; color: #F59E0B; font-weight: 700; }
 
-    /* ── Stores list ── */
-    .cat-stores-list { padding: 0 14px; display: flex; flex-direction: column; gap: 8px; }
-    .cat-store-card {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: #fff;
-      border: 1px solid #E1E8F1;
-      border-radius: 14px;
-      padding: 12px;
-      text-decoration: none;
-      color: #0F172A;
-    }
-    .cat-store-img {
-      width: 50px;
-      height: 50px;
-      border-radius: 12px;
-      object-fit: cover;
-      flex-shrink: 0;
-    }
-    .cat-store-info { flex: 1; min-width: 0; }
-    .cat-store-info strong { display: block; font-size: 13px; font-weight: 800; }
-    .cat-store-info small  { font-size: 11px; color: #64748B; margin-top: 2px; display: block; }
-    .cat-store-info .cat-store-meta { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
-    .cat-store-info .cat-store-rating { font-size: 11px; color: #F59E0B; font-weight: 700; }
-    .cat-store-info .cat-store-badge {
-      font-size: 9px;
-      font-weight: 700;
-      background: #ECFDF5;
-      color: #059669;
-      padding: 2px 7px;
-      border-radius: 6px;
-    }
-    .cat-store-arrow { color: #CBD5E1; }
-    .cat-store-arrow svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-
     /* ── Sub-categories chips ── */
     .cat-chips-wrap {
       display: flex;
@@ -274,7 +252,7 @@
     </header>
 
     <!-- Sub-category chips -->
-    <div class="cat-chips-wrap">
+    <div class="cat-chips-wrap" id="categorySubcategories" aria-label="الأقسام الفرعية">
       <button class="cat-chip active" type="button">الكل</button>
       <button class="cat-chip" type="button">ملابس رجالي</button>
       <button class="cat-chip" type="button">ملابس حريمي</button>
@@ -322,9 +300,10 @@
     <!-- Most Purchased -->
     <div class="cat-section">
       <h2>الأكثر شراءً</h2>
-      <a href="10-featured-products.html">عرض الكل</a>
+      <button class="cat-show-more" type="button" data-show-more="most_purchased">عرض الكل</button>
     </div>
-    <div class="cat-products-scroll">
+    <p class="cat-products-message" id="mostPurchasedMessage" role="status" aria-live="polite"></p>
+    <div class="cat-products-scroll" id="mostPurchasedProducts">
       <a class="cat-product-card" data-search="جاكيت جلد" href="12-product-details.html">
         <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=350&q=85" alt="جاكيت">
         <div class="cat-product-card-body">
@@ -374,9 +353,10 @@
     <!-- Top Rated -->
     <div class="cat-section">
       <h2>الأعلى تقييمًا</h2>
-      <a href="10-featured-products.html">عرض الكل</a>
+      <button class="cat-show-more" type="button" data-show-more="highest_rated">عرض الكل</button>
     </div>
-    <div class="cat-rated-grid">
+    <p class="cat-products-message" id="highestRatedMessage" role="status" aria-live="polite"></p>
+    <div class="cat-rated-grid" id="highestRatedProducts">
       <a class="cat-rated-card" data-search="فستان أنيق" href="12-product-details.html">
         <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=350&q=85" alt="فستان">
         <div class="cat-rated-card-body">
@@ -419,50 +399,6 @@
       </a>
     </div>
 
-    <!-- Stores in category -->
-    <div class="cat-section">
-      <h2>موزعو القسم</h2>
-      <a href="11-featured-stores.html">عرض الكل</a>
-    </div>
-    <div class="cat-stores-list">
-      <a class="cat-store-card" href="19-store-details.html">
-        <img class="cat-store-img" src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=220&q=85" alt="النجم الساطع">
-        <div class="cat-store-info">
-          <strong>النجم الساطع</strong>
-          <small>أزياء وملابس رجالي وحريمي</small>
-          <div class="cat-store-meta">
-            <span class="cat-store-rating">★ ٤.٩</span>
-            <span class="cat-store-badge">موثّق</span>
-          </div>
-        </div>
-        <span class="cat-store-arrow"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></span>
-      </a>
-      <a class="cat-store-card" href="19-store-details.html">
-        <img class="cat-store-img" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=220&q=85" alt="ميدان ستور">
-        <div class="cat-store-info">
-          <strong>ميدان ستور</strong>
-          <small>أحذية رياضية وكلاسيكية</small>
-          <div class="cat-store-meta">
-            <span class="cat-store-rating">★ ٤.٧</span>
-            <span class="cat-store-badge">موثّق</span>
-          </div>
-        </div>
-        <span class="cat-store-arrow"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></span>
-      </a>
-      <a class="cat-store-card" href="19-store-details.html">
-        <img class="cat-store-img" src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=220&q=85" alt="نقطة ستور">
-        <div class="cat-store-info">
-          <strong>نقطة ستور</strong>
-          <small>فساتين وأزياء حريمي</small>
-          <div class="cat-store-meta">
-            <span class="cat-store-rating">★ ٤.٨</span>
-            <span class="cat-store-badge">موثّق</span>
-          </div>
-        </div>
-        <span class="cat-store-arrow"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></span>
-      </a>
-    </div>
-
     <div class="cat-bottom-spacer"></div>
   </main>
 
@@ -487,25 +423,159 @@
   </nav>
 
   <script>
-    const categoryTitle = new URLSearchParams(location.search).get('category') || 'أزياء وملابس';
-    document.getElementById('categoryTitle').textContent = categoryTitle;
+    const categoryParams = new URLSearchParams(location.search);
+    const mainCategoryId = categoryParams.get('main_category_id') || categoryParams.get('category_id');
+    const categoryTitle = categoryParams.get('category') || 'أزياء وملابس';
+    const categoryTitleNode = document.getElementById('categoryTitle');
+    const chipsContainer = document.getElementById('categorySubcategories');
+    const searchInput = document.getElementById('categoryProductSearch');
+    const apiOrigin = location.protocol === 'file:'
+      ? 'http://127.0.0.1:8000'
+      : location.hostname === 'localhost' || location.hostname === '127.0.0.1'
+        ? `${location.protocol}//${location.hostname}:8000`
+        : location.origin;
+    const apiBase = new URL('/api/user', apiOrigin).toString().replace(/\/$/, '');
+    const sections = {
+      most_purchased: { container: document.getElementById('mostPurchasedProducts'), message: document.getElementById('mostPurchasedMessage'), page: 1, lastPage: 1, loading: false, requestId: 0 },
+      highest_rated: { container: document.getElementById('highestRatedProducts'), message: document.getElementById('highestRatedMessage'), page: 1, lastPage: 1, loading: false, requestId: 0 }
+    };
+    let selectedSubcategoryId = categoryParams.get('sub_category_id') || '';
+    let searchTimer;
+    categoryTitleNode.textContent = categoryTitle;
 
-    // Search filter
-    const input = document.getElementById('categoryProductSearch');
-    input.oninput = () => {
-      const q = input.value.trim().toLowerCase();
-      document.querySelectorAll('[data-search]').forEach(item => {
-        item.hidden = q && !item.dataset.search.toLowerCase().includes(q);
+    const request = async (path, signal) => {
+      const response = await fetch(`${apiBase}/${path}`, { signal, headers: { Accept: 'application/json', 'Accept-Language': 'ar' } });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || 'تعذر تحميل المنتجات.');
+      return result;
+    };
+    const setMessage = (section, message) => { section.message.textContent = message || ''; };
+    const createProductCard = (product, sort) => {
+      const card = document.createElement('a');
+      card.href = `12-product-details.html?product_id=${encodeURIComponent(product.id)}`;
+      card.className = sort === 'most_purchased' ? 'cat-product-card' : 'cat-rated-card';
+      const image = document.createElement('img');
+      image.src = product.image || '';
+      image.alt = product.name || '';
+      image.hidden = !product.image;
+      card.append(image);
+      const body = document.createElement('div');
+      body.className = sort === 'most_purchased' ? 'cat-product-card-body' : 'cat-rated-card-body';
+      const name = document.createElement('strong');
+      name.textContent = product.name || '';
+      body.append(name);
+      const meta = document.createElement('div');
+      meta.className = sort === 'most_purchased' ? 'cat-product-meta' : 'cat-rated-meta';
+      const price = document.createElement('span');
+      price.className = sort === 'most_purchased' ? 'cat-product-price' : 'cat-rated-price';
+      price.textContent = `${Number(product.price || 0).toLocaleString('ar-EG')} ج.م`;
+      const rating = document.createElement('span');
+      rating.className = sort === 'most_purchased' ? 'cat-product-rating' : 'cat-rated-stars';
+      rating.textContent = product.average_rating == null ? '★ —' : `★ ${Number(product.average_rating).toLocaleString('ar-EG', { maximumFractionDigits: 1 })}`;
+      meta.append(price, rating);
+      body.append(meta);
+      if (sort === 'most_purchased') {
+        const sold = document.createElement('span');
+        sold.className = 'cat-product-sold-badge';
+        sold.textContent = `${Number(product.units_sold || 0).toLocaleString('ar-EG')} مبيعة`;
+        body.append(sold);
+      }
+      card.append(body);
+      return card;
+    };
+    const loadSection = async (sort, reset = false) => {
+      const section = sections[sort];
+      if (section.loading) return;
+      if (reset) {
+        section.requestId++;
+        section.page = 1;
+        section.lastPage = 1;
+        section.container.replaceChildren();
+      }
+      const page = section.page;
+      const requestId = section.requestId;
+      section.loading = true;
+      const moreButton = document.querySelector(`[data-show-more="${sort}"]`);
+      moreButton.disabled = true;
+      setMessage(section, page === 1 ? 'جارٍ تحميل المنتجات…' : 'جارٍ تحميل المزيد…');
+      const params = new URLSearchParams({
+        sort,
+        pagination: 'on',
+        limit_per_page: '4',
+        page: String(page)
+      });
+      if (mainCategoryId) params.set('main_category_id', mainCategoryId);
+      if (selectedSubcategoryId) params.set('sub_category_id', selectedSubcategoryId);
+      if (searchInput.value.trim()) params.set('search', searchInput.value.trim());
+      try {
+        const result = await request(`products?${params}`);
+        if (requestId !== section.requestId) return;
+        const products = result.data || [];
+        products.forEach(product => section.container.append(createProductCard(product, sort)));
+        section.page = Number(result.current_page || page) + 1;
+        section.lastPage = Number(result.last_page || 1);
+        setMessage(section, products.length ? '' : (page === 1 ? 'لا توجد منتجات مطابقة.' : 'لا توجد منتجات أخرى.'));
+        moreButton.hidden = section.page > section.lastPage;
+      } catch (error) {
+        if (requestId !== section.requestId) return;
+        setMessage(section, error.message || 'تعذر تحميل المنتجات.');
+        moreButton.textContent = 'إعادة المحاولة';
+        moreButton.hidden = false;
+      } finally {
+        if (requestId === section.requestId) {
+          section.loading = false;
+          moreButton.disabled = false;
+        }
+      }
+    };
+    const loadProducts = () => {
+      Object.entries(sections).forEach(([sort, section]) => {
+        const moreButton = document.querySelector(`[data-show-more="${sort}"]`);
+        moreButton.hidden = true;
+        moreButton.textContent = 'عرض الكل';
+        section.loading = false;
+        loadSection(sort, true);
       });
     };
-
-    // Sub-category chips
-    document.querySelectorAll('.cat-chip').forEach(chip => {
-      chip.addEventListener('click', () => {
-        document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
-      });
+    const renderChips = async () => {
+      chipsContainer.replaceChildren();
+      const addChip = (id, name) => {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = `cat-chip${String(id || '') === String(selectedSubcategoryId) ? ' active' : ''}`;
+        chip.dataset.subcategoryId = id || '';
+        chip.textContent = name;
+        chipsContainer.append(chip);
+      };
+      addChip('', 'الكل');
+      try {
+        const result = await request(`sub-categories?main_category_id=${encodeURIComponent(mainCategoryId)}`);
+        (result.data || []).forEach(category => addChip(category.id, category.name || ''));
+      } catch (error) {
+        const message = document.createElement('span');
+        message.className = 'cat-products-message';
+        message.textContent = error.message || 'تعذر تحميل الأقسام الفرعية.';
+        chipsContainer.append(message);
+      }
+    };
+    chipsContainer.addEventListener('click', event => {
+      const chip = event.target.closest('[data-subcategory-id]');
+      if (!chip) return;
+      selectedSubcategoryId = chip.dataset.subcategoryId;
+      chipsContainer.querySelectorAll('.cat-chip').forEach(item => item.classList.toggle('active', item === chip));
+      loadProducts();
     });
+    document.querySelectorAll('[data-show-more]').forEach(button => button.addEventListener('click', () => {
+      const sort = button.dataset.showMore;
+      loadSection(sort, button.textContent.includes('إعادة'));
+      button.textContent = 'عرض الكل';
+    }));
+    searchInput.addEventListener('input', () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(loadProducts, 250);
+    });
+    renderChips();
+    loadProducts();
   </script>
   <script src="sponsored-ads.js"></script>
   <script src="user-experience.js"></script>

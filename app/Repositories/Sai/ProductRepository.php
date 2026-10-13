@@ -7,6 +7,8 @@ use App\Enums\OrderStatusEnum;
 use App\Enums\ProductOrderByEnum;
 use App\Enums\ProductStatusEnum;
 use App\Enums\ProductStockFilterEnum;
+use App\Enums\UserProductSortEnum;
+use App\Enums\UserStatusEnum;
 use App\Models\Sai\AdDailyMetric;
 use App\Models\Sai\OrderItem;
 use App\Models\Sai\Product;
@@ -34,21 +36,33 @@ class ProductRepository extends MainRepository
         $query = $this->query()
             ->where('store_id', $storeId)
             ->select([
-                'id', 'store_id', 'category_id', 'name', 'description', 'sku', 'slug',
-                'status', 'price', 'original_price', 'discount_percentage', 'discount_ends_at',
-                'stock_quantity', 'low_stock_threshold', 'published_at',
+                'id',
+                'store_id',
+                'category_id',
+                'name',
+                'description',
+                'sku',
+                'slug',
+                'status',
+                'price',
+                'original_price',
+                'discount_percentage',
+                'discount_ends_at',
+                'stock_quantity',
+                'low_stock_threshold',
+                'published_at',
             ])
             ->with([
                 'media:id,product_id,type,path,is_primary',
                 'features:id,product_id,name',
-                'category' => fn ($categoryQuery) => $categoryQuery
+                'category' => fn($categoryQuery) => $categoryQuery
                     ->select(['id', 'parent_id'])
-                    ->with(['translations' => fn ($translationQuery) => $translationQuery
+                    ->with(['translations' => fn($translationQuery) => $translationQuery
                         ->select(['id', 'category_id', 'locale', 'name'])
                         ->where('locale', $locale)]),
             ])
-            ->when(isset($filters['status']), fn (Builder $builder) => $builder->where('status', $filters['status']))
-            ->when(isset($filters['category_id']), fn (Builder $builder) => $builder->where('category_id', $filters['category_id']))
+            ->when(isset($filters['status']), fn(Builder $builder) => $builder->where('status', $filters['status']))
+            ->when(isset($filters['category_id']), fn(Builder $builder) => $builder->where('category_id', $filters['category_id']))
             ->when(isset($filters['search']), function (Builder $builder) use ($filters, $locale): void {
                 $search = trim($filters['search']);
                 if ($search === '') {
@@ -56,10 +70,10 @@ class ProductRepository extends MainRepository
                 }
 
                 $builder->where(function (Builder $searchQuery) use ($search, $locale): void {
-                    $searchQuery->where('name', 'like', '%'.$search.'%')
-                        ->orWhereHas('category.translations', fn (Builder $translationQuery) => $translationQuery
+                    $searchQuery->where('name', 'like', '%' . $search . '%')
+                        ->orWhereHas('category.translations', fn(Builder $translationQuery) => $translationQuery
                             ->where('locale', $locale)
-                            ->where('name', 'like', '%'.$search.'%'));
+                            ->where('name', 'like', '%' . $search . '%'));
                 });
             })
             ->when(isset($filters['stock_status']), function (Builder $builder) use ($filters): void {
@@ -97,6 +111,80 @@ class ProductRepository extends MainRepository
         return $query->orderByDesc('created_at')->orderByDesc('id');
     }
 
+    /** @param array<string, mixed> $filters */
+    public function listForUserCatalog(array $filters, string $locale): Builder
+    {
+        $query = $this->query()
+            ->select([
+                'id',
+                'category_id',
+                'name',
+                'price',
+                'original_price',
+                'discount_percentage',
+                'created_at',
+            ])
+            ->where('products.status', ProductStatusEnum::Published)
+            ->where('products.stock_quantity', '>', 0)
+            ->whereHas('store', fn(Builder $storeQuery) => $storeQuery
+                ->where('account_type', AccountTypeEnum::Store)
+                ->where('status', UserStatusEnum::Active))
+            ->whereHas('category', fn(Builder $categoryQuery) => $categoryQuery
+                ->where('is_active', true)
+                ->where(function (Builder $categoryTreeQuery): void {
+                    $categoryTreeQuery->whereNull('parent_id')
+                        ->orWhereHas('parent', fn(Builder $parentQuery) => $parentQuery->where('is_active', true));
+                }))
+            ->with([
+                'media' => fn($mediaQuery) => $mediaQuery
+                    ->select(['id', 'product_id', 'type', 'path', 'is_primary'])
+                    ->orderByDesc('is_primary')
+                    ->orderBy('id'),
+                'category' => fn($categoryQuery) => $categoryQuery
+                    ->select(['id', 'parent_id'])
+                    ->with(['translations' => fn($translationQuery) => $translationQuery
+                        ->select(['id', 'category_id', 'locale', 'name'])
+                        ->where('locale', $locale)]),
+            ])
+            ->when(isset($filters['main_category_id']) && ! isset($filters['sub_category_id']), function (Builder $builder) use ($filters): void {
+                $mainCategoryId = (int) $filters['main_category_id'];
+                $builder->whereHas('category', fn(Builder $categoryQuery) => $categoryQuery
+                    ->where(function (Builder $categoryIds) use ($mainCategoryId): void {
+                        $categoryIds->whereKey($mainCategoryId)->orWhere('parent_id', $mainCategoryId);
+                    }));
+            })
+            ->when(isset($filters['sub_category_id']), fn(Builder $builder) => $builder->where('products.category_id', (int) $filters['sub_category_id']))
+            ->when(isset($filters['search']) && trim((string) $filters['search']) !== '', fn(Builder $builder) => $builder->where('products.name', 'like', '%' . trim((string) $filters['search']) . '%'))
+            ->addSelect([
+                'average_rating' => Review::query()
+                    ->selectRaw('AVG(reviews.rating)')
+                    ->whereColumn('reviews.product_id', 'products.id')
+                    ->where('reviews.is_visible', true),
+                'reviews_count' => Review::query()
+                    ->selectRaw('COUNT(*)')
+                    ->whereColumn('reviews.product_id', 'products.id')
+                    ->where('reviews.is_visible', true),
+                'units_sold' => OrderItem::query()
+                    ->selectRaw('COALESCE(SUM(order_items.quantity), 0)')
+                    ->join('orders', 'orders.id', '=', 'order_items.order_id')
+                    ->whereColumn('order_items.product_id', 'products.id')
+                    ->where('orders.status', OrderStatusEnum::Completed->value),
+            ]);
+
+        if (($filters['sort'] ?? UserProductSortEnum::MostPurchased->value) === UserProductSortEnum::HighestRated->value) {
+            $query->whereExists(fn($reviews) => $reviews->selectRaw('1')
+                ->from('reviews')
+                ->whereColumn('reviews.product_id', 'products.id')
+                ->where('reviews.is_visible', true))
+                ->orderByDesc('average_rating')
+                ->orderByDesc('reviews_count');
+        } else {
+            $query->orderByDesc('units_sold');
+        }
+
+        return $query->orderByDesc('products.created_at')->orderByDesc('products.id');
+    }
+
     public function findDetailsForStore(int|string $productId, int $storeId, string $locale): Model
     {
         return $this->query()
@@ -104,9 +192,9 @@ class ProductRepository extends MainRepository
             ->with([
                 'media:id,product_id,type,path,is_primary',
                 'features:id,product_id,name',
-                'category' => fn ($categoryQuery) => $categoryQuery
+                'category' => fn($categoryQuery) => $categoryQuery
                     ->select(['id', 'parent_id'])
-                    ->with(['translations' => fn ($translationQuery) => $translationQuery
+                    ->with(['translations' => fn($translationQuery) => $translationQuery
                         ->select(['id', 'category_id', 'locale', 'name'])
                         ->where('locale', $locale)]),
             ])
@@ -177,10 +265,10 @@ class ProductRepository extends MainRepository
             ->selectRaw('rating, COUNT(*) AS total')
             ->groupBy('rating')
             ->get()
-            ->mapWithKeys(fn ($row) => [(int) $row->rating => (int) $row->total])
+            ->mapWithKeys(fn($row) => [(int) $row->rating => (int) $row->total])
             ->all();
         $ratingDistribution = array_map(
-            fn (int $rating): array => ['rating' => $rating, 'total' => $ratingDistribution[$rating] ?? 0],
+            fn(int $rating): array => ['rating' => $rating, 'total' => $ratingDistribution[$rating] ?? 0],
             range(1, 5),
         );
 

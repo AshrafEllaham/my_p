@@ -111,6 +111,35 @@ body.saey-catalog {
   font-size: 9px;
 }
 
+.catalog-category-name {
+  max-width: calc(100% - 8px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.catalog-more {
+  display: block;
+  min-height: 40px;
+  margin: 14px auto 0;
+  padding: 0 18px;
+  border: 1px solid #e3eaf3;
+  border-radius: 12px;
+  background: #fff;
+  color: #0f172a;
+  font: 800 11px 'Cairo', sans-serif;
+  cursor: pointer;
+}
+
+.catalog-more[hidden] {
+  display: none;
+}
+
+.catalog-more:disabled {
+  opacity: .6;
+  cursor: wait;
+}
+
 .search-with-filter {
   gap: 8px;
   margin-bottom: 12px;

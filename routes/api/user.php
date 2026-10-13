@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\User\UserHomeCategoryController;
+use App\Http\Controllers\Api\User\UserProductController;
 use App\Http\Controllers\Api\User\UserProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -8,16 +10,27 @@ use Illuminate\Support\Facades\Route;
  */
 Route::group([], function () {
 
+
     // -------------------------------------------------------
     // مسارات عامة (لا تتطلب تسجيل دخول)
     // -------------------------------------------------------
-    Route::group([], function () {});
+    Route::group([], function () {
+        // يعرض الأقسام الرئيسية النشطة للمستخدم مع البحث والترقيم.
+        Route::get('/main-categories', [UserHomeCategoryController::class, 'index'])->middleware('throttle:60,1');
 
-    // -------------------------------------------------------
+        // يعرض الأقسام الفرعية النشطة التابعة لقسم رئيسي للمستخدم.
+        Route::get('/sub-categories', [UserHomeCategoryController::class, 'subCategories'])->middleware('throttle:60,1');
+
+    });
+
+
     // مسارات محمية (تتطلب تسجيل الدخول)
-    // -------------------------------------------------------
     Route::group(['middleware' => ['auth:api', 'throttle:60,1']], function () {
         // يحدّث بيانات الملف الشخصي للمستخدم.
         Route::post('/profile', [UserProfileController::class, 'update']);
+
+        // يعرض المنتجات المنشورة مع فلاتر الأقسام والبحث والترتيب.
+        Route::get('/products', [UserProductController::class, 'index'])->middleware('throttle:60,1');
+
     });
 });
