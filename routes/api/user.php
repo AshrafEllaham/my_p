@@ -28,7 +28,7 @@ Route::group([], function () {
         // يحدّث بيانات الملف الشخصي للمستخدم.
         Route::post('/profile', [UserProfileController::class, 'update']);
 
-        // يعرض المنتجات المنشورة مع فلاتر الأقسام والبحث والترتيب.
+        // يعرض المنتجات المنشورة مع فلاتر الأقسام والمحافظة والبحث والترتيب.
         Route::get('/products', [UserProductController::class, 'index'])->middleware('throttle:60,1');
 
         // يبدل حالة منتج أو متجر في مفضلة المستخدم الحالي.

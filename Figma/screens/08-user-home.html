@@ -145,32 +145,25 @@
 
       <p class="home-filter-label">القسم</p>
       <div class="home-filter-scroller" role="group" aria-label="اختيار القسم">
-        <button class="home-filter-chip selected" type="button">الكل</button>
-        <button class="home-filter-chip" type="button">ملابس وأزياء</button>
-        <button class="home-filter-chip" type="button">إلكترونيات</button>
-        <button class="home-filter-chip" type="button">المنزل</button>
-        <button class="home-filter-chip" type="button">العناية والجمال</button>
+        <button class="home-filter-chip selected" type="button" data-category-id="">الكل</button>
       </div>
 
       <label class="home-filter-label" for="homeGovernorate">المحافظة</label>
       <div class="home-sheet-select">
         <select id="homeGovernorate">
-          <option value="all">كل المحافظات</option>
-          <option value="cairo" selected>القاهرة</option>
-          <option value="giza">الجيزة</option>
-          <option value="alexandria">الإسكندرية</option>
-          <option value="dakahlia">الدقهلية</option>
+          <option value="">كل المحافظات</option>
         </select>
         <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
       </div>
 
       <p class="home-filter-label">الترتيب حسب</p>
       <div class="home-sort-options" role="group" aria-label="ترتيب المنتجات">
-        <button class="home-sort-option selected" type="button">الأكثر طلبًا</button>
-        <button class="home-sort-option" type="button">الأعلى تقييمًا</button>
-        <button class="home-sort-option" type="button">مضاف حديثًا</button>
+        <button class="home-sort-option selected" type="button" data-sort="most_purchased">الأكثر طلبًا</button>
+        <button class="home-sort-option" type="button" data-sort="highest_rated">الأعلى تقييمًا</button>
+        <button class="home-sort-option" type="button" data-sort="newest">مضاف حديثًا</button>
       </div>
 
+      <p id="homeFilterError" role="alert" hidden></p>
       <button class="home-apply-filters" type="button">عرض النتائج</button>
     </section>
   </div>
@@ -217,6 +210,7 @@
       });
     })();
   </script>
+  <script src="user-product-filters.js"></script>
   <script src="banner-carousel.js"></script>
   <script src="user-state.js"></script>
   <script>

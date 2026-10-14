@@ -304,6 +304,11 @@ return [
             ],
         ],
         'user_product_filters' => [
+            'governorate_id' => [
+                'label' => 'governorate',
+                'integer' => 'The governorate ID must be an integer.',
+                'exists' => 'The selected active governorate was not found.',
+            ],
             'main_category_id' => [
                 'label' => 'main category',
                 'integer' => 'The main category ID must be an integer.',
@@ -322,7 +327,7 @@ return [
             'sort' => [
                 'label' => 'product order',
                 'string' => 'The product order must be text.',
-                'enum' => 'Product order must be most_purchased or highest_rated.',
+                'enum' => 'Product order must be most_purchased, highest_rated, or newest.',
             ],
         ],
         'favorite_toggle' => [

@@ -19,6 +19,16 @@ class StorePolicyVersionRepository extends MainRepository
         return $this->getModel()->newQuery();
     }
 
+    public function currentForStore(int $storeId): ?Model
+    {
+        return $this->query()
+            ->where('store_id', $storeId)
+            ->where('is_current', true)
+            ->select(['id', 'store_id', 'pickup_hold_hours', 'return_window_days', 'returns_enabled', 'exchanges_enabled', 'cancellation_enabled', 'pickup_instructions', 'return_terms', 'exchange_terms', 'cancellation_terms'])
+            ->orderByDesc('version')
+            ->first();
+    }
+
     public function findOrFail(int|string $id): Model
     {
         return $this->query()->findOrFail($id);

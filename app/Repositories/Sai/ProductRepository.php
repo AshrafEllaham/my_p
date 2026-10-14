@@ -127,7 +127,7 @@ class ProductRepository extends MainRepository
             ])
             ->where('products.status', ProductStatusEnum::Published)
             ->where('products.stock_quantity', '>', 0)
-            ->withExists(['favorites as is_favorite' => fn (Builder $favoriteQuery) => $favoriteQuery
+            ->withExists(['favorites as is_favorite' => fn(Builder $favoriteQuery) => $favoriteQuery
                 ->where('user_id', $userId)
                 ->where('type', FavoriteTypeEnum::Product)])
             ->whereHas('store', fn(Builder $storeQuery) => $storeQuery
@@ -158,6 +158,7 @@ class ProductRepository extends MainRepository
                     }));
             })
             ->when(isset($filters['sub_category_id']), fn(Builder $builder) => $builder->where('products.category_id', (int) $filters['sub_category_id']))
+            ->when(isset($filters['governorate_id']), fn(Builder $builder) => $builder->whereHas('store', fn(Builder $storeQuery) => $storeQuery->where('governorate_id', (int) $filters['governorate_id'])))
             ->when(isset($filters['search']) && trim((string) $filters['search']) !== '', fn(Builder $builder) => $builder->where('products.name', 'like', '%' . trim((string) $filters['search']) . '%'))
             ->addSelect([
                 'average_rating' => Review::query()
@@ -182,11 +183,46 @@ class ProductRepository extends MainRepository
                 ->where('reviews.is_visible', true))
                 ->orderByDesc('average_rating')
                 ->orderByDesc('reviews_count');
-        } else {
+        } elseif (($filters['sort'] ?? UserProductSortEnum::MostPurchased->value) === UserProductSortEnum::MostPurchased->value) {
             $query->orderByDesc('units_sold');
         }
 
         return $query->orderByDesc('products.created_at')->orderByDesc('products.id');
+    }
+
+    public function findForUserDetails(int $productId, string $locale, int $userId): Model
+    {
+        return $this->query()
+            ->select(['id', 'store_id', 'category_id', 'name', 'description', 'price', 'original_price', 'discount_percentage', 'discount_ends_at', 'stock_quantity', 'created_at'])
+            ->whereKey($productId)
+            ->where('status', ProductStatusEnum::Published)
+            ->whereHas('store', fn (Builder $store) => $store
+                ->where('account_type', AccountTypeEnum::Store)
+                ->where('status', UserStatusEnum::Active))
+            ->whereHas('category', fn (Builder $category) => $category->where('is_active', true))
+            ->withExists(['favorites as is_favorite' => fn (Builder $favorite) => $favorite
+                ->where('user_id', $userId)
+                ->where('type', FavoriteTypeEnum::Product)])
+            ->withAvg(['reviews as average_rating' => fn (Builder $review) => $review->where('is_visible', true)], 'rating')
+            ->withCount(['reviews as reviews_count' => fn (Builder $review) => $review->where('is_visible', true)])
+            ->with([
+                'media:id,product_id,type,path,is_primary',
+                'features:id,product_id,name',
+                'store:id,name,phone_code,phone,avatar,governorate_id',
+                'category' => fn ($category) => $category->select(['id', 'parent_id'])
+                    ->with(['translations' => fn ($translation) => $translation
+                        ->select(['id', 'category_id', 'locale', 'name'])
+                        ->where('locale', $locale)]),
+            ])
+            ->firstOrFail();
+    }
+
+    public function similarForUserDetails(int $productId, int $categoryId, string $locale, int $userId): Builder
+    {
+        return $this->listForUserCatalog([
+            'sub_category_id' => $categoryId,
+            'sort' => UserProductSortEnum::Newest->value,
+        ], $locale, $userId)->whereKeyNot($productId)->limit(4);
     }
 
     public function findDetailsForStore(int|string $productId, int $storeId, string $locale): Model

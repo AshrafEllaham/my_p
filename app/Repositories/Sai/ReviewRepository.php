@@ -22,6 +22,18 @@ class ReviewRepository extends MainRepository
         return $this->getModel()->newQuery();
     }
 
+    public function latestVisibleForProduct(int $productId): ?Model
+    {
+        return $this->query()
+            ->where('product_id', $productId)
+            ->where('is_visible', true)
+            ->select(['id', 'user_id', 'rating', 'comment', 'created_at'])
+            ->with('user:id,name')
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
+            ->first();
+    }
+
     /** @param array<string, mixed> $filters */
     public function listForProduct(int $storeId, int $productId, array $filters): Builder
     {

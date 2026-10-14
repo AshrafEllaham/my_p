@@ -10,4 +10,5 @@ enum UserProductSortEnum: string
 
     case MostPurchased = 'most_purchased';
     case HighestRated = 'highest_rated';
+    case Newest = 'newest';
 }

@@ -30,6 +30,7 @@ class ListUserProductsRequest extends LookupListRequest
                 Rule::exists('categories', 'id')->where('is_active', true)->whereNull('parent_id'),
             ],
             'sub_category_id' => ['sometimes', 'integer', $subCategoryRule],
+            'governorate_id' => ['sometimes', 'integer', Rule::exists('governorates', 'id')->where('is_active', true)],
             'search' => ['sometimes', 'nullable', 'string', 'max:120'],
             'sort' => ['sometimes', 'string', Rule::enum(UserProductSortEnum::class)],
         ];
@@ -43,6 +44,7 @@ class ListUserProductsRequest extends LookupListRequest
             'page' => __('messages.validation.catalog_lookup.page.label'),
             'main_category_id' => __('messages.validation.user_product_filters.main_category_id.label'),
             'sub_category_id' => __('messages.validation.user_product_filters.sub_category_id.label'),
+            'governorate_id' => __('messages.validation.user_product_filters.governorate_id.label'),
             'search' => __('messages.validation.user_product_filters.search.label'),
             'sort' => __('messages.validation.user_product_filters.sort.label'),
         ];
@@ -59,6 +61,8 @@ class ListUserProductsRequest extends LookupListRequest
             'main_category_id.exists' => __('messages.validation.user_product_filters.main_category_id.exists'),
             'sub_category_id.integer' => __('messages.validation.user_product_filters.sub_category_id.integer'),
             'sub_category_id.exists' => __('messages.validation.user_product_filters.sub_category_id.exists'),
+            'governorate_id.integer' => __('messages.validation.user_product_filters.governorate_id.integer'),
+            'governorate_id.exists' => __('messages.validation.user_product_filters.governorate_id.exists'),
             'search.string' => __('messages.validation.user_product_filters.search.string'),
             'search.max' => __('messages.validation.user_product_filters.search.max'),
             'sort.string' => __('messages.validation.user_product_filters.sort.string'),

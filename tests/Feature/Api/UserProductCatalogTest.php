@@ -10,6 +10,7 @@ use App\Enums\ProductStatusEnum;
 use App\Enums\UserStatusEnum;
 use App\Models\Sai\Category;
 use App\Models\Sai\Favorite;
+use App\Models\Sai\Governorate;
 use App\Models\Sai\Order;
 use App\Models\Sai\OrderItem;
 use App\Models\Sai\Product;
@@ -84,7 +85,41 @@ class UserProductCatalogTest extends TestCase
         $this->withHeader('Accept-Language', 'ar')
             ->getJson('/api/user/products?sort=top_rated')
             ->assertUnprocessable()
-            ->assertJsonPath('message', 'ترتيب المنتجات يجب أن يكون most_purchased أو highest_rated.');
+            ->assertJsonPath('message', 'ترتيب المنتجات يجب أن يكون most_purchased أو highest_rated أو newest.');
+
+        $this->withHeader('Accept-Language', 'en')
+            ->getJson('/api/user/products?governorate_id=999999')
+            ->assertUnprocessable()
+            ->assertJsonPath('message', __('messages.validation.user_product_filters.governorate_id.exists'));
+
+        $this->withHeader('Accept-Language', 'ar')
+            ->getJson('/api/user/products?governorate_id=invalid')
+            ->assertUnprocessable()
+            ->assertJsonPath('message', __('messages.validation.user_product_filters.governorate_id.integer'));
+    }
+
+    public function test_user_can_filter_store_governorate_and_sort_newest_with_pagination(): void
+    {
+        [$store, $customer] = $this->createStoreAndCustomer();
+        $governorate = Governorate::factory()->create();
+        $otherGovernorate = Governorate::factory()->create();
+        $store->update(['governorate_id' => $governorate->id]);
+        $otherStore = UserFactory::new()->create([
+            'account_type' => AccountTypeEnum::Store,
+            'status' => UserStatusEnum::Active,
+            'governorate_id' => $otherGovernorate->id,
+        ]);
+        $category = Category::factory()->create();
+        $old = $this->createProduct($store->id, $category->id, 'Old shirt');
+        $old->update(['created_at' => now()->subDays(2)]);
+        $new = $this->createProduct($store->id, $category->id, 'New shirt');
+        $new->update(['created_at' => now()->subDay()]);
+        $this->createProduct($otherStore->id, $category->id, 'Outside shirt');
+        $this->actingAs($customer, 'api');
+
+        $url = '/api/user/products?governorate_id='.$governorate->id.'&sort=newest&pagination=on&limit_per_page=1';
+        $this->getJson($url)->assertOk()->assertJsonPath('total', 2)->assertJsonPath('data.0.id', $new->id);
+        $this->getJson($url.'&page=2')->assertOk()->assertJsonPath('data.0.id', $old->id);
     }
 
     public function test_category_detail_preview_uses_products_endpoint_for_both_lists(): void

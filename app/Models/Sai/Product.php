@@ -71,4 +71,9 @@ class Product extends Model
     {
         return $this->hasMany(Favorite::class, 'favoriteable_id')->where('type', FavoriteTypeEnum::Product);
     }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
 }

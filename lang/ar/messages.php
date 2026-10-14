@@ -304,6 +304,11 @@ return [
             ],
         ],
         'user_product_filters' => [
+            'governorate_id' => [
+                'label' => 'المحافظة',
+                'integer' => 'معرّف المحافظة يجب أن يكون رقمًا صحيحًا.',
+                'exists' => 'المحافظة النشطة المحددة غير موجودة.',
+            ],
             'main_category_id' => [
                 'label' => 'القسم الرئيسي',
                 'integer' => 'معرّف القسم الرئيسي يجب أن يكون رقمًا صحيحًا.',
@@ -322,7 +327,7 @@ return [
             'sort' => [
                 'label' => 'ترتيب المنتجات',
                 'string' => 'ترتيب المنتجات يجب أن يكون نصًا.',
-                'enum' => 'ترتيب المنتجات يجب أن يكون most_purchased أو highest_rated.',
+                'enum' => 'ترتيب المنتجات يجب أن يكون most_purchased أو highest_rated أو newest.',
             ],
         ],
         'favorite_toggle' => [
