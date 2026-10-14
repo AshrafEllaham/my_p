@@ -180,3 +180,18 @@ body.saey-contests{margin:0;background:#eef2f6;color:var(--contest-ink);font-fam
 .detail-menu-wrap{justify-self:start}
 .detail-menu-wrap .contest-menu-button{width:40px;height:40px;border-radius:11px}
 .detail-menu-wrap .contest-action-menu{top:46px}
+
+/* User competition catalog API states */
+.home-contest-card .home-contest-prize{display:-webkit-box;min-height:32px;margin:2px 0 0;overflow:hidden;color:#64748b;font-size:11px;line-height:1.55;font-weight:700;-webkit-box-orient:vertical;-webkit-line-clamp:2}
+.home-contest-state{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px;padding:11px 12px;border:1px dashed #cbd5e1;border-radius:12px;background:#fff;color:#475569;font-size:11px;line-height:1.6;font-weight:700}
+.home-contest-state[hidden]{display:none}
+.public-contest-card-image.contest-image-placeholder,.home-contest-art.contest-image-placeholder{display:grid;place-items:center;background:#e9edf2;color:#64748b}
+.public-contest-card-image.contest-image-placeholder>svg{position:relative;inset:auto;width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:1.6}
+.home-contest-art.contest-image-placeholder>svg{width:32px;height:32px;fill:none;stroke:#fff;stroke-width:1.6}
+.public-contest-card.completed .contest-status{background:#f1f5f9;color:#64748b}
+.contest-state-action{display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:0 11px;border:1px solid #e2e8f0;border-radius:9px;background:#fff;color:#0f172a;text-decoration:none;font:800 11px 'Cairo';white-space:nowrap;cursor:pointer}
+.contest-state-action:focus-visible,.public-contest-pagination button:focus-visible{outline:2px solid #000;outline-offset:2px}
+.public-contest-pagination{display:flex;justify-content:center;margin:12px 0 24px}
+.public-contest-pagination[hidden]{display:none}
+.public-contest-pagination button{min-width:126px;min-height:40px;padding:0 14px;border:1px solid #dbe3ec;border-radius:10px;background:#fff;color:#0f172a;font:800 12px 'Cairo';cursor:pointer}
+.public-contest-pagination button:disabled{color:#94a3b8;cursor:wait}

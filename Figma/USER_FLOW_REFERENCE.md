@@ -38,7 +38,7 @@
                                       └─ الرئيسية
                                            ├─ بحث / أقسام / منتجات / متاجر
                                            │    └─ تفاصيل منتج → شراء مباشر → دفع
-                                           ├─ مسابقات → سؤال → إرسال/تعديل الإجابة
+                                           ├─ مسابقات المتاجر → المتاحة الآن / المنتهية → سؤال المسابقة
                                            ├─ طلبات → تفاصيل → استلام / إلغاء / تقييم / استرجاع
                                            ├─ محفظة → كل العمليات
                                            ├─ دردشات وإشعارات
@@ -99,7 +99,8 @@
 - الأقسام → `09-categories.html`.
 - المنتجات → `10-featured-products.html` أو `12-product-details.html`.
 - المتاجر → `11-featured-stores.html` أو `19-store-details.html`.
-- المسابقات → `27-competitions.html` أو `27-competition-details.html`.
+- مسابقات المتاجر في الرئيسية و«عرض الكل» → `GET /api/user/competitions` مع `status=available_now` أو `status=ended` وتقسيم صفحات → `27-competitions.html`.
+- بطاقات المسابقات تفتح `27-competition-details.html`.
 - الطلبات → `16-orders.html`.
 - الحساب → `15-account.html`.
 

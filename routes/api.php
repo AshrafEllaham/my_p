@@ -50,7 +50,7 @@ Route::group([], function () {
         // ينشئ حساب مستخدم جديدًا.
         Route::post('/register', [AuthApiController::class, 'store'])->middleware('throttle:5,1');
         // يسجل دخول المستخدم ببياناته.
-        Route::post('/login', [AuthApiController::class, 'login'])->middleware('throttle:5,1');
+        Route::post('/login', [AuthApiController::class, 'login'])->middleware('throttle:10,1');
         // يسجل دخول المستخدم باستخدام مزود هوية اجتماعي.
         Route::post('/social-login', [AuthApiController::class, 'socialLogin'])->middleware('throttle:10,1');
         // يغيّر نوع الحساب للحساب المحدد.

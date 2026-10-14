@@ -4,6 +4,8 @@ namespace App\Repositories\Sai;
 
 use App\Enums\AccountTypeEnum;
 use App\Enums\CompetitionStatusEnum;
+use App\Enums\UserCompetitionStatusFilterEnum;
+use App\Enums\UserStatusEnum;
 use App\Models\Sai\Competition;
 use App\Models\Sai\CompetitionEntry;
 use App\Models\Sai\Store;
@@ -46,6 +48,62 @@ class CompetitionRepository extends MainRepository
             ->where('store_id', $storeId)
             ->when(isset($filters['status']), fn (Builder $query) => $query->where('status', CompetitionStatusEnum::from($filters['status'])))
             ->orderByDesc('created_at')->orderByDesc('id');
+    }
+
+    /** @return Builder<Competition> */
+    public function listForUser(?UserCompetitionStatusFilterEnum $status = null): Builder
+    {
+        $now = now();
+
+        $query = $this->query()
+            ->select([
+                'id', 'public_id', 'store_id', 'title', 'question', 'prize', 'image', 'status', 'ends_at', 'created_at',
+            ])
+            ->selectRaw(
+                'CASE WHEN competitions.status = ? AND competitions.ends_at > ? THEN ? ELSE ? END AS feed_status',
+                [
+                    CompetitionStatusEnum::Active->value,
+                    $now,
+                    UserCompetitionStatusFilterEnum::AvailableNow->value,
+                    UserCompetitionStatusFilterEnum::Ended->value,
+                ],
+            )
+            ->with([
+                'store:id,owner_id,cover_image',
+                'store.owner:id,name,avatar',
+            ])
+            ->whereHas('store', fn (Builder $store) => $store
+                ->whereHas('owner', fn (Builder $owner) => $owner
+                    ->where('account_type', AccountTypeEnum::Store)
+                    ->where('status', UserStatusEnum::Active))
+                ->whereHas('category', fn (Builder $category) => $category->where('is_active', true)))
+            ->whereIn('status', [
+                CompetitionStatusEnum::Active,
+                CompetitionStatusEnum::Ended,
+                CompetitionStatusEnum::Drawn,
+            ]);
+
+        if ($status === UserCompetitionStatusFilterEnum::AvailableNow) {
+            $query->where('status', CompetitionStatusEnum::Active)
+                ->where('ends_at', '>', $now);
+        } elseif ($status === UserCompetitionStatusFilterEnum::Ended) {
+            $query->where(function (Builder $ended) use ($now): void {
+                $ended->whereIn('status', [CompetitionStatusEnum::Ended, CompetitionStatusEnum::Drawn])
+                    ->orWhere(fn (Builder $active) => $active
+                        ->where('status', CompetitionStatusEnum::Active)
+                        ->where('ends_at', '<=', $now));
+            });
+        }
+
+        if ($status === UserCompetitionStatusFilterEnum::AvailableNow) {
+            return $query->orderBy('ends_at')->orderByDesc('id');
+        }
+
+        if ($status === UserCompetitionStatusFilterEnum::Ended) {
+            return $query->orderByDesc('ends_at')->orderByDesc('id');
+        }
+
+        return $query->orderByDesc('created_at')->orderByDesc('id');
     }
 
     /** @return array{active_count: int, total_participation_count: int, drawn_count: int} */

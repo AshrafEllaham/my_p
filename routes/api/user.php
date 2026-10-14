@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\User\UserCompetitionController;
 use App\Http\Controllers\Api\User\UserFavoriteController;
 use App\Http\Controllers\Api\User\UserHomeCategoryController;
 use App\Http\Controllers\Api\User\UserProductController;
@@ -38,6 +39,9 @@ Route::group([], function () {
 
         // يعرض المتاجر مرتبة حسب القرب عند إرسال الإحداثيات أو حسب الأعلى تقييمًا عند غيابها.
         Route::get('/stores/nearby', [UserStoreController::class, 'nearby']);
+
+        // يعرض مسابقات المتاجر المتاحة أو المنتهية مع تقسيم النتائج إلى صفحات.
+        Route::get('/competitions', [UserCompetitionController::class, 'index']);
 
         // يعرض منتجات متجر محدد مع البحث والترتيب وتقسيم الصفحات.
         Route::get('/stores/{store}/products', [UserStoreController::class, 'products'])->whereNumber('store');

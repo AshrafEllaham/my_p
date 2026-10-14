@@ -114,6 +114,9 @@ return [
         'draw_not_ended' => 'A draw cannot be performed before the competition ends.',
         'no_matching_entries' => 'There are no entries matching the approved answer.',
     ],
+    'user_competitions' => [
+        'listed' => 'Store competitions were retrieved successfully.',
+    ],
     'reviews' => [
         'listed' => 'Product reviews were retrieved successfully.',
     ],
@@ -450,6 +453,13 @@ return [
             'image' => ['label' => 'competition image', 'image' => 'The uploaded file must be an image.', 'mimes' => 'The competition image must be a JPG, JPEG, PNG, or WEBP file.', 'max' => 'The competition image must not be larger than 5 MB.'],
             'correct_answer' => ['label' => 'approved draw answer', 'required' => 'The approved draw answer is required.', 'string' => 'The approved draw answer must be text.', 'min' => 'Enter the approved draw answer.', 'max' => 'The approved draw answer must not exceed 255 characters.'],
             'ends_at' => ['label' => 'participation end time', 'required' => 'The participation end time is required.', 'date' => 'Enter a valid end time.', 'after' => 'The participation end time must be in the future.'],
+        ],
+        'user_competitions' => [
+            'status' => [
+                'label' => 'competition status filter',
+                'string' => 'The competition status filter must be text.',
+                'enum' => 'The competition status filter must be available_now or ended.',
+            ],
         ],
         'store_review_filters' => [
             'rating' => [
