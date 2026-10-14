@@ -2779,6 +2779,21 @@
     });
 
     screens.push({
+      id: 94,
+      num: '10.1',
+      section: 'تطبيق المستخدم',
+      sectionEn: 'Buyer Experience',
+      file: 'account-favorites.html',
+      title: 'المفضلة',
+      titleEn: 'Favorites',
+      tags: ['Favorites', 'Products', 'Stores', 'Pagination'],
+      desc: 'قائمة منتجات ومتاجر المستخدم المحفوظة، محمّلة من API مع فلتر النوع وتقسيم الصفحات.',
+      descEn: 'The user’s saved products and stores, loaded from the API with type filters and pagination.',
+      notes: ['GET /api/user/favorites?type=product أو type=store', 'تقسيم الصفحات عبر pagination=on وlimit_per_page وpage', 'إزالة عنصر محفوظ عبر POST /api/user/favorites/toggle', 'حالات تسجيل الدخول والتحميل والخطأ والفراغ وإعادة المحاولة'],
+      notesEn: ['GET /api/user/favorites?type=product or type=store', 'Pagination uses pagination=on, limit_per_page, and page', 'Remove a saved item through POST /api/user/favorites/toggle', 'Handles authentication, loading, errors, empty results, and retry']
+    });
+
+    screens.push({
       id: 32,
       num: '11',
       section: 'تطبيق المستخدم',
@@ -2912,7 +2927,7 @@
       '00-splash.html', '00-splash-01.html', '00-splash-02.html',
       '01-login.html', '02-signup.html', '03-verify-otp.html',
       '04-account-type.html', '05-profile-setup.html',
-      '06-distributor-setup.html', '07-forgot-password.html', '07-reset-password.html', '08-profile-setup.html', '08-user-home.html', '27-competitions.html', '27-competition-details.html', '15-account.html', '16-orders.html',
+      '06-distributor-setup.html', '07-forgot-password.html', '07-reset-password.html', '08-profile-setup.html', '08-user-home.html', '27-competitions.html', '27-competition-details.html', '15-account.html', 'account-favorites.html', '16-orders.html',
       '09-categories.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '17-wallet.html', '18-wallet-transactions.html', '19-store-details.html', '13-notifications.html', '14-chat-conversation.html', '14-chats.html', '20-checkout.html', '21-order-details.html', 'order-dispute-status.html', '22-rate-order.html', '23-search-results.html', '24-category-details.html', '25-product-reviews.html', '26-return-request.html', '26-return-status.html', '26-order-receipt.html', 'account-notification-settings.html', 'account-data.html', 'account-faq.html', 'account-about.html', 'account-privacy.html', 'account-terms.html', 'account-contact.html', '17-distributor-dashboard.html', '18-distributor-products.html', '18-distributor-product-details.html', '18-add-product.html', '19-distributor-ads.html', '19-add-ad.html', '19-ad-review.html', 'distributor-ad-details.html', '20-distributor-account.html', 'merchant-activation-status.html', '20-distributor-coupons.html', '20-distributor-coupon-details.html', '20-distributor-competitions.html', '20-distributor-competition-details.html', '20-distributor-store-profile.html', '20-distributor-reviews.html', '21-distributor-orders.html', '21-distributor-order-details.html', '22-distributor-inventory.html', '22-distributor-finance.html', '23-distributor-returns.html', '23-distributor-disputes.html', '23-distributor-reports.html', '23-distributor-documents.html', '23-distributor-customers.html', '23-distributor-team.html', '24-distributor-notifications.html', '24-distributor-policies.html', '24-distributor-activity.html'
     ]);
     const authScreenOrder = [
@@ -2920,7 +2935,7 @@
       '00-splash.html', '00-splash-01.html', '00-splash-02.html',
       '01-login.html', '02-signup.html', '03-verify-otp.html',
       '04-account-type.html', '05-profile-setup.html', '08-profile-setup.html',
-      '06-distributor-setup.html', '08-user-home.html', '27-competitions.html', '27-competition-details.html', '15-account.html', 'account-faq.html', 'account-about.html', 'account-privacy.html', 'account-terms.html', 'account-contact.html', '16-orders.html', '20-checkout.html', '21-order-details.html', 'order-dispute-status.html', '26-order-receipt.html', '26-return-request.html', '26-return-status.html', '22-rate-order.html', '17-wallet.html', '18-wallet-transactions.html', '19-store-details.html', '09-categories.html', '24-category-details.html', '23-search-results.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '25-product-reviews.html', '13-notifications.html', 'account-notification-settings.html', 'account-data.html', '14-chat-conversation.html', '14-chats.html', '07-forgot-password.html', '07-reset-password.html'
+      '06-distributor-setup.html', '08-user-home.html', '27-competitions.html', '27-competition-details.html', '15-account.html', 'account-favorites.html', 'account-faq.html', 'account-about.html', 'account-privacy.html', 'account-terms.html', 'account-contact.html', '16-orders.html', '20-checkout.html', '21-order-details.html', 'order-dispute-status.html', '26-order-receipt.html', '26-return-request.html', '26-return-status.html', '22-rate-order.html', '17-wallet.html', '18-wallet-transactions.html', '19-store-details.html', '09-categories.html', '24-category-details.html', '23-search-results.html', '10-featured-products.html', '11-featured-stores.html', '12-product-details.html', '25-product-reviews.html', '13-notifications.html', 'account-notification-settings.html', 'account-data.html', '14-chat-conversation.html', '14-chats.html', '07-forgot-password.html', '07-reset-password.html'
     ];
     screens.splice(0, screens.length, ...screens
       .filter(screen => authScreenFiles.has(screen.file))

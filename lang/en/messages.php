@@ -69,6 +69,7 @@ return [
         'ads_listed' => 'Active store ads were retrieved successfully.',
     ],
     'user_favorites' => [
+        'listed' => 'Favorites were retrieved successfully.',
         'added' => 'The item was added to favorites.',
         'removed' => 'The item was removed from favorites.',
     ],
@@ -406,6 +407,13 @@ return [
                 'integer' => 'The item ID must be an integer.',
                 'min' => 'The item ID must be greater than zero.',
                 'exists' => 'The selected product or store was not found.',
+            ],
+        ],
+        'favorite_list' => [
+            'type' => [
+                'label' => 'favorite type',
+                'string' => 'The favorite type must be text.',
+                'enum' => 'Favorite type must be product or store.',
             ],
         ],
         'store_ads' => [

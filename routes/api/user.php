@@ -79,5 +79,8 @@ Route::group([], function () {
         // يبدل حالة منتج أو متجر في مفضلة المستخدم الحالي.
         Route::post('/favorites/toggle', [UserFavoriteController::class, 'toggle']);
 
+        // يعرض مفضلات المستخدم مع فلترة نوع العنصر وتقسيم الصفحات.
+        Route::get('/favorites', [UserFavoriteController::class, 'index']);
+
     });
 });

@@ -28,4 +28,14 @@ class Favorite extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class, 'favoriteable_id');
+    }
+
+    public function store(): BelongsTo
+    {
+        return $this->belongsTo(Store::class, 'favoriteable_id');
+    }
 }

@@ -431,6 +431,89 @@ class UserProductCatalogTest extends TestCase
             ->assertJsonPath('message', 'المنتج أو المتجر المحدد غير موجود.');
     }
 
+    public function test_user_can_filter_and_paginate_their_favorites_by_type(): void
+    {
+        [$storeOwner, $customer] = $this->createStoreAndCustomer();
+        $category = Category::factory()->create();
+        $firstProduct = $this->createProduct($storeOwner->id, $category->id, 'First favorite');
+        $secondProduct = $this->createProduct($storeOwner->id, $category->id, 'Second favorite');
+        $storeRecord = Store::query()->create([
+            'owner_id' => $storeOwner->id,
+            'category_id' => $category->id,
+            'description' => 'Favorite store',
+        ]);
+
+        Favorite::query()->create([
+            'user_id' => $customer->id,
+            'type' => FavoriteTypeEnum::Product,
+            'favoriteable_id' => $firstProduct->id,
+        ]);
+        Favorite::query()->create([
+            'user_id' => $customer->id,
+            'type' => FavoriteTypeEnum::Product,
+            'favoriteable_id' => $secondProduct->id,
+        ]);
+        Favorite::query()->create([
+            'user_id' => $customer->id,
+            'type' => FavoriteTypeEnum::Store,
+            'favoriteable_id' => $storeRecord->id,
+        ]);
+
+        $otherCustomer = UserFactory::new()->create([
+            'account_type' => AccountTypeEnum::User,
+            'status' => UserStatusEnum::Active,
+        ]);
+        Favorite::query()->create([
+            'user_id' => $otherCustomer->id,
+            'type' => FavoriteTypeEnum::Product,
+            'favoriteable_id' => $firstProduct->id,
+        ]);
+
+        $this->actingAs($customer, 'api')
+            ->getJson('/api/user/favorites?type=product&pagination=on&limit_per_page=1&page=1')
+            ->assertOk()
+            ->assertJsonPath('message', __('messages.user_favorites.listed'))
+            ->assertJsonPath('total', 2)
+            ->assertJsonPath('data.0.type', FavoriteTypeEnum::Product->value)
+            ->assertJsonPath('data.0.favoriteable_id', $secondProduct->id)
+            ->assertJsonPath('data.0.item.name', $secondProduct->name)
+            ->assertJsonPath('current_page', 1)
+            ->assertJsonPath('last_page', 2);
+
+        $this->getJson('/api/user/favorites?type=product&pagination=on&limit_per_page=1&page=2')
+            ->assertOk()
+            ->assertJsonPath('data.0.favoriteable_id', $firstProduct->id);
+
+        $this->getJson('/api/user/favorites?type=store&pagination=on&limit_per_page=10')
+            ->assertOk()
+            ->assertJsonPath('total', 1)
+            ->assertJsonPath('data.0.type', FavoriteTypeEnum::Store->value)
+            ->assertJsonPath('data.0.item.id', $storeRecord->id)
+            ->assertJsonPath('data.0.item.name', $storeOwner->name);
+
+        $this->getJson('/api/user/favorites?pagination=on&limit_per_page=10')
+            ->assertOk()
+            ->assertJsonPath('total', 3);
+    }
+
+    public function test_favorites_list_requires_authentication_and_localizes_type_validation(): void
+    {
+        $this->getJson('/api/user/favorites')->assertUnauthorized();
+
+        [, $customer] = $this->createStoreAndCustomer();
+        $this->actingAs($customer, 'api');
+
+        $this->withHeader('Accept-Language', 'en')
+            ->getJson('/api/user/favorites?type=other')
+            ->assertUnprocessable()
+            ->assertJsonPath('message', __('messages.validation.favorite_list.type.enum'));
+
+        $this->withHeader('Accept-Language', 'ar')
+            ->getJson('/api/user/favorites?type%5B%5D=product')
+            ->assertUnprocessable()
+            ->assertJsonPath('message', __('messages.validation.favorite_list.type.string'));
+    }
+
     private function createStoreAndCustomer(): array
     {
         $store = UserFactory::new()->create([
