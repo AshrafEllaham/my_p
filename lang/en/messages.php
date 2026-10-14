@@ -57,6 +57,7 @@ return [
     ],
     'user_products' => [
         'listed' => 'Products were retrieved successfully.',
+        'recommended_listed' => 'Recommended products were retrieved successfully.',
         'retrieved' => 'Product details were retrieved successfully.',
         'similar_listed' => 'Similar products were retrieved successfully.',
         'reviews_listed' => 'Product reviews were retrieved successfully.',

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\User\ListRecommendedProductsRequest;
 use App\Http\Requests\Api\User\ListSimilarProductsRequest;
 use App\Http\Requests\Api\User\ListUserProductReviewsRequest;
 use App\Http\Requests\Api\User\ListUserProductsRequest;
@@ -26,6 +27,16 @@ class UserProductController extends Controller
             $this->service->list($filters, app()->getLocale(), (int) auth('api')->id()),
             UserProductResource::class,
             __('messages.user_products.listed'),
+        );
+    }
+
+    public function recommended(ListRecommendedProductsRequest $request): JsonResponse
+    {
+        return generalReturn(
+            $request,
+            $this->service->recommended(app()->getLocale(), (int) auth('api')->id()),
+            UserProductResource::class,
+            __('messages.user_products.recommended_listed'),
         );
     }
 

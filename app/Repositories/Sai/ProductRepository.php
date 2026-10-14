@@ -11,6 +11,8 @@ use App\Enums\ProductStockFilterEnum;
 use App\Enums\UserProductSortEnum;
 use App\Enums\UserStatusEnum;
 use App\Models\Sai\AdDailyMetric;
+use App\Models\Sai\Favorite;
+use App\Models\Sai\Order;
 use App\Models\Sai\OrderItem;
 use App\Models\Sai\Product;
 use App\Models\Sai\Review;
@@ -189,6 +191,39 @@ class ProductRepository extends MainRepository
         }
 
         return $query->orderByDesc('products.created_at')->orderByDesc('products.id');
+    }
+
+    public function listRecommendedForUser(string $locale, int $userId): Builder
+    {
+        $governorateId = User::query()->whereKey($userId)->value('governorate_id');
+        $filters = $governorateId === null ? [] : ['governorate_id' => (int) $governorateId];
+
+        return $this->listForUserCatalog($filters, $locale, $userId)
+            ->reorder()
+            ->addSelect([
+                'purchased_category_units' => Order::query()
+                    ->from('orders as recommendation_orders')
+                    ->selectRaw('COALESCE(SUM(recommendation_order_items.quantity), 0)')
+                    ->join('order_items as recommendation_order_items', 'recommendation_order_items.order_id', '=', 'recommendation_orders.id')
+                    ->join('products as purchased_products', 'purchased_products.id', '=', 'recommendation_order_items.product_id')
+                    ->where('recommendation_orders.user_id', $userId)
+                    ->where('recommendation_orders.status', OrderStatusEnum::Completed->value)
+                    ->whereColumn('purchased_products.category_id', 'products.category_id'),
+                'favorite_category_count' => Favorite::query()
+                    ->from('favorites as recommendation_favorites')
+                    ->selectRaw('COUNT(*)')
+                    ->join('products as favorite_products', 'favorite_products.id', '=', 'recommendation_favorites.favoriteable_id')
+                    ->where('recommendation_favorites.user_id', $userId)
+                    ->where('recommendation_favorites.type', FavoriteTypeEnum::Product->value)
+                    ->whereColumn('favorite_products.category_id', 'products.category_id'),
+            ])
+            ->orderByDesc('purchased_category_units')
+            ->orderByDesc('favorite_category_count')
+            ->orderByDesc('average_rating')
+            ->orderByDesc('reviews_count')
+            ->orderByDesc('units_sold')
+            ->orderByDesc('products.created_at')
+            ->orderByDesc('products.id');
     }
 
     public function findForUserDetails(int $productId, string $locale, int $userId): Model

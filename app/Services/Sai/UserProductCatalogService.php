@@ -21,6 +21,11 @@ class UserProductCatalogService
         return $this->products->listForUserCatalog($filters, $locale, $userId);
     }
 
+    public function recommended(string $locale, int $userId): Builder
+    {
+        return $this->products->listRecommendedForUser($locale, $userId);
+    }
+
     /** @return array<string, mixed> */
     public function details(int $productId, string $locale, int $userId): array
     {

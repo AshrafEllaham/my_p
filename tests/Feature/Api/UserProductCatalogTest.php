@@ -125,6 +125,100 @@ class UserProductCatalogTest extends TestCase
         $this->getJson($url.'&page=2')->assertOk()->assertJsonPath('data.0.id', $old->id);
     }
 
+    public function test_recommended_products_prioritize_completed_purchase_categories_then_favorites_in_user_governorate(): void
+    {
+        [$store, $customer, $policy] = $this->createStoreAndCustomer();
+        $governorate = Governorate::factory()->create();
+        $otherGovernorate = Governorate::factory()->create();
+        $store->update(['governorate_id' => $governorate->id]);
+        $customer->update(['governorate_id' => $governorate->id]);
+
+        $fashion = Category::factory()->create();
+        $electronics = Category::factory()->create();
+        $home = Category::factory()->create();
+        $fashionCandidate = $this->createProduct($store->id, $fashion->id, 'Fashion recommendation');
+        $electronicsCandidate = $this->createProduct($store->id, $electronics->id, 'Electronics recommendation');
+        $homeCandidate = $this->createProduct($store->id, $home->id, 'Home recommendation');
+
+        $purchasedFashion = $this->createProduct($store->id, $fashion->id, 'Purchased fashion');
+        $this->recordSale($store->id, $customer->id, $policy->id, $purchasedFashion, 2);
+        $purchasedFashion->update(['status' => ProductStatusEnum::Draft]);
+
+        $favoriteElectronics = $this->createProduct($store->id, $electronics->id, 'Favorite electronics');
+        Favorite::query()->create([
+            'user_id' => $customer->id,
+            'type' => FavoriteTypeEnum::Product,
+            'favoriteable_id' => $favoriteElectronics->id,
+        ]);
+        $favoriteElectronics->update(['status' => ProductStatusEnum::Draft]);
+
+        $cancelledHome = $this->createProduct($store->id, $home->id, 'Cancelled home');
+        $this->recordSale($store->id, $customer->id, $policy->id, $cancelledHome, 100, OrderStatusEnum::Cancelled);
+        $cancelledHome->update(['status' => ProductStatusEnum::Draft]);
+
+        $outsideStore = UserFactory::new()->create([
+            'account_type' => AccountTypeEnum::Store,
+            'status' => UserStatusEnum::Active,
+            'governorate_id' => $otherGovernorate->id,
+        ]);
+        $outsideProduct = $this->createProduct($outsideStore->id, $fashion->id, 'Outside governorate');
+
+        $response = $this->actingAs($customer, 'api')
+            ->getJson('/api/user/products/recommended?limit_per_page=10');
+
+        $response->assertOk()
+            ->assertJsonPath('message', __('messages.user_products.recommended_listed'))
+            ->assertJsonPath('total', 3)
+            ->assertJsonPath('data.0.id', $fashionCandidate->id)
+            ->assertJsonPath('data.1.id', $electronicsCandidate->id)
+            ->assertJsonPath('data.2.id', $homeCandidate->id);
+        $this->assertNotContains($outsideProduct->id, $response->json('data.*.id'));
+    }
+
+    public function test_recommended_products_use_rating_sales_and_recency_for_a_new_user(): void
+    {
+        [$store, $customer, $policy] = $this->createStoreAndCustomer();
+        $governorate = Governorate::factory()->create();
+        $store->update(['governorate_id' => $governorate->id]);
+        $customer->update(['governorate_id' => $governorate->id]);
+        $category = Category::factory()->create();
+        $highestRated = $this->createProduct($store->id, $category->id, 'Highest rated');
+        $mostPurchased = $this->createProduct($store->id, $category->id, 'Most purchased');
+        $newest = $this->createProduct($store->id, $category->id, 'Newest');
+
+        $otherCustomer = UserFactory::new()->create([
+            'account_type' => AccountTypeEnum::User,
+            'status' => UserStatusEnum::Active,
+        ]);
+        $this->recordReview($store->id, $otherCustomer->id, $policy->id, $highestRated, 5);
+        $this->recordSale($store->id, $otherCustomer->id, $policy->id, $mostPurchased, 10);
+
+        $response = $this->actingAs($customer, 'api')
+            ->getJson('/api/user/products/recommended?limit_per_page=2&page=1');
+
+        $response->assertOk()
+            ->assertJsonPath('total', 3)
+            ->assertJsonPath('per_page', 2)
+            ->assertJsonPath('data.0.id', $highestRated->id)
+            ->assertJsonPath('data.1.id', $mostPurchased->id);
+
+        $this->getJson('/api/user/products/recommended?limit_per_page=2&page=2')
+            ->assertOk()
+            ->assertJsonPath('data.0.id', $newest->id);
+    }
+
+    public function test_recommended_products_require_authentication_and_localize_pagination_validation(): void
+    {
+        $this->getJson('/api/user/products/recommended')->assertUnauthorized();
+        [, $customer] = $this->createStoreAndCustomer();
+
+        $this->actingAs($customer, 'api')
+            ->withHeader('Accept-Language', 'ar')
+            ->getJson('/api/user/products/recommended?page=0')
+            ->assertUnprocessable()
+            ->assertJsonPath('message', __('messages.validation.catalog_lookup.page.min'));
+    }
+
     public function test_user_can_read_published_product_details_with_store_policy_reviews_and_similar_products(): void
     {
         [$store, $customer, $policy] = $this->createStoreAndCustomer();

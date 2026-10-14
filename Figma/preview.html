@@ -2756,11 +2756,11 @@
       file: '08-user-home.html',
       title: 'الرئيسية',
       titleEn: 'User Home',
-      tags: ['User', 'Store Discovery', 'Pickup'],
-      desc: 'الواجهة الرئيسية للمستخدم: سلايدر عروض، أقسام، منتجات مميزة، ثم متاجر مميزة.',
-      descEn: 'The user hub with a campaign slider, categories, featured products, and featured stores.',
-      notes: ['الأقسام الرئيسية تُحمّل بصفحات عبر GET /api/user/main-categories مع فلتر البحث', 'زر عرض المزيد يحمّل الصفحة التالية للبحث الحالي', 'QR ينشئه المتجر ويُمسح خارج التطبيق'],
-      notesEn: ['Main categories load in pages from GET /api/user/main-categories with a search filter', 'Show more loads the next page for the current search', 'Store QR is scanned outside the app']
+      tags: ['User', 'Store Discovery', 'Pickup', 'Recommendations'],
+      desc: 'الواجهة الرئيسية للمستخدم مع منتجات مقترحة فعليًا حسب مشترياته ومفضلاته ومحافظته.',
+      descEn: 'The user hub with live product recommendations based on purchases, favorites, and governorate.',
+      notes: ['الأقسام الرئيسية تُحمّل بصفحات عبر GET /api/user/main-categories مع فلتر البحث', 'قسم مقترح لك يُحمّل عبر GET /api/user/products/recommended', 'QR ينشئه المتجر ويُمسح خارج التطبيق'],
+      notesEn: ['Main categories load in pages from GET /api/user/main-categories with a search filter', 'Recommended products load from GET /api/user/products/recommended', 'Store QR is scanned outside the app']
     });
 
     screens.push({
