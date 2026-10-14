@@ -34,6 +34,12 @@ Route::group([], function () {
         // يعرض تفاصيل منتج منشور مع المتجر والسياسات والتقييمات ومنتجات مشابهة.
         Route::get('/products/{product}', [UserProductController::class, 'show'])->whereNumber('product');
 
+        // يعرض منتجات مشابهة مع فلاتر الكتالوج وتقسيم الصفحات.
+        Route::get('/products/{product}/similar-products', [UserProductController::class, 'similar'])->whereNumber('product');
+
+        // يعرض تقييمات المنتج الظاهرة مع ملخصها وتقسيم الصفحات.
+        Route::get('/products/{product}/reviews', [UserProductController::class, 'reviews'])->whereNumber('product');
+
         // يبدل حالة منتج أو متجر في مفضلة المستخدم الحالي.
         Route::post('/favorites/toggle', [UserFavoriteController::class, 'toggle']);
 

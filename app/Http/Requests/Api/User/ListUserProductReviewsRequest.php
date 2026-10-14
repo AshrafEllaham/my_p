@@ -1,0 +1,57 @@
+<?php
+
+namespace App\Http\Requests\Api\User;
+
+use App\Http\Requests\Api\Catalog\LookupListRequest;
+
+class ListUserProductReviewsRequest extends LookupListRequest
+{
+    protected function prepareForValidation(): void
+    {
+        parent::prepareForValidation();
+        $this->merge(['pagination' => 'on']);
+    }
+
+    /** @return array<string, array<int, mixed>> */
+    public function rules(): array
+    {
+        return [
+            ...$this->paginationRules(),
+            'product' => ['required', 'integer', 'min:1'],
+            'page' => ['sometimes', 'integer', 'min:1'],
+            'rating' => ['sometimes', 'integer', 'between:1,5'],
+        ];
+    }
+
+    /** @return array<string, mixed> */
+    public function validationData(): array
+    {
+        return [...parent::validationData(), 'product' => $this->route('product')];
+    }
+
+    /** @return array<string, string> */
+    public function attributes(): array
+    {
+        return [
+            ...parent::attributes(),
+            'product' => __('messages.validation.user_product_details.product.label'),
+            'page' => __('messages.validation.catalog_lookup.page.label'),
+            'rating' => __('messages.validation.user_product_reviews.rating.label'),
+        ];
+    }
+
+    /** @return array<string, string> */
+    public function messages(): array
+    {
+        return [
+            ...parent::messages(),
+            'product.required' => __('messages.validation.user_product_details.product.required'),
+            'product.integer' => __('messages.validation.user_product_details.product.integer'),
+            'product.min' => __('messages.validation.user_product_details.product.min'),
+            'page.integer' => __('messages.validation.catalog_lookup.page.integer'),
+            'page.min' => __('messages.validation.catalog_lookup.page.min'),
+            'rating.integer' => __('messages.validation.user_product_reviews.rating.integer'),
+            'rating.between' => __('messages.validation.user_product_reviews.rating.between'),
+        ];
+    }
+}

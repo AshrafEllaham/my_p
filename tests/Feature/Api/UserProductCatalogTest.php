@@ -170,6 +170,69 @@ class UserProductCatalogTest extends TestCase
             ->assertJsonPath('message', __('messages.validation.user_product_details.product.min'));
     }
 
+    public function test_similar_products_are_paginated_and_use_catalog_filters(): void
+    {
+        [$store, $customer] = $this->createStoreAndCustomer();
+        $category = Category::factory()->create();
+        $otherCategory = Category::factory()->create();
+        $otherSubcategory = Category::factory()->subcategory($otherCategory)->create();
+        $reference = $this->createProduct($store->id, $category->id, 'Reference jacket');
+        $older = $this->createProduct($store->id, $category->id, 'Older shirt');
+        $older->update(['created_at' => now()->subDays(2)]);
+        $newer = $this->createProduct($store->id, $category->id, 'Newer shirt');
+        $newer->update(['created_at' => now()->subDay()]);
+        $this->createProduct($store->id, $otherCategory->id, 'Outside shirt');
+        $this->actingAs($customer, 'api');
+
+        $url = '/api/user/products/'.$reference->id.'/similar-products?search=shirt&sort=newest&limit_per_page=1';
+        $this->getJson($url)->assertOk()->assertJsonPath('total', 2)->assertJsonPath('data.0.id', $newer->id);
+        $this->getJson($url.'&page=2')->assertOk()->assertJsonPath('data.0.id', $older->id);
+        $this->getJson('/api/user/products/'.$reference->id.'/similar-products?sub_category_id='.$otherSubcategory->id)
+            ->assertOk()->assertJsonPath('total', 0);
+    }
+
+    public function test_product_reviews_are_paginated_visible_and_have_unfiltered_summary(): void
+    {
+        [$store, $customer, $policy] = $this->createStoreAndCustomer();
+        $category = Category::factory()->create();
+        $product = $this->createProduct($store->id, $category->id, 'Reviewed jacket');
+        $this->recordReview($store->id, $customer->id, $policy->id, $product, 5);
+        $this->recordReview($store->id, $customer->id, $policy->id, $product, 4);
+        $this->recordReview($store->id, $customer->id, $policy->id, $product, 1);
+        Review::query()->latest('id')->first()->update(['is_visible' => false]);
+        $this->actingAs($customer, 'api');
+
+        $url = '/api/user/products/'.$product->id.'/reviews?limit_per_page=1';
+        $this->getJson($url)->assertOk()
+            ->assertJsonPath('total', 2)
+            ->assertJsonPath('summary.average_rating', 4.5)
+            ->assertJsonPath('summary.reviews_count', 2)
+            ->assertJsonPath('data.0.rating', 4)
+            ->assertJsonPath('data.0.user.id', $customer->id);
+        $this->getJson($url.'&page=2')->assertOk()->assertJsonPath('data.0.rating', 5);
+        $this->getJson($url.'&rating=5')->assertOk()
+            ->assertJsonPath('total', 1)
+            ->assertJsonPath('summary.reviews_count', 2)
+            ->assertJsonPath('data.0.rating', 5);
+    }
+
+    public function test_similar_and_review_lists_require_authentication_and_validate_filters(): void
+    {
+        [$store, $customer] = $this->createStoreAndCustomer();
+        $category = Category::factory()->create();
+        $product = $this->createProduct($store->id, $category->id, 'Jacket');
+        $base = '/api/user/products/'.$product->id;
+        $this->getJson($base.'/similar-products')->assertUnauthorized();
+        $this->getJson($base.'/reviews')->assertUnauthorized();
+        $this->actingAs($customer, 'api');
+        $this->getJson('/api/user/products/999999/similar-products')->assertNotFound();
+        $this->getJson('/api/user/products/999999/reviews')->assertNotFound();
+        $this->withHeader('Accept-Language', 'en')->getJson($base.'/reviews?rating=6')
+            ->assertUnprocessable()->assertJsonPath('message', __('messages.validation.user_product_reviews.rating.between'));
+        $this->withHeader('Accept-Language', 'ar')->getJson($base.'/similar-products?sort=invalid')
+            ->assertUnprocessable()->assertJsonPath('message', __('messages.validation.user_product_filters.sort.enum'));
+    }
+
     public function test_category_detail_preview_uses_products_endpoint_for_both_lists(): void
     {
         $preview = file_get_contents(base_path('Figma/screens/24-category-details.html'));

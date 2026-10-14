@@ -57,14 +57,14 @@ class ProductRepository extends MainRepository
             ->with([
                 'media:id,product_id,type,path,is_primary',
                 'features:id,product_id,name',
-                'category' => fn($categoryQuery) => $categoryQuery
+                'category' => fn ($categoryQuery) => $categoryQuery
                     ->select(['id', 'parent_id'])
-                    ->with(['translations' => fn($translationQuery) => $translationQuery
+                    ->with(['translations' => fn ($translationQuery) => $translationQuery
                         ->select(['id', 'category_id', 'locale', 'name'])
                         ->where('locale', $locale)]),
             ])
-            ->when(isset($filters['status']), fn(Builder $builder) => $builder->where('status', $filters['status']))
-            ->when(isset($filters['category_id']), fn(Builder $builder) => $builder->where('category_id', $filters['category_id']))
+            ->when(isset($filters['status']), fn (Builder $builder) => $builder->where('status', $filters['status']))
+            ->when(isset($filters['category_id']), fn (Builder $builder) => $builder->where('category_id', $filters['category_id']))
             ->when(isset($filters['search']), function (Builder $builder) use ($filters, $locale): void {
                 $search = trim($filters['search']);
                 if ($search === '') {
@@ -72,10 +72,10 @@ class ProductRepository extends MainRepository
                 }
 
                 $builder->where(function (Builder $searchQuery) use ($search, $locale): void {
-                    $searchQuery->where('name', 'like', '%' . $search . '%')
-                        ->orWhereHas('category.translations', fn(Builder $translationQuery) => $translationQuery
+                    $searchQuery->where('name', 'like', '%'.$search.'%')
+                        ->orWhereHas('category.translations', fn (Builder $translationQuery) => $translationQuery
                             ->where('locale', $locale)
-                            ->where('name', 'like', '%' . $search . '%'));
+                            ->where('name', 'like', '%'.$search.'%'));
                 });
             })
             ->when(isset($filters['stock_status']), function (Builder $builder) use ($filters): void {
@@ -128,39 +128,39 @@ class ProductRepository extends MainRepository
             ])
             ->where('products.status', ProductStatusEnum::Published)
             ->where('products.stock_quantity', '>', 0)
-            ->withExists(['favorites as is_favorite' => fn(Builder $favoriteQuery) => $favoriteQuery
+            ->withExists(['favorites as is_favorite' => fn (Builder $favoriteQuery) => $favoriteQuery
                 ->where('user_id', $userId)
                 ->where('type', FavoriteTypeEnum::Product)])
-            ->whereHas('store', fn(Builder $storeQuery) => $storeQuery
+            ->whereHas('store', fn (Builder $storeQuery) => $storeQuery
                 ->where('account_type', AccountTypeEnum::Store)
                 ->where('status', UserStatusEnum::Active))
-            ->whereHas('category', fn(Builder $categoryQuery) => $categoryQuery
+            ->whereHas('category', fn (Builder $categoryQuery) => $categoryQuery
                 ->where('is_active', true)
                 ->where(function (Builder $categoryTreeQuery): void {
                     $categoryTreeQuery->whereNull('parent_id')
-                        ->orWhereHas('parent', fn(Builder $parentQuery) => $parentQuery->where('is_active', true));
+                        ->orWhereHas('parent', fn (Builder $parentQuery) => $parentQuery->where('is_active', true));
                 }))
             ->with([
-                'media' => fn($mediaQuery) => $mediaQuery
+                'media' => fn ($mediaQuery) => $mediaQuery
                     ->select(['id', 'product_id', 'type', 'path', 'is_primary'])
                     ->orderByDesc('is_primary')
                     ->orderBy('id'),
-                'category' => fn($categoryQuery) => $categoryQuery
+                'category' => fn ($categoryQuery) => $categoryQuery
                     ->select(['id', 'parent_id'])
-                    ->with(['translations' => fn($translationQuery) => $translationQuery
+                    ->with(['translations' => fn ($translationQuery) => $translationQuery
                         ->select(['id', 'category_id', 'locale', 'name'])
                         ->where('locale', $locale)]),
             ])
             ->when(isset($filters['main_category_id']) && ! isset($filters['sub_category_id']), function (Builder $builder) use ($filters): void {
                 $mainCategoryId = (int) $filters['main_category_id'];
-                $builder->whereHas('category', fn(Builder $categoryQuery) => $categoryQuery
+                $builder->whereHas('category', fn (Builder $categoryQuery) => $categoryQuery
                     ->where(function (Builder $categoryIds) use ($mainCategoryId): void {
                         $categoryIds->whereKey($mainCategoryId)->orWhere('parent_id', $mainCategoryId);
                     }));
             })
-            ->when(isset($filters['sub_category_id']), fn(Builder $builder) => $builder->where('products.category_id', (int) $filters['sub_category_id']))
-            ->when(isset($filters['governorate_id']), fn(Builder $builder) => $builder->whereHas('store', fn(Builder $storeQuery) => $storeQuery->where('governorate_id', (int) $filters['governorate_id'])))
-            ->when(isset($filters['search']) && trim((string) $filters['search']) !== '', fn(Builder $builder) => $builder->where('products.name', 'like', '%' . trim((string) $filters['search']) . '%'))
+            ->when(isset($filters['sub_category_id']), fn (Builder $builder) => $builder->where('products.category_id', (int) $filters['sub_category_id']))
+            ->when(isset($filters['governorate_id']), fn (Builder $builder) => $builder->whereHas('store', fn (Builder $storeQuery) => $storeQuery->where('governorate_id', (int) $filters['governorate_id'])))
+            ->when(isset($filters['search']) && trim((string) $filters['search']) !== '', fn (Builder $builder) => $builder->where('products.name', 'like', '%'.trim((string) $filters['search']).'%'))
             ->addSelect([
                 'average_rating' => Review::query()
                     ->selectRaw('AVG(reviews.rating)')
@@ -178,7 +178,7 @@ class ProductRepository extends MainRepository
             ]);
 
         if (($filters['sort'] ?? UserProductSortEnum::MostPurchased->value) === UserProductSortEnum::HighestRated->value) {
-            $query->whereExists(fn($reviews) => $reviews->selectRaw('1')
+            $query->whereExists(fn ($reviews) => $reviews->selectRaw('1')
                 ->from('reviews')
                 ->whereColumn('reviews.product_id', 'products.id')
                 ->where('reviews.is_visible', true))
@@ -229,6 +229,31 @@ class ProductRepository extends MainRepository
         ], $locale, $userId)->where('products.id', '!=', $productId)->limit(4)->get();
     }
 
+    public function categoryIdForVisibleProduct(int $productId): int
+    {
+        return (int) $this->query()
+            ->select(['id', 'category_id'])
+            ->whereKey($productId)
+            ->where('status', ProductStatusEnum::Published)
+            ->whereHas('store', fn (Builder $store) => $store
+                ->where('account_type', AccountTypeEnum::Store)
+                ->where('status', UserStatusEnum::Active))
+            ->whereHas('category', fn (Builder $category) => $category
+                ->where('is_active', true)
+                ->where(fn (Builder $tree) => $tree->whereNull('parent_id')
+                    ->orWhereHas('parent', fn (Builder $parent) => $parent->where('is_active', true))))
+            ->firstOrFail()
+            ->category_id;
+    }
+
+    /** @param array<string, mixed> $filters */
+    public function listSimilarForUser(int $productId, int $categoryId, array $filters, string $locale, int $userId): Builder
+    {
+        return $this->listForUserCatalog($filters, $locale, $userId)
+            ->where('products.category_id', $categoryId)
+            ->where('products.id', '!=', $productId);
+    }
+
     public function findDetailsForStore(int|string $productId, int $storeId, string $locale): Model
     {
         return $this->query()
@@ -236,9 +261,9 @@ class ProductRepository extends MainRepository
             ->with([
                 'media:id,product_id,type,path,is_primary',
                 'features:id,product_id,name',
-                'category' => fn($categoryQuery) => $categoryQuery
+                'category' => fn ($categoryQuery) => $categoryQuery
                     ->select(['id', 'parent_id'])
-                    ->with(['translations' => fn($translationQuery) => $translationQuery
+                    ->with(['translations' => fn ($translationQuery) => $translationQuery
                         ->select(['id', 'category_id', 'locale', 'name'])
                         ->where('locale', $locale)]),
             ])
@@ -309,10 +334,10 @@ class ProductRepository extends MainRepository
             ->selectRaw('rating, COUNT(*) AS total')
             ->groupBy('rating')
             ->get()
-            ->mapWithKeys(fn($row) => [(int) $row->rating => (int) $row->total])
+            ->mapWithKeys(fn ($row) => [(int) $row->rating => (int) $row->total])
             ->all();
         $ratingDistribution = array_map(
-            fn(int $rating): array => ['rating' => $rating, 'total' => $ratingDistribution[$rating] ?? 0],
+            fn (int $rating): array => ['rating' => $rating, 'total' => $ratingDistribution[$rating] ?? 0],
             range(1, 5),
         );
 

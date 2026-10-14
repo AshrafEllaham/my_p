@@ -33,4 +33,26 @@ class UserProductCatalogService
             'similar_products' => $this->products->similarForUserDetails($productId, (int) $product->category_id, $locale, $userId),
         ];
     }
+
+    /** @param array<string, mixed> $filters */
+    public function similar(int $productId, array $filters, string $locale, int $userId): Builder
+    {
+        $categoryId = $this->products->categoryIdForVisibleProduct($productId);
+
+        return $this->products->listSimilarForUser($productId, $categoryId, $filters, $locale, $userId);
+    }
+
+    /** @param array<string, mixed> $filters */
+    public function reviews(int $productId, array $filters): Builder
+    {
+        $this->products->categoryIdForVisibleProduct($productId);
+
+        return $this->reviews->listVisibleForUserProduct($productId, $filters);
+    }
+
+    /** @return array{average_rating: float|null, reviews_count: int} */
+    public function reviewSummary(int $productId): array
+    {
+        return $this->reviews->summaryVisibleForUserProduct($productId);
+    }
 }

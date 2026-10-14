@@ -10,6 +10,8 @@
   const origin = location.protocol === 'file:' ? 'http://127.0.0.1:8000' :
     ['localhost', '127.0.0.1'].includes(location.hostname) ? `${location.protocol}//${location.hostname}:8000` : location.origin;
   input.value = params.get('search') || params.get('q') || '';
+  const similarTo = params.get('similar_to');
+  if (similarTo) document.querySelector('.flow-head h1').textContent = 'منتجات مشابهة';
   let timer;
   let controller;
   let page = 1;
@@ -31,7 +33,8 @@
     if (input.value.trim()) query.set('search', input.value.trim());
     try {
       const token = localStorage.getItem('saey_api_token');
-      const response = await fetch(`${origin}/api/user/products?${query}`, {
+      const endpoint = similarTo ? `products/${encodeURIComponent(similarTo)}/similar-products` : 'products';
+      const response = await fetch(`${origin}/api/user/${endpoint}?${query}`, {
         signal: controller.signal,
         headers: { Accept: 'application/json', 'Accept-Language': 'ar', ...(token ? { Authorization: `Bearer ${token}` } : {}) }
       });

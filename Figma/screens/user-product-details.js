@@ -173,6 +173,7 @@
       similar.append(link);
     });
     similar.parentElement.hidden = similar.childElementCount === 0;
+    similar.parentElement.querySelector('.inline-section-head a').href = `23-search-results.html?similar_to=${encodeURIComponent(data.id)}`;
     setFavorite(Boolean(data.is_favorite));
     document.getElementById('buyNow').disabled = Number(data.stock_quantity) < 1;
     document.getElementById('buyNow').textContent = Number(data.stock_quantity) < 1 ? 'نفد المخزون' : 'شراء الآن';

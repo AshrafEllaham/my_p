@@ -58,6 +58,8 @@ return [
     'user_products' => [
         'listed' => 'Products were retrieved successfully.',
         'retrieved' => 'Product details were retrieved successfully.',
+        'similar_listed' => 'Similar products were retrieved successfully.',
+        'reviews_listed' => 'Product reviews were retrieved successfully.',
     ],
     'user_favorites' => [
         'added' => 'The item was added to favorites.',
@@ -310,6 +312,13 @@ return [
                 'required' => 'The product ID is required.',
                 'integer' => 'The product ID must be an integer.',
                 'min' => 'The product ID must be greater than zero.',
+            ],
+        ],
+        'user_product_reviews' => [
+            'rating' => [
+                'label' => 'product rating',
+                'integer' => 'The rating must be an integer.',
+                'between' => 'The rating must be from 1 to 5.',
             ],
         ],
         'user_product_filters' => [

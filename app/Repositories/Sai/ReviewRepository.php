@@ -35,6 +35,34 @@ class ReviewRepository extends MainRepository
     }
 
     /** @param array<string, mixed> $filters */
+    public function listVisibleForUserProduct(int $productId, array $filters): Builder
+    {
+        return $this->query()
+            ->where('product_id', $productId)
+            ->where('is_visible', true)
+            ->select(['id', 'user_id', 'product_id', 'rating', 'comment', 'created_at'])
+            ->with('user:id,name')
+            ->when(isset($filters['rating']), fn (Builder $query) => $query->where('rating', (int) $filters['rating']))
+            ->orderByDesc('created_at')
+            ->orderByDesc('id');
+    }
+
+    /** @return array{average_rating: float|null, reviews_count: int} */
+    public function summaryVisibleForUserProduct(int $productId): array
+    {
+        $summary = $this->query()
+            ->where('product_id', $productId)
+            ->where('is_visible', true)
+            ->selectRaw('AVG(rating) AS average_rating, COUNT(*) AS reviews_count')
+            ->first();
+
+        return [
+            'average_rating' => $summary->average_rating === null ? null : round((float) $summary->average_rating, 2),
+            'reviews_count' => (int) $summary->reviews_count,
+        ];
+    }
+
+    /** @param array<string, mixed> $filters */
     public function listForProduct(int $storeId, int $productId, array $filters): Builder
     {
         return $this->query()
