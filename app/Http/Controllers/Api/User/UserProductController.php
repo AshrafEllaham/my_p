@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\User\ListUserProductsRequest;
+use App\Http\Requests\Api\User\ShowUserProductRequest;
+use App\Http\Resources\Api\User\UserProductDetailsResource;
 use App\Http\Resources\Api\User\UserProductResource;
 use App\Services\Sai\UserProductCatalogService;
 use Illuminate\Http\JsonResponse;
@@ -22,5 +24,12 @@ class UserProductController extends Controller
             UserProductResource::class,
             __('messages.user_products.listed'),
         );
+    }
+
+    public function show(ShowUserProductRequest $request, int $product): JsonResponse
+    {
+        $details = $this->service->details($product, app()->getLocale(), (int) auth('api')->id());
+
+        return jsonSuccess(UserProductDetailsResource::make($details), __('messages.user_products.retrieved'));
     }
 }

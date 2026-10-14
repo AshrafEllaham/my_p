@@ -57,6 +57,7 @@ return [
     ],
     'user_products' => [
         'listed' => 'Products were retrieved successfully.',
+        'retrieved' => 'Product details were retrieved successfully.',
     ],
     'user_favorites' => [
         'added' => 'The item was added to favorites.',
@@ -301,6 +302,14 @@ return [
                 'label' => 'stock status',
                 'string' => 'The stock status must be text.',
                 'enum' => 'The selected stock status is unavailable.',
+            ],
+        ],
+        'user_product_details' => [
+            'product' => [
+                'label' => 'product',
+                'required' => 'The product ID is required.',
+                'integer' => 'The product ID must be an integer.',
+                'min' => 'The product ID must be greater than zero.',
             ],
         ],
         'user_product_filters' => [

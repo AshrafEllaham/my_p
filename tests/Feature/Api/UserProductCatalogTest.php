@@ -4,6 +4,7 @@ namespace Tests\Feature\Api;
 
 use App\Enums\AccountTypeEnum;
 use App\Enums\FavoriteTypeEnum;
+use App\Enums\MediaTypeEnum;
 use App\Enums\OrderStatusEnum;
 use App\Enums\PaymentStatusEnum;
 use App\Enums\ProductStatusEnum;
@@ -14,6 +15,8 @@ use App\Models\Sai\Governorate;
 use App\Models\Sai\Order;
 use App\Models\Sai\OrderItem;
 use App\Models\Sai\Product;
+use App\Models\Sai\ProductFeature;
+use App\Models\Sai\ProductMedia;
 use App\Models\Sai\Review;
 use App\Models\Sai\Store;
 use App\Models\Sai\StorePolicyVersion;
@@ -120,6 +123,51 @@ class UserProductCatalogTest extends TestCase
         $url = '/api/user/products?governorate_id='.$governorate->id.'&sort=newest&pagination=on&limit_per_page=1';
         $this->getJson($url)->assertOk()->assertJsonPath('total', 2)->assertJsonPath('data.0.id', $new->id);
         $this->getJson($url.'&page=2')->assertOk()->assertJsonPath('data.0.id', $old->id);
+    }
+
+    public function test_user_can_read_published_product_details_with_store_policy_reviews_and_similar_products(): void
+    {
+        [$store, $customer, $policy] = $this->createStoreAndCustomer();
+        $policy->update(['pickup_hold_hours' => 36, 'return_window_days' => 7, 'returns_enabled' => true, 'return_terms' => 'Seven days']);
+        $category = Category::factory()->create();
+        $product = $this->createProduct($store->id, $category->id, 'Leather jacket');
+        $similar = $this->createProduct($store->id, $category->id, 'Cotton shirt');
+        ProductFeature::query()->create(['product_id' => $product->id, 'name' => 'Natural leather']);
+        ProductMedia::query()->create(['product_id' => $product->id, 'type' => MediaTypeEnum::Image, 'path' => 'products/jacket.jpg', 'is_primary' => true]);
+        Favorite::query()->create(['user_id' => $customer->id, 'type' => FavoriteTypeEnum::Product, 'favoriteable_id' => $product->id]);
+        $this->recordReview($store->id, $customer->id, $policy->id, $product, 5);
+
+        $this->actingAs($customer, 'api')->getJson('/api/user/products/'.$product->id)
+            ->assertOk()
+            ->assertJsonPath('data.id', $product->id)
+            ->assertJsonPath('data.store.id', $store->id)
+            ->assertJsonPath('data.policy.pickup_hold_hours', 36)
+            ->assertJsonPath('data.policy.return_terms', 'Seven days')
+            ->assertJsonPath('data.features.0', 'Natural leather')
+            ->assertJsonPath('data.media.0.type', MediaTypeEnum::Image->value)
+            ->assertJsonPath('data.is_favorite', true)
+            ->assertJsonPath('data.average_rating', 5)
+            ->assertJsonPath('data.reviews_count', 1)
+            ->assertJsonPath('data.latest_review.rating', 5)
+            ->assertJsonPath('data.similar_products.0.id', $similar->id);
+    }
+
+    public function test_product_details_require_login_and_do_not_expose_hidden_or_inactive_store_products(): void
+    {
+        [$store, $customer] = $this->createStoreAndCustomer();
+        $category = Category::factory()->create();
+        $product = $this->createProduct($store->id, $category->id, 'Hidden jacket');
+        $this->getJson('/api/user/products/'.$product->id)->assertUnauthorized();
+
+        $this->actingAs($customer, 'api');
+        $product->update(['status' => ProductStatusEnum::Draft]);
+        $this->getJson('/api/user/products/'.$product->id)->assertNotFound();
+        $product->update(['status' => ProductStatusEnum::Published]);
+        $store->update(['status' => UserStatusEnum::Suspended]);
+        $this->getJson('/api/user/products/'.$product->id)->assertNotFound();
+        $this->withHeader('Accept-Language', 'ar')->getJson('/api/user/products/0')
+            ->assertUnprocessable()
+            ->assertJsonPath('message', __('messages.validation.user_product_details.product.min'));
     }
 
     public function test_category_detail_preview_uses_products_endpoint_for_both_lists(): void

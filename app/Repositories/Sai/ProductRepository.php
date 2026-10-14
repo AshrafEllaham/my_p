@@ -17,6 +17,7 @@ use App\Models\Sai\Review;
 use App\Models\Sai\User;
 use App\Repositories\MainRepository;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class ProductRepository extends MainRepository
@@ -199,7 +200,10 @@ class ProductRepository extends MainRepository
             ->whereHas('store', fn (Builder $store) => $store
                 ->where('account_type', AccountTypeEnum::Store)
                 ->where('status', UserStatusEnum::Active))
-            ->whereHas('category', fn (Builder $category) => $category->where('is_active', true))
+            ->whereHas('category', fn (Builder $category) => $category
+                ->where('is_active', true)
+                ->where(fn (Builder $tree) => $tree->whereNull('parent_id')
+                    ->orWhereHas('parent', fn (Builder $parent) => $parent->where('is_active', true))))
             ->withExists(['favorites as is_favorite' => fn (Builder $favorite) => $favorite
                 ->where('user_id', $userId)
                 ->where('type', FavoriteTypeEnum::Product)])
@@ -217,12 +221,12 @@ class ProductRepository extends MainRepository
             ->firstOrFail();
     }
 
-    public function similarForUserDetails(int $productId, int $categoryId, string $locale, int $userId): Builder
+    public function similarForUserDetails(int $productId, int $categoryId, string $locale, int $userId): Collection
     {
         return $this->listForUserCatalog([
             'sub_category_id' => $categoryId,
             'sort' => UserProductSortEnum::Newest->value,
-        ], $locale, $userId)->whereKeyNot($productId)->limit(4);
+        ], $locale, $userId)->where('products.id', '!=', $productId)->limit(4)->get();
     }
 
     public function findDetailsForStore(int|string $productId, int $storeId, string $locale): Model

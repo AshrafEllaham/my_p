@@ -31,6 +31,9 @@ Route::group([], function () {
         // يعرض المنتجات المنشورة مع فلاتر الأقسام والمحافظة والبحث والترتيب.
         Route::get('/products', [UserProductController::class, 'index'])->middleware('throttle:60,1');
 
+        // يعرض تفاصيل منتج منشور مع المتجر والسياسات والتقييمات ومنتجات مشابهة.
+        Route::get('/products/{product}', [UserProductController::class, 'show'])->whereNumber('product');
+
         // يبدل حالة منتج أو متجر في مفضلة المستخدم الحالي.
         Route::post('/favorites/toggle', [UserFavoriteController::class, 'toggle']);
 
