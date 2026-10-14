@@ -164,7 +164,18 @@
     </div>
     <button class="buy-now" id="buyNow" type="button">شراء الآن</button>
   </footer>
-  <dialog class="product-report-dialog" id="reportDialog"><form method="dialog"><div class="report-sheet-handle" aria-hidden="true"></div><button class="report-close" value="cancel" aria-label="إغلاق">×</button><h2>الإبلاغ عن المنتج</h2><p>اختر سبب البلاغ، وسيقوم فريق سعي بمراجعته.</p><label><input type="radio" name="reason" value="wrong" required> معلومات أو سعر غير صحيح</label><label><input type="radio" name="reason" value="forbidden"> منتج مخالف أو غير مسموح</label><label><input type="radio" name="reason" value="fake"> منتج مقلّد</label><button class="report-submit" id="submitReport" value="default">إرسال البلاغ</button></form></dialog>
+  <dialog class="product-report-dialog" id="reportDialog">
+    <form id="reportForm">
+      <div class="report-sheet-handle" aria-hidden="true"></div>
+      <button class="report-close" id="closeReport" type="button" aria-label="إغلاق"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      <h2>الإبلاغ عن المنتج</h2>
+      <p>اختر سبب البلاغ، وسيقوم فريق سعي بمراجعته.</p>
+      <div id="reportReasons"></div>
+      <p id="reportStatus" role="status" aria-live="polite"></p>
+      <button class="report-submit" id="submitReport" type="submit" disabled>إرسال البلاغ</button>
+    </form>
+  </dialog>
+  <script src="user-report.js"></script>
   <script src="user-product-details.js"></script>
   <script src="user-experience.js"></script>
 </body>

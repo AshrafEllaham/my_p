@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             GovernorateSeeder::class,
             CitySeeder::class,
             CategorySeeder::class,
+            ReportReasonSeeder::class,
         ]);
     }
 }

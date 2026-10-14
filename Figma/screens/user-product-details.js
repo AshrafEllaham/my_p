@@ -1,5 +1,5 @@
 (() => {
-  const productId = new URLSearchParams(location.search).get('product_id');
+  const requestedProductId = new URLSearchParams(location.search).get('product_id');
   const state = document.getElementById('detailsState');
   const gallery = document.getElementById('gallery');
   const content = document.querySelector('.details-content');
@@ -10,6 +10,7 @@
     ['localhost', '127.0.0.1'].includes(location.hostname) ? `${location.protocol}//${location.hostname}:8000` : location.origin;
   const token = () => localStorage.getItem('saey_api_token');
   let product;
+  let productId = requestedProductId;
   let quantity = 1;
 
   const showError = message => {
@@ -182,10 +183,23 @@
     state.hidden = true;
   };
   const load = async () => {
-    if (!productId || !/^\d+$/.test(productId)) { showError('افتح المنتج من قائمة المنتجات لعرض تفاصيله.'); return; }
+    if (productId && !/^\d+$/.test(productId)) { showError('معرّف المنتج غير صالح.'); return; }
     state.textContent = 'جارٍ تحميل تفاصيل المنتج...';
     state.hidden = false;
     try {
+      if (!productId) {
+        const query = new URLSearchParams({ pagination: 'on', limit_per_page: '1', sort: 'newest' });
+        const listResponse = await fetch(`${origin}/api/user/products?${query}`, {
+          headers: { Accept: 'application/json', 'Accept-Language': 'ar', ...(token() ? { Authorization: `Bearer ${token()}` } : {}) }
+        });
+        const listPayload = await listResponse.json();
+        if (!listResponse.ok) throw new Error(listResponse.status === 401 ? 'سجّل الدخول لعرض تفاصيل المنتج.' : (listPayload.message || 'تعذر تحميل المنتجات.'));
+        productId = listPayload.data?.[0]?.id ? String(listPayload.data[0].id) : '';
+        if (!productId) throw new Error('لا توجد منتجات متاحة للعرض حاليًا.');
+        const url = new URL(location.href);
+        url.searchParams.set('product_id', productId);
+        history.replaceState(null, '', url);
+      }
       const response = await fetch(`${origin}/api/user/products/${encodeURIComponent(productId)}`, {
         headers: { Accept: 'application/json', 'Accept-Language': 'ar', ...(token() ? { Authorization: `Bearer ${token()}` } : {}) }
       });
@@ -223,7 +237,6 @@
   document.getElementById('share').onclick = async () => {
     if (product && navigator.share) await navigator.share({ title: product.name, url: location.href }).catch(() => {});
   };
-  const reportDialog = document.getElementById('reportDialog');
-  document.getElementById('report').onclick = () => reportDialog.showModal();
+  SaeyUserReport.bind({ type: 'product', itemPath: 'products', getItemId: () => product?.id });
   load();
 })();

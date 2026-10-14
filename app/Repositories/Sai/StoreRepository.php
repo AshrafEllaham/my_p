@@ -2,6 +2,8 @@
 
 namespace App\Repositories\Sai;
 
+use App\Enums\AccountTypeEnum;
+use App\Enums\UserStatusEnum;
 use App\Helpers\ImageHelper;
 use App\Models\Sai\Store;
 use App\Repositories\MainRepository;
@@ -23,6 +25,18 @@ class StoreRepository extends MainRepository
     public function findOrFail(int|string $id): Model
     {
         return $this->query()->findOrFail($id);
+    }
+
+    public function ensureVisibleForUser(int $id): void
+    {
+        $this->query()
+            ->select(['id'])
+            ->whereKey($id)
+            ->whereHas('owner', fn (Builder $owner) => $owner
+                ->where('account_type', AccountTypeEnum::Store)
+                ->where('status', UserStatusEnum::Active))
+            ->whereHas('category', fn (Builder $category) => $category->where('is_active', true))
+            ->firstOrFail();
     }
 
     /** @param array<string, mixed> $data */

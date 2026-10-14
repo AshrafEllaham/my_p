@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\User\UserFavoriteController;
 use App\Http\Controllers\Api\User\UserHomeCategoryController;
 use App\Http\Controllers\Api\User\UserProductController;
 use App\Http\Controllers\Api\User\UserProfileController;
+use App\Http\Controllers\Api\User\UserReportController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -39,6 +40,15 @@ Route::group([], function () {
 
         // يعرض تقييمات المنتج الظاهرة مع ملخصها وتقسيم الصفحات.
         Route::get('/products/{product}/reviews', [UserProductController::class, 'reviews'])->whereNumber('product');
+
+        // يعرض أسباب الإبلاغ المترجمة المفلترة حسب نوع العنصر.
+        Route::get('/report-reasons', [UserReportController::class, 'reasons']);
+
+        // يسجل بلاغ المستخدم عن منتج منشور بسبب محدد.
+        Route::post('/products/{product}/reports', [UserReportController::class, 'storeProduct'])->whereNumber('product');
+
+        // يسجل بلاغ المستخدم عن متجر نشط بسبب محدد.
+        Route::post('/stores/{store}/reports', [UserReportController::class, 'storeStoreReport'])->whereNumber('store');
 
         // يبدل حالة منتج أو متجر في مفضلة المستخدم الحالي.
         Route::post('/favorites/toggle', [UserFavoriteController::class, 'toggle']);

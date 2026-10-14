@@ -77,6 +77,10 @@
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9a2.5 2.5 0 0 1 4.8 1c0 1.7-2.4 2-2.4 4M12 17.5h.01"/></svg>
             <span>{{ __('admin.navigation.faqs') }}</span>
         </a>
+        <a class="admin-nav__item {{ request()->routeIs('admin.report-reasons.*') ? 'is-active' : '' }}" href="{{ route('admin.report-reasons.index') }}" @if(request()->routeIs('admin.report-reasons.*')) aria-current="page" @endif>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 3 7v6c0 5 4 8 9 9 5-1 9-4 9-9V7l-9-4Z"/><path d="M12 8v5M12 17h.01"/></svg>
+            <span>{{ __('admin.navigation.report_reasons') }}</span>
+        </a>
         <a class="admin-nav__item {{ request()->routeIs('admin.contact-us.*') ? 'is-active' : '' }}" href="{{ route('admin.contact-us.index') }}" @if(request()->routeIs('admin.contact-us.*')) aria-current="page" @endif>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v12H7l-3 3Z"/><path d="M8 9h8M8 13h5"/></svg>
             <span>{{ __('admin.navigation.contact_us') }}</span>

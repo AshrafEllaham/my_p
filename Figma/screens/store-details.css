@@ -4,6 +4,7 @@ body.saey-store-details { height:100vh; margin:0; overflow:hidden; display:flex;
 .store-details-page::-webkit-scrollbar { display:none; }
 .store-details-top { display:flex; align-items:center; justify-content:space-between; min-height:42px; margin-bottom:10px; color:#0F172A; font-size:15px; font-weight:900; }
 .store-details-top > span { margin:0 auto; }
+.store-details-actions { display:flex; gap:6px; }
 .store-details-back,.store-icon-button { width:40px; height:40px; display:grid; place-items:center; border:1px solid #E2E8F0; border-radius:13px; background:#FFF; color:#0F172A; text-decoration:none; cursor:pointer; box-shadow:0 3px 10px rgba(15,23,42,.035); }
 .store-details-back svg,.store-icon-button svg { width:19px; height:19px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
 .store-hero { position:relative; height:156px; overflow:hidden; border-radius:21px; background:#E2E8F0; box-shadow:0 8px 18px rgba(15,23,42,.08); }

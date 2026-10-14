@@ -65,6 +65,10 @@ return [
         'added' => 'The item was added to favorites.',
         'removed' => 'The item was removed from favorites.',
     ],
+    'user_reports' => [
+        'reasons_listed' => 'Report reasons were retrieved successfully.',
+        'submitted' => 'The report was submitted successfully.',
+    ],
     'ads' => [
         'listed' => 'Store ads were retrieved successfully.',
         'retrieved' => 'Ad details were retrieved successfully.',
@@ -312,6 +316,27 @@ return [
                 'required' => 'The product ID is required.',
                 'integer' => 'The product ID must be an integer.',
                 'min' => 'The product ID must be greater than zero.',
+            ],
+        ],
+        'user_store_details' => [
+            'store' => [
+                'label' => 'store',
+                'required' => 'The store ID is required.',
+                'integer' => 'The store ID must be an integer.',
+                'min' => 'The store ID must be greater than zero.',
+            ],
+        ],
+        'user_reports' => [
+            'type' => [
+                'label' => 'report type',
+                'required' => 'The report type is required.',
+                'enum' => 'The report type must be store or product.',
+            ],
+            'reason' => [
+                'label' => 'report reason',
+                'required' => 'Choose a report reason.',
+                'integer' => 'The report reason ID must be an integer.',
+                'exists' => 'The selected report reason does not exist.',
             ],
         ],
         'user_product_reviews' => [

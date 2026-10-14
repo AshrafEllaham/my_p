@@ -74,6 +74,7 @@ return [
         'ad_packages' => 'Ad packages',
         'ads_review' => 'Review ads',
         'faqs' => 'FAQs',
+        'report_reasons' => 'Report reasons',
         'contact_us' => 'Contact messages',
         'settings' => 'Settings',
         'developer_tools' => 'Developer tools',
@@ -463,6 +464,30 @@ return [
                 'en.question' => 'question in English',
                 'ar.answer' => 'answer in Arabic',
                 'en.answer' => 'answer in English',
+            ],
+        ],
+    ],
+    'report_reasons' => [
+        'title' => 'Report reasons',
+        'description' => 'Manage report reason titles in Arabic and English.',
+        'create' => 'Add report reason',
+        'choose_type' => 'Choose report type',
+        'in_use' => 'A reason used by existing reports cannot be deleted.',
+        'fields' => [
+            'type' => 'Report type',
+            'title' => 'Title',
+            'title_ar' => 'Title in Arabic',
+            'title_en' => 'Title in English',
+        ],
+        'types' => [
+            'store' => 'Store',
+            'product' => 'Product',
+        ],
+        'validation' => [
+            'attributes' => [
+                'type' => 'report type',
+                'ar.title' => 'title in Arabic',
+                'en.title' => 'title in English',
             ],
         ],
     ],
