@@ -43,6 +43,12 @@ Route::group([], function () {
         // يعرض مسابقات المتاجر المتاحة أو المنتهية مع تقسيم النتائج إلى صفحات.
         Route::get('/competitions', [UserCompetitionController::class, 'index']);
 
+        // يعرض تفاصيل مسابقة المتجر وإجابة المستخدم الحالي وبيانات الفائز عند إعلان النتيجة.
+        Route::get('/competitions/{competition}', [UserCompetitionController::class, 'show'])->whereNumber('competition');
+
+        // يحفظ إجابة المستخدم للمسابقة أو يحدّثها ما دامت المشاركة مفتوحة.
+        Route::put('/competitions/{competition}/entry', [UserCompetitionController::class, 'saveAnswer'])->whereNumber('competition');
+
         // يعرض منتجات متجر محدد مع البحث والترتيب وتقسيم الصفحات.
         Route::get('/stores/{store}/products', [UserStoreController::class, 'products'])->whereNumber('store');
 

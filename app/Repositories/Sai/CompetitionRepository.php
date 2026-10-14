@@ -12,6 +12,7 @@ use App\Models\Sai\Store;
 use App\Repositories\MainRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CompetitionRepository extends MainRepository
 {
@@ -55,7 +56,7 @@ class CompetitionRepository extends MainRepository
     {
         $now = now();
 
-        $query = $this->query()
+        $query = $this->visibleForUserQuery()
             ->select([
                 'id', 'public_id', 'store_id', 'title', 'question', 'prize', 'image', 'status', 'ends_at', 'created_at',
             ])
@@ -71,16 +72,6 @@ class CompetitionRepository extends MainRepository
             ->with([
                 'store:id,owner_id,cover_image',
                 'store.owner:id,name,avatar',
-            ])
-            ->whereHas('store', fn (Builder $store) => $store
-                ->whereHas('owner', fn (Builder $owner) => $owner
-                    ->where('account_type', AccountTypeEnum::Store)
-                    ->where('status', UserStatusEnum::Active))
-                ->whereHas('category', fn (Builder $category) => $category->where('is_active', true)))
-            ->whereIn('status', [
-                CompetitionStatusEnum::Active,
-                CompetitionStatusEnum::Ended,
-                CompetitionStatusEnum::Drawn,
             ]);
 
         if ($status === UserCompetitionStatusFilterEnum::AvailableNow) {
@@ -104,6 +95,66 @@ class CompetitionRepository extends MainRepository
         }
 
         return $query->orderByDesc('created_at')->orderByDesc('id');
+    }
+
+    public function findDetailsForUser(int|string $id, int $userId): Competition
+    {
+        $now = now();
+
+        /** @var Competition $competition */
+        $competition = $this->visibleForUserQuery()
+            ->select([
+                'id', 'public_id', 'store_id', 'winner_user_id', 'title', 'question', 'prize', 'image', 'status',
+                'ends_at', 'drawn_at', 'created_at',
+            ])
+            ->selectRaw(
+                'CASE WHEN competitions.status = ? AND competitions.ends_at > ? THEN ? ELSE ? END AS feed_status',
+                [
+                    CompetitionStatusEnum::Active->value,
+                    $now,
+                    UserCompetitionStatusFilterEnum::AvailableNow->value,
+                    UserCompetitionStatusFilterEnum::Ended->value,
+                ],
+            )
+            ->withCount('entries')
+            ->with([
+                'store:id,owner_id,cover_image',
+                'store.owner:id,name,avatar',
+                'winnerUser:id,name',
+                'entries' => fn (HasMany $entries) => $entries
+                    ->select(['id', 'competition_id', 'user_id', 'answer', 'created_at', 'updated_at'])
+                    ->where('user_id', $userId),
+            ])
+            ->whereKey($id)
+            ->firstOrFail();
+
+        return $competition;
+    }
+
+    public function findForUserForUpdate(int|string $id): Competition
+    {
+        /** @var Competition $competition */
+        $competition = $this->visibleForUserQuery()
+            ->whereKey($id)
+            ->lockForUpdate()
+            ->firstOrFail();
+
+        return $competition;
+    }
+
+    private function visibleForUserQuery(): Builder
+    {
+        return $this->query()
+            ->whereHas('store', fn (Builder $store) => $store
+                ->whereHas('owner', fn (Builder $owner) => $owner
+                    ->where('account_type', AccountTypeEnum::Store)
+                    ->where('status', UserStatusEnum::Active))
+                ->whereHas('category', fn (Builder $category) => $category->where('is_active', true)))
+            ->whereIn('status', [
+                CompetitionStatusEnum::Active,
+                CompetitionStatusEnum::Ended,
+                CompetitionStatusEnum::Drawn,
+            ]);
     }
 
     /** @return array{active_count: int, total_participation_count: int, drawn_count: int} */

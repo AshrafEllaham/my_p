@@ -6,6 +6,7 @@ use App\Enums\CompetitionStatusEnum;
 use App\Repositories\Sai\CompetitionRepository;
 use App\Services\Sai\Results\CompetitionDrawResult;
 use App\Services\Sai\Results\CompetitionListResult;
+use App\Support\CompetitionAnswerNormalizer;
 use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
@@ -20,6 +21,7 @@ class CompetitionService
     public function __construct(
         private readonly CompetitionRepository $repository,
         private readonly FilesystemFactory $filesystem,
+        private readonly CompetitionAnswerNormalizer $answerNormalizer,
     ) {}
 
     /** @param array<string, mixed> $filters */
@@ -105,7 +107,7 @@ class CompetitionService
     {
         $storeId = $this->storeIdForOwner($ownerId);
         $correctAnswer = trim($correctAnswer);
-        $normalizedAnswer = $this->normalizeAnswer($correctAnswer);
+        $normalizedAnswer = $this->answerNormalizer->normalize($correctAnswer);
 
         if ($normalizedAnswer === '') {
             throw ValidationException::withMessages([
@@ -175,23 +177,6 @@ class CompetitionService
     private function isStoredImagePath(?string $image): bool
     {
         return $image !== null && filter_var($image, FILTER_VALIDATE_URL) === false;
-    }
-
-    private function normalizeAnswer(string $answer): string
-    {
-        $normalized = mb_strtolower(trim($answer));
-        $normalized = preg_replace('/[\x{064B}-\x{065F}\x{0670}]/u', '', $normalized) ?? $normalized;
-        $normalized = strtr($normalized, [
-            'أ' => 'ا',
-            'إ' => 'ا',
-            'آ' => 'ا',
-            'ٱ' => 'ا',
-            'ى' => 'ي',
-            'ؤ' => 'و',
-            'ئ' => 'ي',
-        ]);
-
-        return preg_replace('/\s+/u', ' ', trim($normalized)) ?? trim($normalized);
     }
 
     private function storeIdForOwner(int $ownerId): int

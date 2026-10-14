@@ -48,4 +48,32 @@ class CompetitionEntryRepository extends MainRepository
     {
         return (bool) $this->findOrFail($id)->delete();
     }
+
+    public function findForCompetitionAndUserForUpdate(int $competitionId, int $userId): ?CompetitionEntry
+    {
+        return $this->query()
+            ->where('competition_id', $competitionId)
+            ->where('user_id', $userId)
+            ->lockForUpdate()
+            ->first();
+    }
+
+    public function saveUserAnswer(
+        ?CompetitionEntry $entry,
+        int $competitionId,
+        int $userId,
+        string $answer,
+        string $normalizedAnswer,
+    ): CompetitionEntry {
+        $entry ??= $this->getModel()->newInstance();
+        $entry->fill([
+            'competition_id' => $competitionId,
+            'user_id' => $userId,
+            'answer' => $answer,
+            'normalized_answer' => $normalizedAnswer,
+        ]);
+        $entry->save();
+
+        return $entry;
+    }
 }

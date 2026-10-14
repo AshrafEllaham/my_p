@@ -102,6 +102,15 @@ body.saey-contests{margin:0;background:#eef2f6;color:var(--contest-ink);font-fam
 .responses-empty strong{font-size:13px;font-weight:900}
 .responses-empty span{margin-top:3px;color:var(--contest-muted);font-size:10px;font-weight:600}
 
+/* User competition details: readable loading, validation, and saved-answer states */
+.user-contest-title small,.user-contest-prize small,.answer-card-heading p,.answer-field>small,.saved-answer small{font-size:11px}
+.user-contest-status{font-size:11px}
+.user-contest-status.completed{background:#f1f5f9;color:#64748b}
+.answer-field>small{bottom:7px}
+.contest-form-error{margin-top:8px}
+.answer-card button:disabled{opacity:.65;cursor:wait}
+.user-contest-state{margin:0 0 12px}
+
 @media(max-width:379px){.merchant-detail-meta{grid-template-columns:1fr}.draw-setup-card,.merchant-detail-hero,.merchant-responses-card{padding:14px}.merchant-question-box strong{font-size:14px}.draw-setup-head{grid-template-columns:40px minmax(0,1fr) 26px}.draw-setup-head>b{width:26px;height:26px}.merchant-responses-card .response-row{grid-template-columns:36px minmax(0,1fr) auto;padding:9px 8px}.response-row small{max-width:170px}}
 
 /* Merchant competitions dashboard */

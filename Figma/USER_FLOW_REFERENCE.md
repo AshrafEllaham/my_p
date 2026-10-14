@@ -100,7 +100,8 @@
 - المنتجات → `10-featured-products.html` أو `12-product-details.html`.
 - المتاجر → `11-featured-stores.html` أو `19-store-details.html`.
 - مسابقات المتاجر في الرئيسية و«عرض الكل» → `GET /api/user/competitions` مع `status=available_now` أو `status=ended` وتقسيم صفحات → `27-competitions.html`.
-- بطاقات المسابقات تفتح `27-competition-details.html`.
+- بطاقة المسابقة تفتح `27-competition-details.html?id={competition}`، وتحمل التفاصيل والإجابة السابقة عبر `GET /api/user/competitions/{competition}`.
+- إرسال الإجابة أو تعديلها يستخدم `PUT /api/user/competitions/{competition}/entry` بحقل `answer`.
 - الطلبات → `16-orders.html`.
 - الحساب → `15-account.html`.
 
@@ -190,8 +191,10 @@
 ```
 
 - `27-competitions.html`: تبويبا «متاحة الآن» و«المنتهية»، مع صورة واسم المتجر والجائزة والموعد.
-- `27-competition-details.html`: المتجر، العنوان، الجائزة، الموعد، سؤال واضح وحقل الإجابة.
+- `27-competition-details.html`: يعرض بيانات المسابقة والسؤال والمتجر والجائزة وموعد الانتهاء والإجابة المسجلة والفائز عند إعلان النتيجة من API.
 - يشارك المستخدم بإجابة واحدة فقط، ويمكن تحديثها ما دامت المسابقة نشطة ولم يتم السحب.
+- يقبل endpoint المشاركة إجابة نصية من 3 إلى 180 حرفًا، ويعيد حفظ إجابة المستخدم نفسها عند التعديل.
+- تفاصيل المسابقة والمشاركة تتطلبان Bearer token؛ وتعرض الشاشة حالة تحميل وأخطاء API وزر إعادة المحاولة.
 - بعد اختيار التاجر للفائز تتوقف المشاركة وتظهر النتيجة المحفوظة.
 
 ## 9. المحفظة

@@ -116,6 +116,9 @@ return [
     ],
     'user_competitions' => [
         'listed' => 'Store competitions were retrieved successfully.',
+        'retrieved' => 'Competition details were retrieved successfully.',
+        'answer_saved' => 'Your competition answer was saved successfully.',
+        'participation_closed' => 'Participation in this competition has ended or its prize has been drawn.',
     ],
     'reviews' => [
         'listed' => 'Product reviews were retrieved successfully.',
@@ -459,6 +462,14 @@ return [
                 'label' => 'competition status filter',
                 'string' => 'The competition status filter must be text.',
                 'enum' => 'The competition status filter must be available_now or ended.',
+            ],
+            'answer' => [
+                'label' => 'competition answer',
+                'required' => 'A competition answer is required.',
+                'string' => 'The competition answer must be text.',
+                'min' => 'The competition answer must contain at least 3 characters.',
+                'max' => 'The competition answer must not exceed 180 characters.',
+                'regex' => 'The answer cannot consist only of spaces or diacritics.',
             ],
         ],
         'store_review_filters' => [
