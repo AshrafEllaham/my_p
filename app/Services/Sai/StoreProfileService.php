@@ -38,6 +38,8 @@ class StoreProfileService
                 'category_id' => $data['category_id'],
                 ...(array_key_exists('description', $data) ? ['description' => $data['description']] : []),
                 ...(array_key_exists('cover', $data) ? ['cover_image' => $data['cover']] : []),
+                ...(array_key_exists('lat', $data) ? ['latitude' => $data['lat']] : []),
+                ...(array_key_exists('long', $data) ? ['longitude' => $data['long']] : []),
             ]);
         });
     }

@@ -7,7 +7,6 @@ use Illuminate\Validation\Rule;
 
 class UpdateStoreProfileRequest extends ApiRequest
 {
-
     /** @return array<string, array<int, mixed>> */
     public function rules(): array
     {
@@ -22,6 +21,8 @@ class UpdateStoreProfileRequest extends ApiRequest
             'description' => ['sometimes', 'nullable', 'string', 'max:1000'],
             'cover' => ['sometimes', 'nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:10240'],
             'address' => ['sometimes', 'nullable', 'string', 'max:500'],
+            'lat' => ['nullable', 'required_with:long', 'numeric', 'between:-90,90'],
+            'long' => ['nullable', 'required_with:lat', 'numeric', 'between:-180,180'],
         ];
     }
 
@@ -47,6 +48,12 @@ class UpdateStoreProfileRequest extends ApiRequest
             'cover.max' => __('messages.validation.profile_cover.max'),
             'address.string' => __('messages.validation.profile_address.string'),
             'address.max' => __('messages.validation.profile_address.max'),
+            'lat.required_with' => __('messages.validation.nearby_stores.lat.required_with'),
+            'lat.numeric' => __('messages.validation.nearby_stores.lat.numeric'),
+            'lat.between' => __('messages.validation.nearby_stores.lat.between'),
+            'long.required_with' => __('messages.validation.nearby_stores.long.required_with'),
+            'long.numeric' => __('messages.validation.nearby_stores.long.numeric'),
+            'long.between' => __('messages.validation.nearby_stores.long.between'),
         ];
     }
 }

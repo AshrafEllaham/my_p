@@ -21,12 +21,16 @@ class Store extends Model
         'cover_image',
         'contact_phone',
         'contact_email',
+        'latitude',
+        'longitude',
         'is_featured',
     ];
 
     protected function casts(): array
     {
         return [
+            'latitude' => 'decimal:7',
+            'longitude' => 'decimal:7',
             'is_featured' => 'boolean',
         ];
     }

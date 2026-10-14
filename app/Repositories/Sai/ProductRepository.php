@@ -10,6 +10,7 @@ use App\Enums\ProductStatusEnum;
 use App\Enums\ProductStockFilterEnum;
 use App\Enums\UserProductSortEnum;
 use App\Enums\UserStatusEnum;
+use App\Enums\UserStoreProductSortEnum;
 use App\Models\Sai\AdDailyMetric;
 use App\Models\Sai\Favorite;
 use App\Models\Sai\Order;
@@ -193,6 +194,20 @@ class ProductRepository extends MainRepository
         return $query->orderByDesc('products.created_at')->orderByDesc('products.id');
     }
 
+    /** @param array<string, mixed> $filters */
+    public function listForVisibleUserStore(int $storeOwnerId, array $filters, string $locale, int $userId): Builder
+    {
+        $sort = UserStoreProductSortEnum::from($filters['sort'] ?? UserStoreProductSortEnum::MostPurchased->value);
+        $filters['sort'] = match ($sort) {
+            UserStoreProductSortEnum::HighestRated => UserProductSortEnum::HighestRated->value,
+            UserStoreProductSortEnum::Newest => UserProductSortEnum::Newest->value,
+            UserStoreProductSortEnum::MostPurchased => UserProductSortEnum::MostPurchased->value,
+        };
+
+        return $this->listForUserCatalog($filters, $locale, $userId)
+            ->where('products.store_id', $storeOwnerId);
+    }
+
     public function listRecommendedForUser(string $locale, int $userId): Builder
     {
         $governorateId = User::query()->whereKey($userId)->value('governorate_id');
@@ -224,6 +239,17 @@ class ProductRepository extends MainRepository
             ->orderByDesc('units_sold')
             ->orderByDesc('products.created_at')
             ->orderByDesc('products.id');
+    }
+
+    /** @return Collection<int, Product> */
+    public function featuredForUserStore(int $storeOwnerId, string $locale, int $userId): Collection
+    {
+        return $this->listForUserCatalog([
+            'sort' => UserProductSortEnum::Newest->value,
+        ], $locale, $userId)
+            ->where('products.store_id', $storeOwnerId)
+            ->limit(6)
+            ->get();
     }
 
     public function findForUserDetails(int $productId, string $locale, int $userId): Model

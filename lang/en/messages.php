@@ -62,6 +62,12 @@ return [
         'similar_listed' => 'Similar products were retrieved successfully.',
         'reviews_listed' => 'Product reviews were retrieved successfully.',
     ],
+    'user_stores' => [
+        'nearby_listed' => 'Nearby stores were retrieved successfully.',
+        'retrieved' => 'Store details were retrieved successfully.',
+        'products_listed' => 'Store products were retrieved successfully.',
+        'ads_listed' => 'Active store ads were retrieved successfully.',
+    ],
     'user_favorites' => [
         'added' => 'The item was added to favorites.',
         'removed' => 'The item was removed from favorites.',
@@ -374,6 +380,13 @@ return [
                 'enum' => 'Product order must be most_purchased, highest_rated, or newest.',
             ],
         ],
+        'user_store_products' => [
+            'sort' => [
+                'label' => 'store product order',
+                'string' => 'Store product order must be text.',
+                'enum' => 'Store product order must be high_rate, newest, or most_purchased.',
+            ],
+        ],
         'favorite_toggle' => [
             'type' => [
                 'label' => 'favorite type',
@@ -529,6 +542,44 @@ return [
         'profile_address' => [
             'string' => 'The address must be a string.',
             'max' => 'The address must not exceed 500 characters.',
+        ],
+        'nearby_stores' => [
+            'lat' => [
+                'label' => 'latitude',
+                'required_with' => 'Latitude is required when longitude is submitted.',
+                'required_if' => 'Latitude is required when sorting by nearest.',
+                'numeric' => 'Latitude must be numeric.',
+                'between' => 'Latitude must be between -90 and 90.',
+            ],
+            'long' => [
+                'label' => 'longitude',
+                'required_with' => 'Longitude is required when latitude is submitted.',
+                'required_if' => 'Longitude is required when sorting by nearest.',
+                'numeric' => 'Longitude must be numeric.',
+                'between' => 'Longitude must be between -180 and 180.',
+            ],
+        ],
+        'user_store_filters' => [
+            'main_category_id' => [
+                'label' => 'main category',
+                'integer' => 'The main category ID must be an integer.',
+                'exists' => 'The selected active main category was not found.',
+            ],
+            'governorate_id' => [
+                'label' => 'governorate',
+                'integer' => 'The governorate ID must be an integer.',
+                'exists' => 'The selected active governorate was not found.',
+            ],
+            'sort' => [
+                'label' => 'store order',
+                'string' => 'The store order must be text.',
+                'enum' => 'Store order must be high_rate, nearest, or newest.',
+            ],
+            'search' => [
+                'label' => 'store search',
+                'string' => 'Store search must be text.',
+                'max' => 'The search text must not exceed 120 characters.',
+            ],
         ],
         'category_id' => [
             'required' => 'The store category is required.',

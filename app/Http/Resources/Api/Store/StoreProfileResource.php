@@ -21,6 +21,8 @@ class StoreProfileResource extends JsonResource
             'description' => $this->description,
             'cover' => $this->cover_image,
             'address' => $this->whenLoaded('owner', fn () => $this->owner->address_line),
+            'lat' => $this->latitude === null ? null : (float) $this->latitude,
+            'long' => $this->longitude === null ? null : (float) $this->longitude,
         ];
     }
 }

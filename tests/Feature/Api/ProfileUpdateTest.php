@@ -89,6 +89,8 @@ class ProfileUpdateTest extends TestCase
             'description' => 'Store description',
             'cover' => UploadedFile::fake()->image('cover.jpg', 1200, 400),
             'address' => 'Cairo',
+            'lat' => 30.0444196,
+            'long' => 31.2357116,
         ], ['Accept' => 'application/json']);
 
         $createResponse
@@ -97,7 +99,9 @@ class ProfileUpdateTest extends TestCase
             ->assertJsonPath('data.name', 'Saey Store')
             ->assertJsonPath('data.category_id', $category->id)
             ->assertJsonPath('data.description', 'Store description')
-            ->assertJsonPath('data.address', 'Cairo');
+            ->assertJsonPath('data.address', 'Cairo')
+            ->assertJsonPath('data.lat', 30.0444196)
+            ->assertJsonPath('data.long', 31.2357116);
 
         Storage::disk('public')->assertExists($createResponse->json('data.image'));
         Storage::disk('public')->assertExists($createResponse->json('data.cover'));
@@ -122,6 +126,8 @@ class ProfileUpdateTest extends TestCase
             'owner_id' => $owner->id,
             'category_id' => $category->id,
             'description' => 'Store description',
+            'latitude' => 30.0444196,
+            'longitude' => 31.2357116,
         ]);
         $this->assertFalse(Schema::hasColumn('stores', 'name'));
         $this->assertFalse(Schema::hasColumn('stores', 'image'));

@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\User\UserHomeCategoryController;
 use App\Http\Controllers\Api\User\UserProductController;
 use App\Http\Controllers\Api\User\UserProfileController;
 use App\Http\Controllers\Api\User\UserReportController;
+use App\Http\Controllers\Api\User\UserStoreController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -34,6 +35,18 @@ Route::group([], function () {
 
         // يعرض منتجات مقترحة حسب مشتريات المستخدم ومفضلاته ومحافظته.
         Route::get('/products/recommended', [UserProductController::class, 'recommended']);
+
+        // يعرض المتاجر مرتبة حسب القرب عند إرسال الإحداثيات أو حسب الأعلى تقييمًا عند غيابها.
+        Route::get('/stores/nearby', [UserStoreController::class, 'nearby']);
+
+        // يعرض منتجات متجر محدد مع البحث والترتيب وتقسيم الصفحات.
+        Route::get('/stores/{store}/products', [UserStoreController::class, 'products'])->whereNumber('store');
+
+        // يعرض الإعلانات النشطة ضمن فترة العرض لمتجر محدد مع تقسيم النتائج إلى صفحات.
+        Route::get('/stores/{store}/ads', [UserStoreController::class, 'ads'])->whereNumber('store');
+
+        // يعرض بيانات متجر نشط وسياساته وأبرز منتجاته للمستخدم.
+        Route::get('/stores/{store}', [UserStoreController::class, 'show'])->whereNumber('store');
 
         // يعرض تفاصيل منتج منشور مع المتجر والسياسات والتقييمات ومنتجات مشابهة.
         Route::get('/products/{product}', [UserProductController::class, 'show'])->whereNumber('product');

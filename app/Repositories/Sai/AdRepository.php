@@ -39,6 +39,23 @@ class AdRepository extends MainRepository
             ->orderByDesc('created_at')->orderByDesc('id');
     }
 
+    public function listActiveForUserStore(int $storeId): Builder
+    {
+        $now = now();
+
+        return $this->query()
+            ->select([
+                'id', 'public_id', 'store_id', 'product_id', 'category_id', 'title', 'action_label',
+                'caption', 'placement', 'action', 'media_type', 'media_path', 'starts_at', 'ends_at', 'created_at',
+            ])
+            ->where('store_id', $storeId)
+            ->where('status', AdStatusEnum::Active->value)
+            ->where(fn (Builder $query) => $query->whereNull('starts_at')->orWhere('starts_at', '<=', $now))
+            ->where(fn (Builder $query) => $query->whereNull('ends_at')->orWhere('ends_at', '>=', $now))
+            ->orderByDesc('created_at')
+            ->orderByDesc('id');
+    }
+
     /** @return array{total_impressions_count: int, total_impressions_this_month_count: int, total_new_customers_count: int, total_active_campaigns_count: int} */
     public function summaryForStore(int $storeId): array
     {

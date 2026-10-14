@@ -33,29 +33,42 @@
         <button class="store-icon-button" id="shareStore" type="button" aria-label="مشاركة المتجر"><svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg></button>
       </div>
     </header>
-    <section class="store-hero">
-      <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85" alt="واجهة متجر النجم الساطع">
+    <p class="store-details-state" id="storeDetailsState" role="status" aria-live="polite">جارٍ تحميل بيانات المتجر...</p>
+    <div id="storeContent" hidden>
+    <section class="store-hero" id="storeHero" hidden>
+      <img id="storeHeroImage" src="" alt="">
       <span class="store-hero-shade"></span>
     </section>
-    <section class="store-profile-card">
+    <section class="store-profile-card" id="storeProfile" hidden>
       <div class="store-profile-head">
-        <div class="store-logo-large">ن</div>
-        <div class="store-profile-copy"><h1>النجم الساطع <i>موثّق</i></h1><p>أزياء رجالية · القاهرة</p></div>
+        <div class="store-logo-large" id="storeLogo">س</div>
+        <div class="store-profile-copy"><h1 id="storeName"></h1><p id="storeCategoryLocation"></p></div>
         <button class="store-icon-button favorite-store" id="favoriteStore" type="button" aria-label="إضافة المتجر للمفضلة"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
       </div>
-      <div class="store-stats"><span><b>4.9</b><small>التقييم</small></span><span><b>١.٢ كم</b><small>المسافة</small></span><span><b>+١٢٠</b><small>منتج</small></span></div>
-      <div class="store-actions"><a class="store-action primary" href="tel:+201000000000"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>اتصال</a><a class="store-action" href="14-chat-conversation.html?store=%D8%A7%D9%84%D9%86%D8%AC%D9%85%20%D8%A7%D9%84%D8%B3%D8%A7%D8%B7%D8%B9"><svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>دردشة</a></div>
+      <div class="store-stats"><span><b id="storeRating">—</b><small>التقييم</small></span><span><b id="storeDistance">—</b><small>المسافة</small></span><span><b id="storeProductCount">0</b><small>منتج</small></span></div>
+      <div class="store-actions"><a class="store-action primary" id="storePhone" href="#"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>اتصال</a><a class="store-action" id="storeChat" href="#"><svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>دردشة</a></div>
     </section>
-    <section class="youtube-ad-section store-ads" aria-label="إعلانات المتجر"><div class="youtube-ad-section-head"><h2>إعلانات المتجر</h2><span>عروض مميزة</span></div><article class="youtube-ad compact"><a class="youtube-ad-media" href="12-product-details.html"><img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=900&q=85" alt="عرض جاكيت جلد طبيعي"><span class="youtube-ad-shade"></span><span class="youtube-ad-badge">إعلان المتجر</span><span class="youtube-ad-duration">0:12</span><span class="youtube-ad-play"><svg viewBox="0 0 24 24"><path d="m8 5 11 7-11 7Z"/></svg></span></a><div class="youtube-ad-body"><div class="youtube-ad-meta"><span class="youtube-ad-avatar">ن</span><span class="youtube-ad-copy"><strong>خصم ١٠٪ على تشكيلة الجاكيتات الجديدة</strong><small>النجم الساطع · عرض لفترة محدودة</small></span><button class="youtube-ad-menu" type="button" aria-label="خيارات الإعلان">⋮</button></div><div class="youtube-ad-actions"><a class="youtube-ad-cta" href="12-product-details.html">عرض المنتج</a><a class="youtube-ad-chat" href="14-chat-conversation.html?store=النجم%20الساطع">اسأل المتجر</a></div></div></article><div class="youtube-ad-pager" aria-label="مؤشر إعلانات المتجر"><i class="active"></i><i></i><i></i></div></section>
-    <section class="store-info-block"><h2>عن المتجر</h2><p>النجم الساطع متجر متخصص في الأزياء الرجالية المختارة بعناية. نساعدك تلاقي قطع عملية وأنيقة مع إمكانية الاستلام مباشرة من المتجر.</p><div class="store-location"><span class="store-info-icon"><svg viewBox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span><span><b>موقع المتجر</b><small>شارع عباس العقاد، مدينة نصر، القاهرة</small></span><a href="https://www.google.com/maps/search/?api=1&amp;query=%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%B9%D8%A8%D8%A7%D8%B3%20%D8%A7%D9%84%D8%B9%D9%82%D8%A7%D8%AF%20%D9%85%D8%AF%D9%8A%D9%86%D8%A9%20%D9%86%D8%B5%D8%B1%20%D8%A7%D9%84%D9%82%D8%A7%D9%87%D8%B1%D8%A9" target="_blank" rel="noreferrer" aria-label="فتح موقع المتجر في الخرائط"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a></div></section>
-    <section class="store-info-block"><h2>سياسات المتجر</h2><div class="policy-summary" id="storePolicies"></div></section>
-    <div class="store-section-head"><h2>منتجات المتجر</h2><a href="10-featured-products.html">عرض الكل</a></div>
-    <label class="store-product-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg><input id="storeProductSearch" type="search" placeholder="ابحث داخل المتجر"></label>
-    <section class="store-products">
-      <a class="store-product-card" href="12-product-details.html"><span class="store-product-image"><img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=400&q=85" alt="جاكيت جلد طبيعي"><em>خصم ١٠٪</em></span><strong>جاكيت جلد طبيعي</strong><small>٢,٨٩٠ ج.م</small></a>
-      <a class="store-product-card" href="12-product-details.html"><span class="store-product-image"><img src="https://images.unsplash.com/photo-1548883354-7622d03aca27?auto=format&fit=crop&w=400&q=85" alt="جاكيت شتوي"><em>خصم ٢٠٪</em></span><strong>جاكيت شتوي أنيق</strong><small>٢,٣٠٠ ج.م</small></a>
-      <a class="store-product-card" href="12-product-details.html"><span class="store-product-image"><img src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=400&q=85" alt="قميص قطني"><em>الأكثر طلبًا</em></span><strong>قميص قطني عملي</strong><small>٦٢٠ ج.م</small></a>
+    <section class="store-info-block" id="storeAbout" hidden><h2>عن المتجر</h2><p id="storeDescription"></p><div class="store-location"><span class="store-info-icon"><svg viewBox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span><span><b>موقع المتجر</b><small id="storeAddress"></small></span><a id="storeMap" href="#" target="_blank" rel="noreferrer" aria-label="فتح موقع المتجر في الخرائط"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a></div></section>
+    <section class="store-info-block" id="storePolicySection" hidden><h2>سياسات المتجر</h2><div class="policy-summary" id="storePolicies"></div></section>
+    <section class="youtube-ad-section store-active-ads-section" id="storeAdsSection" hidden>
+      <div class="youtube-ad-section-head"><h2>إعلانات المتجر</h2><span>إعلانات نشطة</span></div>
+      <div class="store-active-ads" id="storeAds" aria-live="polite"></div>
+      <div class="store-ads-state" id="storeAdsState" role="status" aria-live="polite" hidden></div>
+      <button class="store-ads-more" id="loadMoreStoreAds" type="button" hidden>تحميل إعلانات إضافية</button>
     </section>
+    <div class="store-section-head"><h2>منتجات المتجر</h2></div>
+    <div class="store-product-controls">
+      <label class="store-product-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg><input id="storeProductSearch" type="search" placeholder="ابحث داخل المتجر" aria-label="ابحث داخل منتجات المتجر"></label>
+      <select class="store-product-sort" id="storeProductSort" aria-label="ترتيب منتجات المتجر">
+        <option value="high_rate">الأعلى تقييمًا</option>
+        <option value="newest">المضاف حديثًا</option>
+        <option value="most_purchased">الأكثر شراءً</option>
+      </select>
+    </div>
+    <section class="store-products" id="storeProducts" aria-live="polite"></section>
+    <p class="store-products-state" id="storeProductsState" role="status" aria-live="polite" hidden></p>
+    <button class="store-products-more" id="loadMoreProducts" type="button" hidden>تحميل منتجات إضافية</button>
+    </div>
   </main>
   <nav class="saey-bottom-nav" aria-label="التنقل الرئيسي">
     <a href="08-user-home.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22v-9h6v9"/></svg></span><span>الرئيسية</span></a>
@@ -76,16 +89,11 @@
   </dialog>
   <script src="user-state.js"></script><script src="user-experience.js"></script><script src="user-report.js"></script>
   <script>
-    const storeId = new URLSearchParams(location.search).get('store_id') || '1';
-    const policies=SaeyState.storePolicies();storePolicies.innerHTML=`<div class="policy-row"><span><svg viewBox="0 0 24 24"><path d="M9 7H4v5"/><path d="M4 12a8 8 0 1 0 2-5M4 12l5-5"/></svg></span><div><strong>الاسترجاع خلال ${Number(policies.returnDays).toLocaleString('ar-EG')} يومًا</strong><small>${policies.returnTerms}</small></div></div><div class="policy-row"><span><svg viewBox="0 0 24 24"><path d="M4 10v10h16V10M3 10l2-6h14l2 6"/></svg></span><div><strong>حجز الاستلام لمدة ${Number(policies.pickupHours).toLocaleString('ar-EG')} ساعة</strong><small>${policies.pickupTerms}</small></div></div>`;
-    const storeFavorite = { id:'bright-star-store', name:'النجم الساطع', category:'أزياء رجالية', rating:4.9, image:'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=500&q=85', href:'19-store-details.html' };
-    const favoriteStoreButton = document.getElementById('favoriteStore');
-    favoriteStoreButton.classList.toggle('saved', SaeyState.isFavoriteStore(storeFavorite.id));
-    favoriteStoreButton.addEventListener('click', event => event.currentTarget.classList.toggle('saved', SaeyState.toggleFavoriteStore(storeFavorite)));
-    document.getElementById('shareStore').addEventListener('click', async () => { try { await navigator.share?.({ title:'النجم الساطع', url:location.href }); } catch (e) {} });
-    document.getElementById('storeProductSearch').addEventListener('input', event => { const q=event.currentTarget.value.trim(); document.querySelectorAll('.store-product-card').forEach(card => card.hidden=q&&!card.textContent.includes(q)); });
-    SaeyUserReport.bind({ type: 'store', itemPath: 'stores', getItemId: () => storeId });
+    const storeId = new URLSearchParams(location.search).get('store_id');
+    window.saeyStoreId = storeId;
+    if (storeId) SaeyUserReport.bind({ type: 'store', itemPath: 'stores', getItemId: () => storeId });
   </script>
+  <script src="user-store-details.js"></script>
   <script src="sponsored-ads.js"></script>
 </body>
 </html>
