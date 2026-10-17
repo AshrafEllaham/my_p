@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ReportReasonController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\SubCategoryController;
+use App\Http\Controllers\Admin\WalletWithdrawalController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
@@ -43,6 +44,10 @@ Route::group([
         Route::get('/ads/{ad}/review', [AdReviewController::class, 'review'])->name('admin.ads.review');
         Route::post('/ads/{ad}/approve', [AdReviewController::class, 'approve'])->name('admin.ads.approve');
         Route::post('/ads/{ad}/reject', [AdReviewController::class, 'reject'])->name('admin.ads.reject');
+        Route::get('/wallet-withdrawals', [WalletWithdrawalController::class, 'index'])->name('admin.wallet-withdrawals.index');
+        Route::get('/wallet-withdrawals/{withdrawal}/review', [WalletWithdrawalController::class, 'review'])->name('admin.wallet-withdrawals.review');
+        Route::post('/wallet-withdrawals/{withdrawal}/approve', [WalletWithdrawalController::class, 'approve'])->name('admin.wallet-withdrawals.approve');
+        Route::post('/wallet-withdrawals/{withdrawal}/reject', [WalletWithdrawalController::class, 'reject'])->name('admin.wallet-withdrawals.reject');
         Route::prefix('developer')->name('admin.developer.')->middleware('developer')->group(function (): void {
             Route::get('/commands', [CommandController::class, 'index'])->name('commands.index');
             Route::get('/commands/create', [CommandController::class, 'create'])->name('commands.create');

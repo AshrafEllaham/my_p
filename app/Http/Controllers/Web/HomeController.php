@@ -7,6 +7,7 @@ use App\Enums\PaymentStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Services\Sai\AdService;
 use App\Services\Sai\SettingsService;
+use App\Services\Sai\WalletTopUpService;
 use Illuminate\Contracts\View\View;
 
 class HomeController extends Controller
@@ -14,6 +15,7 @@ class HomeController extends Controller
     public function __construct(
         private readonly SettingsService $settingsService,
         private readonly AdService $adService,
+        private readonly WalletTopUpService $walletTopUpService,
     ) {}
 
     public function privacy(): View
@@ -49,6 +51,12 @@ class HomeController extends Controller
             return view($status === PaymentStatusEnum::Paid ? 'payments.payment_success' : 'payments.payment_failed');
         }
 
+        if (PaymentOperationTableEnum::tryFrom($type) === PaymentOperationTableEnum::WalletTopUp) {
+            $status = $this->walletTopUpService->completeOnlineTopUp($id, PaymentOperationTableEnum::WalletTopUp);
+
+            return view($status === PaymentStatusEnum::Paid ? 'payments.payment_success' : 'payments.payment_failed');
+        }
+
         return view('payments.payment_success');
     }
 
@@ -56,6 +64,12 @@ class HomeController extends Controller
     {
         if (PaymentOperationTableEnum::tryFrom($type) === PaymentOperationTableEnum::PayTrip) {
             $status = $this->adService->failOnlineAdPayment($id, PaymentOperationTableEnum::PayTrip);
+
+            return view($status === PaymentStatusEnum::Paid ? 'payments.payment_success' : 'payments.payment_failed');
+        }
+
+        if (PaymentOperationTableEnum::tryFrom($type) === PaymentOperationTableEnum::WalletTopUp) {
+            $status = $this->walletTopUpService->failOnlineTopUp($id, PaymentOperationTableEnum::WalletTopUp);
 
             return view($status === PaymentStatusEnum::Paid ? 'payments.payment_success' : 'payments.payment_failed');
         }

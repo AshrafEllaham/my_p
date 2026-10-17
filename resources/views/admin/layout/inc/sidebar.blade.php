@@ -73,6 +73,10 @@
             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 9h8M8 13h5M16 16l2 2 4-4"/></svg>
             <span>{{ __('admin.navigation.ads_review') }}</span>
         </a>
+        <a class="admin-nav__item {{ request()->routeIs('admin.wallet-withdrawals.*') ? 'is-active' : '' }}" href="{{ route('admin.wallet-withdrawals.index') }}" @if(request()->routeIs('admin.wallet-withdrawals.*')) aria-current="page" @endif>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4M17 15h.01"/></svg>
+            <span>{{ __('admin.navigation.wallet_withdrawals') }}</span>
+        </a>
         <a class="admin-nav__item {{ request()->routeIs('admin.faqs.*') ? 'is-active' : '' }}" href="{{ route('admin.faqs.index') }}" @if(request()->routeIs('admin.faqs.*')) aria-current="page" @endif>
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9a2.5 2.5 0 0 1 4.8 1c0 1.7-2.4 2-2.4 4M12 17.5h.01"/></svg>
             <span>{{ __('admin.navigation.faqs') }}</span>

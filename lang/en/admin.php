@@ -73,6 +73,7 @@ return [
         'banners' => 'Banners',
         'ad_packages' => 'Ad packages',
         'ads_review' => 'Review ads',
+        'wallet_withdrawals' => 'Withdrawal requests',
         'faqs' => 'FAQs',
         'report_reasons' => 'Report reasons',
         'contact_us' => 'Contact messages',
@@ -433,6 +434,38 @@ return [
         'validation' => [
             'reason_required' => 'Enter a reason for rejecting the ad.',
             'reason_max' => 'The rejection reason may not exceed 1000 characters.',
+        ],
+    ],
+    'wallet_withdrawals' => [
+        'title' => 'Withdrawal requests',
+        'description' => 'Review wallet withdrawal requests and approve or reject them with a reason.',
+        'pending_count' => 'Requests waiting for review',
+        'empty' => 'There are no withdrawal requests waiting for review.',
+        'review_title' => 'Review withdrawal request',
+        'not_available' => 'Not available',
+        'approve' => 'Approve and deduct balance',
+        'reject' => 'Reject withdrawal request',
+        'fields' => [
+            'owner' => 'Wallet owner',
+            'amount' => 'Withdrawal amount',
+            'method' => 'Payout method',
+            'destination' => 'Payout details',
+            'submitted_at' => 'Submitted at',
+            'rejection_reason' => 'Rejection reason',
+        ],
+        'methods' => [
+            'bank_account' => 'Bank account',
+            'mobile_wallet' => 'Mobile wallet',
+        ],
+        'messages' => [
+            'approved' => 'The withdrawal request was approved and deducted from the wallet owner’s balance.',
+            'rejected' => 'The withdrawal request was rejected and the reason was saved.',
+            'insufficient_balance' => 'The available balance is now lower than the request amount; the request was not approved.',
+            'unavailable' => 'The withdrawal request or its linked wallet transaction is unavailable for review.',
+        ],
+        'validation' => [
+            'reason_required' => 'Enter a reason for rejecting the withdrawal request.',
+            'reason_max' => 'The rejection reason may not exceed 1,000 characters.',
         ],
     ],
     'faqs' => [

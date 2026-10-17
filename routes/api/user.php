@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\User\UserProductController;
 use App\Http\Controllers\Api\User\UserProfileController;
 use App\Http\Controllers\Api\User\UserReportController;
 use App\Http\Controllers\Api\User\UserStoreController;
+use App\Http\Controllers\Api\User\WalletController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -81,6 +82,16 @@ Route::group([], function () {
 
         // يعرض مفضلات المستخدم مع فلترة نوع العنصر وتقسيم الصفحات.
         Route::get('/favorites', [UserFavoriteController::class, 'index']);
+
+
+         // يعرض سجل عمليات محفظة الحساب الحالي بصفحات مرتبة من الأحدث.
+        Route::get('/wallet', [WalletController::class, 'index']);
+        // ينشئ محاولة دفع إلكتروني لشحن محفظة الحساب الحالي.
+        Route::post('/wallet', [WalletController::class, 'store']);
+        // يرسل طلب سحب من محفظة الحساب الحالي للمراجعة.
+        Route::post('/wallet/withdrawal-requests', [WalletController::class, 'requestWithdrawal']);
+        // يحوّل مبلغًا من محفظة الحساب الحالي إلى مستخدم أو متجر آخر.
+        Route::post('/wallet/transfers', [WalletController::class, 'transfer']);
 
     });
 });

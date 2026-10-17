@@ -24,26 +24,41 @@
     <header class="wallet-header">
       <a class="wallet-back" href="08-user-home.html" aria-label="العودة للرئيسية"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a>
       <h1>المحفظة</h1>
-      <a class="wallet-history" href="18-wallet-transactions.html">سجل العمليات</a>
+      <span class="wallet-header-spacer" aria-hidden="true"></span>
     </header>
     <section class="wallet-balance-card" aria-label="رصيد المحفظة">
       <div class="wallet-balance-top"><span class="wallet-balance-label">الرصيد المتاح</span><span class="wallet-secure"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>آمن</span></div>
-      <strong class="wallet-balance" id="walletBalanceValue">٢,٤٥٠ ج.م</strong>
-      <div class="wallet-balance-meta"><span>آخر تحديث منذ دقائق</span><strong>متاح للاستخدام</strong></div>
+      <strong class="wallet-balance" id="walletBalanceValue" aria-live="polite">جارٍ تحميل الرصيد...</strong>
+      <div class="wallet-balance-meta"><span id="walletBalanceStatus">يتم جلب الرصيد من المحفظة</span><strong>متاح للاستخدام</strong></div>
+      <div class="wallet-balance-pending" id="walletPendingBalance" hidden aria-live="polite">
+        <span><i aria-hidden="true"></i>شحن قيد التأكيد</span>
+        <strong id="walletPendingBalanceValue"></strong>
+      </div>
       <div class="wallet-actions">
         <button class="wallet-action primary" type="button" id="depositButton"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>شحن المحفظة</button>
         <button class="wallet-action" type="button" id="withdrawButton"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12h14"/></svg>سحب الرصيد</button>
         <button class="wallet-action transfer" type="button" id="transferButton"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 19a6 6 0 0 1 12 0M16 8h5M18.5 5.5 21 8l-2.5 2.5"/></svg>تحويل لصديق</button>
       </div>
     </section>
-    <section class="wallet-insights" aria-label="ملخص المحفظة"><div><span>إجمالي الأرباح</span><strong class="positive">٣,٨٦٠ ج.م</strong><small>هذا الشهر</small></div><div><span>عمليات معلقة</span><strong>١ عملية</strong><small>تحتاج مراجعة</small></div></section>
+    <section class="wallet-insights wallet-insights-review" id="withdrawalPendingCard" aria-label="طلب سحب الرصيد" hidden>
+      <article class="wallet-review-card" aria-label="عملية طلب سحب رصيد تحت المراجعة">
+        <span class="wallet-review-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 2"/></svg></span>
+        <span class="wallet-review-copy">
+          <span class="wallet-review-heading">
+            <strong class="wallet-review-title">طلب سحب رصيد</strong>
+            <span class="wallet-review-status"><i aria-hidden="true"></i>تحت المراجعة</span>
+          </span>
+          <span class="wallet-review-hint">يتم تحويل المبلغ بعد اعتماد الطلب</span>
+        </span>
+      </article>
+    </section>
     <div class="wallet-section-head" id="transactions"><h2>آخر العمليات</h2><a href="18-wallet-transactions.html">عرض الكل</a></div>
     <section class="wallet-list" aria-label="آخر العمليات">
-      <article class="wallet-transaction transaction-profit"><div class="wallet-transaction-main"><strong>أرباح</strong><b>٢,٥٠٠ ج.م</b></div><div class="wallet-transaction-meta"><small>#7A3D6D</small><time>2025/12/01, 4:50م</time></div></article>
-      <article class="wallet-transaction transaction-pending"><div class="wallet-transaction-main"><strong>طلب سحب قيد المراجعة</strong><b>٢,٥٠٠ ج.م</b></div><div class="wallet-transaction-meta"><small>#7A3D6D</small><time>2025/12/01, 4:50م</time></div></article>
-      <article class="wallet-transaction transaction-approved"><div class="wallet-transaction-main"><strong>طلب سحب مقبول</strong><b>٢,٥٠٠ ج.م</b></div><div class="wallet-transaction-meta"><small>#7A3D6D</small><time>2025/12/01, 4:50م</time></div></article>
+      <article class="wallet-transaction transaction-purchase"><div class="wallet-transaction-main"><strong>شراء منتج</strong><b>− ٢,٥٠٠ ج.م</b></div><div class="wallet-transaction-meta"><small>#7A3D6D</small><time>2025/12/01، 4:50 م</time></div></article>
+      <article class="wallet-transaction transaction-pending"><div class="wallet-transaction-main"><strong>طلب سحب رصيد تحت المراجعة</strong><b>− ٢,٥٠٠ ج.م</b></div><div class="wallet-transaction-meta"><small>#7A3D6D</small><time>2025/12/01، 4:50 م</time></div></article>
+      <article class="wallet-transaction transaction-approved"><div class="wallet-transaction-main"><strong>طلب سحب مقبول</strong><b>− ٢,٥٠٠ ج.م</b></div><div class="wallet-transaction-meta"><small>#7A3D6D</small><time>2025/12/01، 4:50 م</time></div></article>
     </section>
-    <p class="wallet-note">يمكنك استخدام رصيد المحفظة عند تأكيد طلبك من أي متجر على سعي.</p>
+    <p class="wallet-note"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span>يمكنك استخدام رصيد المحفظة عند تأكيد طلبك من أي متجر على سعي.</span></p>
   </main>
   <div class="wallet-sheet-backdrop" id="transferBackdrop" hidden></div>
   <section class="wallet-bottom-sheet" id="transferSheet" role="dialog" aria-modal="true" aria-labelledby="transferSheetTitle" hidden>
@@ -57,7 +72,7 @@
         <label class="wallet-field-label" for="recipientInput">رقم الهاتف أو البريد الإلكتروني</label>
         <input class="wallet-field" id="recipientInput" name="recipient" type="text" inputmode="email" dir="ltr" autocomplete="off" placeholder="01012345678 أو friend@email.com" required>
         <label class="wallet-field-label" for="transferAmount">مبلغ التحويل</label>
-        <div class="wallet-amount-field"><input class="wallet-field" id="transferAmount" name="amount" type="number" inputmode="decimal" min="1" max="2450" dir="ltr" placeholder="0" required><span>ج.م</span></div>
+        <div class="wallet-amount-field"><input class="wallet-field" id="transferAmount" name="amount" type="number" inputmode="decimal" min="1" step="0.01" max="2450" dir="ltr" placeholder="0" required><span>ج.م</span></div>
         <p class="wallet-form-error" id="transferError" role="alert" hidden></p>
         <button class="wallet-sheet-primary" type="submit">متابعة التحويل</button>
       </form>
@@ -67,16 +82,17 @@
       <h2>تأكيد التحويل</h2>
       <p class="wallet-sheet-description">راجع البيانات قبل تنفيذ التحويل من رصيد محفظتك.</p>
       <div class="transfer-review">
-        <div><span>حالة الحساب</span><strong class="recipient-verified">حساب سعي موثّق ✓</strong></div>
+        <div><span>التحقق</span><strong>سيتم التحقق قبل التحويل</strong></div>
         <div><span>المستلم</span><strong id="reviewRecipient"></strong></div>
         <div><span>المبلغ</span><strong id="reviewAmount"></strong></div>
       </div>
+      <p class="wallet-form-error" id="transferConfirmError" role="alert" hidden></p>
       <button class="wallet-sheet-primary" id="confirmTransfer" type="button">تأكيد التحويل</button>
       <button class="wallet-sheet-secondary" id="editTransfer" type="button">تعديل البيانات</button>
     </div>
   </section>
   <div class="wallet-sheet-backdrop" id="depositBackdrop" hidden></div>
-  <section class="wallet-bottom-sheet" id="depositSheet" role="dialog" aria-modal="true" aria-labelledby="depositSheetTitle" hidden><button class="wallet-sheet-close" id="closeDepositSheet" type="button" aria-label="إغلاق"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button><div class="wallet-sheet-handle"></div><div class="wallet-sheet-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div><h2 id="depositSheetTitle">شحن المحفظة</h2><p class="wallet-sheet-description">اختر وسيلة الشحن ثم أدخل المبلغ.</p><form id="depositForm"><label class="wallet-field-label" for="depositMethod">وسيلة الشحن</label><select class="wallet-field" id="depositMethod" required><option value="بطاقة بنكية">بطاقة بنكية</option><option value="تحويل فوري">تحويل فوري</option><option value="محفظة هاتف">محفظة هاتف</option></select><label class="wallet-field-label" for="depositAmount">مبلغ الشحن</label><div class="wallet-amount-field"><input class="wallet-field" id="depositAmount" type="number" min="1" inputmode="decimal" placeholder="0" required><span>ج.م</span></div><p class="wallet-form-error" id="depositError" hidden></p><button class="wallet-sheet-primary" type="submit">تأكيد الشحن</button></form></section>
+  <section class="wallet-bottom-sheet" id="depositSheet" role="dialog" aria-modal="true" aria-labelledby="depositSheetTitle" hidden><button class="wallet-sheet-close" id="closeDepositSheet" type="button" aria-label="إغلاق"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button><div class="wallet-sheet-handle"></div><div class="wallet-sheet-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div><h2 id="depositSheetTitle">شحن المحفظة</h2><p class="wallet-sheet-description">أدخل المبلغ، ثم أكمل الدفع من صفحة الدفع الآمنة.</p><form id="depositForm" novalidate><label class="wallet-field-label" for="depositAmount">مبلغ الشحن</label><div class="wallet-amount-field"><input class="wallet-field" id="depositAmount" name="amount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="0.00" required><span id="depositCurrency">ج.م</span></div><p class="wallet-form-error" id="depositError" role="alert" hidden></p><button class="wallet-sheet-primary" id="depositSubmit" type="submit">تأكيد الشحن</button></form></section>
   <div class="wallet-sheet-backdrop" id="withdrawBackdrop" hidden></div>
   <section class="wallet-bottom-sheet" id="withdrawSheet" role="dialog" aria-modal="true" aria-labelledby="withdrawSheetTitle" hidden>
     <button class="wallet-sheet-close" id="closeWithdrawSheet" type="button" aria-label="إغلاق"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
@@ -88,11 +104,11 @@
       <form id="withdrawForm" novalidate>
         <div class="withdraw-available"><span>الرصيد المتاح</span><strong>٢,٤٥٠ ج.م</strong></div>
         <label class="wallet-field-label" for="withdrawMethod">وسيلة استلام المبلغ</label>
-        <select class="wallet-field" id="withdrawMethod" required><option value="حساب بنكي">حساب بنكي</option><option value="محفظة هاتف">محفظة هاتف</option></select>
+        <select class="wallet-field" id="withdrawMethod" name="method" required><option value="bank_account">حساب بنكي</option><option value="mobile_wallet">محفظة هاتف</option></select>
         <label class="wallet-field-label" for="withdrawDestination">رقم الحساب أو المحفظة</label>
-        <input class="wallet-field" id="withdrawDestination" type="text" dir="ltr" placeholder="اكتب بيانات الاستلام" required>
+        <input class="wallet-field" id="withdrawDestination" name="destination" type="text" dir="ltr" maxlength="255" placeholder="اكتب بيانات الاستلام" required>
         <label class="wallet-field-label" for="withdrawAmount">مبلغ السحب</label>
-        <div class="wallet-amount-field"><input class="wallet-field" id="withdrawAmount" name="amount" type="number" inputmode="decimal" min="1" max="2450" dir="ltr" placeholder="0" required><span>ج.م</span></div>
+        <div class="wallet-amount-field"><input class="wallet-field" id="withdrawAmount" name="amount" type="number" inputmode="decimal" min="0.01" step="0.01" max="2450" dir="ltr" placeholder="0.00" required><span>ج.م</span></div>
         <p class="wallet-form-error" id="withdrawError" role="alert" hidden></p>
         <button class="wallet-sheet-primary" type="submit">تأكيد طلب السحب</button>
       </form>
@@ -107,11 +123,11 @@
   <script src="user-state.js"></script>
   <script>
     const walletToast = (button, text, initialText) => { button.textContent = text; setTimeout(() => { button.textContent = initialText; }, 1400); };
-    const formatMoney = value => `${Number(value).toLocaleString('ar-EG')} ج.م`;
-    let currentBalance = Number(localStorage.getItem('saey_wallet_balance') || 4500);
-    const addTransaction = (type, amount, status = 'completed') => SaeyState.addTransaction(type, amount, status);
-    const updateBalance = value => { currentBalance = value; localStorage.setItem('saey_wallet_balance', String(value)); document.getElementById('walletBalanceValue').textContent = formatMoney(value); };
-    updateBalance(currentBalance);
+    let walletCurrency = 'EGP';
+    const currencyLabel = currency => currency === 'EGP' ? 'ج.م' : currency;
+    const formatMoney = (value, currency = walletCurrency) => `${Number(value).toLocaleString('ar-EG')} ${currencyLabel(currency)}`;
+    let currentBalance = 0;
+    const updateBalance = value => { currentBalance = Number(value); document.getElementById('walletBalanceValue').textContent = formatMoney(currentBalance); };
 
     const transferButton = document.getElementById('transferButton');
     const withdrawButton = document.getElementById('withdrawButton');
@@ -123,6 +139,7 @@
     const recipientInput = document.getElementById('recipientInput');
     const transferAmount = document.getElementById('transferAmount');
     const transferError = document.getElementById('transferError');
+    const transferConfirmError = document.getElementById('transferConfirmError');
 
     const closeTransferSheet = () => {
       transferSheet.hidden = true;
@@ -136,6 +153,7 @@
       transferFormStep.hidden = false;
       transferConfirmStep.hidden = true;
       transferError.hidden = true;
+      transferConfirmError.hidden = true;
       requestAnimationFrame(() => recipientInput.focus());
     };
 
@@ -150,11 +168,15 @@
     const withdrawError = document.getElementById('withdrawError');
     const withdrawAmount = document.getElementById('withdrawAmount');
     const withdrawDestination = document.getElementById('withdrawDestination');
+    const withdrawMethod = document.getElementById('withdrawMethod');
+    const withdrawalPendingCard = document.getElementById('withdrawalPendingCard');
+    let withdrawalPending = false;
     const closeWithdrawSheet = () => {
       withdrawSheet.hidden = true;
       withdrawBackdrop.hidden = true;
     };
     const openWithdrawSheet = () => {
+      if (withdrawalPending) return;
       withdrawSheet.hidden = false;
       withdrawBackdrop.hidden = false;
       withdrawError.hidden = true;
@@ -165,26 +187,54 @@
     document.getElementById('closeWithdrawSheet').addEventListener('click', closeWithdrawSheet);
     withdrawBackdrop.addEventListener('click', closeWithdrawSheet);
     document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && !withdrawSheet.hidden) closeWithdrawSheet(); });
-    withdrawForm.addEventListener('submit', (event) => {
+    const withdrawSubmit = withdrawForm.querySelector('[type="submit"]');
+    let pendingWithdrawalAttempt = null;
+    withdrawForm.addEventListener('submit', async (event) => {
       event.preventDefault();
+      withdrawError.hidden = true;
       const amount = Number(withdrawAmount.value);
       const destination = withdrawDestination.value.trim();
-      if (destination.length < 6 || !amount || amount < 1 || amount > currentBalance) {
-        withdrawError.textContent = destination.length < 6 ? 'اكتب بيانات استلام صحيحة.' : `أدخل مبلغًا من ١ إلى ${formatMoney(currentBalance)}.`;
+      const method = withdrawMethod.value;
+      if (!destination || destination.length > 255 || !amount || amount <= 0 || amount > currentBalance) {
+        withdrawError.textContent = !destination || destination.length > 255 ? 'اكتب بيانات استلام صحيحة.' : `أدخل مبلغًا أكبر من صفر ولا يتجاوز ${formatMoney(currentBalance)}.`;
         withdrawError.hidden = false;
         return;
       }
-      closeWithdrawSheet();
-      updateBalance(currentBalance - amount); addTransaction(`طلب سحب إلى ${document.getElementById('withdrawMethod').value}`, -amount, 'pending');
-      walletToast(withdrawButton, 'تم إرسال طلب السحب', 'سحب الرصيد');
-      withdrawForm.reset();
+      if (!pendingWithdrawalAttempt || pendingWithdrawalAttempt.amount !== withdrawAmount.value || pendingWithdrawalAttempt.destination !== destination || pendingWithdrawalAttempt.method !== method) {
+        pendingWithdrawalAttempt = { amount: withdrawAmount.value, destination, method, key: createRequestKey() };
+      }
+      withdrawSubmit.disabled = true;
+      withdrawSubmit.textContent = 'جارٍ إرسال الطلب...';
+      const formData = new FormData();
+      formData.append('amount', pendingWithdrawalAttempt.amount);
+      formData.append('method', pendingWithdrawalAttempt.method);
+      formData.append('destination', pendingWithdrawalAttempt.destination);
+      formData.append('idempotency_key', pendingWithdrawalAttempt.key);
+      try {
+        await walletApiRequest('/wallet/withdrawal-requests', { method: 'POST', body: formData });
+        pendingWithdrawalAttempt = null;
+        withdrawalPending = true;
+        withdrawalPendingCard.hidden = false;
+        withdrawButton.disabled = true;
+        closeWithdrawSheet();
+        withdrawForm.reset();
+        walletToast(withdrawButton, 'تم إرسال طلب السحب', 'سحب الرصيد');
+        await loadWalletBalance();
+      } catch (error) {
+        withdrawError.textContent = error.message;
+        withdrawError.hidden = false;
+        await loadWalletBalance();
+      } finally {
+        withdrawSubmit.disabled = false;
+        withdrawSubmit.textContent = 'تأكيد طلب السحب';
+      }
     });
 
     transferForm.addEventListener('submit', (event) => {
       event.preventDefault();
       const recipient = recipientInput.value.trim();
       const amount = Number(transferAmount.value);
-      const validRecipient = /^(?:[^\s@]+@[^\s@]+\.[^\s@]+|\+?\d[\d\s-]{8,})$/.test(recipient);
+      const validRecipient = /^(?:[^\s@]+@[^\s@]+\.[^\s@]+|\+?[0-9][0-9\s().-]{5,30})$/.test(recipient);
       if (!validRecipient || !amount || amount < 1 || amount > currentBalance) {
         transferError.textContent = !validRecipient ? 'اكتب رقم هاتف أو بريدًا إلكترونيًا صحيحًا.' : `أدخل مبلغًا من ١ إلى ${formatMoney(currentBalance)}.`;
         transferError.hidden = false;
@@ -197,23 +247,165 @@
     });
 
     document.getElementById('editTransfer').addEventListener('click', () => {
+      transferConfirmError.hidden = true;
       transferConfirmStep.hidden = true;
       transferFormStep.hidden = false;
       recipientInput.focus();
     });
 
-    document.getElementById('confirmTransfer').addEventListener('click', () => {
-      const amount = Number(transferAmount.value); updateBalance(currentBalance - amount); addTransaction(`تحويل إلى ${recipientInput.value.trim()}`, -amount);
-      closeTransferSheet();
-      walletToast(transferButton, 'تم التحويل بنجاح', 'تحويل لصديق');
-      transferForm.reset();
+    const confirmTransferButton = document.getElementById('confirmTransfer');
+    let pendingTransferAttempt = null;
+    confirmTransferButton.addEventListener('click', async () => {
+      transferConfirmError.hidden = true;
+      const recipient = recipientInput.value.trim();
+      const amount = transferAmount.value;
+
+      if (!pendingTransferAttempt || pendingTransferAttempt.recipient !== recipient || pendingTransferAttempt.amount !== amount) {
+        pendingTransferAttempt = { recipient, amount, key: createRequestKey() };
+      }
+
+      const formData = new FormData();
+      formData.append('recipient', pendingTransferAttempt.recipient);
+      formData.append('amount', pendingTransferAttempt.amount);
+      formData.append('idempotency_key', pendingTransferAttempt.key);
+      confirmTransferButton.disabled = true;
+      confirmTransferButton.textContent = 'جارٍ تنفيذ التحويل...';
+
+      try {
+        const transfer = await walletApiRequest('/wallet/transfers', { method: 'POST', body: formData });
+        if (transfer.balance_after !== undefined) updateBalance(transfer.balance_after);
+        pendingTransferAttempt = null;
+        closeTransferSheet();
+        walletToast(transferButton, 'تم التحويل بنجاح', 'تحويل لصديق');
+        transferForm.reset();
+        transferFormStep.hidden = false;
+        transferConfirmStep.hidden = true;
+        await loadWalletBalance();
+      } catch (error) {
+        transferConfirmError.textContent = error.message;
+        transferConfirmError.hidden = false;
+      } finally {
+        confirmTransferButton.disabled = false;
+        confirmTransferButton.textContent = 'تأكيد التحويل';
+      }
     });
 
-    const depositSheet=document.getElementById('depositSheet'),depositBackdrop=document.getElementById('depositBackdrop'),depositAmount=document.getElementById('depositAmount');
-    const closeDeposit=()=>{depositSheet.hidden=true;depositBackdrop.hidden=true;};
-    document.getElementById('depositButton').onclick=()=>{depositSheet.hidden=false;depositBackdrop.hidden=false;requestAnimationFrame(()=>depositAmount.focus());};
-    document.getElementById('closeDepositSheet').onclick=closeDeposit;depositBackdrop.onclick=closeDeposit;
-    document.getElementById('depositForm').onsubmit=event=>{event.preventDefault();const amount=Number(depositAmount.value),method=document.getElementById('depositMethod').value;if(!amount||amount<1){const error=document.getElementById('depositError');error.textContent='أدخل مبلغ شحن صحيحًا.';error.hidden=false;return;}updateBalance(currentBalance+amount);addTransaction(`شحن عبر ${method}`,amount);closeDeposit();walletToast(document.getElementById('depositButton'),'تم شحن المحفظة','شحن المحفظة');event.currentTarget.reset();};
+    const depositSheet = document.getElementById('depositSheet');
+    const depositBackdrop = document.getElementById('depositBackdrop');
+    const depositAmount = document.getElementById('depositAmount');
+    const depositForm = document.getElementById('depositForm');
+    const depositError = document.getElementById('depositError');
+    const depositSubmit = document.getElementById('depositSubmit');
+    const apiOrigin = window.location.protocol === 'file:'
+      ? 'http://localhost:8000'
+      : ['localhost', '127.0.0.1'].includes(window.location.hostname) && window.location.port !== '8000'
+        ? `${window.location.protocol}//${window.location.hostname}:8000`
+        : window.location.origin;
+    const configuredApiBase = new URL(localStorage.getItem('saey_api_base') || '/api', apiOrigin);
+    configuredApiBase.pathname = configuredApiBase.pathname.replace(/\/(?:user|store)\/?$/, '').replace(/\/$/, '') || '/api';
+    const walletApiBase = configuredApiBase.toString().replace(/\/$/, '');
+    const apiToken = () => localStorage.getItem('saey_api_token') || '';
+    const walletApiRequest = async (path, options = {}) => {
+      const token = apiToken();
+      if (!token) throw new Error('سجّل الدخول لعرض رصيد المحفظة أو شحنها.');
+      let response;
+      try {
+        response = await fetch(`${walletApiBase}${path}`, {
+          ...options,
+          headers: {
+            Accept: 'application/json',
+            'Accept-Language': document.documentElement.lang || 'ar',
+            ...(options.body && !(options.body instanceof FormData) ? { 'Content-Type': 'application/json' } : {}),
+            Authorization: `Bearer ${token}`,
+            ...(options.headers || {}),
+          },
+        });
+      } catch (cause) {
+        throw new Error('تعذر الاتصال بالخادم. تحقق من الاتصال ثم أعد المحاولة.');
+      }
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        const validationMessage = Object.values(result.errors || {}).flat()[0];
+        throw new Error(validationMessage || result.message || 'تعذر تنفيذ الطلب.');
+      }
+      return path === '/wallet' ? (result.wallet || result.data?.wallet || result.data) : result.data;
+    };
+    const loadWalletBalance = async () => {
+      const status = document.getElementById('walletBalanceStatus');
+      try {
+        const wallet = await walletApiRequest('/wallet');
+        walletCurrency = wallet.currency || 'EGP';
+        updateBalance(wallet.balance || 0);
+        withdrawalPending = Boolean(wallet.has_pending_withdrawal);
+        withdrawalPendingCard.hidden = !withdrawalPending;
+        withdrawButton.disabled = withdrawalPending;
+        const pendingBalance = Number(wallet.pending_balance || 0);
+        const pendingBalanceCard = document.getElementById('walletPendingBalance');
+        pendingBalanceCard.hidden = pendingBalance <= 0;
+        document.getElementById('walletPendingBalanceValue').textContent = formatMoney(pendingBalance);
+        document.getElementById('depositCurrency').textContent = currencyLabel(walletCurrency);
+        withdrawAmount.max = String(currentBalance);
+        transferAmount.max = String(currentBalance);
+        status.textContent = 'الرصيد محدث';
+      } catch (error) {
+        document.getElementById('walletBalanceValue').textContent = 'غير متاح';
+        status.textContent = error.message;
+      }
+    };
+    const openDeposit = () => {
+      depositSheet.hidden = false;
+      depositBackdrop.hidden = false;
+      depositError.hidden = true;
+      requestAnimationFrame(() => depositAmount.focus());
+    };
+    const closeDeposit = () => { depositSheet.hidden = true; depositBackdrop.hidden = true; };
+    const createRequestKey = () => {
+      if (window.crypto?.randomUUID) return window.crypto.randomUUID();
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, character => {
+        const random = Math.random() * 16 | 0;
+        return (character === 'x' ? random : (random & 0x3 | 0x8)).toString(16);
+      });
+    };
+    let pendingTopUpAttempt = null;
+    document.getElementById('depositButton').addEventListener('click', openDeposit);
+    document.getElementById('closeDepositSheet').addEventListener('click', closeDeposit);
+    depositBackdrop.addEventListener('click', closeDeposit);
+    depositForm.addEventListener('submit', async event => {
+      event.preventDefault();
+      depositError.hidden = true;
+      const amount = depositAmount.value;
+      if (!amount || Number(amount) <= 0) {
+        depositError.textContent = 'أدخل مبلغ شحن أكبر من صفر.';
+        depositError.hidden = false;
+        return;
+      }
+      if (!pendingTopUpAttempt || pendingTopUpAttempt.amount !== amount) {
+        pendingTopUpAttempt = { amount, key: createRequestKey() };
+      }
+      depositSubmit.disabled = true;
+      depositSubmit.textContent = 'جارٍ تجهيز الدفع...';
+      try {
+        const payment = await walletApiRequest('/wallet', {
+          method: 'POST',
+          body: JSON.stringify({ amount, idempotency_key: pendingTopUpAttempt.key }),
+        });
+        window.location.assign(payment.redirectUrl);
+      } catch (error) {
+        depositError.textContent = error.message;
+        depositError.hidden = false;
+      } finally {
+        depositSubmit.disabled = false;
+        depositSubmit.textContent = 'تأكيد الشحن';
+      }
+    });
+    loadWalletBalance();
+    window.addEventListener('focus', loadWalletBalance);
+    window.addEventListener('pageshow', event => {
+      if (event.persisted) {
+        pendingTopUpAttempt = null;
+        loadWalletBalance();
+      }
+    });
   </script>
 <script src="user-experience.js"></script></body>
 </html>

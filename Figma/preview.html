@@ -2819,8 +2819,8 @@
       tags: ['Wallet', 'Balance', 'Transactions'],
       desc: 'محفظة المستخدم لعرض الرصيد ومتابعة عمليات الشحن والشراء والاسترداد.',
       descEn: 'User wallet for balance, top-ups, purchases, and refunds.',
-      notes: ['الرصيد المتاح', 'شحن وسحب الرصيد', 'آخر العمليات المالية'],
-      notesEn: ['Available balance', 'Deposit and withdraw actions', 'Recent wallet transactions']
+      notes: ['يعرض الرصيد المتاح وأي مبالغ شحن قيد التأكيد', 'يرسل طلب السحب إلى /api/wallet/withdrawal-requests بصيغة multipart ولا يخصم الرصيد قبل الاعتماد', 'يرسل تحويل الصديق إلى /api/wallet/transfers بصيغة multipart بعد تأكيد المستخدم', 'يرسل الشحن إلى /api/wallet ويفتح صفحة الدفع'],
+      notesEn: ['Shows the available balance and any top-ups awaiting confirmation', 'Submits multipart withdrawal requests to /api/wallet/withdrawal-requests without deducting balance before approval', 'Submits friend transfers to /api/wallet/transfers as multipart after user confirmation', 'Submits top-ups to /api/wallet and opens payment']
     });
 
     screens.push({
@@ -2832,10 +2832,10 @@
       title: 'كل العمليات',
       titleEn: 'All Transactions',
       tags: ['Wallet', 'Transactions', 'History'],
-      desc: 'سجل كامل لعمليات المحفظة مع فلترة الإضافة والشراء والاسترداد والتحويل.',
-      descEn: 'Full wallet transaction history with filters for deposits, purchases, refunds, and transfers.',
-      notes: ['ملخص الرصيد الحالي', 'فلترة العمليات حسب النوع', 'سجل مرتب من الأحدث إلى الأقدم'],
-      notesEn: ['Current balance summary', 'Transaction type filters', 'Newest-first transaction history']
+      desc: 'سجل عمليات المحفظة الفعلي مع تحميل الصفحات والتنقل بينها.',
+      descEn: 'Live wallet transaction history with paginated loading and page navigation.',
+      notes: ['يجلب الرصيد ورابط سجل العمليات المرقّم من /api/wallet', 'يعرض العمليات من رابط transactions_url مع التنقل بين الصفحات', 'يتعامل مع التحميل والأخطاء والحالة الفارغة'],
+      notesEn: ['Loads the balance and paginated transaction URL from /api/wallet', 'Fetches wallet activity from transactions_url and supports page navigation', 'Handles loading, errors, and the empty state']
     });
 
     screens.push({

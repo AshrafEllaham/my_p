@@ -29,26 +29,19 @@
     </header>
 
     <section class="transactions-summary" aria-label="ملخص المحفظة">
-      <div><span>الرصيد الحالي</span><strong id="transactionsBalance">٤,٥٠٠ ج.م</strong></div>
-      <div><span>عمليات هذا الشهر</span><strong>٦ عمليات</strong></div>
+      <div><span>الرصيد الحالي</span><strong id="transactionsBalance" aria-live="polite">جارٍ تحميل الرصيد...</strong></div>
+      <div><span>إجمالي العمليات</span><strong id="transactionsTotal">—</strong></div>
     </section>
 
     <div class="wallet-section-head transactions-title"><h2>سجل العمليات</h2><span>الأحدث أولًا</span></div>
-    <div class="wallet-filter-row" role="tablist" aria-label="فلترة العمليات">
-      <button class="wallet-filter is-active" type="button" data-filter="all" role="tab" aria-selected="true">الكل</button>
-      <button class="wallet-filter" type="button" data-filter="profit" role="tab" aria-selected="false">أرباح</button>
-      <button class="wallet-filter" type="button" data-filter="pending" role="tab" aria-selected="false">قيد المراجعة</button>
-      <button class="wallet-filter" type="button" data-filter="rejected" role="tab" aria-selected="false">مرفوض</button>
-      <button class="wallet-filter" type="button" data-filter="approved" role="tab" aria-selected="false">مقبول</button>
-    </div>
-
-    <section class="wallet-list wallet-transactions-list" aria-label="كل عمليات المحفظة">
-      <article class="wallet-transaction transaction-profit" data-type="profit"><div class="wallet-transaction-main"><strong>أرباح</strong><b>٢,٥٠٠ ج.م</b></div><div class="wallet-transaction-meta"><small>#7A3D6D</small><time>2025/12/01, 4:50م</time></div></article>
-      <article class="wallet-transaction transaction-pending" data-type="pending"><div class="wallet-transaction-main"><strong>طلب سحب قيد المراجعة</strong><b>٢,٥٠٠ ج.م</b></div><div class="wallet-transaction-meta"><small>#7A3D6D</small><time>2025/12/01, 4:50م</time></div></article>
-      <article class="wallet-transaction transaction-rejected" data-type="rejected"><div class="wallet-transaction-main"><strong>طلب سحب مرفوض</strong><b>٢,٥٠٠ ج.م</b></div><div class="wallet-transaction-meta"><small>#7A3D6D</small><time>2025/12/01, 4:50م</time></div></article>
-      <article class="wallet-transaction transaction-approved" data-type="approved"><div class="wallet-transaction-main"><strong>طلب سحب مقبول</strong><b>٢,٥٠٠ ج.م</b></div><div class="wallet-transaction-meta"><small>#7A3D6D</small><time>2025/12/01, 4:50م</time></div></article>
-    </section>
-    <p class="wallet-note">كل عملياتك المالية محفوظة بأمان ويمكنك مراجعتها في أي وقت.</p>
+    <p class="wallet-note wallet-transactions-state" id="transactionsState" role="status">جارٍ تحميل العمليات...</p>
+    <button class="wallet-transactions-retry" id="transactionsRetry" type="button" hidden>إعادة المحاولة</button>
+    <section class="wallet-list wallet-transactions-list" id="walletTransactionsList" aria-label="كل عمليات المحفظة" aria-live="polite" aria-busy="true"></section>
+    <nav class="wallet-pagination" id="walletPagination" aria-label="صفحات عمليات المحفظة" hidden>
+      <button id="transactionsPrevious" type="button">السابق</button>
+      <span id="transactionsPageLabel" aria-live="polite">صفحة 1 من 1</span>
+      <button id="transactionsNext" type="button">التالي</button>
+    </nav>
   </main>
   <nav class="saey-bottom-nav" aria-label="التنقل الرئيسي">
     <a href="08-user-home.html"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22v-9h6v9"/></svg></span><span>الرئيسية</span></a>
@@ -57,14 +50,151 @@
     <a class="active" href="15-account.html" aria-current="page"><span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></span><span>حسابي</span></a>
   </nav>
   <script>
-    const filters = document.querySelectorAll('.wallet-filter');
-    document.getElementById('transactionsBalance').textContent = `${Number(localStorage.getItem('saey_wallet_balance') || 4500).toLocaleString('ar-EG')} ج.م`;
-    try { const saved=JSON.parse(localStorage.getItem('saey_wallet_transactions')||'[]'); const list=document.querySelector('.wallet-transactions-list'); saved.forEach((item,index)=>{const article=document.createElement('article');article.className=`wallet-transaction ${item.amount>0?'transaction-profit':'transaction-approved'}`;article.dataset.type=item.amount>0?'profit':'approved';article.innerHTML=`<div class="wallet-transaction-main"><strong>${item.type}</strong><b>${Math.abs(item.amount).toLocaleString('ar-EG')} ج.م</b></div><div class="wallet-transaction-meta"><small>#LOCAL${index+1}</small><time>${new Date(item.date).toLocaleString('ar-EG')}</time></div>`;list.prepend(article);}); } catch(error) {}
-    filters.forEach((filter) => filter.addEventListener('click', () => {
-      const selected = filter.dataset.filter;
-      filters.forEach((item) => { const active = item === filter; item.classList.toggle('is-active', active); item.setAttribute('aria-selected', String(active)); });
-      document.querySelectorAll('.wallet-transaction[data-type]').forEach((item) => item.classList.toggle('is-hidden', selected !== 'all' && item.dataset.type !== selected));
-    }));
+    const walletApiBaseOrigin = window.location.protocol === 'file:'
+      ? 'http://localhost:8000'
+      : ['localhost', '127.0.0.1'].includes(window.location.hostname) && window.location.port !== '8000'
+        ? `${window.location.protocol}//${window.location.hostname}:8000`
+        : window.location.origin;
+    const walletApiBaseUrl = new URL(localStorage.getItem('saey_api_base') || '/api', walletApiBaseOrigin);
+    walletApiBaseUrl.pathname = walletApiBaseUrl.pathname.replace(/\/(?:user|store)\/?$/, '').replace(/\/$/, '') || '/api';
+    const walletApiRoot = walletApiBaseUrl.toString().replace(/\/$/, '');
+    const walletTransactionPageSize = 10;
+    const walletTransactionLabels = {
+      deposit: 'شحن', purchase: 'شراء', refund: 'استرداد', transfer_in: 'تحويل وارد',
+      transfer_out: 'تحويل صادر', withdrawal: 'سحب', commission: 'عمولة',
+      settlement: 'تسوية', ad_payment: 'دفع إعلان',
+    };
+    const walletTransactionStatusLabels = {
+      pending: 'معلقة', completed: 'مكتملة', failed: 'فشلت', reversed: 'معكوسة',
+    };
+    const transactionsList = document.getElementById('walletTransactionsList');
+    const transactionsState = document.getElementById('transactionsState');
+    const transactionsRetry = document.getElementById('transactionsRetry');
+    const walletPagination = document.getElementById('walletPagination');
+    let transactionsUrl = null;
+    let currentTransactionsPage = 1;
+
+    const walletCurrencyLabel = currency => currency === 'EGP' ? 'ج.م' : currency;
+    const formatWalletMoney = (amount, currency) => `${Number(amount || 0).toLocaleString('ar-EG')} ${walletCurrencyLabel(currency || 'EGP')}`;
+    const showTransactionsState = (message, hasError = false) => {
+      transactionsState.textContent = message;
+      transactionsState.hidden = !message;
+      transactionsRetry.hidden = !hasError;
+    };
+    const walletApiRequest = async url => {
+      const token = localStorage.getItem('saey_api_token') || '';
+      if (!token) throw new Error('سجّل الدخول لعرض عمليات المحفظة.');
+
+      let response;
+      try {
+        response = await fetch(url, {
+          headers: {
+            Accept: 'application/json',
+            'Accept-Language': document.documentElement.lang || 'ar',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      } catch (error) {
+        throw new Error('تعذر الاتصال بالخادم. تحقق من الاتصال ثم أعد المحاولة.');
+      }
+
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(payload.message || 'تعذر تحميل عمليات المحفظة.');
+      return payload;
+    };
+    const renderTransaction = transaction => {
+      const item = document.createElement('article');
+      const isCredit = Number(transaction.balance_after) >= Number(transaction.balance_before);
+      const tone = transaction.status === 'pending'
+        ? 'transaction-pending'
+        : ['failed', 'reversed'].includes(transaction.status)
+          ? 'transaction-rejected'
+          : transaction.type === 'purchase'
+            ? 'transaction-purchase'
+            : isCredit ? 'transaction-credit' : 'transaction-approved';
+      const sign = isCredit ? '+' : '−';
+      item.className = `wallet-transaction ${tone}`;
+
+      const main = document.createElement('div');
+      main.className = 'wallet-transaction-main';
+      const title = document.createElement('strong');
+      title.textContent = walletTransactionLabels[transaction.type] || 'عملية محفظة';
+      const amount = document.createElement('b');
+      amount.textContent = `${sign}${formatWalletMoney(transaction.amount, transaction.currency)}`;
+      main.append(title, amount);
+
+      const meta = document.createElement('div');
+      meta.className = 'wallet-transaction-meta';
+      const status = document.createElement('small');
+      status.textContent = walletTransactionStatusLabels[transaction.status] || transaction.status;
+      const time = document.createElement('time');
+      time.dateTime = transaction.created_at || '';
+      time.textContent = transaction.created_at
+        ? new Date(transaction.created_at).toLocaleString('ar-EG')
+        : '—';
+      meta.append(status, time);
+      item.append(main, meta);
+      return item;
+    };
+    const loadTransactionsPage = async (page = 1) => {
+      if (!transactionsUrl) return;
+      currentTransactionsPage = page;
+      transactionsList.replaceChildren();
+      transactionsList.setAttribute('aria-busy', 'true');
+      walletPagination.hidden = true;
+      showTransactionsState('جارٍ تحميل العمليات...');
+
+      const requestUrl = new URL(transactionsUrl, walletApiRoot);
+      requestUrl.searchParams.set('page', String(page));
+      requestUrl.searchParams.set('limit_per_page', String(walletTransactionPageSize));
+      try {
+        const result = await walletApiRequest(requestUrl.toString());
+        const transactions = Array.isArray(result.data) ? result.data : [];
+        const visibleTransactions = transactions.filter(transaction => transaction.type !== 'earning');
+        visibleTransactions.forEach(transaction => transactionsList.append(renderTransaction(transaction)));
+        transactionsList.setAttribute('aria-busy', 'false');
+        document.getElementById('transactionsTotal').textContent = Number(result.total || 0).toLocaleString('ar-EG');
+        currentTransactionsPage = Number(result.current_page || page);
+        const lastPage = Number(result.last_page || 1);
+        document.getElementById('transactionsPageLabel').textContent = `صفحة ${currentTransactionsPage} من ${lastPage}`;
+        document.getElementById('transactionsPrevious').disabled = currentTransactionsPage <= 1;
+        document.getElementById('transactionsNext').disabled = currentTransactionsPage >= lastPage;
+        walletPagination.hidden = lastPage <= 1;
+
+        if (visibleTransactions.length === 0) {
+          showTransactionsState('لا توجد عمليات مسجلة في هذه الصفحة.');
+          return;
+        }
+
+        showTransactionsState('');
+      } catch (error) {
+        transactionsList.setAttribute('aria-busy', 'false');
+        showTransactionsState(error.message, true);
+      }
+    };
+    const loadWalletTransactions = async () => {
+      showTransactionsState('جارٍ تحميل الرصيد والعمليات...');
+      try {
+        const walletResult = await walletApiRequest(`${walletApiRoot}/wallet`);
+        const wallet = walletResult.wallet || walletResult.data?.wallet || {};
+        document.getElementById('transactionsBalance').textContent = formatWalletMoney(wallet.balance, wallet.currency);
+        transactionsUrl = wallet.transactions_url || `${walletApiRoot}/wallet`;
+        if (!transactionsUrl) throw new Error('رابط عمليات المحفظة غير متاح.');
+        await loadTransactionsPage(currentTransactionsPage);
+      } catch (error) {
+        document.getElementById('transactionsBalance').textContent = 'غير متاح';
+        transactionsList.setAttribute('aria-busy', 'false');
+        showTransactionsState(error.message, true);
+      }
+    };
+
+    document.getElementById('transactionsPrevious').addEventListener('click', () => {
+      if (currentTransactionsPage > 1) loadTransactionsPage(currentTransactionsPage - 1);
+    });
+    document.getElementById('transactionsNext').addEventListener('click', () => loadTransactionsPage(currentTransactionsPage + 1));
+    transactionsRetry.addEventListener('click', loadWalletTransactions);
+    loadWalletTransactions();
+    window.addEventListener('focus', loadWalletTransactions);
   </script>
 <script src="user-experience.js"></script></body>
 </html>

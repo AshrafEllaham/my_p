@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\FaqController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\NotificationPreferenceController;
 use App\Http\Controllers\Api\SettingsController;
+use App\Http\Controllers\Api\WalletController;
 use Illuminate\Support\Facades\Route;
 
 // User (student) routes
@@ -84,6 +85,8 @@ Route::group([], function () {
         Route::put('/notifications/preferences', [NotificationPreferenceController::class, 'update']);
         // يحدّث جزءًا من تفضيلات إشعارات المستخدم الحالية.
         Route::patch('/notifications/preferences', [NotificationPreferenceController::class, 'update']);
+
+       
 
         // ############################ chat ############################
     });

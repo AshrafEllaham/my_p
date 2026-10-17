@@ -15,6 +15,11 @@ class WalletTransactionService
         return $this->repository->query();
     }
 
+    public function listForOwner(int $ownerId): Builder
+    {
+        return $this->repository->listForOwner($ownerId);
+    }
+
     public function find(int|string $id): Model
     {
         return $this->repository->findOrFail($id);

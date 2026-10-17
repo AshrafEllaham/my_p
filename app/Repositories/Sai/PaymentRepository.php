@@ -2,6 +2,8 @@
 
 namespace App\Repositories\Sai;
 
+use App\Enums\PaymentMethodEnum;
+use App\Enums\PaymentStatusEnum;
 use App\Models\Sai\Payment;
 use App\Repositories\MainRepository;
 use Illuminate\Database\Eloquent\Builder;
@@ -44,6 +46,39 @@ class PaymentRepository extends MainRepository
         return $this->query()->lockForUpdate()->findOrFail($id);
     }
 
+    /** @return array{id: int, status: PaymentStatusEnum, method: PaymentMethodEnum, amount: string, currency: string, wallet_transaction_id: int|null} */
+    public function topUpSnapshotForUpdate(int|string $id): array
+    {
+        return $this->paymentSnapshot($this->findForUpdateOrFail($id));
+    }
+
+    /** @return array{id: int, status: PaymentStatusEnum, method: PaymentMethodEnum, amount: string, currency: string, wallet_transaction_id: int|null}|null */
+    public function topUpByIdempotencyKeyForUpdate(string $key): ?array
+    {
+        $payment = $this->query()
+            ->where('idempotency_key', $key)
+            ->lockForUpdate()
+            ->first();
+
+        return $payment === null ? null : $this->paymentSnapshot($payment);
+    }
+
+    /** @param array<string, mixed> $data
+     * @return array{id: int, status: PaymentStatusEnum, method: PaymentMethodEnum, amount: string, currency: string, wallet_transaction_id: int|null}
+     */
+    public function createTopUpRecord(array $data): array
+    {
+        return $this->paymentSnapshot($this->createRecord($data));
+    }
+
+    /** @param array<string, mixed> $data */
+    public function updateTopUpRecordById(int|string $id, array $data): void
+    {
+        $payment = $this->findForUpdateOrFail($id);
+        $payment->fill($data);
+        $payment->save();
+    }
+
     public function findAdPayment(int $adId): ?Payment
     {
         return $this->query()->where('ad_id', $adId)->first();
@@ -71,5 +106,20 @@ class PaymentRepository extends MainRepository
     public function deleteRecord(int|string $id): bool
     {
         return (bool) $this->findOrFail($id)->delete();
+    }
+
+    /** @return array{id: int, status: PaymentStatusEnum, method: PaymentMethodEnum, amount: string, currency: string, wallet_transaction_id: int|null} */
+    private function paymentSnapshot(Payment $payment): array
+    {
+        return [
+            'id' => (int) $payment->getKey(),
+            'status' => $payment->status,
+            'method' => $payment->method,
+            'amount' => (string) $payment->amount,
+            'currency' => (string) $payment->currency,
+            'wallet_transaction_id' => $payment->wallet_transaction_id === null
+                ? null
+                : (int) $payment->wallet_transaction_id,
+        ];
     }
 }

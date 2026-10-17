@@ -9,4 +9,5 @@ enum PaymentOperationTableEnum: string
     use HasValues;
 
     case PayTrip = 'pay_trip';
+    case WalletTopUp = 'wallet_top_up';
 }

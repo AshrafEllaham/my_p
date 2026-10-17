@@ -2,6 +2,8 @@
 
 namespace App\Repositories\Sai;
 
+use App\Enums\WalletTransactionStatusEnum;
+use App\Enums\WalletTransactionTypeEnum;
 use App\Models\Sai\WalletTransaction;
 use App\Repositories\MainRepository;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,9 +22,141 @@ class WalletTransactionRepository extends MainRepository
         return $this->getModel()->newQuery();
     }
 
+    public function listForOwner(int $ownerId): Builder
+    {
+        return $this->query()
+            ->select([
+                'id',
+                'public_id',
+                'wallet_id',
+                'type',
+                'status',
+                'amount',
+                'balance_before',
+                'balance_after',
+                'currency',
+                'completed_at',
+                'created_at',
+            ])
+            ->whereHas('wallet', fn (Builder $query): Builder => $query->where('user_id', $ownerId))
+            ->orderByDesc('created_at')
+            ->orderByDesc('id');
+    }
+
     public function findOrFail(int|string $id): Model
     {
         return $this->query()->findOrFail($id);
+    }
+
+    public function findForUpdateOrFail(int|string $id): WalletTransaction
+    {
+        return $this->query()->lockForUpdate()->findOrFail($id);
+    }
+
+    /** @param array<string, mixed> $data */
+    public function createTopUpRecord(array $data): int
+    {
+        return (int) $this->createRecord($data)->getKey();
+    }
+
+    /** @param array<string, mixed> $data */
+    public function createWithdrawalRecord(array $data): int
+    {
+        return (int) $this->createRecord($data)->getKey();
+    }
+
+    /** @param array<string, mixed> $data */
+    public function createTransferRecord(array $data): void
+    {
+        $this->createRecord($data);
+    }
+
+    /** @return array{id: int, public_id: string, wallet_id: int, counterparty_wallet_id: int|null, counterparty_owner_id: int|null, type: WalletTransactionTypeEnum, status: WalletTransactionStatusEnum, amount: string, balance_before: string, balance_after: string, currency: string, completed_at: string|null}|null */
+    public function transferSnapshotByIdempotencyKeyForUpdate(string $idempotencyKey): ?array
+    {
+        $transaction = $this->query()
+            ->with(['counterpartyWallet' => fn ($query) => $query->select(['id', 'user_id'])])
+            ->where('idempotency_key', $idempotencyKey)
+            ->lockForUpdate()
+            ->first();
+
+        if ($transaction === null) {
+            return null;
+        }
+
+        return [
+            'id' => (int) $transaction->getKey(),
+            'public_id' => (string) $transaction->public_id,
+            'wallet_id' => (int) $transaction->wallet_id,
+            'counterparty_wallet_id' => $transaction->counterparty_wallet_id === null
+                ? null
+                : (int) $transaction->counterparty_wallet_id,
+            'counterparty_owner_id' => $transaction->counterpartyWallet === null
+                ? null
+                : (int) $transaction->counterpartyWallet->user_id,
+            'type' => $transaction->type,
+            'status' => $transaction->status,
+            'amount' => (string) $transaction->amount,
+            'balance_before' => (string) $transaction->balance_before,
+            'balance_after' => (string) $transaction->balance_after,
+            'currency' => (string) $transaction->currency,
+            'completed_at' => $transaction->completed_at?->toIso8601String(),
+        ];
+    }
+
+    /** @param array<string, mixed> $data */
+    public function updateWithdrawalRecordById(int|string $id, array $data): void
+    {
+        $transaction = $this->findForUpdateOrFail($id);
+        $transaction->fill($data);
+        $transaction->save();
+    }
+
+    /** @return array{id: int, wallet_id: int, type: WalletTransactionTypeEnum, status: WalletTransactionStatusEnum, amount: string, currency: string} */
+    public function topUpSnapshotForUpdate(int|string $id): array
+    {
+        $transaction = $this->findForUpdateOrFail($id);
+
+        return [
+            'id' => (int) $transaction->getKey(),
+            'wallet_id' => (int) $transaction->wallet_id,
+            'type' => $transaction->type,
+            'status' => $transaction->status,
+            'amount' => (string) $transaction->amount,
+            'currency' => (string) $transaction->currency,
+        ];
+    }
+
+    /** @return array{id: int, wallet_id: int, type: WalletTransactionTypeEnum, status: WalletTransactionStatusEnum, amount: string, currency: string} */
+    public function withdrawalSnapshotForUpdate(int|string $id): array
+    {
+        $transaction = $this->findForUpdateOrFail($id);
+
+        return [
+            'id' => (int) $transaction->getKey(),
+            'wallet_id' => (int) $transaction->wallet_id,
+            'type' => $transaction->type,
+            'status' => $transaction->status,
+            'amount' => (string) $transaction->amount,
+            'currency' => (string) $transaction->currency,
+        ];
+    }
+
+    /** @param array<string, mixed> $data */
+    public function updateTopUpRecordById(int|string $id, array $data): void
+    {
+        $transaction = $this->findForUpdateOrFail($id);
+        $transaction->fill($data);
+        $transaction->save();
+    }
+
+    /** @param array<string, mixed> $data */
+    public function updateTransaction(WalletTransaction $transaction, array $data): WalletTransaction
+    {
+        $transaction->fill($data);
+        $transaction->save();
+
+        return $transaction;
     }
 
     /** @param array<string, mixed> $data */

@@ -51,6 +51,116 @@ class UserRepository extends MainRepository
             ->first();
     }
 
+    /** @return array{id: int, name: string|null, status: UserStatusEnum}|null */
+    public function findWalletTransferUserByIdentity(string $identity): ?array
+    {
+        $identity = trim($identity);
+
+        if (str_contains($identity, '@')) {
+            $user = $this->query()
+                ->select(['id', 'name', 'status'])
+                ->where('email', mb_strtolower($identity))
+                ->first();
+
+            return $user === null ? null : $this->walletTransferUserSnapshot($user);
+        }
+
+        $digits = preg_replace('/\\D+/', '', $identity) ?? '';
+        if ($digits === '') {
+            return null;
+        }
+
+        $phoneCodes = $this->query()
+            ->select('phone_code')
+            ->whereNotNull('phone_code')
+            ->distinct()
+            ->pluck('phone_code');
+        $phoneMatches = [];
+
+        foreach ($phoneCodes as $phoneCode) {
+            $callingCode = preg_replace('/\\D+/', '', (string) $phoneCode) ?? '';
+            if ($callingCode === '' || ! str_starts_with($digits, $callingCode)) {
+                continue;
+            }
+
+            $localNumber = substr($digits, strlen($callingCode));
+            if ($localNumber === '') {
+                continue;
+            }
+
+            $phoneValues = [$localNumber];
+            $withoutTrunkPrefix = ltrim($localNumber, '0');
+            if ($withoutTrunkPrefix !== '' && $withoutTrunkPrefix !== $localNumber) {
+                $phoneValues[] = $withoutTrunkPrefix;
+            } else {
+                $phoneValues[] = '0'.$localNumber;
+            }
+
+            $phoneMatches[] = [
+                'phone_code' => (string) $phoneCode,
+                'phones' => array_values(array_unique($phoneValues)),
+            ];
+        }
+
+        $users = $this->query()
+            ->select(['id', 'name', 'status'])
+            ->where(function (Builder $query) use ($phoneCodes, $digits, $phoneMatches): void {
+                $query->where(function (Builder $localPhoneQuery) use ($phoneCodes, $digits): void {
+                    $localPhoneQuery->where(function (Builder $codedQuery) use ($phoneCodes, $digits): void {
+                        $codedQuery->whereIn('phone_code', $phoneCodes)
+                            ->where('phone', $digits);
+                    })->orWhere(function (Builder $uncodedQuery) use ($digits): void {
+                        $uncodedQuery->whereNull('phone_code')
+                            ->where('phone', $digits);
+                    });
+                });
+
+                foreach ($phoneMatches as $match) {
+                    $query->orWhere(function (Builder $phoneQuery) use ($match): void {
+                        $phoneQuery->where('phone_code', $match['phone_code'])
+                            ->whereIn('phone', $match['phones']);
+                    });
+                }
+            })
+            ->get()
+            ->unique('id')
+            ->values();
+
+        if ($users->count() !== 1) {
+            return null;
+        }
+
+        return $this->walletTransferUserSnapshot($users->first());
+    }
+
+    /** @return array{id: int, name: string|null, status: UserStatusEnum}|null */
+    public function findWalletTransferUserById(int $userId): ?array
+    {
+        $user = $this->query()
+            ->select(['id', 'name', 'status'])
+            ->find($userId);
+
+        return $user === null ? null : $this->walletTransferUserSnapshot($user);
+    }
+
+    /** @param array<int, int> $userIds
+     * @return array<int, int>
+     */
+    public function lockOwnersForUpdate(array $userIds): array
+    {
+        $userIds = array_values(array_unique(array_map('intval', $userIds)));
+        sort($userIds, SORT_NUMERIC);
+
+        return $this->query()
+            ->select('id')
+            ->whereIn('id', $userIds)
+            ->orderBy('id')
+            ->lockForUpdate()
+            ->pluck('id')
+            ->map(static fn (int|string $id): int => (int) $id)
+            ->all();
+    }
+
     public function findTrashedByEmail(string $email): ?User
     {
         return $this->query()->onlyTrashed()->where('email', $email)->first();
@@ -157,5 +267,15 @@ class UserRepository extends MainRepository
     public function softDelete(User $user): bool
     {
         return (bool) $user->delete();
+    }
+
+    /** @return array{id: int, name: string|null, status: UserStatusEnum} */
+    private function walletTransferUserSnapshot(User $user): array
+    {
+        return [
+            'id' => (int) $user->getKey(),
+            'name' => $user->name,
+            'status' => $user->status,
+        ];
     }
 }
