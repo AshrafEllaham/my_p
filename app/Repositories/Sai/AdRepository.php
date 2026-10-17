@@ -54,11 +54,15 @@ class AdRepository extends MainRepository
             ->whereIn('status', [AdStatusEnum::Active->value, AdStatusEnum::Scheduled->value])
             ->where(fn (Builder $query) => $query->whereNull('starts_at')->orWhere('starts_at', '<=', $now))
             ->where(fn (Builder $query) => $query->whereNull('ends_at')->orWhere('ends_at', '>', $now))
+            ->with([
+                'store:id,owner_id,cover_image',
+                'store.owner:id,name,avatar',
+            ])
             ->orderByDesc('created_at')
             ->orderByDesc('id');
     }
 
-    public function listActiveForPlacement(AdPlacementEnum $placement): Builder
+    public function listActiveForPlacement(AdPlacementEnum $placement, ?int $categoryId = null): Builder
     {
         return $this->currentlyVisibleToUsers($this->query())
             ->select([
@@ -66,6 +70,16 @@ class AdRepository extends MainRepository
                 'caption', 'placement', 'action', 'media_type', 'media_path', 'starts_at', 'ends_at', 'created_at',
             ])
             ->where('placement', $placement->value)
+            ->when(
+                $placement === AdPlacementEnum::Category,
+                fn (Builder $query) => $query->where(function (Builder $categoryQuery) use ($categoryId): void {
+                    $categoryQuery->where('ads.category_id', $categoryId)
+                        ->orWhere(function (Builder $storeCategoryQuery) use ($categoryId): void {
+                            $storeCategoryQuery->whereNull('ads.category_id')
+                                ->whereHas('store', fn (Builder $store) => $store->where('category_id', $categoryId));
+                        });
+                }),
+            )
             ->with([
                 'store:id,owner_id,cover_image',
                 'store.owner:id,name,avatar',

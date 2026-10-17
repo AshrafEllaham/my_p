@@ -20,10 +20,13 @@ class UserAdService
         private readonly DatabaseManager $database,
     ) {}
 
-    /** @param array{placement: string} $filters */
+    /** @param array{placement: string, category_id?: int} $filters */
     public function list(array $filters): Builder
     {
-        return $this->ads->listActiveForPlacement(AdPlacementEnum::from($filters['placement']));
+        return $this->ads->listActiveForPlacement(
+            AdPlacementEnum::from($filters['placement']),
+            isset($filters['category_id']) ? (int) $filters['category_id'] : null,
+        );
     }
 
     /** @return array{event_id: string, type: AdInteractionEventTypeEnum, recorded: bool} */

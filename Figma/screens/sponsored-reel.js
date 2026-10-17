@@ -55,6 +55,9 @@
   const progress = document.getElementById('reelProgress');
   const state = document.getElementById('reelState');
   const query = new URLSearchParams(location.search);
+  const placement = query.get('placement') || 'home';
+  const categoryId = query.get('category_id') || '';
+  const storefrontId = query.get('store_id') || '';
   const useApiFeed = query.has('placement') || query.has('ad_id') || !query.has('ad');
   const apiOrigin = location.protocol === 'file:'
     ? 'http://127.0.0.1:8000'
@@ -66,6 +69,7 @@
   let adIndex = 0;
   let slideIndex = 0;
   let timer = null;
+  let feedRefreshTimer = null;
   let paused = false;
   let touchStartY = null;
 
@@ -146,6 +150,22 @@
     state.replaceChildren();
   };
 
+  const scheduleFeedRefresh = (delay = 60_000) => {
+    clearTimeout(feedRefreshTimer);
+    const now = Date.now();
+    const nextEnd = ads
+      .map(ad => Date.parse(ad.ends_at || ''))
+      .filter(end => Number.isFinite(end) && end > now)
+      .sort((left, right) => left - right)[0];
+    const untilNextEnd = Number.isFinite(nextEnd) ? Math.max(nextEnd - now + 500, 250) : delay;
+    const remaining = Math.min(untilNextEnd, delay);
+    const maximumTimeout = 2_147_483_647;
+    feedRefreshTimer = window.setTimeout(() => {
+      if (remaining > maximumTimeout) scheduleFeedRefresh(delay);
+      else loadApiAds();
+    }, Math.min(remaining, maximumTimeout));
+  };
+
   const renderProgress = (count, activeIndex, slideCount = 1) => {
     progress.replaceChildren();
     for (let index = 0; index < count; index += 1) {
@@ -214,8 +234,10 @@
   const updateUrl = ad => {
     if (!ad.apiId) return;
     const params = new URLSearchParams(location.search);
-    params.set('placement', 'home');
+    params.set('placement', placement);
     params.set('ad_id', ad.apiId);
+    if (placement === 'category' && categoryId) params.set('category_id', categoryId);
+    if (placement === 'storefront' && storefrontId) params.set('store_id', storefrontId);
     params.delete('ad');
     history.replaceState(null, '', `${location.pathname}?${params.toString()}`);
   };
@@ -252,10 +274,31 @@
 
   const loadApiAds = async () => {
     clearTimeout(timer);
-    showState('جارٍ تحميل الإعلانات...');
+    clearTimeout(feedRefreshTimer);
+    const currentAdId = ads[adIndex]?.id;
+    if (!ads.length) showState('جارٍ تحميل الإعلانات...');
     try {
+      if (placement === 'category' && !categoryId) {
+        showState('تعذر تحديد القسم المطلوب لعرض إعلاناته.');
+        return;
+      }
+      if (placement === 'storefront' && !storefrontId) {
+        showState('تعذر تحديد المتجر المطلوب لعرض إعلاناته.');
+        return;
+      }
+
       const fetchPage = async page => {
-        const response = await fetch(`${apiOrigin}/api/user/ads?placement=home&limit_per_page=100&page=${page}`, {
+        let endpoint;
+        if (placement === 'storefront') {
+          const params = new URLSearchParams({ pagination: 'on', limit_per_page: '100', page: String(page) });
+          endpoint = `${apiOrigin}/api/user/stores/${encodeURIComponent(storefrontId)}/ads?${params}`;
+        } else if (placement === 'category') {
+          const params = new URLSearchParams({ placement, category_id: categoryId, limit_per_page: '100', page: String(page) });
+          endpoint = `${apiOrigin}/api/user/ads?${params}`;
+        } else {
+          endpoint = `${apiOrigin}/api/user/ads?placement=home&limit_per_page=100&page=${page}`;
+        }
+        const response = await fetch(endpoint, {
           headers: {
             Accept: 'application/json',
             'Accept-Language': 'ar',
@@ -280,7 +323,17 @@
         if (Array.isArray(payload.data)) results.push(...payload.data);
       }
 
-      ads = results.sort((left, right) => {
+      ads = results.map(ad => placement === 'storefront' ? {
+        ...ad,
+        media_url: ad.media_url || ad.media_path,
+        starts_at: ad.starts_at_iso || ad.starts_at,
+        ends_at: ad.ends_at_iso || ad.ends_at,
+        target: ad.target || {
+          store_id: storefrontId,
+          product_id: ad.product_id,
+          category_id: ad.category_id,
+        },
+      } : ad).sort((left, right) => {
         const leftEnd = Date.parse(left.ends_at || '');
         const rightEnd = Date.parse(right.ends_at || '');
         const orderedLeftEnd = Number.isFinite(leftEnd) ? leftEnd : Number.POSITIVE_INFINITY;
@@ -293,22 +346,43 @@
       });
 
       if (!ads.length) {
-        showState('لا توجد إعلانات ممولة متاحة حاليًا.');
+        showState(placement === 'storefront'
+          ? 'لا توجد إعلانات نشطة لهذا المتجر حاليًا.'
+          : placement === 'category'
+            ? 'لا توجد إعلانات ممولة لهذا القسم حاليًا.'
+            : 'لا توجد إعلانات ممولة متاحة حاليًا.');
         document.getElementById('reelHint').hidden = true;
+        scheduleFeedRefresh();
         return;
       }
 
-      const requestedAdId = query.get('ad_id');
+      const requestedAdId = currentAdId == null ? query.get('ad_id') : String(currentAdId);
       const requestedIndex = ads.findIndex(ad => String(ad.id) === requestedAdId);
+      if (currentAdId != null && requestedIndex >= 0) {
+        adIndex = requestedIndex;
+        renderProgress(ads.length, adIndex);
+        document.getElementById('reelHint').hidden = ads.length < 2;
+        hideState();
+        updateUrl({ ...ads[adIndex], apiId: ads[adIndex].id });
+        scheduleFeedRefresh();
+        return;
+      }
       renderApiAd(requestedIndex >= 0 ? requestedIndex : 0, requestedIndex < 0);
+      scheduleFeedRefresh();
     } catch (error) {
       if (error.message === 'تسجيل الدخول مطلوب.') return;
       showState(error.message || 'تعذر تحميل الإعلانات الممولة.', { label: 'إعادة المحاولة' });
+      feedRefreshTimer = window.setTimeout(loadApiAds, 30_000);
     }
   };
 
   const showNextAd = direction => {
     if (!ads.length) return;
+    const currentEndsAt = Date.parse(ads[adIndex]?.ends_at || '');
+    if (Number.isFinite(currentEndsAt) && currentEndsAt <= Date.now()) {
+      loadApiAds();
+      return;
+    }
     if (ads.length === 1) {
       showState('لا توجد إعلانات أخرى متاحة حاليًا.');
       window.setTimeout(hideState, 1800);

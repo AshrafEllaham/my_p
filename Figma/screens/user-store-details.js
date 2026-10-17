@@ -18,7 +18,16 @@
   let adsPage = 1;
   let adsLastPage = 1;
   let adsRequestId = 0;
+  let adsRefreshTimer = null;
+  const seenStoreAdImpressions = new Set();
   const token = () => localStorage.getItem('saey_api_token');
+  const eventId = () => {
+    if (crypto.randomUUID) return crypto.randomUUID();
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, character => {
+      const value = crypto.getRandomValues(new Uint8Array(1))[0] & 15;
+      return (character === 'x' ? value : (value & 3) | 8).toString(16);
+    });
+  };
   const apiOrigin = location.protocol === 'file:'
     ? 'http://127.0.0.1:8000'
     : ['localhost', '127.0.0.1'].includes(location.hostname)
@@ -228,8 +237,11 @@
   };
 
   const adActionUrl = ad => {
-    if (['view_product', 'buy_now'].includes(ad.action) && ad.product_id) {
+    if (ad.action === 'view_product' && ad.product_id) {
       return `12-product-details.html?product_id=${encodeURIComponent(ad.product_id)}`;
+    }
+    if (ad.action === 'buy_now' && ad.product_id) {
+      return `20-checkout.html?product_id=${encodeURIComponent(ad.product_id)}`;
     }
     if (ad.action === 'start_chat') {
       const store = window.saeyStoreDetails;
@@ -239,6 +251,65 @@
     return `19-store-details.html?store_id=${encodeURIComponent(storeId)}`;
   };
 
+  const viewerUrlFor = adId => `25-sponsored-reel.html?placement=storefront&store_id=${encodeURIComponent(storeId)}&ad_id=${encodeURIComponent(adId)}`;
+
+  const trackStoreAd = async (adId, interaction) => {
+    const form = new FormData();
+    form.append('event_id', eventId());
+    const response = await fetch(`${apiOrigin}/api/user/ads/${encodeURIComponent(adId)}/${interaction === 'impression' ? 'impressions' : 'clicks'}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Accept-Language': 'ar',
+        ...(token() ? { Authorization: `Bearer ${token()}` } : {})
+      },
+      body: form
+    });
+    if (!response.ok) throw new Error('تعذر تسجيل التفاعل مع الإعلان.');
+  };
+
+  const trackClickAndContinue = (event, adId, href) => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+    event.preventDefault();
+    trackStoreAd(adId, 'click').catch(() => {}).finally(() => location.assign(href));
+  };
+
+  const observeStoreAdImpressions = cards => {
+    if (!('IntersectionObserver' in window)) {
+      cards.forEach(card => {
+        const adId = card.dataset.adId;
+        if (seenStoreAdImpressions.has(adId)) return;
+        seenStoreAdImpressions.add(adId);
+        trackStoreAd(adId, 'impression').catch(() => {});
+      });
+      return;
+    }
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting || entry.intersectionRatio < 0.5) return;
+        observer.unobserve(entry.target);
+        const adId = entry.target.dataset.adId;
+        if (seenStoreAdImpressions.has(adId)) return;
+        seenStoreAdImpressions.add(adId);
+        trackStoreAd(adId, 'impression').catch(() => {});
+      });
+    }, { threshold: [0.5] });
+
+    cards.forEach(card => observer.observe(card));
+  };
+
+  const scheduleStoreAdsRefresh = ads => {
+    clearTimeout(adsRefreshTimer);
+    const now = Date.now();
+    const nextEnd = (Array.isArray(ads) ? ads : [])
+      .map(ad => Date.parse(ad.ends_at_iso || ad.ends_at || ''))
+      .filter(end => Number.isFinite(end) && end > now)
+      .sort((left, right) => left - right)[0];
+    const untilNextEnd = Number.isFinite(nextEnd) ? Math.max(nextEnd - now + 500, 250) : 60_000;
+    adsRefreshTimer = window.setTimeout(() => loadStoreActiveAds(false, true), Math.min(untilNextEnd, 60_000));
+  };
+
   const renderStoreAds = (ads, append = false) => {
     if (!append) adList.replaceChildren();
     if (!ads?.length) {
@@ -246,33 +317,38 @@
       return;
     }
 
+    const impressionTargets = [];
     ads.forEach(ad => {
       const card = document.createElement('article');
       card.className = 'youtube-ad compact store-active-ad';
+      card.dataset.adId = String(ad.id);
 
-      const media = document.createElement('div');
+      const media = document.createElement('a');
       media.className = 'youtube-ad-media';
+      const viewerHref = viewerUrlFor(ad.id);
+      media.href = viewerHref;
+      media.setAttribute('aria-label', `عرض الإعلان ${ad.title || ''} بملء الشاشة`);
+      media.addEventListener('click', event => trackClickAndContinue(event, ad.id, viewerHref));
+      const mediaUrl = ad.media_url || ad.media_path;
       if (ad.media_type === 'video' && ad.media_path) {
         const video = document.createElement('video');
-        video.src = ad.media_path;
-        video.controls = true;
+        video.src = mediaUrl;
+        video.muted = true;
+        video.autoplay = true;
+        video.loop = true;
         video.playsInline = true;
         video.preload = 'metadata';
         video.setAttribute('aria-label', ad.title || 'فيديو الإعلان');
         media.append(video);
-      } else if (ad.media_type === 'image' && ad.media_path) {
+      } else if (ad.media_type === 'image' && mediaUrl) {
         const image = document.createElement('img');
-        image.src = ad.media_path;
+        image.src = mediaUrl;
         image.alt = ad.title || 'صورة الإعلان';
         image.loading = 'lazy';
         media.append(image);
       } else {
-        const fileLink = document.createElement('a');
-        fileLink.href = ad.media_path || '#';
-        fileLink.target = '_blank';
-        fileLink.rel = 'noreferrer';
-        fileLink.textContent = 'عرض ملف الإعلان';
-        media.append(fileLink);
+        media.classList.add('store-ad-media-fallback');
+        media.textContent = 'عرض الإعلان';
       }
 
       const shade = document.createElement('span');
@@ -284,14 +360,20 @@
 
       const body = document.createElement('div');
       body.className = 'youtube-ad-body';
+      const viewerLink = document.createElement('a');
+      viewerLink.className = 'youtube-ad-viewer-link';
+      viewerLink.href = viewerHref;
+      viewerLink.setAttribute('aria-label', 'عرض الإعلان بملء الشاشة');
+      viewerLink.addEventListener('click', event => trackClickAndContinue(event, ad.id, viewerHref));
       const meta = document.createElement('div');
       meta.className = 'youtube-ad-meta';
       const avatar = document.createElement('span');
       avatar.className = 'youtube-ad-avatar';
-      const store = window.saeyStoreDetails || {};
-      if (store.image) {
+      const store = ad.store || window.saeyStoreDetails || {};
+      const avatarUrl = store.avatar || store.image;
+      if (avatarUrl) {
         const image = document.createElement('img');
-        image.src = store.image;
+        image.src = avatarUrl;
         image.alt = '';
         image.loading = 'lazy';
         avatar.append(image);
@@ -306,10 +388,11 @@
       copy.append(title);
       if (ad.caption) {
         const caption = document.createElement('small');
-        caption.textContent = ad.caption;
+        caption.textContent = `مموّل · ${ad.caption}`;
         copy.append(caption);
       }
       meta.append(avatar, copy);
+      viewerLink.append(meta);
 
       const actions = document.createElement('div');
       actions.className = 'youtube-ad-actions';
@@ -322,26 +405,33 @@
         start_chat: 'تواصل مع المتجر',
         view_store: 'عرض المتجر',
       }[ad.action] || 'عرض الإعلان');
+      actionLink.addEventListener('click', event => trackClickAndContinue(event, ad.id, actionLink.href));
       actions.append(actionLink);
-      body.append(meta, actions);
+      body.append(viewerLink, actions);
       card.append(media, body);
       adList.append(card);
+      impressionTargets.push(card);
     });
     adsState.hidden = true;
+    observeStoreAdImpressions(impressionTargets);
   };
 
-  const loadStoreActiveAds = async (append = false) => {
+  const loadStoreActiveAds = async (append = false, silent = false) => {
     if (!storeId) return;
+
+    if (!append) clearTimeout(adsRefreshTimer);
 
     const requestId = ++adsRequestId;
     const requestedPage = append ? adsPage + 1 : 1;
     if (!append) {
-      adsPage = 1;
-      adsLastPage = 1;
       adsSection.hidden = false;
-      adList.replaceChildren();
-      loadMoreAds.hidden = true;
-      setAdsState('جارٍ تحميل إعلانات المتجر...', 'loading');
+      if (!silent) {
+        adsPage = 1;
+        adsLastPage = 1;
+        loadMoreAds.hidden = true;
+        adList.replaceChildren();
+        setAdsState('جارٍ تحميل إعلانات المتجر...', 'loading');
+      }
     } else {
       loadMoreAds.disabled = true;
     }
@@ -368,12 +458,33 @@
       }
       if (!response.ok) throw new Error(payload.message || 'تعذر تحميل إعلانات المتجر.');
 
-      renderStoreAds(payload.data, append);
-      adsPage = Number(payload.current_page || requestedPage);
+      if (silent && !append) {
+        const existingIds = Array.from(adList.querySelectorAll('.store-active-ad'), card => card.dataset.adId);
+        const freshIds = Array.isArray(payload.data) ? payload.data.map(ad => String(ad.id)) : [];
+        const pageSize = Number(payload.per_page) || freshIds.length;
+        const sameEmptyState = freshIds.length === 0
+          && existingIds.length === 0
+          && adsState.classList.contains('is-empty');
+        const unchanged = freshIds.length
+          ? freshIds.every((id, index) => existingIds[index] === id)
+            && (freshIds.length === pageSize || existingIds.length === freshIds.length)
+          : sameEmptyState;
+        if (!unchanged) {
+          renderStoreAds(payload.data, false);
+          adsPage = Number(payload.current_page || 1);
+        }
+      } else {
+        renderStoreAds(payload.data, append);
+        adsPage = Number(payload.current_page || requestedPage);
+      }
       adsLastPage = Number(payload.last_page || adsPage);
       loadMoreAds.hidden = adsPage >= adsLastPage;
+      if (!append) scheduleStoreAdsRefresh(payload.data);
     } catch (error) {
-      if (requestId === adsRequestId) setAdsState(error.message || 'تعذر تحميل إعلانات المتجر.', 'error');
+      if (requestId === adsRequestId) {
+        if (!silent || !adList.children.length) setAdsState(error.message || 'تعذر تحميل إعلانات المتجر.', 'error');
+        if (!append) adsRefreshTimer = window.setTimeout(() => loadStoreActiveAds(false, true), 30_000);
+      }
     } finally {
       loadMoreAds.disabled = false;
     }
@@ -545,6 +656,10 @@
   productSort.addEventListener('change', () => loadStoreProducts());
   loadMoreProducts.addEventListener('click', () => loadStoreProducts(true));
   loadMoreAds.addEventListener('click', () => loadStoreActiveAds(true));
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') loadStoreActiveAds(false, true);
+  });
 
   load();
 })();

@@ -356,6 +356,13 @@ return [
                 'string' => 'The ad placement must be text.',
                 'enum' => 'The ad placement must be home or category.',
             ],
+            'category_id' => [
+                'label' => 'category ID',
+                'required' => 'The category ID is required for category ads.',
+                'prohibited' => 'Only send a category ID when requesting category ads.',
+                'integer' => 'The category ID must be an integer.',
+                'exists' => 'The selected active category was not found.',
+            ],
             'event_id' => [
                 'label' => 'event ID',
                 'required' => 'The event ID is required.',

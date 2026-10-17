@@ -12,7 +12,7 @@ const sponsoredSlideSets = {
 };
 
 document.querySelectorAll('.youtube-ad:not(.store-active-ad)').forEach(ad => {
-  if (ad.classList.contains('api-home-sponsored-ad')) return;
+  if (ad.classList.contains('api-sponsored-ad') || ad.classList.contains('api-home-sponsored-ad')) return;
 
   const image = ad.querySelector('.youtube-ad-media > img');
   const avatar = ad.querySelector('.youtube-ad-avatar')?.textContent.trim();

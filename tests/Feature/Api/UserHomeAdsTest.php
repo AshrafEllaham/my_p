@@ -29,7 +29,7 @@ class UserHomeAdsTest extends TestCase
         [$store, $user, $package] = $this->createStoreAndUser();
         $olderHomeAd = $this->createAd($store, $package, 'إعلان أقدم', AdPlacementEnum::Home, AdStatusEnum::Active, now()->subDay(), now()->addDay());
         $newestHomeAd = $this->createAd($store, $package, 'إعلان الرئيسية', AdPlacementEnum::Home, AdStatusEnum::Active);
-        $this->createAd($store, $package, 'إعلان قسم', AdPlacementEnum::Category, AdStatusEnum::Active);
+        $categoryAd = $this->createAd($store, $package, 'إعلان قسم', AdPlacementEnum::Category, AdStatusEnum::Active);
         $this->createAd($store, $package, 'إعلان يبدأ لاحقًا', AdPlacementEnum::Home, AdStatusEnum::Active, now()->addDay(), now()->addDays(2));
         $this->createAd($store, $package, 'إعلان منتهي', AdPlacementEnum::Home, AdStatusEnum::Active, now()->subDays(2), now()->subSecond());
         $this->createAd($store, $package, 'إعلان متوقف', AdPlacementEnum::Home, AdStatusEnum::Paused);
@@ -60,9 +60,45 @@ class UserHomeAdsTest extends TestCase
             ->assertOk()
             ->assertJsonPath('data.0.id', $olderHomeAd->id);
 
-        $this->getJson('/api/user/ads?placement=category')
+        $this->getJson('/api/user/ads?placement=category&category_id='.$store->category_id)
             ->assertOk()
-            ->assertJsonPath('data.0.title', 'إعلان قسم');
+            ->assertJsonPath('data.0.title', 'إعلان قسم')
+            ->assertJsonPath('data.0.id', $categoryAd->id);
+    }
+
+    public function test_category_ad_list_requires_an_active_category_and_filters_by_it(): void
+    {
+        [$store, $user, $package] = $this->createStoreAndUser();
+        $matchingAd = $this->createAd($store, $package, 'إعلان القسم المطابق', AdPlacementEnum::Category, AdStatusEnum::Active);
+        $otherCategory = Category::factory()->create();
+        $otherAd = $this->createAd($store, $package, 'إعلان قسم آخر', AdPlacementEnum::Category, AdStatusEnum::Active);
+        $otherAd->update(['category_id' => $otherCategory->id]);
+        $this->actingAs($user, 'api');
+
+        $this->withHeader('Accept-Language', 'ar')
+            ->getJson('/api/user/ads?placement=category')
+            ->assertUnprocessable()
+            ->assertJsonPath('message', __('messages.validation.user_ads.category_id.required'));
+
+        $this->getJson('/api/user/ads?placement=home&category_id='.$store->category_id)
+            ->assertUnprocessable()
+            ->assertJsonPath('message', __('messages.validation.user_ads.category_id.prohibited'));
+
+        $this->getJson('/api/user/ads?placement=category&category_id='.$store->category_id)
+            ->assertOk()
+            ->assertJsonPath('total', 1)
+            ->assertJsonPath('data.0.id', $matchingAd->id);
+
+        $this->getJson('/api/user/ads?placement=category&category_id='.$otherCategory->id)
+            ->assertOk()
+            ->assertJsonPath('total', 1)
+            ->assertJsonPath('data.0.id', $otherAd->id);
+
+        $inactiveCategory = Category::factory()->create(['is_active' => false]);
+        $this->withHeader('Accept-Language', 'en')
+            ->getJson('/api/user/ads?placement=category&category_id='.$inactiveCategory->id)
+            ->assertUnprocessable()
+            ->assertJsonPath('message', __('messages.validation.user_ads.category_id.exists'));
     }
 
     public function test_impressions_and_clicks_update_daily_metrics_once_per_event_id(): void
@@ -184,29 +220,42 @@ class UserHomeAdsTest extends TestCase
     {
         $preview = file_get_contents(base_path('Figma/screens/08-user-home.html'));
         $script = file_get_contents(base_path('Figma/screens/user-home-sponsored-ads.js'));
+        $categoryScreen = file_get_contents(base_path('Figma/screens/24-category-details.html'));
         $viewer = file_get_contents(base_path('Figma/screens/25-sponsored-reel.html'));
         $viewerScript = file_get_contents(base_path('Figma/screens/sponsored-reel.js'));
         $screenRegistry = file_get_contents(base_path('Figma/preview.html'));
 
         $this->assertIsString($preview);
         $this->assertIsString($script);
+        $this->assertIsString($categoryScreen);
         $this->assertIsString($viewer);
         $this->assertIsString($viewerScript);
         $this->assertIsString($screenRegistry);
         $this->assertStringContainsString('id="homeSponsoredAds"', $preview);
         $this->assertStringContainsString('user-home-sponsored-ads.js', $preview);
         $this->assertStringContainsString('/api/user/ads?placement=home', $script);
-        $this->assertStringContainsString('25-sponsored-reel.html?placement=home&ad_id=', $script);
+        $this->assertStringContainsString('new URLSearchParams({ placement, ad_id: String(adId) })', $script);
+        $this->assertStringContainsString("params.set('category_id', categoryId())", $script);
         $this->assertStringContainsString("viewerLink.className = 'youtube-ad-viewer-link'", $script);
         $this->assertStringContainsString("interaction === 'impression' ? 'impressions' : 'clicks'", $script);
         $this->assertStringContainsString('IntersectionObserver', $script);
+        $this->assertStringContainsString('Math.min(endsAt - Date.now() + 500, delay)', $script);
+        $this->assertStringContainsString('rotationTimer = window.setTimeout(load, 60_000)', $script);
         $this->assertStringContainsString('const card = createCard(ad)', $script);
         $this->assertStringContainsString('scheduleRefresh(ad)', $script);
         $this->assertStringNotContainsString('payload.data.map(createCard)', $script);
         $this->assertStringContainsString('id="reelVideo"', $viewer);
         $this->assertStringContainsString('/api/user/ads?placement=home&limit_per_page=100&page=', $viewerScript);
+        $this->assertStringContainsString("placement === 'category'", $viewerScript);
+        $this->assertStringContainsString("placement === 'storefront'", $viewerScript);
+        $this->assertStringContainsString('Math.min(untilNextEnd, delay)', $viewerScript);
+        $this->assertStringContainsString('if (currentAdId != null && requestedIndex >= 0)', $viewerScript);
         $this->assertStringContainsString('distance > 0 ? 1 : -1', $viewerScript);
         $this->assertStringContainsString('25-sponsored-reel.html', $screenRegistry);
+        $this->assertStringContainsString('id="categorySponsoredAds"', $categoryScreen);
+        $this->assertStringContainsString('user-home-sponsored-ads.js', $categoryScreen);
+        $this->assertStringContainsString('window.saeyCategoryId = mainCategoryId ||', $categoryScreen);
+        $this->assertStringNotContainsString('window.saeyCategoryId = selectedSubcategoryId', $categoryScreen);
     }
 
     private function createStoreAndUser(UserStatusEnum $storeStatus = UserStatusEnum::Active): array
@@ -248,6 +297,7 @@ class UserHomeAdsTest extends TestCase
             'public_id' => (string) Str::uuid(),
             'store_id' => $store->id,
             'ad_package_id' => $package->id,
+            'category_id' => null,
             'title' => $title,
             'placement' => $placement,
             'action' => AdActionEnum::ViewStore,

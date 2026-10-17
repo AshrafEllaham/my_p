@@ -293,31 +293,9 @@
     </div>
 
     <!-- Sponsored Ad — same component used on the user home -->
-    <section class="youtube-ad-section cat-sponsored-wrap" aria-label="إعلانات ممولة">
+    <section class="youtube-ad-section cat-sponsored-wrap" id="categorySponsoredAdSection" aria-label="إعلانات ممولة" hidden>
       <div class="youtube-ad-section-head"><h2>إعلانات ممولة</h2><span>مقترحة لك</span></div>
-      <article class="youtube-ad">
-        <a class="youtube-ad-media" href="19-store-details.html">
-          <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85" alt="إعلان النجم الساطع">
-          <span class="youtube-ad-shade"></span>
-          <span class="youtube-ad-badge">إعلان</span>
-          <span class="youtube-ad-duration">0:10</span>
-          <span class="youtube-ad-play"><svg viewBox="0 0 24 24"><path d="m8 5 11 7-11 7Z"/></svg></span>
-        </a>
-        <div class="youtube-ad-body">
-          <div class="youtube-ad-meta">
-            <span class="youtube-ad-avatar">ن</span>
-            <span class="youtube-ad-copy">
-              <strong>تشكيلة صيف ٢٠٢٦ — عروض حصرية</strong>
-              <small><b>مموّل</b> · النجم الساطع</small>
-            </span>
-            <button class="youtube-ad-menu" type="button">⋮</button>
-          </div>
-          <div class="youtube-ad-actions">
-            <a class="youtube-ad-cta" href="19-store-details.html">عرض المتجر</a>
-            <a class="youtube-ad-chat" href="14-chat-conversation.html">دردشة</a>
-          </div>
-        </div>
-      </article>
+      <div id="categorySponsoredAds" aria-live="polite"></div>
     </section>
 
     <!-- Most Purchased -->
@@ -463,6 +441,7 @@
       highest_rated: { container: document.getElementById('highestRatedProducts'), message: document.getElementById('highestRatedMessage'), page: 1, lastPage: 1, loading: false, requestId: 0 }
     };
     let selectedSubcategoryId = categoryParams.get('sub_category_id') || '';
+    window.saeyCategoryId = mainCategoryId || '';
     let searchTimer;
     categoryTitleNode.textContent = categoryTitle;
 
@@ -655,6 +634,7 @@
     renderChips();
     loadProducts();
   </script>
+  <script src="user-home-sponsored-ads.js"></script>
   <script src="sponsored-ads.js"></script>
   <script src="user-experience.js"></script>
 </body>

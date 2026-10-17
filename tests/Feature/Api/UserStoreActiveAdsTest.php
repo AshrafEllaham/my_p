@@ -26,7 +26,9 @@ class UserStoreActiveAdsTest extends TestCase
         [$store, $customer, $package] = $this->createStoreAndCustomer();
         $olderActive = $this->createAd($store->id, $package->id, 'Older active', AdStatusEnum::Active, now()->subDay(), now()->addDays(2));
         $dueScheduled = $this->createAd($store->id, $package->id, 'Scheduled campaign in progress', AdStatusEnum::Scheduled, now()->subHour(), now()->addDays(3));
-        $newestActive = $this->createAd($store->id, $package->id, 'Newest active', AdStatusEnum::Active);
+        $newestStartsAt = now()->subHour();
+        $newestEndsAt = now()->addDays(2);
+        $newestActive = $this->createAd($store->id, $package->id, 'Newest active', AdStatusEnum::Active, $newestStartsAt, $newestEndsAt);
         $this->createAd($store->id, $package->id, 'Starts later', AdStatusEnum::Active, now()->addDay(), now()->addDays(2));
         $this->createAd($store->id, $package->id, 'Already ended', AdStatusEnum::Active, now()->subDays(2), now()->subSecond());
         $this->createAd($store->id, $package->id, 'Paused', AdStatusEnum::Paused);
@@ -45,6 +47,12 @@ class UserStoreActiveAdsTest extends TestCase
             ->assertJsonPath('data.0.placement', AdPlacementEnum::Storefront->value)
             ->assertJsonPath('data.0.action', AdActionEnum::ViewStore->value)
             ->assertJsonPath('data.0.media_type', MediaTypeEnum::Image->value)
+            ->assertJsonPath('data.0.target.store_id', $store->id)
+            ->assertJsonPath('data.0.store.id', $store->id)
+            ->assertJsonPath('data.0.store.name', $store->owner->name)
+            ->assertJsonPath('data.0.media_url', get_file('ads/storefront.jpg'))
+            ->assertJsonPath('data.0.starts_at_iso', $newestStartsAt->toIso8601String())
+            ->assertJsonPath('data.0.ends_at_iso', $newestEndsAt->toIso8601String())
             ->assertJsonMissingPath('data.0.cost')
             ->assertJsonMissingPath('data.0.status');
 
@@ -86,17 +94,29 @@ class UserStoreActiveAdsTest extends TestCase
         $preview = file_get_contents(base_path('Figma/screens/19-store-details.html'));
         $script = file_get_contents(base_path('Figma/screens/user-store-details.js'));
         $sponsoredAdsScript = file_get_contents(base_path('Figma/screens/sponsored-ads.js'));
+        $viewerScript = file_get_contents(base_path('Figma/screens/sponsored-reel.js'));
 
         $this->assertIsString($preview);
         $this->assertIsString($script);
         $this->assertIsString($sponsoredAdsScript);
+        $this->assertIsString($viewerScript);
         $this->assertStringContainsString('id="storeAdsSection"', $preview);
         $this->assertStringContainsString('id="loadMoreStoreAds"', $preview);
         $this->assertStringContainsString('/api/user/stores/${encodeURIComponent(storeId)}/ads', $script);
+        $this->assertStringContainsString('placement=storefront&store_id=', $script);
+        $this->assertStringContainsString("trackStoreAd(adId, 'impression')", $script);
+        $this->assertStringContainsString('trackStoreAd(adId, \'click\')', $script);
         $this->assertStringContainsString('loadStoreActiveAds()', $script);
         $this->assertStringContainsString('page: String(requestedPage)', $script);
         $this->assertStringContainsString('لا توجد إعلانات نشطة لهذا المتجر حاليًا.', $script);
         $this->assertStringContainsString("retry.textContent = 'إعادة المحاولة'", $script);
+        $this->assertStringContainsString("if (placement === 'storefront')", $viewerScript);
+        $this->assertStringContainsString('/api/user/stores/${encodeURIComponent(storefrontId)}/ads', $viewerScript);
+        $this->assertStringContainsString('ends_at_iso || ad.ends_at', $viewerScript);
+        $this->assertStringContainsString('Math.min(untilNextEnd, delay)', $viewerScript);
+        $this->assertStringContainsString('scheduleStoreAdsRefresh(payload.data)', $script);
+        $this->assertStringContainsString('loadStoreActiveAds(false, true)', $script);
+        $this->assertStringContainsString('seenStoreAdImpressions.has(adId)', $script);
         $this->assertStringContainsString("'.youtube-ad:not(.store-active-ad)'", $sponsoredAdsScript);
     }
 

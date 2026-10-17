@@ -1,6 +1,10 @@
 (() => {
-  const list = document.getElementById('homeSponsoredAds');
+  const homeList = document.getElementById('homeSponsoredAds');
+  const categoryList = document.getElementById('categorySponsoredAds');
+  const list = homeList || categoryList;
   if (!list) return;
+  const placement = categoryList ? 'category' : 'home';
+  const section = list.closest('.youtube-ad-section');
 
   const apiOrigin = location.protocol === 'file:'
     ? 'http://127.0.0.1:8000'
@@ -10,6 +14,7 @@
   const token = () => localStorage.getItem('saey_api_token');
   let rotationTimer = null;
   let isLoading = false;
+  let loadRequestId = 0;
   const icon = {
     shop: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h8.7a2 2 0 0 0 2-1.6L21 8H7"/></svg>',
     chat: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M8 11h8M8 15h5"/></svg>',
@@ -61,7 +66,12 @@
     }
   };
 
-  const viewerFor = adId => `25-sponsored-reel.html?placement=home&ad_id=${encodeURIComponent(adId)}`;
+  const categoryId = () => String(window.saeyCategoryId || '');
+  const viewerFor = adId => {
+    const params = new URLSearchParams({ placement, ad_id: String(adId) });
+    if (placement === 'category' && categoryId()) params.set('category_id', categoryId());
+    return `25-sponsored-reel.html?${params.toString()}`;
+  };
 
   const recordClickAndContinue = (event, adId, href) => {
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
@@ -87,7 +97,7 @@
 
   const createCard = ad => {
     const card = document.createElement('article');
-    card.className = 'youtube-ad api-home-sponsored-ad';
+    card.className = `youtube-ad api-sponsored-ad api-${placement}-sponsored-ad`;
     card.dataset.adId = ad.id;
 
     const href = viewerFor(ad.id);
@@ -228,7 +238,7 @@
       return;
     }
 
-    const remaining = endsAt - Date.now() + 500;
+    const remaining = Math.min(endsAt - Date.now() + 500, delay);
     const maximumTimeout = 2_147_483_647;
     if (remaining > maximumTimeout) {
       rotationTimer = window.setTimeout(() => scheduleRefresh(ad), maximumTimeout);
@@ -254,12 +264,24 @@
 
   async function load() {
     if (isLoading) return;
+    if (placement === 'category' && !categoryId()) {
+      list.replaceChildren();
+      section.hidden = true;
+      return;
+    }
     isLoading = true;
+    const requestId = ++loadRequestId;
+    section.hidden = false;
 
     if (!list.querySelector('.youtube-ad')) showState('جارٍ تحميل الإعلانات الممولة...');
 
     try {
-      const response = await fetch(`${apiOrigin}/api/user/ads?placement=home&limit_per_page=5&page=1`, {
+      let endpoint = `${apiOrigin}/api/user/ads?placement=home&limit_per_page=5&page=1`;
+      if (placement === 'category') {
+        const params = new URLSearchParams({ placement, category_id: categoryId(), limit_per_page: '5', page: '1' });
+        endpoint = `${apiOrigin}/api/user/ads?${params}`;
+      }
+      const response = await fetch(endpoint, {
         headers: {
           Accept: 'application/json',
           'Accept-Language': 'ar',
@@ -267,6 +289,7 @@
         }
       });
       const payload = await response.json();
+      if (requestId !== loadRequestId) return;
       if (response.status === 401) {
         showState('سجّل الدخول لعرض الإعلانات الممولة.', { label: 'تسجيل الدخول', href: '01-login.html' });
         return;
@@ -274,6 +297,13 @@
       if (!response.ok) throw new Error(payload.message || 'تعذر تحميل الإعلانات الممولة.');
       const ad = nextAdInSequence(Array.isArray(payload.data) ? payload.data : []);
       if (!ad) {
+        if (placement === 'category') {
+          window.clearTimeout(rotationTimer);
+          list.replaceChildren();
+          section.hidden = true;
+          rotationTimer = window.setTimeout(load, 60_000);
+          return;
+        }
         showState('لا توجد إعلانات ممولة متاحة حاليًا.');
         rotationTimer = window.setTimeout(load, 60_000);
         return;
@@ -291,16 +321,29 @@
       observeImpressions([card]);
       scheduleRefresh(ad);
     } catch (error) {
+      if (requestId !== loadRequestId) return;
       showState(error.message || 'تعذر تحميل الإعلانات الممولة.', { label: 'إعادة المحاولة' });
       rotationTimer = window.setTimeout(load, 30_000);
     } finally {
-      isLoading = false;
+      if (requestId === loadRequestId) isLoading = false;
     }
   }
 
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') load();
   });
+
+  if (placement === 'category') {
+    window.addEventListener('saey:category-changed', event => {
+      window.saeyCategoryId = String(event.detail?.categoryId || '');
+      window.clearTimeout(rotationTimer);
+      loadRequestId += 1;
+      isLoading = false;
+      list.replaceChildren();
+      section.hidden = false;
+      load();
+    });
+  }
 
   load();
 })();
