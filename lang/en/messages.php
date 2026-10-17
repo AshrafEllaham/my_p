@@ -68,6 +68,10 @@ return [
         'products_listed' => 'Store products were retrieved successfully.',
         'ads_listed' => 'Active store ads were retrieved successfully.',
     ],
+    'user_ads' => [
+        'listed' => 'Active ads were retrieved successfully.',
+        'interaction_recorded' => 'Your interaction with the ad was recorded.',
+    ],
     'user_favorites' => [
         'listed' => 'Favorites were retrieved successfully.',
         'added' => 'The item was added to favorites.',
@@ -93,6 +97,7 @@ return [
         'toggled' => 'The ad status was updated successfully.',
         'deleted' => 'The ad was deleted successfully.',
         'toggle_unavailable' => 'Only active or paused ads can be toggled.',
+        'event_id_conflict' => 'This event ID was already used for a different interaction.',
     ],
     'wallet' => [
         'balance_loaded' => 'The wallet balance was retrieved successfully.',
@@ -343,6 +348,20 @@ return [
             'label' => 'The FAQ audience type',
             'string' => 'The FAQ audience type must be text.',
             'enum' => 'The FAQ audience type must be user or store.',
+        ],
+        'user_ads' => [
+            'placement' => [
+                'label' => 'ad placement',
+                'required' => 'The ad placement is required.',
+                'string' => 'The ad placement must be text.',
+                'enum' => 'The ad placement must be home or category.',
+            ],
+            'event_id' => [
+                'label' => 'event ID',
+                'required' => 'The event ID is required.',
+                'string' => 'The event ID must be text.',
+                'uuid' => 'The event ID must be a valid UUID.',
+            ],
         ],
         'catalog_lookup' => [
             'pagination' => [

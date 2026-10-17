@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\User\UserAdController;
 use App\Http\Controllers\Api\User\UserCompetitionController;
 use App\Http\Controllers\Api\User\UserFavoriteController;
 use App\Http\Controllers\Api\User\UserHomeCategoryController;
@@ -29,6 +30,15 @@ Route::group([], function () {
 
     // مسارات محمية (تتطلب تسجيل الدخول)
     Route::group(['middleware' => ['auth:api', 'throttle:60,1']], function () {
+        // يعرض الإعلانات النشطة حسب موضع ظهورها مع تقسيم النتائج إلى صفحات.
+        Route::get('/ads', [UserAdController::class, 'index']);
+
+        // يسجل مشاهدة إعلان نشط مرة واحدة لكل معرّف حدث.
+        Route::post('/ads/{ad}/impressions', [UserAdController::class, 'impression'])->whereNumber('ad');
+
+        // يسجل نقرة المستخدم على إعلان نشط مرة واحدة لكل معرّف حدث.
+        Route::post('/ads/{ad}/clicks', [UserAdController::class, 'click'])->whereNumber('ad');
+
         // يحدّث بيانات الملف الشخصي للمستخدم.
         Route::post('/profile', [UserProfileController::class, 'update']);
 
@@ -83,8 +93,7 @@ Route::group([], function () {
         // يعرض مفضلات المستخدم مع فلترة نوع العنصر وتقسيم الصفحات.
         Route::get('/favorites', [UserFavoriteController::class, 'index']);
 
-
-         // يعرض سجل عمليات محفظة الحساب الحالي بصفحات مرتبة من الأحدث.
+        // يعرض سجل عمليات محفظة الحساب الحالي بصفحات مرتبة من الأحدث.
         Route::get('/wallet', [WalletController::class, 'index']);
         // ينشئ محاولة دفع إلكتروني لشحن محفظة الحساب الحالي.
         Route::post('/wallet', [WalletController::class, 'store']);

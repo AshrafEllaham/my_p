@@ -3,7 +3,9 @@
 namespace App\Repositories\Sai;
 
 use App\Enums\AccountTypeEnum;
+use App\Enums\AdPlacementEnum;
 use App\Enums\AdStatusEnum;
+use App\Enums\UserStatusEnum;
 use App\Models\Sai\Ad;
 use App\Models\Sai\AdDailyMetric;
 use App\Models\Sai\AdPackage;
@@ -54,6 +56,42 @@ class AdRepository extends MainRepository
             ->where(fn (Builder $query) => $query->whereNull('ends_at')->orWhere('ends_at', '>=', $now))
             ->orderByDesc('created_at')
             ->orderByDesc('id');
+    }
+
+    public function listActiveForPlacement(AdPlacementEnum $placement): Builder
+    {
+        return $this->currentlyVisibleToUsers($this->query())
+            ->select([
+                'id', 'public_id', 'store_id', 'product_id', 'category_id', 'title', 'action_label',
+                'caption', 'placement', 'action', 'media_type', 'media_path', 'starts_at', 'ends_at', 'created_at',
+            ])
+            ->where('placement', $placement->value)
+            ->with([
+                'store:id,owner_id,cover_image',
+                'store.owner:id,name,avatar',
+            ])
+            ->orderByDesc('created_at')
+            ->orderByDesc('id');
+    }
+
+    public function findActiveForInteractionOrFail(int $adId): Model
+    {
+        return $this->currentlyVisibleToUsers($this->query()->select(['id']))
+            ->findOrFail($adId);
+    }
+
+    private function currentlyVisibleToUsers(Builder $query): Builder
+    {
+        $now = now();
+
+        return $query
+            ->where('status', AdStatusEnum::Active->value)
+            ->where(fn (Builder $builder) => $builder->whereNull('starts_at')->orWhere('starts_at', '<=', $now))
+            ->where(fn (Builder $builder) => $builder->whereNull('ends_at')->orWhere('ends_at', '>=', $now))
+            ->whereHas('store.owner', fn (Builder $owner) => $owner
+                ->where('account_type', AccountTypeEnum::Store)
+                ->where('status', UserStatusEnum::Active))
+            ->whereHas('store.category', fn (Builder $category) => $category->where('is_active', true));
     }
 
     /** @return array{total_impressions_count: int, total_impressions_this_month_count: int, total_new_customers_count: int, total_active_campaigns_count: int} */

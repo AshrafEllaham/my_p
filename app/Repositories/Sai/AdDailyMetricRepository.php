@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Sai;
 
+use App\Enums\AdInteractionEventTypeEnum;
 use App\Models\Sai\AdDailyMetric;
 use App\Repositories\MainRepository;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,6 +18,32 @@ class AdDailyMetricRepository extends MainRepository
     public function query(): Builder
     {
         return $this->getModel()->newQuery();
+    }
+
+    public function incrementForInteraction(int $adId, AdInteractionEventTypeEnum $type, string $metricDate): void
+    {
+        $now = now();
+        $this->getModel()->newQuery()->toBase()->insertOrIgnore([
+            'ad_id' => $adId,
+            'metric_date' => $metricDate,
+            'impressions' => 0,
+            'clicks' => 0,
+            'chats_started' => 0,
+            'orders_attributed' => 0,
+            'revenue_attributed' => 0,
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
+
+        $column = match ($type) {
+            AdInteractionEventTypeEnum::Impression => 'impressions',
+            AdInteractionEventTypeEnum::Click => 'clicks',
+        };
+
+        $this->query()
+            ->where('ad_id', $adId)
+            ->where('metric_date', $metricDate)
+            ->increment($column);
     }
 
     public function findOrFail(int|string $id): Model

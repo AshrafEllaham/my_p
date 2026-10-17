@@ -86,4 +86,9 @@ class Ad extends Model
     {
         return $this->hasMany(AdDailyMetric::class, 'ad_id');
     }
+
+    public function interactionEvents(): HasMany
+    {
+        return $this->hasMany(AdInteractionEvent::class, 'ad_id');
+    }
 }

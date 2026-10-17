@@ -2759,8 +2759,8 @@
       tags: ['User', 'Store Discovery', 'Pickup', 'Recommendations'],
       desc: 'الواجهة الرئيسية للمستخدم مع منتجات مقترحة فعليًا حسب مشترياته ومفضلاته ومحافظته.',
       descEn: 'The user hub with live product recommendations and nearby stores.',
-      notes: ['الأقسام الرئيسية تُحمّل بصفحات عبر GET /api/user/main-categories مع فلتر البحث', 'قسم مقترح لك يُحمّل عبر GET /api/user/products/recommended', 'المتاجر القريبة تُحمّل عبر GET /api/user/stores/nearby باستخدام إحداثيات موقع الاستلام المحفوظة عند توفرها', 'QR ينشئه المتجر ويُمسح خارج التطبيق'],
-      notesEn: ['Main categories load in pages from GET /api/user/main-categories with a search filter', 'Recommended products load from GET /api/user/products/recommended', 'Nearby stores load from GET /api/user/stores/nearby using saved pickup coordinates when available', 'Store QR is scanned outside the app']
+      notes: ['الأقسام الرئيسية تُحمّل بصفحات عبر GET /api/user/main-categories مع فلتر البحث', 'الإعلانات الممولة تُحمّل حسب موضع الرئيسية عبر GET /api/user/ads?placement=home', 'تُسجل المشاهدة بعد ظهور نصف كارد الإعلان عبر POST /api/user/ads/{ad}/impressions، والنقر قبل فتح الوجهة عبر POST /api/user/ads/{ad}/clicks', 'قسم مقترح لك يُحمّل عبر GET /api/user/products/recommended', 'المتاجر القريبة تُحمّل عبر GET /api/user/stores/nearby باستخدام إحداثيات موقع الاستلام المحفوظة عند توفرها', 'QR ينشئه المتجر ويُمسح خارج التطبيق'],
+      notesEn: ['Main categories load in pages from GET /api/user/main-categories with a search filter', 'Sponsored ads load for the home placement from GET /api/user/ads?placement=home', 'An impression is recorded when at least half of the ad card is visible using POST /api/user/ads/{ad}/impressions; a click is recorded before opening its destination using POST /api/user/ads/{ad}/clicks', 'Recommended products load from GET /api/user/products/recommended', 'Nearby stores load from GET /api/user/stores/nearby using saved pickup coordinates when available', 'Store QR is scanned outside the app']
     });
 
     screens.push({
