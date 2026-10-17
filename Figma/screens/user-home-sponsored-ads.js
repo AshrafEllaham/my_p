@@ -8,6 +8,8 @@
       ? `${location.protocol}//${location.hostname}:8000`
       : location.origin;
   const token = () => localStorage.getItem('saey_api_token');
+  let rotationTimer = null;
+  let isLoading = false;
   const icon = {
     shop: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h8.7a2 2 0 0 0 2-1.6L21 8H7"/></svg>',
     chat: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M8 11h8M8 15h5"/></svg>',
@@ -23,6 +25,8 @@
   };
 
   const showState = (message, action = null) => {
+    window.clearTimeout(rotationTimer);
+    rotationTimer = null;
     list.replaceChildren();
     const state = document.createElement('div');
     state.className = 'home-sponsored-ads-state';
@@ -57,6 +61,8 @@
     }
   };
 
+  const viewerFor = adId => `25-sponsored-reel.html?placement=home&ad_id=${encodeURIComponent(adId)}`;
+
   const recordClickAndContinue = (event, adId, href) => {
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
     event.preventDefault();
@@ -81,14 +87,14 @@
 
   const createCard = ad => {
     const card = document.createElement('article');
-    card.className = 'youtube-ad';
+    card.className = 'youtube-ad api-home-sponsored-ad';
     card.dataset.adId = ad.id;
 
-    const href = destinationFor(ad);
+    const href = viewerFor(ad.id);
     const media = document.createElement('a');
     media.className = 'youtube-ad-media';
     media.href = href;
-    media.setAttribute('aria-label', ad.action_label || ad.title || 'فتح الإعلان');
+    media.setAttribute('aria-label', 'عرض الإعلان بملء الشاشة');
     media.addEventListener('click', event => recordClickAndContinue(event, ad.id, href));
 
     if (ad.media_type === 'video') {
@@ -129,6 +135,11 @@
 
     const body = document.createElement('div');
     body.className = 'youtube-ad-body';
+    const viewerLink = document.createElement('a');
+    viewerLink.className = 'youtube-ad-viewer-link';
+    viewerLink.href = href;
+    viewerLink.setAttribute('aria-label', 'عرض الإعلان بملء الشاشة');
+    viewerLink.addEventListener('click', event => recordClickAndContinue(event, ad.id, href));
     const meta = document.createElement('div');
     meta.className = 'youtube-ad-meta';
     const avatar = document.createElement('span');
@@ -158,7 +169,8 @@
     actions.className = 'youtube-ad-actions';
     const isChatAction = ad.action === 'start_chat';
     const actionLabel = ad.action_label || (isChatAction ? 'دردشة' : 'تسوّق الآن');
-    actions.append(makeLink(href, ad.id, actionLabel, isChatAction ? icon.chat : icon.shop, 'youtube-ad-cta'));
+    const actionHref = destinationFor(ad);
+    actions.append(makeLink(actionHref, ad.id, actionLabel, isChatAction ? icon.chat : icon.shop, 'youtube-ad-cta'));
     if (ad.store?.id) {
       const secondaryHref = isChatAction
         ? `19-store-details.html?store_id=${encodeURIComponent(ad.store.id)}`
@@ -166,7 +178,8 @@
       const secondaryLabel = isChatAction ? `زيارة متجر ${storeName}` : `دردشة مع ${storeName}`;
       actions.append(makeLink(secondaryHref, ad.id, secondaryLabel, isChatAction ? icon.shop : icon.chat, 'youtube-ad-chat'));
     }
-    body.append(meta, actions);
+    viewerLink.append(meta);
+    body.append(viewerLink, actions);
     card.append(media, body);
 
     return card;
@@ -206,8 +219,45 @@
     cards.forEach(card => observer.observe(card));
   };
 
+  const scheduleRefresh = (ad, delay = 60_000) => {
+    window.clearTimeout(rotationTimer);
+    const endsAt = Date.parse(ad?.ends_at || '');
+
+    if (!Number.isFinite(endsAt)) {
+      rotationTimer = window.setTimeout(load, delay);
+      return;
+    }
+
+    const remaining = endsAt - Date.now() + 500;
+    const maximumTimeout = 2_147_483_647;
+    if (remaining > maximumTimeout) {
+      rotationTimer = window.setTimeout(() => scheduleRefresh(ad), maximumTimeout);
+      return;
+    }
+
+    rotationTimer = window.setTimeout(load, Math.max(remaining, 250));
+  };
+
+  const nextAdInSequence = ads => ads.slice().sort((left, right) => {
+    const endTime = ad => {
+      const value = Date.parse(ad.ends_at || '');
+      return Number.isFinite(value) ? value : Number.POSITIVE_INFINITY;
+    };
+    const leftEnd = endTime(left);
+    const rightEnd = endTime(right);
+    if (leftEnd !== rightEnd) return leftEnd < rightEnd ? -1 : 1;
+
+    const startDifference = Date.parse(left.starts_at || '') - Date.parse(right.starts_at || '');
+    if (Number.isFinite(startDifference) && startDifference !== 0) return startDifference;
+    return Number(left.id) - Number(right.id);
+  })[0] || null;
+
   async function load() {
-    showState('جارٍ تحميل الإعلانات الممولة...');
+    if (isLoading) return;
+    isLoading = true;
+
+    if (!list.querySelector('.youtube-ad')) showState('جارٍ تحميل الإعلانات الممولة...');
+
     try {
       const response = await fetch(`${apiOrigin}/api/user/ads?placement=home&limit_per_page=5&page=1`, {
         headers: {
@@ -222,18 +272,35 @@
         return;
       }
       if (!response.ok) throw new Error(payload.message || 'تعذر تحميل الإعلانات الممولة.');
-      if (!payload.data?.length) {
+      const ad = nextAdInSequence(Array.isArray(payload.data) ? payload.data : []);
+      if (!ad) {
         showState('لا توجد إعلانات ممولة متاحة حاليًا.');
+        rotationTimer = window.setTimeout(load, 60_000);
         return;
       }
 
-      const cards = payload.data.map(createCard);
-      list.replaceChildren(...cards);
-      observeImpressions(cards);
+      const currentCard = list.querySelector('.youtube-ad');
+      if (currentCard?.dataset.adId === String(ad.id)) {
+        scheduleRefresh(ad);
+        return;
+      }
+
+      window.clearTimeout(rotationTimer);
+      const card = createCard(ad);
+      list.replaceChildren(card);
+      observeImpressions([card]);
+      scheduleRefresh(ad);
     } catch (error) {
       showState(error.message || 'تعذر تحميل الإعلانات الممولة.', { label: 'إعادة المحاولة' });
+      rotationTimer = window.setTimeout(load, 30_000);
+    } finally {
+      isLoading = false;
     }
   }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') load();
+  });
 
   load();
 })();

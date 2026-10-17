@@ -2,10 +2,12 @@
 
 namespace App\Repositories\Admin;
 
+use App\Enums\AdPlacementEnum;
 use App\Enums\AdStatusEnum;
 use App\Models\Sai\Ad;
 use App\Repositories\MainRepository;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 
 class AdReviewRepository extends MainRepository
 {
@@ -65,6 +67,23 @@ class AdReviewRepository extends MainRepository
             ->findOrFail($id);
 
         return $ad;
+    }
+
+    public function latestHomeCampaignEndForUpdate(int $excludingAdId): ?Carbon
+    {
+        /** @var Ad|null $ad */
+        $ad = $this->getModel()->newQuery()
+            ->select(['id', 'ends_at'])
+            ->where('placement', AdPlacementEnum::Home->value)
+            ->whereIn('status', [AdStatusEnum::Active->value, AdStatusEnum::Scheduled->value])
+            ->whereNotNull('ends_at')
+            ->where('ends_at', '>', now())
+            ->where('id', '!=', $excludingAdId)
+            ->orderByDesc('ends_at')
+            ->lockForUpdate()
+            ->first();
+
+        return $ad?->ends_at;
     }
 
     /** @param array<string, mixed> $data */

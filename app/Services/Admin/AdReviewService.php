@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin;
 
+use App\Enums\AdPlacementEnum;
 use App\Enums\AdStatusEnum;
 use App\Models\Sai\Ad;
 use App\Repositories\Admin\AdReviewRepository;
@@ -34,7 +35,16 @@ class AdReviewService
     {
         return $this->database->transaction(function () use ($id): Ad {
             $ad = $this->repository->lockPendingForReview($id);
-            $startsAt = $ad->starts_at?->isFuture() ? $ad->starts_at : now();
+            $startsAt = $ad->starts_at?->isFuture() ? $ad->starts_at->copy() : now();
+
+            if ($ad->placement === AdPlacementEnum::Home) {
+                $latestHomeCampaignEnd = $this->repository->latestHomeCampaignEndForUpdate($ad->id);
+
+                if ($latestHomeCampaignEnd !== null && $latestHomeCampaignEnd->greaterThan($startsAt)) {
+                    $startsAt = $latestHomeCampaignEnd->copy();
+                }
+            }
+
             $status = $startsAt->isFuture() ? AdStatusEnum::Scheduled : AdStatusEnum::Active;
 
             return $this->repository->updateReview($ad, [

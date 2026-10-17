@@ -110,6 +110,47 @@ class UserHomeAdsTest extends TestCase
         $this->assertSame(2, AdInteractionEvent::query()->count());
     }
 
+    public function test_next_scheduled_home_ad_appears_when_the_current_campaign_ends(): void
+    {
+        [$store, $user, $package] = $this->createStoreAndUser();
+        $handoffAt = now()->addHour();
+        $currentAd = $this->createAd(
+            $store,
+            $package,
+            'إعلان المتجر الأول',
+            AdPlacementEnum::Home,
+            AdStatusEnum::Active,
+            now()->subHour(),
+            $handoffAt,
+        );
+        $nextAd = $this->createAd(
+            $store,
+            $package,
+            'إعلان المتجر التالي',
+            AdPlacementEnum::Home,
+            AdStatusEnum::Scheduled,
+            $handoffAt,
+            $handoffAt->copy()->addDay(),
+        );
+        $this->actingAs($user, 'api');
+
+        $this->getJson('/api/user/ads?placement=home')
+            ->assertOk()
+            ->assertJsonPath('total', 1)
+            ->assertJsonPath('data.0.id', $currentAd->id);
+
+        $this->travelTo($handoffAt);
+
+        $this->getJson('/api/user/ads?placement=home')
+            ->assertOk()
+            ->assertJsonPath('total', 1)
+            ->assertJsonPath('data.0.id', $nextAd->id);
+
+        $this->postJson("/api/user/ads/{$nextAd->id}/impressions", ['event_id' => (string) Str::uuid()])
+            ->assertOk()
+            ->assertJsonPath('data.recorded', true);
+    }
+
     public function test_ad_interaction_requires_authentication_and_translates_validation_errors(): void
     {
         $this->postJson('/api/user/ads/1/impressions', [])->assertUnauthorized();
@@ -143,14 +184,29 @@ class UserHomeAdsTest extends TestCase
     {
         $preview = file_get_contents(base_path('Figma/screens/08-user-home.html'));
         $script = file_get_contents(base_path('Figma/screens/user-home-sponsored-ads.js'));
+        $viewer = file_get_contents(base_path('Figma/screens/25-sponsored-reel.html'));
+        $viewerScript = file_get_contents(base_path('Figma/screens/sponsored-reel.js'));
+        $screenRegistry = file_get_contents(base_path('Figma/preview.html'));
 
         $this->assertIsString($preview);
         $this->assertIsString($script);
+        $this->assertIsString($viewer);
+        $this->assertIsString($viewerScript);
+        $this->assertIsString($screenRegistry);
         $this->assertStringContainsString('id="homeSponsoredAds"', $preview);
         $this->assertStringContainsString('user-home-sponsored-ads.js', $preview);
         $this->assertStringContainsString('/api/user/ads?placement=home', $script);
+        $this->assertStringContainsString('25-sponsored-reel.html?placement=home&ad_id=', $script);
+        $this->assertStringContainsString("viewerLink.className = 'youtube-ad-viewer-link'", $script);
         $this->assertStringContainsString("interaction === 'impression' ? 'impressions' : 'clicks'", $script);
         $this->assertStringContainsString('IntersectionObserver', $script);
+        $this->assertStringContainsString('const card = createCard(ad)', $script);
+        $this->assertStringContainsString('scheduleRefresh(ad)', $script);
+        $this->assertStringNotContainsString('payload.data.map(createCard)', $script);
+        $this->assertStringContainsString('id="reelVideo"', $viewer);
+        $this->assertStringContainsString('/api/user/ads?placement=home&limit_per_page=100&page=', $viewerScript);
+        $this->assertStringContainsString('distance > 0 ? 1 : -1', $viewerScript);
+        $this->assertStringContainsString('25-sponsored-reel.html', $screenRegistry);
     }
 
     private function createStoreAndUser(UserStatusEnum $storeStatus = UserStatusEnum::Active): array

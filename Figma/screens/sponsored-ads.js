@@ -12,6 +12,8 @@ const sponsoredSlideSets = {
 };
 
 document.querySelectorAll('.youtube-ad:not(.store-active-ad)').forEach(ad => {
+  if (ad.classList.contains('api-home-sponsored-ad')) return;
+
   const image = ad.querySelector('.youtube-ad-media > img');
   const avatar = ad.querySelector('.youtube-ad-avatar')?.textContent.trim();
   const slides = ad.dataset.slides?.split('|').filter(Boolean) || sponsoredSlideSets[avatar] || [];

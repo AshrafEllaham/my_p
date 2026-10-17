@@ -66,10 +66,10 @@ return [
         'nearby_listed' => 'Nearby stores were retrieved successfully.',
         'retrieved' => 'Store details were retrieved successfully.',
         'products_listed' => 'Store products were retrieved successfully.',
-        'ads_listed' => 'Active store ads were retrieved successfully.',
+        'ads_listed' => 'Available store ads were retrieved successfully.',
     ],
     'user_ads' => [
-        'listed' => 'Active ads were retrieved successfully.',
+        'listed' => 'Available ads were retrieved successfully.',
         'interaction_recorded' => 'Your interaction with the ad was recorded.',
     ],
     'user_favorites' => [

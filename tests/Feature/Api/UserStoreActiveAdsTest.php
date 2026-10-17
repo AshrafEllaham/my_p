@@ -21,10 +21,11 @@ class UserStoreActiveAdsTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_user_can_list_only_currently_active_ads_for_a_store_with_pagination(): void
+    public function test_user_can_list_currently_visible_ads_for_a_store_with_pagination(): void
     {
         [$store, $customer, $package] = $this->createStoreAndCustomer();
         $olderActive = $this->createAd($store->id, $package->id, 'Older active', AdStatusEnum::Active, now()->subDay(), now()->addDays(2));
+        $dueScheduled = $this->createAd($store->id, $package->id, 'Scheduled campaign in progress', AdStatusEnum::Scheduled, now()->subHour(), now()->addDays(3));
         $newestActive = $this->createAd($store->id, $package->id, 'Newest active', AdStatusEnum::Active);
         $this->createAd($store->id, $package->id, 'Starts later', AdStatusEnum::Active, now()->addDay(), now()->addDays(2));
         $this->createAd($store->id, $package->id, 'Already ended', AdStatusEnum::Active, now()->subDays(2), now()->subSecond());
@@ -37,7 +38,7 @@ class UserStoreActiveAdsTest extends TestCase
         $this->getJson($url)
             ->assertOk()
             ->assertJsonPath('message', __('messages.user_stores.ads_listed'))
-            ->assertJsonPath('total', 2)
+            ->assertJsonPath('total', 3)
             ->assertJsonPath('per_page', 1)
             ->assertJsonPath('data.0.id', $newestActive->id)
             ->assertJsonPath('data.0.title', 'Newest active')
@@ -48,6 +49,10 @@ class UserStoreActiveAdsTest extends TestCase
             ->assertJsonMissingPath('data.0.status');
 
         $this->getJson($url.'&page=2')
+            ->assertOk()
+            ->assertJsonPath('data.0.id', $dueScheduled->id);
+
+        $this->getJson($url.'&page=3')
             ->assertOk()
             ->assertJsonPath('data.0.id', $olderActive->id);
     }

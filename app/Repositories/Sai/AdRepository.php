@@ -51,9 +51,9 @@ class AdRepository extends MainRepository
                 'caption', 'placement', 'action', 'media_type', 'media_path', 'starts_at', 'ends_at', 'created_at',
             ])
             ->where('store_id', $storeId)
-            ->where('status', AdStatusEnum::Active->value)
+            ->whereIn('status', [AdStatusEnum::Active->value, AdStatusEnum::Scheduled->value])
             ->where(fn (Builder $query) => $query->whereNull('starts_at')->orWhere('starts_at', '<=', $now))
-            ->where(fn (Builder $query) => $query->whereNull('ends_at')->orWhere('ends_at', '>=', $now))
+            ->where(fn (Builder $query) => $query->whereNull('ends_at')->orWhere('ends_at', '>', $now))
             ->orderByDesc('created_at')
             ->orderByDesc('id');
     }
@@ -85,9 +85,9 @@ class AdRepository extends MainRepository
         $now = now();
 
         return $query
-            ->where('status', AdStatusEnum::Active->value)
+            ->whereIn('status', [AdStatusEnum::Active->value, AdStatusEnum::Scheduled->value])
             ->where(fn (Builder $builder) => $builder->whereNull('starts_at')->orWhere('starts_at', '<=', $now))
-            ->where(fn (Builder $builder) => $builder->whereNull('ends_at')->orWhere('ends_at', '>=', $now))
+            ->where(fn (Builder $builder) => $builder->whereNull('ends_at')->orWhere('ends_at', '>', $now))
             ->whereHas('store.owner', fn (Builder $owner) => $owner
                 ->where('account_type', AccountTypeEnum::Store)
                 ->where('status', UserStatusEnum::Active))

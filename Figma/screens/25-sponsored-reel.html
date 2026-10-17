@@ -12,8 +12,9 @@
 <body class="sponsored-reel" style="font-family:'Inter','Cairo',system-ui,-apple-system,sans-serif">
   <main class="reel-viewer" id="reelViewer" aria-label="عرض الإعلان بملء الشاشة">
     <img class="reel-media" id="reelMedia" alt="">
+    <video class="reel-media reel-video" id="reelVideo" playsinline muted hidden></video>
     <div class="reel-shade"></div>
-    <div class="reel-progress" id="reelProgress" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="reel-progress" id="reelProgress" aria-hidden="true"></div>
     <header class="reel-header">
       <button class="reel-circle" id="closeReel" type="button" aria-label="إغلاق الإعلان"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
       <span><b>إعلان</b> ممول</span>
@@ -25,12 +26,13 @@
       <button id="nextReel" type="button" aria-label="الإعلان التالي"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg><small>التالي</small></button>
     </aside>
     <section class="reel-content">
-      <a class="reel-store" id="reelStore" href="19-store-details.html"><span class="reel-avatar" id="reelAvatar">ت</span><span><strong id="reelStoreName">التقنية الحديثة</strong><small>متجر موثّق</small></span></a>
+      <a class="reel-store" id="reelStore" href="19-store-details.html"><span class="reel-avatar" id="reelAvatar">ت</span><span><strong id="reelStoreName">التقنية الحديثة</strong><small>مموّل</small></span></a>
       <h1 id="reelTitle">خصم حتى ٢٠٪ على أحدث الإلكترونيات</h1>
       <p id="reelDescription">اكتشف العرض وتسوق مباشرة من المتجر.</p>
       <div class="reel-actions"><a class="reel-primary" id="reelCta" href="19-store-details.html" aria-label="تسوّق الآن" title="تسوّق الآن"><svg viewBox="0 0 24 24"><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h8.7a2 2 0 0 0 2-1.6L21 8H7"/></svg></a><a class="reel-secondary" id="reelChat" href="14-chat-conversation.html" aria-label="دردشة" title="دردشة"><svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M8 11h8M8 15h5"/></svg></a></div>
     </section>
-    <p class="reel-hint">اسحب لأعلى للإعلان التالي</p>
+    <p class="reel-hint" id="reelHint">اسحب لأسفل للإعلان التالي</p>
+    <div class="reel-state" id="reelState" role="status" aria-live="polite" hidden></div>
   </main>
   <script src="sponsored-reel.js"></script>
 </body>
