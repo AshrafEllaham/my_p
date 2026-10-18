@@ -24,58 +24,28 @@
   <main class="conversation-page">
     <header class="conversation-head">
       <a class="conversation-back" href="14-chats.html" aria-label="العودة للدردشات"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a>
-      <span class="conversation-avatar"><img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=120&q=85" alt="نقطة ستور"><i></i></span>
-      <div class="conversation-identity"><strong id="storeName">نقطة ستور</strong><span><i></i>متصل الآن</span></div>
+      <span class="conversation-avatar"><img id="storeAvatar" alt="" hidden><span class="conversation-avatar-fallback" id="storeAvatarFallback" aria-hidden="true">م</span></span>
+      <div class="conversation-identity"><strong id="storeName">المتجر</strong><span>محادثة خاصة مع المتجر</span></div>
       <button class="conversation-menu" id="conversationMenu" type="button" aria-label="خيارات المحادثة">⋮</button>
     </header>
 
-    <section class="conversation-product" aria-label="المنتج المرتبط بالمحادثة">
-      <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=180&q=85" alt="جاكيت جلد طبيعي">
-      <div><small>استفسار عن المنتج</small><strong>جاكيت جلد طبيعي رجالي</strong><span>٢,٨٩٠ ج.م · مقاس M</span></div>
-      <a href="12-product-details.html" aria-label="عرض تفاصيل المنتج"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a>
-    </section>
+    <label class="message-search" for="messageSearch"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg><input id="messageSearch" type="search" placeholder="ابحث في الرسائل"></label>
+    <button class="older-messages" id="loadOlderMessages" type="button" hidden>عرض رسائل أقدم</button>
 
-    <section class="messages" aria-label="رسائل المحادثة">
-      <div class="date-divider"><span>اليوم</span></div>
-      <div class="message incoming"><p>أهلًا بك في نقطة ستور، كيف نقدر نساعدك؟</p><time>10:28 ص</time></div>
-      <div class="message outgoing"><p>هل الجاكيت متوفر بالمقاس M؟ وهل يمكن الاستلام من المتجر؟</p><time>10:30 ص <b>✓✓</b></time></div>
-      <div class="message incoming"><p>نعم، المقاس M متوفر ويمكنك الاستلام من المتجر اليوم.</p><time>10:32 ص</time></div>
-    </section>
+    <section class="messages" id="messages" aria-label="رسائل المحادثة" aria-live="polite"></section>
+    <section class="conversation-loading" id="messagesLoading" hidden>جارٍ تحميل الرسائل...</section>
+    <section class="conversation-error" id="messagesError" hidden><span id="messagesErrorText"></span><button type="button" id="retryMessages">إعادة المحاولة</button></section>
+    <p class="conversation-status" id="conversationStatus" role="status" hidden></p>
   </main>
 
   <form class="message-composer" id="messageComposer">
-    <button class="attach-button" type="button" aria-label="إرفاق ملف"><svg viewBox="0 0 24 24"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg></button>
-    <input id="messageInput" type="text" placeholder="اكتب رسالتك..." autocomplete="off">
-    <button class="send-button" type="submit" aria-label="إرسال الرسالة"><svg viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></button>
+    <input id="messageInput" type="text" placeholder="اكتب رسالتك..." autocomplete="off" maxlength="5000" disabled>
+    <button class="send-button" type="submit" aria-label="إرسال الرسالة" disabled><svg viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></button>
   </form>
-  <dialog class="conversation-actions" id="conversationActions"><form method="dialog"><h2>خيارات المحادثة</h2><button value="block" id="blockConversation">حظر المتجر</button><button value="report" id="reportConversation">الإبلاغ عن المحادثة</button><button value="cancel">إلغاء</button></form></dialog>
+  <dialog class="conversation-actions" id="conversationActions"><form method="dialog"><h2>خيارات المحادثة</h2><button value="block" id="blockConversation">حظر المحادثة</button><button value="report" id="reportConversation">الإبلاغ عن المحادثة</button><button value="cancel">إلغاء</button></form></dialog>
+  <dialog class="report-dialog" id="reportDialog"><form id="reportForm"><h2>الإبلاغ عن المحادثة</h2><label for="reportReason">سبب الإبلاغ</label><input id="reportReason" name="reason" required maxlength="120" value="محتوى غير مناسب"><label for="reportDetails">تفاصيل إضافية (اختياري)</label><textarea id="reportDetails" name="details" maxlength="1000"></textarea><p id="reportError" role="alert" hidden></p><div><button type="button" id="cancelReport">إلغاء</button><button type="submit">إرسال البلاغ</button></div></form></dialog>
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const storeName = params.get('store');
-    if (storeName) document.getElementById('storeName').textContent = storeName;
-
-    const composer = document.getElementById('messageComposer');
-    const input = document.getElementById('messageInput');
-    const messages = document.querySelector('.messages');
-    const storageKey = `saey_chat_${storeName || 'نقطة ستور'}`;
-    const savedMessages = JSON.parse(localStorage.getItem(storageKey) || '[]');
-    savedMessages.forEach(saved => { const message=document.createElement('div');message.className=`message outgoing${saved.failed?' failed':''}`;message.dataset.local='true';message.innerHTML=`<p>${saved.text}</p><time>${saved.failed?'تعذر الإرسال <button class="retry-message" type="button">إعادة</button>':'تم الإرسال <b>✓✓</b>'}</time>`;messages.appendChild(message); });
-    const saveMessages = () => localStorage.setItem(storageKey, JSON.stringify([...messages.querySelectorAll('.message.outgoing[data-local]')].map(message=>({text:message.querySelector('p').textContent,failed:message.classList.contains('failed')}))));
-    composer.addEventListener('submit', (event) => {
-      event.preventDefault();
-      const value = input.value.trim();
-      if (!value) return;
-      const message = document.createElement('div');
-      message.className = 'message outgoing sending'; message.dataset.local = 'true';
-      message.innerHTML = `<p>${value.replace(/[&<>]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[char]))}</p><time>جارٍ الإرسال…</time>`;
-      messages.appendChild(message);
-      input.value = '';
-      message.scrollIntoView({ behavior: 'smooth', block: 'end' });
-      setTimeout(() => { const shouldFail=params.get('send')==='error'&&!sessionStorage.getItem('saey_chat_retry');message.classList.remove('sending');message.classList.toggle('failed',shouldFail);message.querySelector('time').innerHTML=shouldFail?'تعذر الإرسال <button class="retry-message" type="button">إعادة</button>':'تم الإرسال <b>✓✓</b>';saveMessages(); }, 550);
-    });
-    messages.addEventListener('click', event => { const retry=event.target.closest('.retry-message');if(!retry)return;const message=retry.closest('.message');sessionStorage.setItem('saey_chat_retry','1');message.classList.remove('failed');message.classList.add('sending');message.querySelector('time').textContent='جارٍ إعادة الإرسال…';setTimeout(()=>{message.classList.remove('sending');message.querySelector('time').innerHTML='تم الإرسال <b>✓✓</b>';saveMessages();},500); });
-    const actions=document.getElementById('conversationActions');document.getElementById('conversationMenu').onclick=()=>actions.showModal();document.getElementById('blockConversation').onclick=()=>{localStorage.setItem(`saey_chat_blocked_${storeName||'store'}`,'true');composer.hidden=true;};document.getElementById('reportConversation').onclick=()=>localStorage.setItem(`saey_chat_reported_${storeName||'store'}`,'true');
-  </script>
+  <script src="chat-reverb.js"></script>
+  <script src="chat-api.js"></script>
 </body>
 </html>

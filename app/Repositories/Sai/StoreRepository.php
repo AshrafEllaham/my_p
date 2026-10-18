@@ -13,6 +13,7 @@ use App\Models\Sai\Store;
 use App\Repositories\MainRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class StoreRepository extends MainRepository
 {
@@ -41,6 +42,24 @@ class StoreRepository extends MainRepository
                 ->where('status', UserStatusEnum::Active))
             ->whereHas('category', fn (Builder $category) => $category->where('is_active', true))
             ->firstOrFail();
+    }
+
+    public function ensureActiveOwnerForChat(int $ownerId): int
+    {
+        $activeOwnerId = $this->query()
+            ->select(['owner_id'])
+            ->where('owner_id', $ownerId)
+            ->whereHas('owner', fn (Builder $owner) => $owner
+                ->where('account_type', AccountTypeEnum::Store)
+                ->where('status', UserStatusEnum::Active))
+            ->value('owner_id');
+
+        if ($activeOwnerId === null) {
+            throw (new ModelNotFoundException)
+                ->setModel($this->getModel(), $ownerId);
+        }
+
+        return (int) $activeOwnerId;
     }
 
     public function ownerIdForVisibleStore(int $id): int

@@ -26,52 +26,16 @@
       <div><h1>الدردشات</h1><span>تواصل مباشرة مع المتاجر</span></div>
     </header>
 
-    <label class="chat-search" for="chatSearch"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg><input id="chatSearch" type="search" placeholder="ابحث باسم متجر أو منتج"></label>
+    <label class="chat-search" for="chatSearch"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg><input id="chatSearch" type="search" placeholder="ابحث باسم المتجر"></label>
 
-    <div class="chat-list-head"><p class="chat-section-label">المحادثات</p><span>٣ محادثات</span></div>
-    <section class="chat-list" id="chatList">
-      <button class="chat-row unread" type="button" data-type="stores" data-conversation="نقطة ستور" data-name="نقطة ستور جاكيت جلد طبيعي">
-        <span class="chat-avatar blue"><img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=120&q=85" alt="نقطة ستور"><i></i></span>
-        <span class="chat-copy"><strong>نقطة ستور <em>موثق</em></strong><span>الجاكيت متوفر بالمقاس M، أهلًا بك.</span><small>متعلق بـ جاكيت جلد طبيعي</small></span>
-        <span class="chat-meta"><time>10:32 ص</time><b>1</b></span>
-      </button>
-      <button class="chat-row unread" type="button" data-type="stores" data-conversation="التقنية الحديثة" data-name="التقنية الحديثة سماعة لاسلكية">
-        <span class="chat-avatar mint"><img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=120&q=85" alt="التقنية الحديثة"><i></i></span>
-        <span class="chat-copy"><strong>التقنية الحديثة <em>موثق</em></strong><span>نعم، المنتج متاح للاستلام اليوم.</span><small>متعلق بـ سماعة لاسلكية</small></span>
-        <span class="chat-meta"><time>أمس</time><b>1</b></span>
-      </button>
-      <button class="chat-row" type="button" data-type="stores" data-conversation="أزياء الشرق" data-name="أزياء الشرق فستان نسائي">
-        <span class="chat-avatar peach"><img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=120&q=85" alt="أزياء الشرق"></span>
-        <span class="chat-copy"><strong>أزياء الشرق</strong><span>شكرًا لتواصلك معنا، في خدمتك دائمًا.</span><small>متعلق بـ فستان نسائي أنيق</small></span>
-        <span class="chat-meta"><time>الأحد</time></span>
-      </button>
-    </section>
-    <section class="chat-empty" id="chatEmpty"><span><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8A8.5 8.5 0 0 1 12.5 20a8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7A8.38 8.38 0 0 1 4 11.5 8.5 8.5 0 0 1 8.7 3.9 8.38 8.38 0 0 1 12.5 3h.5a8.48 8.48 0 0 1 8 8v.5Z"/></svg></span><h2>لا توجد محادثات مطابقة</h2><p>جرّب البحث باسم متجر أو منتج آخر.</p></section>
+    <div class="chat-list-head"><p class="chat-section-label">المحادثات</p><span id="chatCount" aria-live="polite"></span></div>
+    <section class="chat-list" id="chatList" aria-live="polite"></section>
+    <section class="chat-empty" id="chatEmpty"><span><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8A8.5 8.5 0 0 1 12.5 20a8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7A8.38 8.38 0 0 1 4 11.5 8.5 8.5 0 0 1 8.7 3.9 8.38 8.38 0 0 1 12.5 3h.5a8.48 8.48 0 0 1 8 8v.5Z"/></svg></span><h2>لا توجد محادثات مطابقة</h2><p>جرّب البحث باسم متجر آخر.</p></section>
     <section class="chat-loading" id="chatLoading" hidden><i></i><p>جارٍ تحميل المحادثات...</p></section>
     <section class="chat-error" id="chatError" hidden><b>!</b><h2>تعذر تحميل المحادثات</h2><p>تحقق من الاتصال ثم أعد المحاولة.</p><button type="button" id="retryChats">إعادة المحاولة</button></section>
+    <button class="chat-load-more" id="loadMoreChats" type="button" hidden>تحميل المزيد</button>
   </main>
-  <script>
-    const search = document.getElementById('chatSearch'), list = document.getElementById('chatList'), empty = document.getElementById('chatEmpty'), loading = document.getElementById('chatLoading'), errorState = document.getElementById('chatError'), params = new URLSearchParams(location.search);
-    let filterTimer;
-    const runRefresh = () => {
-      let shown = 0; const term = search.value.trim().toLowerCase();
-      list.querySelectorAll('.chat-row').forEach(row => {
-        const matchSearch = !term || row.dataset.name.toLowerCase().includes(term);
-        row.hidden = !matchSearch; if (!row.hidden) shown++;
-      });
-      empty.classList.toggle('visible', shown === 0);
-      loading.hidden = true; list.hidden = false;
-    };
-    const refresh = () => { clearTimeout(filterTimer); empty.classList.remove('visible'); loading.hidden = false; list.hidden = true; filterTimer = setTimeout(runRefresh, 220); };
-    search.addEventListener('input', refresh);
-    list.querySelectorAll('.chat-row').forEach(row => row.addEventListener('click', () => {
-      row.classList.remove('unread');
-      const badge = row.querySelector('.chat-meta b');
-      if (badge) badge.remove();
-      window.location.href = `14-chat-conversation.html?store=${encodeURIComponent(row.dataset.conversation)}`;
-    }));
-    document.getElementById('retryChats').onclick = () => { params.delete('state'); location.search = params.toString(); };
-    if (params.get('state') === 'error') { list.hidden = true; errorState.hidden = false; } else { runRefresh(); }
-  </script>
+  <script src="chat-reverb.js"></script>
+  <script src="chat-api.js"></script>
 <script src="user-experience.js"></script></body>
 </html>

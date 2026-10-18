@@ -2538,20 +2538,20 @@
         section: 'تطبيق المستخدم',
         sectionEn: 'Buyer Experience',
         file: '14-chat-conversation.html',
-        title: 'محادثة فورية مع الموزع',
-        titleEn: 'In-App Live Chat',
-        tags: ['Live Messaging', 'Product Context Pinned', 'Voice Notes', 'Image Attach'],
-        desc: 'دردشة مباشرة مشفرة بين المشتري والتاجر للاستفسار عن المقاسات، الألوان، أو تفاصيل الشحن.',
-        descEn: 'Direct live messaging between customer and seller for inquiries on specs, sizing, and delivery.',
+        title: 'محادثة بين المستخدم والمتجر',
+        titleEn: 'User and Store Chat',
+        tags: ['Chat Rooms', 'Store Messages', 'Reports', 'Blocking'],
+        desc: 'محادثة واحدة مستمرة بين المستخدم والمتجر، مستقلة عن المنتجات، مع رسائل قابلة للبحث والإبلاغ والحظر.',
+        descEn: 'One persistent conversation between a user and store, independent of products, with searchable messages, reports, and blocking.',
         notes: [
-          'تثبيت كارت المنتج المستفسر عنه أعلى شاشة المحادثة',
-          'دعم تسجيل الرسائل الصوتية وإرسال الصور الملتقطة بالكاميرا',
-          'مؤشر قراءة الرسائل وحالة الموزع (متصل الآن)'
+          'يفتح المحادثة أو يعيد الغرفة القائمة من POST /api/chat/rooms',
+          'يحمل الرسائل ويرسلها مع البحث والترقيم من /api/chat/rooms/{room}/messages',
+          'يدعم الإبلاغ عن الغرفة وحظرها من /reports و/blocks'
         ],
         notesEn: [
-          'Contextual product card pinned at the top of the chat',
-          'Support for voice notes, photo attachments, and canned quick replies',
-          'Real-time message read receipts and distributor online badge'
+          'Opens one room per user and store through POST /api/chat/rooms',
+          'Loads searchable paginated messages and sends messages through the room endpoint',
+          'Reports or blocks the room through its safety action endpoints'
         ]
       },
       {
@@ -2874,7 +2874,7 @@
       { id: 27, num: '14', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '11-featured-stores.html', title: 'متاجر مميزة', titleEn: 'Featured Stores', tags: ['Stores', 'Discovery'], desc: 'قائمة المتاجر مع بحث وفلاتر القسم والمحافظة والترتيب.', descEn: 'Store catalog with search, category, governorate, and ordering filters.', notes: ['تحميل القائمة عبر GET /api/user/stores/nearby', 'البحث باسم المتجر عبر search', 'الفلترة بـ main_category_id وgovernorate_id', 'الترتيب: high_rate أو nearest أو newest؛ الأقرب يحتاج إحداثيات موقع الاستلام'], notesEn: ['Load the list from GET /api/user/stores/nearby', 'Search store names with search', 'Filter with main_category_id and governorate_id', 'Sort by high_rate, nearest, or newest; nearest requires saved pickup coordinates'] },
       { id: 28, num: '15', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '12-product-details.html', title: 'تفاصيل المنتج', titleEn: 'Product Details', tags: ['Product', 'Pickup', 'Favorite'], desc: 'تفاصيل المنتج الحقيقية من API مع اختيار أحدث منتج متاح عند فتح الشاشة مباشرة من الـ preview.', descEn: 'Live product details from API, automatically selecting the newest available product when opened directly from the preview.', notes: ['GET /api/user/products لاختيار منتج عند غياب product_id', 'GET /api/user/products/{product}', 'GET /api/user/report-reasons', 'POST /api/user/products/{product}/reports'], notesEn: ['GET /api/user/products to resolve a product when product_id is missing', 'GET /api/user/products/{product}', 'GET /api/user/report-reasons', 'POST /api/user/products/{product}/reports'] },
       { id: 29, num: '16', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '13-notifications.html', title: 'الإشعارات', titleEn: 'Notifications', tags: ['Notifications', 'Orders', 'Offers'], desc: 'إشعارات الطلبات والعروض مع إمكانية حذفها كلها.', descEn: 'Order and offer notifications with a clear-all action.', notes: ['حالات طلب الاستلام', 'عروض المتاجر', 'حالة فارغة بعد حذف الكل'], notesEn: ['Pickup order updates', 'Store offers', 'Empty state after clear all'] },
-      { id: 30, num: '17', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '14-chats.html', title: 'الدردشات', titleEn: 'Chats', tags: ['Chat', 'Stores', 'Search'], desc: 'قائمة محادثات مباشرة مع المتاجر مع بحث باسم المتجر أو المنتج.', descEn: 'Direct store conversations with search by store or product.', notes: ['بحث باسم المتجر أو المنتج', 'حالة قراءة ووقت آخر رسالة', 'فتح محادثة مباشرة من القائمة'], notesEn: ['Search by store or product', 'Read state and last message time', 'Open a direct conversation from the list'] }
+      { id: 30, num: '17', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '14-chats.html', title: 'الدردشات', titleEn: 'Chats', tags: ['Chat', 'Stores', 'Search'], desc: 'قائمة الغرف النشطة بترتيب آخر رسالة مرسلة أو مستلمة مع البحث باسم المتجر.', descEn: 'Rooms ordered by the latest sent or received message, searchable by store name.', notes: ['تحميل الغرف بصفحات من GET /api/chat/rooms', 'بحث باسم المتجر من API', 'عرض آخر رسالة وعدد الرسائل غير المقروءة'], notesEn: ['Loads paginated rooms from GET /api/chat/rooms', 'Searches store names through the API', 'Shows the last message and unread message count'] }
     );
 
     screens.push(

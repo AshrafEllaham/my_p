@@ -5,6 +5,8 @@ namespace App\Models\Sai;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Conversation extends Model
 {
@@ -14,8 +16,6 @@ class Conversation extends Model
         'public_id',
         'user_id',
         'store_id',
-        'product_id',
-        'order_id',
         'last_message_at',
         'user_read_at',
         'store_read_at',
@@ -40,13 +40,18 @@ class Conversation extends Model
         return $this->belongsTo(User::class, 'store_id');
     }
 
-    public function product(): BelongsTo
+    public function messages(): HasMany
     {
-        return $this->belongsTo(Product::class, 'product_id');
+        return $this->hasMany(Message::class, 'conversation_id');
     }
 
-    public function order(): BelongsTo
+    public function lastMessage(): HasOne
     {
-        return $this->belongsTo(Order::class, 'order_id');
+        return $this->hasOne(Message::class, 'conversation_id')->latestOfMany();
+    }
+
+    public function safetyActions(): HasMany
+    {
+        return $this->hasMany(ConversationSafetyAction::class, 'conversation_id');
     }
 }

@@ -11,7 +11,6 @@ use App\Http\Controllers\Api\FaqController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\NotificationPreferenceController;
 use App\Http\Controllers\Api\SettingsController;
-use App\Http\Controllers\Api\WalletController;
 use Illuminate\Support\Facades\Route;
 
 // User (student) routes
@@ -19,6 +18,9 @@ Route::prefix('user')->group(base_path('routes/api/user.php'));
 
 // Store routes
 Route::prefix('store')->group(base_path('routes/api/store.php'));
+
+// مسارات المحادثات المشتركة بين المستخدم والمتجر.
+Route::prefix('chat')->group(base_path('routes/api/chat.php'));
 
 Route::group([], function () {
 
@@ -86,8 +88,5 @@ Route::group([], function () {
         // يحدّث جزءًا من تفضيلات إشعارات المستخدم الحالية.
         Route::patch('/notifications/preferences', [NotificationPreferenceController::class, 'update']);
 
-       
-
-        // ############################ chat ############################
     });
 });
