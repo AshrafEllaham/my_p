@@ -29,6 +29,29 @@ class StorePolicyVersionRepository extends MainRepository
             ->first();
     }
 
+    /** @return array{id: int, pickup_hold_hours: int, return_window_days: int, returns_enabled: bool, exchanges_enabled: bool, cancellation_enabled: bool, pickup_instructions: string|null, return_terms: string|null, exchange_terms: string|null, cancellation_terms: string|null}|null */
+    public function currentSnapshotForStore(int $storeId): ?array
+    {
+        $policy = $this->currentForStore($storeId);
+
+        if ($policy === null) {
+            return null;
+        }
+
+        return [
+            'id' => (int) $policy->getKey(),
+            'pickup_hold_hours' => (int) $policy->pickup_hold_hours,
+            'return_window_days' => (int) $policy->return_window_days,
+            'returns_enabled' => (bool) $policy->returns_enabled,
+            'exchanges_enabled' => (bool) $policy->exchanges_enabled,
+            'cancellation_enabled' => (bool) $policy->cancellation_enabled,
+            'pickup_instructions' => $policy->pickup_instructions,
+            'return_terms' => $policy->return_terms,
+            'exchange_terms' => $policy->exchange_terms,
+            'cancellation_terms' => $policy->cancellation_terms,
+        ];
+    }
+
     public function findOrFail(int|string $id): Model
     {
         return $this->query()->findOrFail($id);

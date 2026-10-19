@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\User\UserAdController;
 use App\Http\Controllers\Api\User\UserCompetitionController;
 use App\Http\Controllers\Api\User\UserFavoriteController;
 use App\Http\Controllers\Api\User\UserHomeCategoryController;
+use App\Http\Controllers\Api\User\UserOrderController;
 use App\Http\Controllers\Api\User\UserProductController;
 use App\Http\Controllers\Api\User\UserProfileController;
 use App\Http\Controllers\Api\User\UserReportController;
@@ -101,6 +102,23 @@ Route::group([], function () {
         Route::post('/wallet/withdrawal-requests', [WalletController::class, 'requestWithdrawal']);
         // يحوّل مبلغًا من محفظة الحساب الحالي إلى مستخدم أو متجر آخر.
         Route::post('/wallet/transfers', [WalletController::class, 'transfer']);
+
+        // يعرض طلبات المستخدم الحالي مقسمة إلى صفحات مع إمكانية التصفية بالحالة.
+        Route::get('/orders', [UserOrderController::class, 'index']);
+        // ينشئ طلب شراء منتج واحد ويخصم قيمته من محفظة المستخدم.
+        Route::post('/orders', [UserOrderController::class, 'store']);
+        // يعرض تفاصيل طلب يملكه المستخدم الحالي.
+        Route::get('/orders/{order}', [UserOrderController::class, 'show'])->whereNumber('order');
+        // يعرض إيصال الدفع الخاص بطلب يملكه المستخدم الحالي.
+        Route::get('/orders/{order}/receipt', [UserOrderController::class, 'receipt'])->whereNumber('order');
+        // يلغي طلب المستخدم قبل بدء تجهيز المتجر ويعيد المبلغ المدفوع إلى المحفظة.
+        Route::patch('/orders/{order}/cancel', [UserOrderController::class, 'cancel'])->whereNumber('order');
+        // يسجل تقييم المستخدم للمنتج بعد اكتمال الطلب.
+        Route::post('/orders/{order}/review', [UserOrderController::class, 'review'])->whereNumber('order');
+        // يرسل طلب استرجاع لطلب مكتمل وفق سياسة المتجر.
+        Route::post('/orders/{order}/return-requests', [UserOrderController::class, 'requestReturn'])->whereNumber('order');
+        // يرسل طلب استبدال لطلب مكتمل وفق سياسة المتجر.
+        Route::post('/orders/{order}/exchange-requests', [UserOrderController::class, 'requestExchange'])->whereNumber('order');
 
     });
 });

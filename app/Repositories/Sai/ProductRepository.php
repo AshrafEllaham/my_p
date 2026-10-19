@@ -35,6 +35,55 @@ class ProductRepository extends MainRepository
         return $this->getModel()->newQuery();
     }
 
+    /** @return array{id: int, store_id: int, store_name: string, name: string, price: string, stock_quantity: int, image: string|null}|null */
+    public function purchasableSnapshotForUpdate(int $productId, int $quantity): ?array
+    {
+        $product = $this->query()
+            ->select(['id', 'store_id', 'name', 'price', 'stock_quantity'])
+            ->whereKey($productId)
+            ->where('status', ProductStatusEnum::Published)
+            ->where('stock_quantity', '>=', $quantity)
+            ->whereHas('store', fn (Builder $query) => $query
+                ->where('account_type', AccountTypeEnum::Store)
+                ->where('status', UserStatusEnum::Active))
+            ->with([
+                'media' => fn (Builder $query) => $query
+                    ->select(['id', 'product_id', 'path', 'is_primary'])
+                    ->orderByDesc('is_primary')
+                    ->orderBy('id'),
+                'store:id,name',
+            ])
+            ->lockForUpdate()
+            ->first();
+
+        if ($product === null) {
+            return null;
+        }
+
+        return [
+            'id' => (int) $product->getKey(),
+            'store_id' => (int) $product->store_id,
+            'name' => (string) $product->name,
+            'store_name' => (string) $product->store->name,
+            'price' => (string) $product->price,
+            'stock_quantity' => (int) $product->stock_quantity,
+            'image' => $product->media->first()?->path,
+        ];
+    }
+
+    public function reserveStock(int $productId, int $quantity): bool
+    {
+        return $this->query()
+            ->whereKey($productId)
+            ->where('stock_quantity', '>=', $quantity)
+            ->decrement('stock_quantity', $quantity) > 0;
+    }
+
+    public function restoreStock(int $productId, int $quantity): void
+    {
+        $this->query()->whereKey($productId)->increment('stock_quantity', $quantity);
+    }
+
     /** @param array<string, mixed> $filters */
     public function listForStore(int $storeId, array $filters, string $locale): Builder
     {

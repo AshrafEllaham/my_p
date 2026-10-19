@@ -42,4 +42,4 @@
     confirmCompletion.onclick=()=>completionDialog.showModal();confirmCompletionAction.onclick=event=>{event.preventDefault();SaeyState.confirmCompletion(code);location.reload()};
     reportIssue.onclick=()=>issueDialog.showModal();submitIssue.onclick=event=>{event.preventDefault();const note=issueNote.value.trim();if(note.length<8){issueNote.focus();return}SaeyState.reportOrderIssue(code,note);location.reload()};
   </script>
-</body></html>
+<script src="user-orders-api.js"></script></body></html>

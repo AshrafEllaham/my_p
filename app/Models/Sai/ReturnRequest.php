@@ -7,6 +7,7 @@ use App\Enums\ReturnStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ReturnRequest extends Model
 {
@@ -55,5 +56,10 @@ class ReturnRequest extends Model
     public function store(): BelongsTo
     {
         return $this->belongsTo(User::class, 'store_id');
+    }
+
+    public function media(): HasMany
+    {
+        return $this->hasMany(ReturnRequestMedia::class, 'return_request_id')->orderBy('sort_order');
     }
 }

@@ -19,6 +19,12 @@ class OrderItemRepository extends MainRepository
         return $this->getModel()->newQuery();
     }
 
+    /** @param array<string, mixed> $data */
+    public function createForOrder(array $data): int
+    {
+        return (int) $this->store($data)->getKey();
+    }
+
     public function findOrFail(int|string $id): Model
     {
         return $this->query()->findOrFail($id);

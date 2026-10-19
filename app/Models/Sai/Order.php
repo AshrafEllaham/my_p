@@ -7,6 +7,8 @@ use App\Enums\PaymentStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
 {
@@ -79,5 +81,30 @@ class Order extends Model
     public function storePolicyVersion(): BelongsTo
     {
         return $this->belongsTo(StorePolicyVersion::class, 'store_policy_version_id');
+    }
+
+    public function items(): HasMany
+    {
+        return $this->hasMany(OrderItem::class, 'order_id');
+    }
+
+    public function receipt(): HasOne
+    {
+        return $this->hasOne(OrderReceipt::class, 'order_id');
+    }
+
+    public function review(): HasOne
+    {
+        return $this->hasOne(Review::class, 'order_id');
+    }
+
+    public function returnRequest(): HasOne
+    {
+        return $this->hasOne(ReturnRequest::class, 'order_id');
+    }
+
+    public function statusHistory(): HasMany
+    {
+        return $this->hasMany(OrderStatusHistory::class, 'order_id')->orderBy('created_at');
     }
 }

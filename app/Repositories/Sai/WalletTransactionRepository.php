@@ -4,6 +4,7 @@ namespace App\Repositories\Sai;
 
 use App\Enums\WalletTransactionStatusEnum;
 use App\Enums\WalletTransactionTypeEnum;
+use App\Models\Sai\Order;
 use App\Models\Sai\WalletTransaction;
 use App\Repositories\MainRepository;
 use Illuminate\Database\Eloquent\Builder;
@@ -69,6 +70,46 @@ class WalletTransactionRepository extends MainRepository
     public function createTransferRecord(array $data): void
     {
         $this->createRecord($data);
+    }
+
+    /** @param array<string, mixed> $data */
+    public function createOrderPurchase(array $data, int $orderId): int
+    {
+        $data['reference_type'] = Order::class;
+        $data['reference_id'] = $orderId;
+
+        return (int) $this->store($data)->getKey();
+    }
+
+    /** @param array<string, mixed> $data */
+    public function createOrderRefund(array $data, int $orderId): int
+    {
+        $data['reference_type'] = Order::class;
+        $data['reference_id'] = $orderId;
+
+        return (int) $this->store($data)->getKey();
+    }
+
+    /** @return array{id: int, wallet_id: int, amount: string, currency: string}|null */
+    public function orderPurchaseSnapshotForUpdate(int $transactionId, int $orderId, int $userId): ?array
+    {
+        $transaction = $this->query()
+            ->select(['id', 'wallet_id', 'amount', 'currency'])
+            ->whereKey($transactionId)
+            ->where('reference_type', Order::class)
+            ->where('reference_id', $orderId)
+            ->where('type', WalletTransactionTypeEnum::Purchase)
+            ->where('status', WalletTransactionStatusEnum::Completed)
+            ->whereHas('wallet', fn (Builder $query): Builder => $query->where('user_id', $userId))
+            ->lockForUpdate()
+            ->first();
+
+        return $transaction === null ? null : [
+            'id' => (int) $transaction->getKey(),
+            'wallet_id' => (int) $transaction->wallet_id,
+            'amount' => (string) $transaction->amount,
+            'currency' => (string) $transaction->currency,
+        ];
     }
 
     /** @return array{id: int, public_id: string, wallet_id: int, counterparty_wallet_id: int|null, counterparty_owner_id: int|null, type: WalletTransactionTypeEnum, status: WalletTransactionStatusEnum, amount: string, balance_before: string, balance_after: string, currency: string, completed_at: string|null}|null */

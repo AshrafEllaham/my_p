@@ -122,6 +122,19 @@ class WalletRepository extends MainRepository
         return $this->walletSnapshot($this->findForUpdateOrFail($id));
     }
 
+    /** @return array{id: int, available_balance: string, pending_balance: string, currency: string}|null */
+    public function snapshotForOwnerByIdForUpdate(int $walletId, int $ownerId): ?array
+    {
+        $wallet = $this->query()
+            ->select(['id', 'user_id', 'currency', 'available_balance', 'pending_balance'])
+            ->whereKey($walletId)
+            ->where('user_id', $ownerId)
+            ->lockForUpdate()
+            ->first();
+
+        return $wallet === null ? null : $this->walletSnapshot($wallet);
+    }
+
     public function updateBalancesById(int|string $id, string $availableBalance, string $pendingBalance): void
     {
         $wallet = $this->findForUpdateOrFail($id);
@@ -133,10 +146,19 @@ class WalletRepository extends MainRepository
     public function activeForOwnerForUpdate(int $ownerId): ?Wallet
     {
         return $this->query()
+            ->select(['id', 'user_id', 'currency', 'available_balance', 'pending_balance'])
             ->where('user_id', $ownerId)
             ->where('is_active', true)
             ->lockForUpdate()
             ->first();
+    }
+
+    /** @return array{id: int, available_balance: string, pending_balance: string, currency: string}|null */
+    public function activeSnapshotForOwnerForUpdate(int $ownerId): ?array
+    {
+        $wallet = $this->activeForOwnerForUpdate($ownerId);
+
+        return $wallet === null ? null : $this->walletSnapshot($wallet);
     }
 
     /** @return array{before: string, after: string} */

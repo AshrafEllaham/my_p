@@ -28,6 +28,46 @@ class CouponRepository extends MainRepository
         return $this->getModel()->newQuery();
     }
 
+    /** @return array<string, mixed>|null */
+    public function checkoutSnapshotForUpdate(string $code, int $storeOwnerId): ?array
+    {
+        $coupon = $this->query()
+            ->select([
+                'id', 'store_id', 'code', 'discount_type', 'discount_value', 'minimum_order_amount',
+                'maximum_discount_amount', 'max_uses', 'max_uses_per_user', 'uses_count', 'status',
+                'starts_at', 'expires_at',
+            ])
+            ->where('code', mb_strtoupper($code))
+            ->whereHas('store', fn (Builder $query) => $query->where('owner_id', $storeOwnerId))
+            ->lockForUpdate()
+            ->first();
+
+        if ($coupon === null) {
+            return null;
+        }
+
+        return [
+            'id' => (int) $coupon->getKey(),
+            'store_id' => (int) $coupon->store_id,
+            'code' => (string) $coupon->code,
+            'discount_type' => $coupon->discount_type->value,
+            'discount_value' => (string) $coupon->discount_value,
+            'minimum_order_amount' => (string) $coupon->minimum_order_amount,
+            'maximum_discount_amount' => $coupon->maximum_discount_amount === null ? null : (string) $coupon->maximum_discount_amount,
+            'max_uses' => $coupon->max_uses === null ? null : (int) $coupon->max_uses,
+            'max_uses_per_user' => (int) $coupon->max_uses_per_user,
+            'uses_count' => (int) $coupon->uses_count,
+            'status' => $coupon->status->value,
+            'starts_at' => $coupon->starts_at?->toIso8601String(),
+            'expires_at' => $coupon->expires_at?->toIso8601String(),
+        ];
+    }
+
+    public function incrementUsesCount(int $couponId): void
+    {
+        $this->query()->whereKey($couponId)->increment('uses_count');
+    }
+
     public function isStoreOwner(int $ownerId): bool
     {
         return Store::query()->where('owner_id', $ownerId)

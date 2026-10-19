@@ -19,6 +19,20 @@ class OrderReceiptRepository extends MainRepository
         return $this->getModel()->newQuery();
     }
 
+    public function findForUserOrder(int $orderId, int $userId): Model
+    {
+        return $this->query()
+            ->where('order_id', $orderId)
+            ->whereHas('order', fn (Builder $query) => $query->where('user_id', $userId))
+            ->firstOrFail();
+    }
+
+    /** @param array<string, mixed> $data */
+    public function createForOrder(array $data): int
+    {
+        return (int) $this->store($data)->getKey();
+    }
+
     public function findOrFail(int|string $id): Model
     {
         return $this->query()->findOrFail($id);

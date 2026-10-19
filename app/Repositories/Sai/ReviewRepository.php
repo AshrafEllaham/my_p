@@ -22,6 +22,17 @@ class ReviewRepository extends MainRepository
         return $this->getModel()->newQuery();
     }
 
+    public function existsForOrder(int $orderId): bool
+    {
+        return $this->query()->where('order_id', $orderId)->exists();
+    }
+
+    /** @param array<string, mixed> $data */
+    public function createForUserOrder(array $data): Model
+    {
+        return $this->store($data)->load('user:id,name');
+    }
+
     public function latestVisibleForProduct(int $productId): ?Model
     {
         return $this->query()

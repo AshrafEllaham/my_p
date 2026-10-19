@@ -19,6 +19,19 @@ class ReturnRequestMediaRepository extends MainRepository
         return $this->getModel()->newQuery();
     }
 
+    /** @param array<int, array{return_request_id: int, path: string, mime_type: string|null, sort_order: int}> $records */
+    public function createManyForRequest(array $records): void
+    {
+        $timestamp = now();
+        $rows = array_map(static fn (array $record): array => [
+            ...$record,
+            'created_at' => $timestamp,
+            'updated_at' => $timestamp,
+        ], $records);
+
+        $this->getModel()->newQuery()->insert($rows);
+    }
+
     public function findOrFail(int|string $id): Model
     {
         return $this->query()->findOrFail($id);

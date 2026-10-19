@@ -19,6 +19,11 @@ class CouponRedemptionRepository extends MainRepository
         return $this->getModel()->newQuery();
     }
 
+    public function countForCouponUser(int $couponId, int $userId): int
+    {
+        return $this->query()->where('coupon_id', $couponId)->where('user_id', $userId)->count();
+    }
+
     public function findOrFail(int|string $id): Model
     {
         return $this->query()->findOrFail($id);

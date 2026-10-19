@@ -19,6 +19,26 @@ class ReturnRequestRepository extends MainRepository
         return $this->getModel()->newQuery();
     }
 
+    public function existsForOrder(int $orderId): bool
+    {
+        return $this->query()->where('order_id', $orderId)->exists();
+    }
+
+    /** @param array<string, mixed> $data */
+    public function createForUserOrder(array $data): int
+    {
+        return (int) $this->store($data)->getKey();
+    }
+
+    public function findForUserOrder(int $returnRequestId, int $userId): Model
+    {
+        return $this->query()
+            ->whereKey($returnRequestId)
+            ->where('user_id', $userId)
+            ->with(['media:id,return_request_id,path,mime_type,sort_order'])
+            ->firstOrFail();
+    }
+
     public function findOrFail(int|string $id): Model
     {
         return $this->query()->findOrFail($id);
