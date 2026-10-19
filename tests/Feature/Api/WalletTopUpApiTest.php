@@ -25,7 +25,7 @@ class WalletTopUpApiTest extends TestCase
             $owner = UserFactory::new()->create(['account_type' => $accountType]);
 
             $response = $this->actingAs($owner, 'api')
-                ->postJson('/api/wallet/top-up', [
+                ->postJson('/api/user/wallet', [
                     'amount' => '125.50',
                     'idempotency_key' => (string) Str::uuid(),
                 ])
@@ -54,10 +54,10 @@ class WalletTopUpApiTest extends TestCase
         $idempotencyKey = (string) Str::uuid();
         $payload = ['amount' => '80.25', 'idempotency_key' => $idempotencyKey];
 
-        $firstResponse = $this->actingAs($owner, 'api')->postJson('/api/wallet/top-up', $payload)->assertOk();
+        $firstResponse = $this->actingAs($owner, 'api')->postJson('/api/user/wallet', $payload)->assertOk();
         $paymentId = $firstResponse->json('data.payment_id');
 
-        $this->postJson('/api/wallet/top-up', $payload)
+        $this->postJson('/api/user/wallet', $payload)
             ->assertOk()
             ->assertJsonPath('data.payment_id', $paymentId);
 
@@ -91,11 +91,11 @@ class WalletTopUpApiTest extends TestCase
         $owner = UserFactory::new()->create(['account_type' => AccountTypeEnum::Store]);
         $idempotencyKey = (string) Str::uuid();
         $response = $this->actingAs($owner, 'api')
-            ->postJson('/api/wallet/top-up', ['amount' => '42.00', 'idempotency_key' => $idempotencyKey])
+            ->postJson('/api/user/wallet', ['amount' => '42.00', 'idempotency_key' => $idempotencyKey])
             ->assertOk();
         $paymentId = $response->json('data.payment_id');
 
-        $this->postJson('/api/wallet/top-up', ['amount' => '43.00', 'idempotency_key' => $idempotencyKey])
+        $this->postJson('/api/user/wallet', ['amount' => '43.00', 'idempotency_key' => $idempotencyKey])
             ->assertUnprocessable()
             ->assertJsonPath('message', __('messages.wallet.idempotency_conflict'));
 
@@ -114,15 +114,14 @@ class WalletTopUpApiTest extends TestCase
 
     public function test_balance_and_top_up_validation_require_authentication_and_return_translated_errors(): void
     {
-        $this->getJson('/api/wallet')->assertUnauthorized();
-        $this->getJson('/api/wallet/transactions')->assertUnauthorized();
-        $this->postJson('/api/wallet/top-up', [])->assertUnauthorized();
+        $this->getJson('/api/user/wallet')->assertUnauthorized();
+        $this->postJson('/api/user/wallet', [])->assertUnauthorized();
 
         $owner = UserFactory::new()->create(['account_type' => AccountTypeEnum::User]);
         $this->actingAs($owner, 'api');
 
         $this->withHeader('Accept-Language', 'ar')
-            ->postJson('/api/wallet/top-up', [
+            ->postJson('/api/user/wallet', [
                 'amount' => '0.001',
                 'idempotency_key' => (string) Str::uuid(),
             ])
@@ -130,19 +129,18 @@ class WalletTopUpApiTest extends TestCase
             ->assertJsonPath('message', __('messages.validation.wallet_top_up.amount.decimal'));
 
         $this->withHeader('Accept-Language', 'en')
-            ->postJson('/api/wallet/top-up', [
+            ->postJson('/api/user/wallet', [
                 'amount' => '10.00',
                 'idempotency_key' => 'invalid-key',
             ])
             ->assertUnprocessable()
             ->assertJsonPath('message', __('messages.validation.wallet_top_up.idempotency_key.uuid'));
 
-        $walletResponse = $this->getJson('/api/wallet')
+        $this->getJson('/api/user/wallet?limit_per_page=1')
             ->assertOk()
-            ->assertJsonPath('data.balance', '0.00')
-            ->assertJsonPath('data.pending_balance', '0.00')
-            ->assertJsonPath('data.currency', 'EGP');
-        $this->assertStringEndsWith('/api/wallet/transactions', $walletResponse->json('data.transactions_url'));
+            ->assertJsonPath('wallet.balance', '0.00')
+            ->assertJsonPath('wallet.pending_balance', '0.00')
+            ->assertJsonPath('wallet.currency', 'EGP');
     }
 
     public function test_wallet_transactions_are_owner_scoped_and_paginated(): void
@@ -184,7 +182,7 @@ class WalletTopUpApiTest extends TestCase
         ]);
 
         $this->actingAs($owner, 'api')
-            ->getJson('/api/wallet/transactions?page=1&limit_per_page=1')
+            ->getJson('/api/user/wallet?page=1&limit_per_page=1')
             ->assertOk()
             ->assertJsonPath('total', 3)
             ->assertJsonPath('current_page', 1)
@@ -194,12 +192,12 @@ class WalletTopUpApiTest extends TestCase
             ->assertJsonPath('data.0.type', WalletTransactionTypeEnum::Deposit->value)
             ->assertJsonPath('data.0.status', WalletTransactionStatusEnum::Completed->value);
 
-        $this->getJson('/api/wallet/transactions?page=2&limit_per_page=1')
+        $this->getJson('/api/user/wallet?page=2&limit_per_page=1')
             ->assertOk()
             ->assertJsonPath('data.0.id', $ownerTransactions[1]->public_id);
 
         $this->withHeader('Accept-Language', 'en')
-            ->getJson('/api/wallet/transactions?limit_per_page=101')
+            ->getJson('/api/user/wallet?limit_per_page=101')
             ->assertUnprocessable()
             ->assertJsonPath('message', __('messages.validation.catalog_lookup.limit_per_page.max'));
     }
@@ -216,7 +214,7 @@ class WalletTopUpApiTest extends TestCase
         ]);
 
         $this->actingAs($owner, 'api')
-            ->postJson('/api/wallet/top-up', [
+            ->postJson('/api/user/wallet', [
                 'amount' => '0.01',
                 'idempotency_key' => (string) Str::uuid(),
             ])

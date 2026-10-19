@@ -9,6 +9,11 @@ body.saey-wallet-transactions { height:100vh; margin:0; overflow:hidden; display
 .transactions-summary strong { display:block; margin-top:4px; color:var(--wallet-ink); font-size:14px; font-weight:900; }
 .transactions-title { margin-top:20px; margin-bottom:8px; }
 .transactions-title span { color:var(--wallet-muted); font-size:11px; font-weight:700; }
+.wallet-filters { display:flex; gap:6px; overflow-x:auto; margin:0 0 10px; padding:4px; border:1px solid var(--wallet-line); border-radius:12px; background:#FFF; scrollbar-width:none; }
+.wallet-filters::-webkit-scrollbar { display:none; }
+.wallet-filters button { flex:0 0 auto; min-height:36px; padding:0 12px; border:0; border-radius:9px; background:transparent; color:var(--wallet-muted); font:800 12px 'Cairo',sans-serif; cursor:pointer; }
+.wallet-filters button.active { background:#000; color:#FFF; }
+.wallet-filters button:focus-visible { outline:2px solid #000; outline-offset:2px; }
 .wallet-transactions-list { overflow:visible; border:0; background:transparent; box-shadow:none; }
 .saey-wallet-transactions .wallet-transaction-meta small,
 .saey-wallet-transactions .wallet-transaction-meta time,
@@ -26,9 +31,12 @@ body.saey-wallet-transactions { height:100vh; margin:0; overflow:hidden; display
 .wallet-pagination[hidden] { display:none; }
 body.dark-mode.saey-wallet-transactions { --wallet-bg:#0F172A; --wallet-ink:#F8FAFC; --wallet-muted:#CBD5E1; --wallet-line:#334155; background:var(--wallet-bg); }
 body.dark-mode.saey-wallet-transactions .transactions-summary,
+body.dark-mode.saey-wallet-transactions .wallet-filters,
 body.dark-mode.saey-wallet-transactions .wallet-transactions-retry,
 body.dark-mode.saey-wallet-transactions .wallet-pagination button { background:#111827; border-color:#334155; color:#F8FAFC; }
 body.dark-mode.saey-wallet-transactions .wallet-pagination button:disabled { background:#1E293B; color:#94A3B8; }
+body.dark-mode.saey-wallet-transactions .wallet-filters button { color:#CBD5E1; }
+body.dark-mode.saey-wallet-transactions .wallet-filters button.active { background:#F8FAFC; color:#0F172A; }
 body.dark-mode.saey-wallet-transactions .transaction-purchase { border-color:#334155; background:#1E293B; color:#CBD5E1; }
 body.dark-mode.saey-wallet-transactions .transaction-credit { border-color:#1E40AF; background:#172E4F; color:#BFDBFE; }
 body.dark-mode.saey-wallet-transactions .transaction-credit .wallet-transaction-main b { color:#BFDBFE; }

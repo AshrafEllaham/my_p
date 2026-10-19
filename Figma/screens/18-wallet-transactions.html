@@ -34,6 +34,13 @@
     </section>
 
     <div class="wallet-section-head transactions-title"><h2>سجل العمليات</h2><span>الأحدث أولًا</span></div>
+    <div class="wallet-filters" id="walletFilters" role="tablist" aria-label="فلترة العمليات">
+      <button type="button" role="tab" aria-selected="true" class="active" data-filter="all">الكل</button>
+      <button type="button" role="tab" aria-selected="false" data-filter="addition">إضافة</button>
+      <button type="button" role="tab" aria-selected="false" data-filter="purchase">شراء</button>
+      <button type="button" role="tab" aria-selected="false" data-filter="refund">استرداد</button>
+      <button type="button" role="tab" aria-selected="false" data-filter="transfer">تحويل</button>
+    </div>
     <p class="wallet-note wallet-transactions-state" id="transactionsState" role="status">جارٍ تحميل العمليات...</p>
     <button class="wallet-transactions-retry" id="transactionsRetry" type="button" hidden>إعادة المحاولة</button>
     <section class="wallet-list wallet-transactions-list" id="walletTransactionsList" aria-label="كل عمليات المحفظة" aria-live="polite" aria-busy="true"></section>
@@ -61,7 +68,7 @@
     const walletTransactionPageSize = 10;
     const walletTransactionLabels = {
       deposit: 'شحن', purchase: 'شراء', refund: 'استرداد', transfer_in: 'تحويل وارد',
-      transfer_out: 'تحويل صادر', withdrawal: 'سحب', commission: 'عمولة',
+      transfer_out: 'تحويل صادر', withdrawal: 'سحب', earning: 'أرباح', commission: 'عمولة',
       settlement: 'تسوية', ad_payment: 'دفع إعلان',
     };
     const walletTransactionStatusLabels = {
@@ -73,6 +80,7 @@
     const walletPagination = document.getElementById('walletPagination');
     let transactionsUrl = null;
     let currentTransactionsPage = 1;
+    let activeFilter = 'all';
 
     const walletCurrencyLabel = currency => currency === 'EGP' ? 'ج.م' : currency;
     const formatWalletMoney = (amount, currency) => `${Number(amount || 0).toLocaleString('ar-EG')} ${walletCurrencyLabel(currency || 'EGP')}`;
@@ -147,11 +155,13 @@
       const requestUrl = new URL(transactionsUrl, walletApiRoot);
       requestUrl.searchParams.set('page', String(page));
       requestUrl.searchParams.set('limit_per_page', String(walletTransactionPageSize));
+      requestUrl.searchParams.set('filter', activeFilter);
       try {
         const result = await walletApiRequest(requestUrl.toString());
         const transactions = Array.isArray(result.data) ? result.data : [];
-        const visibleTransactions = transactions.filter(transaction => transaction.type !== 'earning');
-        visibleTransactions.forEach(transaction => transactionsList.append(renderTransaction(transaction)));
+        const wallet = result.wallet || {};
+        document.getElementById('transactionsBalance').textContent = formatWalletMoney(wallet.balance, wallet.currency);
+        transactions.forEach(transaction => transactionsList.append(renderTransaction(transaction)));
         transactionsList.setAttribute('aria-busy', 'false');
         document.getElementById('transactionsTotal').textContent = Number(result.total || 0).toLocaleString('ar-EG');
         currentTransactionsPage = Number(result.current_page || page);
@@ -161,7 +171,7 @@
         document.getElementById('transactionsNext').disabled = currentTransactionsPage >= lastPage;
         walletPagination.hidden = lastPage <= 1;
 
-        if (visibleTransactions.length === 0) {
+        if (transactions.length === 0) {
           showTransactionsState('لا توجد عمليات مسجلة في هذه الصفحة.');
           return;
         }
@@ -175,11 +185,7 @@
     const loadWalletTransactions = async () => {
       showTransactionsState('جارٍ تحميل الرصيد والعمليات...');
       try {
-        const walletResult = await walletApiRequest(`${walletApiRoot}/wallet`);
-        const wallet = walletResult.wallet || walletResult.data?.wallet || {};
-        document.getElementById('transactionsBalance').textContent = formatWalletMoney(wallet.balance, wallet.currency);
-        transactionsUrl = wallet.transactions_url || `${walletApiRoot}/wallet`;
-        if (!transactionsUrl) throw new Error('رابط عمليات المحفظة غير متاح.');
+        transactionsUrl = `${walletApiRoot}/user/wallet`;
         await loadTransactionsPage(currentTransactionsPage);
       } catch (error) {
         document.getElementById('transactionsBalance').textContent = 'غير متاح';
@@ -193,6 +199,17 @@
     });
     document.getElementById('transactionsNext').addEventListener('click', () => loadTransactionsPage(currentTransactionsPage + 1));
     transactionsRetry.addEventListener('click', loadWalletTransactions);
+    document.getElementById('walletFilters').addEventListener('click', event => {
+      const button = event.target.closest('[data-filter]');
+      if (!button || button.dataset.filter === activeFilter) return;
+      activeFilter = button.dataset.filter;
+      document.querySelectorAll('#walletFilters [data-filter]').forEach(filterButton => {
+        const selected = filterButton === button;
+        filterButton.classList.toggle('active', selected);
+        filterButton.setAttribute('aria-selected', String(selected));
+      });
+      loadTransactionsPage(1);
+    });
     loadWalletTransactions();
     window.addEventListener('focus', loadWalletTransactions);
   </script>

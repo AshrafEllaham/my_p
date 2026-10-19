@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>سعي — تفاصيل طلب المتجر</title>
   <link rel="stylesheet" href="auth.css">
+  <link rel="stylesheet" href="merchant-orders-api.css">
   <link rel="stylesheet" href="user-home.css">
   <link rel="stylesheet" href="user-home-layout.css">
   <link rel="stylesheet" href="user-home-structure.css">
@@ -61,7 +62,7 @@
   </main>
 
   <footer class="merchant-order-detail-actions"><a id="detailChatAction" href="14-chat-conversation.html"><svg viewBox="0 0 24 24"><path d="M20 15a4 4 0 0 1-4 4H8l-4 3v-7a4 4 0 0 1-2-3.5V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg>دردشة العميل</a><button id="advanceOrderAction" type="button">تأكيد الطلب</button></footer>
-  <dialog class="handover-dialog" id="handoverDialog"><h2>إتمام التعامل بأمان</h2><p>اختر التأكيد المناسب. في التعامل عن بُعد سيصل للمستخدم طلب تأكيد داخل التطبيق، ولا يكتمل الطلب إلا بموافقته.</p><div class="handover-dialog-actions"><button id="requestCustomerConfirmation" class="primary" type="button">طلب تأكيد المستخدم</button><button id="showPickupCodeForm" type="button">إدخال كود حضوري</button></div><div id="pickupCodeForm" hidden style="margin-top:12px"><input id="pickupCodeInput" inputmode="numeric" maxlength="7" dir="ltr" placeholder="000 000" aria-label="كود الاستلام"><small class="handover-error" id="pickupCodeError" hidden></small><button id="verifyPickupCode" class="primary" style="width:100%" type="button">تحقق وأكمل الطلب</button></div><button id="closeHandoverDialog" style="width:100%;margin-top:8px" type="button">إغلاق</button></dialog>
+  <dialog class="handover-dialog" id="handoverDialog"><h2>التحقق من استلام الطلب</h2><p>أدخل رمز الاستلام الذي يعرضه المستخدم في تفاصيل الطلب. يتأكد الخادم من الرمز قبل إتمام الطلب.</p><div class="handover-dialog-actions"><button id="requestCustomerConfirmation" class="primary" type="button" hidden>طلب تأكيد المستخدم</button><button id="showPickupCodeForm" type="button" hidden>إدخال رمز الاستلام</button></div><div id="pickupCodeForm" hidden style="margin-top:12px"><input id="pickupCodeInput" inputmode="text" maxlength="36" dir="ltr" placeholder="رمز الاستلام" aria-label="رمز الاستلام"><small class="handover-error" id="pickupCodeError" hidden></small><button id="verifyPickupCode" class="primary" style="width:100%" type="button">تحقق وأكمل الطلب</button></div><button id="closeHandoverDialog" style="width:100%;margin-top:8px" type="button">إغلاق</button></dialog>
   <dialog class="handover-dialog" id="rejectDialog"><h2>تعذر تنفيذ الطلب</h2><p>لن يُغلق الطلب من طرفك من دون سبب واضح. سيصل السبب للمستخدم ويُعاد المبلغ إلى محفظته.</p><textarea id="rejectReason" placeholder="اكتب السبب"></textarea><small class="handover-error" id="rejectError" hidden></small><div class="handover-dialog-actions"><button id="confirmReject" class="primary" type="button">تأكيد ورد المبلغ</button><button id="closeRejectDialog" type="button">تراجع</button></div></dialog>
 
   <script src="merchant-state.js"></script>
@@ -108,5 +109,6 @@
     noShowAction.onclick=()=>{const result=SaeyMerchant.markNoShow(code,order);if(result.ok){currentState='no_show';renderState()}else{alert(result.message)}};
     renderState();
   </script>
+  <script src="merchant-orders-api.js"></script>
 </body>
 </html>

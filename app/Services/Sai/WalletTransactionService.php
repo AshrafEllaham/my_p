@@ -2,6 +2,7 @@
 
 namespace App\Services\Sai;
 
+use App\Enums\WalletTransactionFilterEnum;
 use App\Repositories\Sai\WalletTransactionRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -15,9 +16,9 @@ class WalletTransactionService
         return $this->repository->query();
     }
 
-    public function listForOwner(int $ownerId): Builder
+    public function listForOwner(int $ownerId, ?WalletTransactionFilterEnum $filter = null): Builder
     {
-        return $this->repository->listForOwner($ownerId);
+        return $this->repository->listForOwner($ownerId, $filter);
     }
 
     public function find(int|string $id): Model

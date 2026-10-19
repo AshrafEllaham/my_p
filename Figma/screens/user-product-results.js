@@ -7,14 +7,20 @@
   const error = document.getElementById('searchError');
   const retry = document.getElementById('retrySearch');
   const more = document.getElementById('loadMoreProducts');
+  const productTab = document.getElementById('productResultsTab');
+  const storeTab = document.getElementById('storeResultsTab');
   const origin = location.protocol === 'file:' ? 'http://127.0.0.1:8000' :
     ['localhost', '127.0.0.1'].includes(location.hostname) ? `${location.protocol}//${location.hostname}:8000` : location.origin;
   input.value = params.get('search') || params.get('q') || '';
   const similarTo = params.get('similar_to');
-  if (similarTo) document.querySelector('.flow-head h1').textContent = 'منتجات مشابهة';
+  if (similarTo) {
+    document.querySelector('.flow-head h1').textContent = 'منتجات مشابهة';
+    storeTab.hidden = true;
+  }
   let timer;
   let controller;
   let page = 1;
+  let activeType = 'product';
 
   const load = async (append = false) => {
     controller?.abort();
@@ -33,7 +39,10 @@
     if (input.value.trim()) query.set('search', input.value.trim());
     try {
       const token = localStorage.getItem('saey_api_token');
-      const endpoint = similarTo ? `products/${encodeURIComponent(similarTo)}/similar-products` : 'products';
+      const endpoint = activeType === 'store'
+        ? 'stores/nearby'
+        : similarTo ? `products/${encodeURIComponent(similarTo)}/similar-products` : 'products';
+      if (activeType === 'store') query.set('sort', 'high_rate');
       const response = await fetch(`${origin}/api/user/${endpoint}?${query}`, {
         signal: controller.signal,
         headers: { Accept: 'application/json', 'Accept-Language': 'ar', ...(token ? { Authorization: `Bearer ${token}` } : {}) }
@@ -43,7 +52,9 @@
       (payload.data || []).forEach(product => {
         const card = document.createElement('a');
         card.className = 'result-item';
-        card.href = `12-product-details.html?product_id=${encodeURIComponent(product.id)}`;
+        card.href = activeType === 'store'
+          ? `19-store-details.html?store_id=${encodeURIComponent(product.id)}`
+          : `12-product-details.html?product_id=${encodeURIComponent(product.id)}`;
         if (product.image) {
           const image = document.createElement('img');
           image.src = product.image;
@@ -54,9 +65,13 @@
         const name = document.createElement('strong');
         name.textContent = product.name || '';
         const category = document.createElement('small');
-        category.textContent = product.category_name || '';
+        category.textContent = activeType === 'store'
+          ? [product.category_name, product.address].filter(Boolean).join(' · ')
+          : product.category_name || '';
         const price = document.createElement('b');
-        price.textContent = `${Number(product.price || 0).toLocaleString('ar-EG')} ج.م`;
+        price.textContent = activeType === 'store'
+          ? `${Number(product.average_rating || 0).toLocaleString('ar-EG')} ★ · ${Number(product.reviews_count || 0).toLocaleString('ar-EG')} تقييم`
+          : `${Number(product.price || 0).toLocaleString('ar-EG')} ج.م`;
         details.append(name, category, price);
         card.append(details);
         results.append(card);
@@ -79,5 +94,15 @@
   });
   retry.addEventListener('click', () => load());
   more.addEventListener('click', () => load(true));
+  const setType = type => {
+    activeType = type;
+    productTab.classList.toggle('active', type === 'product');
+    productTab.setAttribute('aria-selected', String(type === 'product'));
+    storeTab.classList.toggle('active', type === 'store');
+    storeTab.setAttribute('aria-selected', String(type === 'store'));
+    load();
+  };
+  productTab.addEventListener('click', () => setType('product'));
+  storeTab.addEventListener('click', () => setType('store'));
   load();
 })();

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Enums\PaymentOperationTableEnum;
+use App\Enums\WalletTransactionFilterEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Wallet\ListWalletTransactionsRequest;
 use App\Http\Requests\Api\Wallet\RequestWalletWithdrawalRequest;
@@ -34,7 +35,10 @@ class WalletController extends Controller
 
         return generalReturn(
             $request,
-            $this->transactionsService->listForOwner($ownerId),
+            $this->transactionsService->listForOwner(
+                $ownerId,
+                $request->enum('filter', WalletTransactionFilterEnum::class),
+            ),
             WalletTransactionResource::class,
             __('messages.wallet.transactions_listed'),
             [

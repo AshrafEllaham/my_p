@@ -28,6 +28,26 @@ class UserRepository extends MainRepository
         return $this->query()->findOrFail($id);
     }
 
+    public function profileForUser(int $userId): User
+    {
+        /** @var User $user */
+        $user = $this->query()
+            ->select([
+                'id', 'name', 'email', 'phone_code', 'phone', 'avatar', 'country_id',
+                'governorate_id', 'city_id', 'address_line', 'pickup_latitude',
+                'pickup_longitude', 'account_type',
+            ])
+            ->with([
+                'governorate:id,country_id',
+                'governorate.translations:id,governorate_id,locale,name',
+                'city:id,governorate_id',
+                'city.translations:id,city_id,locale,name',
+            ])
+            ->findOrFail($userId);
+
+        return $user;
+    }
+
     /** @param array<string, mixed> $data */
     public function createRecord(array $data): Model
     {
@@ -252,7 +272,9 @@ class UserRepository extends MainRepository
     public function updateProfile(int|string $id, array $data): Model
     {
         $record = $this->findOrFail($id);
-        $data['avatar'] = ImageHelper::upload($data['avatar'], 'users/avatars', $record->avatar);
+        if (array_key_exists('avatar', $data)) {
+            $data['avatar'] = ImageHelper::upload($data['avatar'], 'users/avatars', $record->avatar);
+        }
         $record->fill($data);
         $record->save();
 

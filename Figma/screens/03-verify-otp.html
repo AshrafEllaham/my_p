@@ -71,8 +71,10 @@
   <script>
     const otpTrack = document.getElementById('otpTrack');
     const otpParams = new URLSearchParams(location.search), resetFlow = otpParams.get('flow') === 'reset';
-    const signupDraft = JSON.parse(sessionStorage.getItem('saey_signup_draft') || 'null');
-    if(signupDraft)document.getElementById('otpDescription').innerHTML='أدخل رمز التحقق المكوّن من 4 أرقام. الرمز التجريبي الحالي هو <strong style="color: var(--barq-ink); font-family: \'Inter\', sans-serif;">1234</strong>';
+    const signupDraft = resetFlow ? null : JSON.parse(sessionStorage.getItem('saey_signup_draft') || 'null');
+    const recoveryIdentity = sessionStorage.getItem('saey_recovery_identity');
+    if(resetFlow && !recoveryIdentity)location.replace('07-forgot-password.html');
+    if(signupDraft || (resetFlow && /^(localhost|127\.0\.0\.1)$/.test(location.hostname)))document.getElementById('otpDescription').innerHTML='أدخل رمز التحقق المكوّن من 4 أرقام. الرمز التجريبي الحالي هو <strong style="color: var(--barq-ink); font-family: \'Inter\', sans-serif;">1234</strong>';
     const hiddenInput = document.getElementById('hiddenOtpInput');
     const cells = Array.from(document.querySelectorAll('.barq-otp-cell'));
 
@@ -135,6 +137,17 @@
         } catch(error) { document.getElementById('otpError').textContent=error.message;document.getElementById('otpError').hidden=false; }
         return;
       }
+      if(resetFlow && recoveryIdentity){
+        try {
+          const origin=location.protocol==='file:'?'http://127.0.0.1:8000':['localhost','127.0.0.1'].includes(location.hostname)?`${location.protocol}//${location.hostname}:8000`:location.origin;
+          const response=await fetch(`${origin}/api/password-reset/send-otp`,{method:'POST',headers:{Accept:'application/json','Content-Type':'application/json','Accept-Language':'ar'},body:JSON.stringify({identity:recoveryIdentity})});
+          const result=await response.json();
+          if(!response.ok)throw new Error(result.message||'تعذر إعادة إرسال الرمز.');
+          hiddenInput.value='';updateCells();secondsLeft=30;timerDigits.textContent='00:30';resendBtn.textContent='إعادة إرسال الرمز';resendBtn.style.color='';
+          countdown=setInterval(()=>{secondsLeft--;if(secondsLeft<=0){clearInterval(countdown);timerDigits.textContent='00:00';}else{timerDigits.textContent='00:'+(secondsLeft<10?'0':'')+secondsLeft;}},1000);
+        } catch(error) { document.getElementById('otpError').textContent=error.message;document.getElementById('otpError').hidden=false; }
+        return;
+      }
       hiddenInput.value='';updateCells();resendBtn.textContent='تم إرسال رمز جديد';
     });
     document.getElementById('verifyAction').addEventListener('click', async event => {
@@ -153,6 +166,12 @@
           localStorage.setItem('saey_api_token',registerResult.data?.access_token||'');
           location.href=registerResult.data?.onboarding?.next_step==='select_account_type'?'04-account-type.html':'08-user-home.html';
           return;
+        } else if(resetFlow && recoveryIdentity){
+          const origin=location.protocol==='file:'?'http://127.0.0.1:8000':['localhost','127.0.0.1'].includes(location.hostname)?`${location.protocol}//${location.hostname}:8000`:location.origin;
+          const response=await fetch(`${origin}/api/password-reset/confirm-otp`,{method:'POST',headers:{Accept:'application/json','Content-Type':'application/json','Accept-Language':'ar'},body:JSON.stringify({identity:recoveryIdentity,code:hiddenInput.value})});
+          const result=await response.json();
+          if(!response.ok){const firstError=Object.values(result.errors||{}).flat()[0];throw new Error(firstError||result.message||'رمز التحقق غير صحيح.');}
+          sessionStorage.setItem('saey_recovery_code',hiddenInput.value);
         } else {
           localStorage.setItem('saey_otp_verified_at',new Date().toISOString());
         }

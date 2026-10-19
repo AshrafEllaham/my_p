@@ -38,6 +38,8 @@ class User extends Authenticatable implements JWTSubject
         'governorate_id',
         'city_id',
         'address_line',
+        'pickup_latitude',
+        'pickup_longitude',
         'avatar',
         'preferred_locale',
         'last_login_at',
@@ -56,6 +58,8 @@ class User extends Authenticatable implements JWTSubject
             'account_type' => AccountTypeEnum::class,
             'status' => UserStatusEnum::class,
             'last_login_at' => 'datetime',
+            'pickup_latitude' => 'decimal:7',
+            'pickup_longitude' => 'decimal:7',
         ];
     }
 

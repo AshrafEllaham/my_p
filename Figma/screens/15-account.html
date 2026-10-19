@@ -26,8 +26,8 @@
     <header class="account-header">
       <a class="account-icon-button" href="08-user-home.html" aria-label="العودة للرئيسية"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a>
       <div class="account-profile">
-        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=160&q=85" alt="صورة محمد">
-        <div><h1>محمد</h1><span>id: ABC45678</span></div>
+        <img id="accountProfileImage" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=160&q=85" alt="الصورة الشخصية">
+        <div><h1 id="accountProfileName">حسابي</h1><span id="accountProfileId"></span></div>
       </div>
       <div class="account-actions">
         <a class="account-icon-button" href="14-chats.html" aria-label="الدردشات"><svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg><i>2</i></a>
@@ -49,7 +49,7 @@
       <div class="account-list">
         <a class="account-row" href="17-wallet.html"><span class="row-icon mint"><svg viewBox="0 0 24 24"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H20v14H5.5A2.5 2.5 0 0 1 3 16.5Z"/><path d="M3 8h16M16 13h.01"/></svg></span><span>المحفظة</span><small id="accountWalletBalance">٤,٥٠٠ ج.م</small><svg class="row-arrow" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a>
         <a class="account-row" href="account-profile.html"><span class="row-icon violet"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><span>الملف الشخصي</span><svg class="row-arrow" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a>
-        <a class="account-row" href="account-pickup.html"><span class="row-icon blue"><svg viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span><span>موقع الاستلام</span><small>القاهرة</small><svg class="row-arrow" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a>
+        <a class="account-row" href="account-pickup.html"><span class="row-icon blue"><svg viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span><span>موقع الاستلام</span><small id="accountPickupLocation">—</small><svg class="row-arrow" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a>
       </div>
     </section>
 
@@ -144,7 +144,17 @@
       closeThemeSheet();
     });
     applyAccountTheme(selectedTheme, false);
-    document.getElementById('accountWalletBalance').textContent = `${Number(localStorage.getItem('saey_wallet_balance') || 4500).toLocaleString('ar-EG')} ج.م`;
+    SaeyAccountApi.request('/user/wallet?pagination=off', 'GET').then(result => {
+      const wallet = result.wallet || {};
+      if (wallet.balance !== undefined) document.getElementById('accountWalletBalance').textContent = `${Number(wallet.balance).toLocaleString('ar-EG')} ${wallet.currency || 'ج.م'}`;
+    }).catch(() => { document.getElementById('accountWalletBalance').textContent = '—'; });
+    SaeyAccountApi.request('/user/profile', 'GET').then(result => {
+      const profile = result.data || {};
+      document.getElementById('accountProfileName').textContent = profile.name || 'حسابي';
+      document.getElementById('accountProfileId').textContent = profile.id ? `ID: ${profile.id}` : '';
+      if (profile.image) document.getElementById('accountProfileImage').src = profile.image;
+      document.getElementById('accountPickupLocation').textContent = [profile.city, profile.governorate].filter(Boolean).join('، ') || 'غير محدد';
+    }).catch(() => {});
     document.getElementById('logoutButton').addEventListener('click', async event => {
       const button = event.currentTarget;
       button.disabled = true;

@@ -436,9 +436,31 @@
       chatLink.href = '14-chat-conversation.html?store_id=' + encodeURIComponent(order.store.id);
       chatLink.hidden = false;
     }
-    // لا يعرض preview رمز استلام محليًا؛ رمز الخادم يحتاج تدفق تحقق مخصصًا.
     const pickupIdentity = document.getElementById('pickupIdentity');
-    if (pickupIdentity) pickupIdentity.hidden = true;
+    const canShowPickupToken = ['ready_for_completion', 'awaiting_customer_confirmation'].includes(status) && Boolean(order.pickup_qr_token);
+    if (pickupIdentity) pickupIdentity.hidden = !canShowPickupToken;
+    if (canShowPickupToken) {
+      text('pickupPin', order.pickup_qr_token);
+      text('pickupExpiry', order.pickup_expires_at ? `صالح حتى ${dateText(order.pickup_expires_at)}` : 'لا تشاركه قبل استلام المنتج');
+      text('handoverStatus', statusLabels[status] || 'جاهز للاستلام');
+      const copyCode = document.getElementById('copyPickupCode');
+      copyCode.onclick = async () => {
+        try {
+          await navigator.clipboard.writeText(order.pickup_qr_token);
+        } catch (_) {
+          const input = document.createElement('textarea');
+          input.value = order.pickup_qr_token;
+          input.setAttribute('readonly', '');
+          input.style.position = 'fixed';
+          input.style.opacity = '0';
+          document.body.append(input);
+          input.select();
+          document.execCommand('copy');
+          input.remove();
+        }
+        copyCode.textContent = 'تم نسخ الرمز';
+      };
+    }
     const history = Array.isArray(order.status_history) ? order.status_history : [];
     const historyTime = status => {
       const entry = history.find(row => row.to_status === status);
@@ -460,10 +482,21 @@
     const rate = document.getElementById('rateOrder');
     const refund = document.getElementById('refundOrder');
     const exchange = document.getElementById('exchangeOrder');
+    const confirmCompletion = document.getElementById('confirmCompletion');
+    const reportIssue = document.getElementById('reportIssue');
+    const disputeStatusLink = document.getElementById('disputeStatusLink');
     if (cancel) cancel.hidden = !(policy.cancellation_enabled && ['pending_store', 'confirmed'].includes(status));
     if (rate) rate.hidden = !(completed && !order.review);
     if (refund) refund.hidden = !(completed && policy.returns_enabled && withinReturnWindow && !hasReturn);
     if (exchange) exchange.hidden = !(completed && policy.exchanges_enabled && withinReturnWindow && !hasReturn);
+    const confirmationAvailable = ['ready_for_completion', 'awaiting_customer_confirmation'].includes(status) && !order.dispute;
+    if (confirmCompletion) confirmCompletion.hidden = !confirmationAvailable;
+    if (reportIssue) reportIssue.hidden = !confirmationAvailable;
+    if (status === 'disputed' && disputeStatusLink) {
+      disputeStatusLink.hidden = false;
+      disputeStatusLink.style.display = 'grid';
+      disputeStatusLink.href = 'order-dispute-status.html?order_id=' + encodeURIComponent(order.id) + '&code=' + encodeURIComponent(order.number);
+    }
     const returnStatus = document.getElementById('returnStatusLink');
     if (returnStatus && hasReturn) {
       returnStatus.hidden = false;
@@ -482,6 +515,56 @@
     const actionMessage = document.getElementById('orderActionMessage');
     const cancelRequest = document.getElementById('confirmCancel');
     if (rate) rate.onclick = () => { location.href = '22-rate-order.html?' + query; };
+    const completionDialog = document.getElementById('completionDialog');
+    const completionAction = document.getElementById('confirmCompletionAction');
+    if (confirmCompletion && completionDialog) confirmCompletion.onclick = () => completionDialog.showModal();
+    if (completionAction) completionAction.onclick = async event => {
+      event.preventDefault();
+      completionAction.disabled = true;
+      try {
+        const updated = unwrap(await api('orders/' + order.id + '/confirm-completion', { method: 'PATCH', body: new FormData() }));
+        completionDialog.close();
+        displayOrder(updated);
+        actionMessage.className = 'flow-message success';
+        actionMessage.textContent = 'تم تأكيد إتمام الطلب بنجاح.';
+        actionMessage.hidden = false;
+      } catch (failure) {
+        actionMessage.className = 'flow-message';
+        actionMessage.textContent = failure.message;
+        actionMessage.hidden = false;
+      } finally {
+        completionAction.disabled = false;
+      }
+    };
+    const issueDialog = document.getElementById('issueDialog');
+    if (reportIssue && issueDialog) reportIssue.onclick = () => issueDialog.showModal();
+    const submitIssue = document.getElementById('submitIssue');
+    if (submitIssue) submitIssue.onclick = async event => {
+      event.preventDefault();
+      const details = document.getElementById('issueNote').value.trim();
+      if (details.length < 10) {
+        document.getElementById('issueNote').focus();
+        actionMessage.textContent = 'اكتب تفاصيل لا تقل عن ١٠ أحرف.';
+        actionMessage.className = 'flow-message';
+        actionMessage.hidden = false;
+        return;
+      }
+      submitIssue.disabled = true;
+      const body = new FormData();
+      body.append('reason', 'customer_reported_issue');
+      body.append('details', details);
+      try {
+        const dispute = unwrap(await api('orders/' + order.id + '/disputes', { method: 'POST', body }));
+        issueDialog.close();
+        location.href = 'order-dispute-status.html?order_id=' + encodeURIComponent(order.id) + '&code=' + encodeURIComponent(order.number);
+      } catch (failure) {
+        actionMessage.textContent = failure.message;
+        actionMessage.className = 'flow-message';
+        actionMessage.hidden = false;
+      } finally {
+        submitIssue.disabled = false;
+      }
+    };
     if (cancel) cancel.onclick = () => document.getElementById('cancelDialog').showModal();
     if (cancelRequest) cancelRequest.onclick = async event => {
       event.preventDefault();
@@ -523,7 +606,7 @@
       .forEach(id => text(id, 'جارٍ تحميل بيانات الطلب…'));
     text('detailAddress', 'جارٍ تحميل تفاصيل الاستلام…');
     ['confirmedMark', 'preparingMark', 'readyMark', 'receivedMark'].forEach(id => text(id, '—'));
-    ['cancelOrder', 'rateOrder', 'refundOrder', 'exchangeOrder', 'returnStatusLink'].forEach(id => {
+    ['cancelOrder', 'rateOrder', 'refundOrder', 'exchangeOrder', 'returnStatusLink', 'confirmCompletion', 'reportIssue', 'disputeStatusLink'].forEach(id => {
       const action = document.getElementById(id);
       if (action) action.hidden = true;
     });

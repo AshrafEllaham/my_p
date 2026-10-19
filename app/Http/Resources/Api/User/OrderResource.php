@@ -24,6 +24,7 @@ class OrderResource extends JsonResource
             'currency' => $this->currency,
             'created_at' => $this->created_at?->toIso8601String(),
             'pickup_expires_at' => $this->pickup_expires_at?->toIso8601String(),
+            'pickup_qr_token' => $this->pickup_qr_token,
             'confirmed_at' => $this->confirmed_at?->toIso8601String(),
             'preparing_at' => $this->preparing_at?->toIso8601String(),
             'ready_at' => $this->ready_at?->toIso8601String(),
@@ -50,6 +51,7 @@ class OrderResource extends JsonResource
                 'comment' => $this->review->comment,
             ]),
             'return_request' => ReturnRequestResource::make($this->whenLoaded('returnRequest')),
+            'dispute' => OrderDisputeResource::make($this->whenLoaded('dispute')),
             'status_history' => OrderStatusHistoryResource::collection($this->whenLoaded('statusHistory')),
         ];
     }

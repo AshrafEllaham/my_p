@@ -153,7 +153,7 @@ class OrderAfterSalesService
                 $orderUpdates['payment_status'] = PaymentStatusEnum::Refunded->value;
             }
 
-            $this->orders->updateForUserOrder($orderId, $orderUpdates);
+            $this->orders->updateOrder($orderId, $orderUpdates);
 
             $this->history->store([
                 'order_id' => $orderId,

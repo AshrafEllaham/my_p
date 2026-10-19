@@ -254,6 +254,11 @@
       position: sticky;
       bottom: 0;
     }
+      .cat-category-store-list { display:grid; gap:8px; padding:0 14px; }
+    .cat-category-store { display:flex; align-items:center; gap:10px; padding:10px; border:1px solid #E1E8F1; border-radius:12px; color:#0F172A; text-decoration:none; background:#fff; }
+    .cat-category-store img { width:48px; height:48px; object-fit:cover; border-radius:10px; }
+    .cat-category-store strong,.cat-category-store small { display:block; }
+    .cat-category-store small { margin-top:3px; color:#64748B; font-size:10px; }
   </style>
 </head>
 <body class="saey-flow">
@@ -400,6 +405,12 @@
       </a>
     </div>
 
+    <section class="cat-category-stores" id="categoryStoresSection" hidden aria-labelledby="categoryStoresTitle">
+      <div class="cat-section"><h2 id="categoryStoresTitle">متاجر القسم</h2><a href="11-featured-stores.html" id="categoryStoresMore">عرض الكل</a></div>
+      <p class="cat-products-message" id="categoryStoresMessage" role="status" aria-live="polite"></p>
+      <div class="cat-category-store-list" id="categoryStoresList"></div>
+    </section>
+
     <div class="cat-bottom-spacer"></div>
   </main>
 
@@ -461,6 +472,44 @@
       const result = await response.json();
       if (!response.ok) throw new Error(result.message || 'تعذر تحميل المنتجات.');
       return result;
+    };
+    const loadCategoryStores = async () => {
+      const section = document.getElementById('categoryStoresSection');
+      const list = document.getElementById('categoryStoresList');
+      const message = document.getElementById('categoryStoresMessage');
+      if (!mainCategoryId) return;
+      section.hidden = false;
+      message.textContent = 'جارٍ تحميل متاجر القسم…';
+      const more = document.getElementById('categoryStoresMore');
+      more.href = `11-featured-stores.html?main_category_id=${encodeURIComponent(mainCategoryId)}`;
+      const params = new URLSearchParams({ main_category_id: mainCategoryId, sort: 'high_rate', limit_per_page: '4', page: '1' });
+      if (searchInput.value.trim()) params.set('search', searchInput.value.trim());
+      try {
+        const result = await request(`stores/nearby?${params}`);
+        list.replaceChildren();
+        (result.data || []).forEach(store => {
+          const card = document.createElement('a');
+          card.className = 'cat-category-store';
+          card.href = `19-store-details.html?store_id=${encodeURIComponent(store.id)}`;
+          if (store.image || store.cover) {
+            const image = document.createElement('img');
+            image.src = store.image || store.cover;
+            image.alt = '';
+            card.append(image);
+          }
+          const content = document.createElement('span');
+          const name = document.createElement('strong');
+          name.textContent = store.name || 'متجر';
+          const details = document.createElement('small');
+          details.textContent = [store.category_name, store.address, store.average_rating ? `★ ${store.average_rating}` : ''].filter(Boolean).join(' · ');
+          content.append(name, details);
+          card.append(content);
+          list.append(card);
+        });
+        message.textContent = result.data?.length ? '' : 'لا توجد متاجر في هذا القسم حاليًا.';
+      } catch (error) {
+        message.textContent = error.message || 'تعذر تحميل متاجر القسم.';
+      }
     };
     const setMessage = (section, message) => { section.message.textContent = message || ''; };
     const createProductCard = (product, sort) => {
@@ -629,10 +678,11 @@
     }));
     searchInput.addEventListener('input', () => {
       clearTimeout(searchTimer);
-      searchTimer = setTimeout(loadProducts, 250);
+      searchTimer = setTimeout(() => { loadProducts(); loadCategoryStores(); }, 250);
     });
     renderChips();
     loadProducts();
+    loadCategoryStores();
   </script>
   <script src="user-home-sponsored-ads.js"></script>
   <script src="sponsored-ads.js"></script>

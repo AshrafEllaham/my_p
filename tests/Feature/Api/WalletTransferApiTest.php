@@ -27,7 +27,7 @@ class WalletTransferApiTest extends TestCase
         );
 
         $this->actingAs($sender, 'api')
-            ->postJson('/api/wallet/transfers', [
+            ->postJson('/api/user/wallet/transfers', [
                 'recipient' => $recipient->email,
                 'amount' => '75.50',
                 'idempotency_key' => (string) Str::uuid(),
@@ -79,17 +79,17 @@ class WalletTransferApiTest extends TestCase
         ];
 
         $firstResponse = $this->actingAs($sender, 'api')
-            ->postJson('/api/wallet/transfers', $payload)
+            ->postJson('/api/user/wallet/transfers', $payload)
             ->assertOk();
 
-        $this->postJson('/api/wallet/transfers', $payload)
+        $this->postJson('/api/user/wallet/transfers', $payload)
             ->assertOk()
             ->assertJsonPath('data.id', $firstResponse->json('data.id'));
 
         $this->assertSame(2, WalletTransaction::query()->count());
         $this->assertSame('75.00', (string) Wallet::query()->where('user_id', $sender->id)->value('available_balance'));
 
-        $this->postJson('/api/wallet/transfers', [...$payload, 'amount' => '30.00'])
+        $this->postJson('/api/user/wallet/transfers', [...$payload, 'amount' => '30.00'])
             ->assertUnprocessable()
             ->assertJsonPath('message', __('messages.wallet.transfer_idempotency_conflict'));
 
@@ -103,15 +103,15 @@ class WalletTransferApiTest extends TestCase
         $recipient = $this->makeActiveUser();
         $this->actingAs($sender, 'api');
 
-        $this->postJson('/api/wallet/transfers', $this->transferPayload($sender->email))
+        $this->postJson('/api/user/wallet/transfers', $this->transferPayload($sender->email))
             ->assertUnprocessable()
             ->assertJsonPath('message', __('messages.wallet.transfer_self_not_allowed'));
 
-        $this->postJson('/api/wallet/transfers', $this->transferPayload('missing@example.com'))
+        $this->postJson('/api/user/wallet/transfers', $this->transferPayload('missing@example.com'))
             ->assertUnprocessable()
             ->assertJsonPath('message', __('messages.wallet.transfer_recipient_unavailable'));
 
-        $this->postJson('/api/wallet/transfers', $this->transferPayload($recipient->email, '11.00'))
+        $this->postJson('/api/user/wallet/transfers', $this->transferPayload($recipient->email, '11.00'))
             ->assertUnprocessable()
             ->assertJsonPath('message', __('messages.wallet.transfer_amount_exceeds_balance'));
 
@@ -119,7 +119,7 @@ class WalletTransferApiTest extends TestCase
             'account_type' => AccountTypeEnum::User,
             'status' => UserStatusEnum::Suspended,
         ]);
-        $this->postJson('/api/wallet/transfers', $this->transferPayload($inactiveRecipient->email))
+        $this->postJson('/api/user/wallet/transfers', $this->transferPayload($inactiveRecipient->email))
             ->assertUnprocessable()
             ->assertJsonPath('message', __('messages.wallet.transfer_recipient_unavailable'));
 
@@ -129,14 +129,14 @@ class WalletTransferApiTest extends TestCase
 
     public function test_transfer_requires_authentication_and_returns_translated_validation_errors(): void
     {
-        $this->postJson('/api/wallet/transfers', [])->assertUnauthorized();
+        $this->postJson('/api/user/wallet/transfers', [])->assertUnauthorized();
 
         $sender = $this->makeActiveUser(['available_balance' => '100.00']);
         $recipient = $this->makeActiveUser();
 
         $this->actingAs($sender, 'api')
             ->withHeader('Accept-Language', 'ar')
-            ->postJson('/api/wallet/transfers', [
+            ->postJson('/api/user/wallet/transfers', [
                 'recipient' => $recipient->email,
                 'amount' => '1.001',
                 'idempotency_key' => (string) Str::uuid(),
@@ -145,7 +145,7 @@ class WalletTransferApiTest extends TestCase
             ->assertJsonPath('message', __('messages.validation.wallet_transfer.amount.decimal'));
 
         $this->withHeader('Accept-Language', 'en')
-            ->postJson('/api/wallet/transfers', [
+            ->postJson('/api/user/wallet/transfers', [
                 'recipient' => $recipient->email,
                 'amount' => '10.00',
                 'idempotency_key' => 'not-a-uuid',

@@ -53,10 +53,8 @@
       </article>
     </section>
     <div class="wallet-section-head" id="transactions"><h2>آخر العمليات</h2><a href="18-wallet-transactions.html">عرض الكل</a></div>
-    <section class="wallet-list" aria-label="آخر العمليات">
-      <article class="wallet-transaction transaction-purchase"><div class="wallet-transaction-main"><strong>شراء منتج</strong><b>− ٢,٥٠٠ ج.م</b></div><div class="wallet-transaction-meta"><small>#7A3D6D</small><time>2025/12/01، 4:50 م</time></div></article>
-      <article class="wallet-transaction transaction-pending"><div class="wallet-transaction-main"><strong>طلب سحب رصيد تحت المراجعة</strong><b>− ٢,٥٠٠ ج.م</b></div><div class="wallet-transaction-meta"><small>#7A3D6D</small><time>2025/12/01، 4:50 م</time></div></article>
-      <article class="wallet-transaction transaction-approved"><div class="wallet-transaction-main"><strong>طلب سحب مقبول</strong><b>− ٢,٥٠٠ ج.م</b></div><div class="wallet-transaction-meta"><small>#7A3D6D</small><time>2025/12/01، 4:50 م</time></div></article>
+    <section class="wallet-list" id="walletRecentTransactions" aria-label="آخر العمليات" aria-live="polite" aria-busy="true">
+      <p class="wallet-note">جارٍ تحميل العمليات...</p>
     </section>
     <p class="wallet-note"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span>يمكنك استخدام رصيد المحفظة عند تأكيد طلبك من أي متجر على سعي.</span></p>
   </main>
@@ -211,7 +209,7 @@
       formData.append('destination', pendingWithdrawalAttempt.destination);
       formData.append('idempotency_key', pendingWithdrawalAttempt.key);
       try {
-        await walletApiRequest('/wallet/withdrawal-requests', { method: 'POST', body: formData });
+        await walletApiRequest('/user/wallet/withdrawal-requests', { method: 'POST', body: formData });
         pendingWithdrawalAttempt = null;
         withdrawalPending = true;
         withdrawalPendingCard.hidden = false;
@@ -272,7 +270,7 @@
       confirmTransferButton.textContent = 'جارٍ تنفيذ التحويل...';
 
       try {
-        const transfer = await walletApiRequest('/wallet/transfers', { method: 'POST', body: formData });
+        const transfer = await walletApiRequest('/user/wallet/transfers', { method: 'POST', body: formData });
         if (transfer.balance_after !== undefined) updateBalance(transfer.balance_after);
         pendingTransferAttempt = null;
         closeTransferSheet();
@@ -328,12 +326,13 @@
         const validationMessage = Object.values(result.errors || {}).flat()[0];
         throw new Error(validationMessage || result.message || 'تعذر تنفيذ الطلب.');
       }
-      return path === '/wallet' ? (result.wallet || result.data?.wallet || result.data) : result.data;
+      return options.method === 'GET' || !options.method ? result : result.data;
     };
     const loadWalletBalance = async () => {
       const status = document.getElementById('walletBalanceStatus');
       try {
-        const wallet = await walletApiRequest('/wallet');
+        const result = await walletApiRequest('/user/wallet?limit_per_page=3');
+        const wallet = result.wallet || {};
         walletCurrency = wallet.currency || 'EGP';
         updateBalance(wallet.balance || 0);
         withdrawalPending = Boolean(wallet.has_pending_withdrawal);
@@ -346,11 +345,59 @@
         document.getElementById('depositCurrency').textContent = currencyLabel(walletCurrency);
         withdrawAmount.max = String(currentBalance);
         transferAmount.max = String(currentBalance);
+        renderRecentTransactions(result.data || []);
         status.textContent = 'الرصيد محدث';
       } catch (error) {
         document.getElementById('walletBalanceValue').textContent = 'غير متاح';
+        const recentTransactions = document.getElementById('walletRecentTransactions');
+        recentTransactions.setAttribute('aria-busy', 'false');
+        recentTransactions.textContent = error.message;
         status.textContent = error.message;
       }
+    };
+    const transactionLabels = {
+      deposit: 'شحن المحفظة', purchase: 'شراء منتج', refund: 'استرداد', transfer_in: 'تحويل وارد',
+      transfer_out: 'تحويل صادر', withdrawal: 'سحب الرصيد', earning: 'أرباح', commission: 'عمولة',
+      settlement: 'تسوية', ad_payment: 'دفع إعلان',
+    };
+    const transactionStatuses = { pending: 'قيد التنفيذ', completed: 'مكتملة', failed: 'فشلت', reversed: 'معكوسة' };
+    const renderRecentTransactions = transactions => {
+      const list = document.getElementById('walletRecentTransactions');
+      list.replaceChildren();
+      list.setAttribute('aria-busy', 'false');
+      if (!transactions.length) {
+        const empty = document.createElement('p');
+        empty.className = 'wallet-note';
+        empty.textContent = 'لا توجد عمليات حديثة.';
+        list.append(empty);
+        return;
+      }
+      transactions.forEach(transaction => {
+        const item = document.createElement('article');
+        const credit = Number(transaction.balance_after) >= Number(transaction.balance_before);
+        const tone = transaction.status === 'pending' ? 'transaction-pending'
+          : ['failed', 'reversed'].includes(transaction.status) ? 'transaction-rejected'
+            : transaction.type === 'purchase' ? 'transaction-purchase'
+              : credit ? 'transaction-credit' : 'transaction-approved';
+        item.className = `wallet-transaction ${tone}`;
+        const main = document.createElement('div');
+        main.className = 'wallet-transaction-main';
+        const title = document.createElement('strong');
+        title.textContent = transactionLabels[transaction.type] || 'عملية محفظة';
+        const amount = document.createElement('b');
+        amount.textContent = `${credit ? '+' : '−'} ${formatMoney(transaction.amount, transaction.currency)}`;
+        main.append(title, amount);
+        const meta = document.createElement('div');
+        meta.className = 'wallet-transaction-meta';
+        const status = document.createElement('small');
+        status.textContent = transactionStatuses[transaction.status] || transaction.status || '—';
+        const time = document.createElement('time');
+        time.dateTime = transaction.created_at || '';
+        time.textContent = transaction.created_at ? new Date(transaction.created_at).toLocaleString('ar-EG') : '—';
+        meta.append(status, time);
+        item.append(main, meta);
+        list.append(item);
+      });
     };
     const openDeposit = () => {
       depositSheet.hidden = false;
@@ -385,7 +432,7 @@
       depositSubmit.disabled = true;
       depositSubmit.textContent = 'جارٍ تجهيز الدفع...';
       try {
-        const payment = await walletApiRequest('/wallet', {
+        const payment = await walletApiRequest('/user/wallet', {
           method: 'POST',
           body: JSON.stringify({ amount, idempotency_key: pendingTopUpAttempt.key }),
         });

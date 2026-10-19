@@ -25,6 +25,7 @@ class ProfileUpdateTest extends TestCase
     public function test_profile_endpoints_require_authentication(): void
     {
         $this->postJson('/api/user/profile')->assertUnauthorized();
+        $this->getJson('/api/user/profile')->assertUnauthorized();
         $this->postJson('/api/store/profile')->assertUnauthorized();
     }
 
@@ -73,6 +74,33 @@ class ProfileUpdateTest extends TestCase
             'id' => $user->id,
             'name' => 'Updated User',
             'address_line' => 'Existing address',
+        ]);
+    }
+
+    public function test_user_can_load_profile_and_save_name_without_reuploading_image(): void
+    {
+        $user = UserFactory::new()->create([
+            'account_type' => AccountTypeEnum::User,
+            'name' => 'Existing User',
+            'address_line' => 'Old address',
+        ]);
+        $token = $this->tokenFor($user);
+
+        $this->withToken($token)->getJson('/api/user/profile')
+            ->assertOk()
+            ->assertJsonPath('data.id', $user->id)
+            ->assertJsonPath('data.name', 'Existing User')
+            ->assertJsonPath('data.email', $user->email)
+            ->assertJsonPath('data.address', 'Old address');
+
+        $this->withToken($token)->postJson('/api/user/profile', [
+            'name' => 'Updated User',
+        ])->assertOk()->assertJsonPath('data.name', 'Updated User');
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'name' => 'Updated User',
+            'address_line' => 'Old address',
         ]);
     }
 
@@ -134,7 +162,7 @@ class ProfileUpdateTest extends TestCase
         $this->assertFalse(Schema::hasColumn('stores', 'address'));
     }
 
-    public function test_profile_validation_messages_are_localized(): void
+    public function test_profile_name_validation_messages_are_localized_and_image_is_optional(): void
     {
         $user = UserFactory::new()->create(['account_type' => AccountTypeEnum::User]);
 
@@ -142,8 +170,7 @@ class ProfileUpdateTest extends TestCase
             ->withToken($this->tokenFor($user))
             ->postJson('/api/user/profile', [])
             ->assertUnprocessable()
-            ->assertJsonPath('errors.name.0', __('messages.validation.profile_name.required'))
-            ->assertJsonPath('errors.image.0', __('messages.validation.profile_image.required'));
+            ->assertJsonPath('message', __('messages.validation.profile_name.required'));
 
         $owner = UserFactory::new()->create(['account_type' => AccountTypeEnum::Store]);
 
@@ -151,9 +178,7 @@ class ProfileUpdateTest extends TestCase
             ->withToken($this->tokenFor($owner))
             ->postJson('/api/store/profile', [])
             ->assertUnprocessable()
-            ->assertJsonPath('errors.name.0', __('messages.validation.profile_name.required'))
-            ->assertJsonPath('errors.image.0', __('messages.validation.profile_image.required'))
-            ->assertJsonPath('errors.category_id.0', __('messages.validation.category_id.required'));
+            ->assertJsonPath('message', __('messages.validation.profile_name.required'));
     }
 
     public function test_profile_routes_reject_the_wrong_account_type(): void
@@ -166,7 +191,7 @@ class ProfileUpdateTest extends TestCase
             'image' => UploadedFile::fake()->image('avatar.png'),
         ], ['Accept' => 'application/json'])
             ->assertUnprocessable()
-            ->assertJsonPath('errors.account_type.0', __('messages.profile.user_type_required'));
+            ->assertJsonPath('message', __('messages.profile.user_type_required'));
 
         $userAccount = UserFactory::new()->create(['account_type' => AccountTypeEnum::User]);
 
@@ -176,7 +201,7 @@ class ProfileUpdateTest extends TestCase
             'category_id' => $category->id,
         ], ['Accept' => 'application/json'])
             ->assertUnprocessable()
-            ->assertJsonPath('errors.account_type.0', __('messages.profile.store_type_required'));
+            ->assertJsonPath('message', __('messages.profile.store_type_required'));
     }
 
     public function test_figma_profile_screens_submit_to_the_api_endpoints(): void

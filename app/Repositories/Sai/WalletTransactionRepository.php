@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Sai;
 
+use App\Enums\WalletTransactionFilterEnum;
 use App\Enums\WalletTransactionStatusEnum;
 use App\Enums\WalletTransactionTypeEnum;
 use App\Models\Sai\Order;
@@ -23,9 +24,9 @@ class WalletTransactionRepository extends MainRepository
         return $this->getModel()->newQuery();
     }
 
-    public function listForOwner(int $ownerId): Builder
+    public function listForOwner(int $ownerId, ?WalletTransactionFilterEnum $filter = null): Builder
     {
-        return $this->query()
+        $query = $this->query()
             ->select([
                 'id',
                 'public_id',
@@ -42,6 +43,23 @@ class WalletTransactionRepository extends MainRepository
             ->whereHas('wallet', fn (Builder $query): Builder => $query->where('user_id', $ownerId))
             ->orderByDesc('created_at')
             ->orderByDesc('id');
+
+        $types = match ($filter) {
+            WalletTransactionFilterEnum::Addition => [
+                WalletTransactionTypeEnum::Deposit->value,
+                WalletTransactionTypeEnum::Earning->value,
+                WalletTransactionTypeEnum::Commission->value,
+            ],
+            WalletTransactionFilterEnum::Purchase => [WalletTransactionTypeEnum::Purchase->value],
+            WalletTransactionFilterEnum::Refund => [WalletTransactionTypeEnum::Refund->value],
+            WalletTransactionFilterEnum::Transfer => [
+                WalletTransactionTypeEnum::TransferIn->value,
+                WalletTransactionTypeEnum::TransferOut->value,
+            ],
+            default => [],
+        };
+
+        return $types === [] ? $query : $query->whereIn('type', $types);
     }
 
     public function findOrFail(int|string $id): Model

@@ -5,16 +5,20 @@ namespace App\Http\Controllers\Api\User;
 use App\Enums\ReturnResolutionTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\User\CancelUserOrderRequest;
+use App\Http\Requests\Api\User\CreateOrderDisputeRequest;
 use App\Http\Requests\Api\User\CreateOrderReviewRequest;
 use App\Http\Requests\Api\User\CreateUserOrderRequest;
 use App\Http\Requests\Api\User\ListUserOrdersRequest;
+use App\Http\Requests\Api\User\ReplyOrderDisputeRequest;
 use App\Http\Requests\Api\User\SubmitOrderReturnRequest;
+use App\Http\Resources\Api\User\OrderDisputeResource;
 use App\Http\Resources\Api\User\OrderReceiptResource;
 use App\Http\Resources\Api\User\OrderResource;
 use App\Http\Resources\Api\User\ReturnRequestResource;
 use App\Http\Resources\Api\User\UserProductReviewResource;
 use App\Services\Sai\OrderAfterSalesService;
 use App\Services\Sai\OrderCheckoutService;
+use App\Services\Sai\UserOrderLifecycleService;
 use App\Services\Sai\UserOrderReadService;
 use Illuminate\Http\JsonResponse;
 
@@ -24,6 +28,7 @@ class UserOrderController extends Controller
         private readonly UserOrderReadService $orders,
         private readonly OrderCheckoutService $checkout,
         private readonly OrderAfterSalesService $afterSales,
+        private readonly UserOrderLifecycleService $lifecycle,
     ) {}
 
     public function index(ListUserOrdersRequest $request): JsonResponse
@@ -99,5 +104,34 @@ class UserOrderController extends Controller
         );
 
         return jsonSuccess(ReturnRequestResource::make($returnRequest), __('messages.orders.exchange_requested'));
+    }
+
+    public function confirmCompletion(int $order): JsonResponse
+    {
+        $updatedOrder = $this->lifecycle->confirmCompletion((int) auth('api')->id(), $order);
+
+        return jsonSuccess(OrderResource::make($updatedOrder), __('messages.orders.customer_completion_confirmed'));
+    }
+
+    public function openDispute(CreateOrderDisputeRequest $request, int $order): JsonResponse
+    {
+        $dispute = $this->lifecycle->openDispute((int) auth('api')->id(), $order, $request->validated());
+
+        return jsonSuccess(OrderDisputeResource::make($dispute), __('messages.orders.dispute_opened'));
+    }
+
+    public function dispute(int $order): JsonResponse
+    {
+        return jsonSuccess(
+            OrderDisputeResource::make($this->lifecycle->dispute((int) auth('api')->id(), $order)),
+            __('messages.orders.dispute_retrieved'),
+        );
+    }
+
+    public function replyToDispute(ReplyOrderDisputeRequest $request, int $order): JsonResponse
+    {
+        $dispute = $this->lifecycle->replyToDispute((int) auth('api')->id(), $order, $request->validated());
+
+        return jsonSuccess(OrderDisputeResource::make($dispute), __('messages.orders.dispute_reply_sent'));
     }
 }

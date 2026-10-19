@@ -22,6 +22,7 @@ use App\Repositories\MainRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProductRepository extends MainRepository
 {
@@ -47,7 +48,7 @@ class ProductRepository extends MainRepository
                 ->where('account_type', AccountTypeEnum::Store)
                 ->where('status', UserStatusEnum::Active))
             ->with([
-                'media' => fn (Builder $query) => $query
+                'media' => fn (HasMany $query) => $query
                     ->select(['id', 'product_id', 'path', 'is_primary'])
                     ->orderByDesc('is_primary')
                     ->orderBy('id'),

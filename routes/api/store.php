@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Store\StoreAdController;
 use App\Http\Controllers\Api\Store\StoreCompetitionController;
 use App\Http\Controllers\Api\Store\StoreCouponController;
+use App\Http\Controllers\Api\Store\StoreOrderController;
 use App\Http\Controllers\Api\Store\StoreProductController;
 use App\Http\Controllers\Api\Store\StoreProfileController;
 use App\Http\Controllers\Api\Store\StoreReviewController;
@@ -27,6 +28,15 @@ Route::group([], function () {
     // مسارات محمية (تتطلب تسجيل الدخول)
     // -------------------------------------------------------
     Route::group(['middleware' => ['auth:api', 'throttle:60,1']], function () {
+        // يعرض طلبات المتجر مع ترقيم الصفحات وفلاتر الحالة والبحث.
+        Route::get('/orders', [StoreOrderController::class, 'index']);
+        // يعرض تفاصيل طلب مملوك للمتجر الحالي.
+        Route::get('/orders/{order}', [StoreOrderController::class, 'show'])->whereNumber('order');
+        // يحدّث المتجر حالة طلبه بالتتابع حتى يصبح جاهزًا لاستلام العميل.
+        Route::patch('/orders/{order}/status', [StoreOrderController::class, 'updateStatus'])->whereNumber('order');
+        // يؤكد استلام المنتج برمز QR الذي يعرضه المستخدم من تفاصيل الطلب.
+        Route::post('/orders/{order}/confirm-pickup', [StoreOrderController::class, 'confirmPickup'])->whereNumber('order');
+
         // يعرض مسابقات المتجر الحالي وملخص المشاركات مع فلترة الحالة.
         Route::get('/competitions', [StoreCompetitionController::class, 'index']);
         // يعرض تفاصيل مسابقة مملوكة للمتجر الحالي.

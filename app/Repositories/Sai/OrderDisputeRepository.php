@@ -24,6 +24,23 @@ class OrderDisputeRepository extends MainRepository
         return $this->query()->findOrFail($id);
     }
 
+    public function findForUserOrder(int $orderId, int $userId): OrderDispute
+    {
+        /** @var OrderDispute $dispute */
+        $dispute = $this->query()
+            ->where('order_id', $orderId)
+            ->whereHas('order', fn (Builder $query) => $query->where('user_id', $userId))
+            ->with('messages')
+            ->firstOrFail();
+
+        return $dispute;
+    }
+
+    public function existsForOrder(int $orderId): bool
+    {
+        return $this->query()->where('order_id', $orderId)->exists();
+    }
+
     /** @param array<string, mixed> $data */
     public function createRecord(array $data): Model
     {

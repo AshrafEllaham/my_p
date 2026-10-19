@@ -103,6 +103,11 @@ class Order extends Model
         return $this->hasOne(ReturnRequest::class, 'order_id');
     }
 
+    public function dispute(): HasOne
+    {
+        return $this->hasOne(OrderDispute::class, 'order_id');
+    }
+
     public function statusHistory(): HasMany
     {
         return $this->hasMany(OrderStatusHistory::class, 'order_id')->orderBy('created_at');

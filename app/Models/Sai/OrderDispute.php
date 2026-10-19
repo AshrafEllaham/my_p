@@ -6,6 +6,7 @@ use App\Enums\DisputeStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class OrderDispute extends Model
@@ -52,5 +53,10 @@ class OrderDispute extends Model
     public function resolvedBy(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    public function messages(): HasMany
+    {
+        return $this->hasMany(OrderDisputeMessage::class, 'order_dispute_id')->orderBy('created_at');
     }
 }

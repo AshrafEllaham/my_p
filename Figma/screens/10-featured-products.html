@@ -47,61 +47,8 @@
         </svg>
       </button>
     </div>
-    <p class="catalog-subtitle product-results">١٢٨ منتجًا مناسبًا لك</p>
-    <section class="catalog-products featured-products-page">
-      <a class="catalog-product" href="12-product-details.html">
-        <span class="catalog-product-image">
-          <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=500&q=85" alt="فستان نسائي وردي">
-          <em class="discount-ribbon"><span>25</span><span>%</span></em>
-          <button type="button" aria-label="إضافة للمفضلة">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-          </button>
-        </span>
-        <span class="catalog-product-category">أزياء الشرق</span>
-        <strong>فستان نسائي أنيق</strong>
-        <span class="catalog-price"><del>٢٥٠ ج.م</del><b>١٩٠ ج.م</b></span>
-        <span class="catalog-rating">4.7 <i>★</i></span>
-      </a>
-      <a class="catalog-product" href="12-product-details.html">
-        <span class="catalog-product-image">
-          <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=500&q=85" alt="جاكيت جلد بني">
-          <em class="discount-ribbon"><span>10</span><span>%</span></em>
-          <button type="button" aria-label="إضافة للمفضلة">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-          </button>
-        </span>
-        <span class="catalog-product-category">نقطة ستور</span>
-        <strong>جاكيت جلد طبيعي رجالي</strong>
-        <span class="catalog-price"><del>٣,٢٥٠ ج.م</del><b>٢,٨٩٠ ج.م</b></span>
-        <span class="catalog-rating">4.9 <i>★</i></span>
-      </a>
-      <a class="catalog-product" href="12-product-details.html">
-        <span class="catalog-product-image">
-          <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=500&q=85" alt="ساعة يد">
-          <em class="discount-ribbon"><span>15</span><span>%</span></em>
-          <button type="button" aria-label="إضافة للمفضلة">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-          </button>
-        </span>
-        <span class="catalog-product-category">وقتـك</span>
-        <strong>ساعة كلاسيكية أنيقة</strong>
-        <span class="catalog-price"><del>١,٨٠٠ ج.م</del><b>١,٤٥٠ ج.م</b></span>
-        <span class="catalog-rating">4.8 <i>★</i></span>
-      </a>
-      <a class="catalog-product" href="12-product-details.html">
-        <span class="catalog-product-image">
-          <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=500&q=85" alt="حذاء رياضي">
-          <em class="discount-ribbon"><span>20</span><span>%</span></em>
-          <button type="button" aria-label="إضافة للمفضلة">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-          </button>
-        </span>
-        <span class="catalog-product-category">ستب</span>
-        <strong>حذاء رياضي يومي</strong>
-        <span class="catalog-price"><del>١,٦٥٠ ج.م</del><b>١,٢٩٠ ج.م</b></span>
-        <span class="catalog-rating">4.7 <i>★</i></span>
-      </a>
-    </section>
+    <p class="catalog-subtitle product-results" id="featuredResultLabel" aria-live="polite">جارٍ تحميل المنتجات…</p>
+    <section class="catalog-products featured-products-page" id="featuredProducts" aria-live="polite" aria-busy="true"></section><button type="button" id="featuredLoadMore" hidden style="width:100%;height:44px;margin:12px 0;border:1px solid #E1E8F0;border-radius:10px;background:#FFF;font:800 12px Cairo,sans-serif">عرض المزيد</button><p id="featuredMessage" role="status" aria-live="polite"></p>
   </main>
   <div class="sheet-backdrop" id="filterSheet" aria-hidden="true">
     <section class="filter-sheet" role="dialog" aria-modal="true" aria-labelledby="filterTitle">
@@ -121,17 +68,12 @@
         <button class="filter-chip" type="button">أحذية</button>
       </div>
       <div class="filter-label">المحافظة</div>
-      <button class="sheet-select" type="button">
-        القاهرة
-        <span>
-          <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
-        </span>
-      </button>
+      <select class="sheet-select" id="featuredGovernorate" aria-label="المحافظة"><option value="">كل المحافظات</option></select>
       <div class="filter-label">الترتيب حسب</div>
       <div class="sort-options">
-        <button class="sort-option selected" type="button">الأعلى تقييمًا</button>
-        <button class="sort-option" type="button">الأكثر طلبًا</button>
-        <button class="sort-option" type="button">مضاف حديثًا</button>
+        <button class="sort-option selected" type="button" data-sort="highest_rated">الأعلى تقييمًا</button>
+        <button class="sort-option" type="button" data-sort="most_purchased">الأكثر طلبًا</button>
+        <button class="sort-option" type="button" data-sort="newest">مضاف حديثًا</button>
       </div>
       <button class="apply-filters" type="button">عرض النتائج</button>
     </section>
@@ -176,5 +118,6 @@
       }
     }));
   </script>
+  <script src="user-featured-products.js"></script>
 </body>
 </html>

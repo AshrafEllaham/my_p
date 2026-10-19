@@ -12,6 +12,14 @@ class UserProfileController extends Controller
 {
     public function __construct(private readonly UserProfileService $service) {}
 
+    public function show(): JsonResponse
+    {
+        return jsonSuccess(
+            UserProfileResource::make($this->service->show((int) auth('api')->id())),
+            __('messages.profile.user_retrieved'),
+        );
+    }
+
     public function update(UpdateUserProfileRequest $request): JsonResponse
     {
         $profile = $this->service->update((int) auth('api')->id(), $request->validated());

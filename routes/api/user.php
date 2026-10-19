@@ -42,6 +42,8 @@ Route::group([], function () {
 
         // يحدّث بيانات الملف الشخصي للمستخدم.
         Route::post('/profile', [UserProfileController::class, 'update']);
+        // يعرض بيانات الملف الشخصي وموقع الاستلام الافتراضي للمستخدم.
+        Route::get('/profile', [UserProfileController::class, 'show']);
 
         // يعرض المنتجات المنشورة مع فلاتر الأقسام والمحافظة والبحث والترتيب.
         Route::get('/products', [UserProductController::class, 'index'])->middleware('throttle:60,1');
@@ -113,6 +115,14 @@ Route::group([], function () {
         Route::get('/orders/{order}/receipt', [UserOrderController::class, 'receipt'])->whereNumber('order');
         // يلغي طلب المستخدم قبل بدء تجهيز المتجر ويعيد المبلغ المدفوع إلى المحفظة.
         Route::patch('/orders/{order}/cancel', [UserOrderController::class, 'cancel'])->whereNumber('order');
+        // يؤكد إتمام استلام الطلب ويتيح التقييم وخدمات ما بعد البيع.
+        Route::patch('/orders/{order}/confirm-completion', [UserOrderController::class, 'confirmCompletion'])->whereNumber('order');
+        // يسجل مشكلة في طلب جاهز ويوقف إتمامه لحين المراجعة.
+        Route::post('/orders/{order}/disputes', [UserOrderController::class, 'openDispute'])->whereNumber('order');
+        // يعرض نزاع الطلب ورسائله للمستخدم المالك.
+        Route::get('/orders/{order}/disputes', [UserOrderController::class, 'dispute'])->whereNumber('order');
+        // يرسل رد المستخدم على طلب معلومات إضافية في النزاع.
+        Route::post('/orders/{order}/disputes/messages', [UserOrderController::class, 'replyToDispute'])->whereNumber('order');
         // يسجل تقييم المستخدم للمنتج بعد اكتمال الطلب.
         Route::post('/orders/{order}/review', [UserOrderController::class, 'review'])->whereNumber('order');
         // يرسل طلب استرجاع لطلب مكتمل وفق سياسة المتجر.

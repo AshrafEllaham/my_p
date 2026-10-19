@@ -91,10 +91,30 @@
   async function load() {
     showState('جارٍ تحميل المتاجر...');
     const query = new URLSearchParams({ limit_per_page: '6' });
-    const coordinates = pickupCoordinates();
+    const browserCoordinates = pickupCoordinates();
+    let coordinates = null;
+    if (token()) {
+      try {
+        const profileResponse = await fetch(`${apiOrigin}/api/user/profile`, {
+          headers: { Accept: 'application/json', 'Accept-Language': 'ar', Authorization: `Bearer ${token()}` }
+        });
+        if (profileResponse.ok) {
+          const profilePayload = await profileResponse.json();
+          const profile = profilePayload.data || {};
+          const lat = Number(profile.pickup_latitude);
+          const long = Number(profile.pickup_longitude);
+          if (Number.isFinite(lat) && Number.isFinite(long)) coordinates = { lat, long };
+          if (profile.governorate_id) query.set('governorate_id', String(profile.governorate_id));
+        }
+      } catch {
+        // Saved browser coordinates can still be used when the profile request fails.
+      }
+    }
+    coordinates ||= browserCoordinates;
     if (coordinates) {
       query.set('lat', String(coordinates.lat));
       query.set('long', String(coordinates.long));
+      query.set('sort', 'nearest');
     }
 
     try {

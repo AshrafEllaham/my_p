@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\FaqController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\NotificationPreferenceController;
 use App\Http\Controllers\Api\SettingsController;
+use App\Http\Controllers\Api\User\UserPasswordResetController;
 use Illuminate\Support\Facades\Route;
 
 // User (student) routes
@@ -54,6 +55,12 @@ Route::group([], function () {
         Route::post('/register', [AuthApiController::class, 'store'])->middleware('throttle:5,1');
         // يسجل دخول المستخدم ببياناته.
         Route::post('/login', [AuthApiController::class, 'login'])->middleware('throttle:10,1');
+        // يرسل رمز استعادة كلمة المرور إلى البريد أو الهاتف المسجل.
+        Route::post('/password-reset/send-otp', [UserPasswordResetController::class, 'send'])->middleware('throttle:3,1');
+        // يتحقق من رمز استعادة كلمة المرور.
+        Route::post('/password-reset/confirm-otp', [UserPasswordResetController::class, 'confirm'])->middleware('throttle:10,1');
+        // يحفظ كلمة المرور الجديدة بعد التحقق من رمز الاستعادة.
+        Route::post('/password-reset', [UserPasswordResetController::class, 'reset'])->middleware('throttle:5,1');
         // يسجل دخول المستخدم باستخدام مزود هوية اجتماعي.
         Route::post('/social-login', [AuthApiController::class, 'socialLogin'])->middleware('throttle:10,1');
         // يغيّر نوع الحساب للحساب المحدد.

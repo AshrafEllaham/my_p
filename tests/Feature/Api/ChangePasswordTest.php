@@ -97,7 +97,8 @@ class ChangePasswordTest extends TestCase
         $screen = file_get_contents(base_path('Figma/screens/account-security.html'));
 
         $this->assertIsString($screen);
-        $this->assertStringContainsString('/api/change-password', $screen);
+        $this->assertStringContainsString("SaeyAccountApi.request('/change-password', 'PUT'", $screen);
+        $this->assertStringContainsString('src="account-api.js"', $screen);
         $this->assertStringContainsString('current_password: currentPassword', $screen);
         $this->assertStringContainsString('password_confirmation: passwordConfirmation', $screen);
     }
