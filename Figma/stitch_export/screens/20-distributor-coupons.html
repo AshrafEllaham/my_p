@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>سعي — كوبونات الخصم</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <style data-source="auth.css">
+/* ==========================================================================
+   Saey Distribution (تطبيق سعي للتوزيع) — Auth & Onboarding Design System
+   Matches Figma mockups & production screenshots exactly.
+   ========================================================================== */
+
+@import url("app-standard-type.css");
+
+:root {
+  --barq-blue: #000000;
+  --barq-blue-hover: #000000;
+  --barq-blue-soft: #F2F2F2;
+  --barq-blue-border: #D1D1D1;
+  --barq-ink: #0F172A;
+  --barq-slate: #334155;
+  --barq-muted: #64748B;
+  --barq-light: #94A3B8;
+  --barq-line: #E2E8F0;
+  --barq-line-strong: #D7E1EE;
+  --barq-field-surface: #F8FAFD;
+  --barq-field-focus: rgba(0, 0, 0, 0.12);
+  --barq-bg: #F8FAFC;
+  --barq-card: #FFFFFF;
+  --barq-green: #10B981;
+  --barq-green-soft: #ECFDF5;
+  --barq-font: 'Inter', 'Cairo', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body.barq-auth-body {
+  font-family: var(--barq-font);
+  background-color: var(--barq-bg);
+  color: var(--barq-ink);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Status Bar & Dynamic Island Simulation */
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 22px 4px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--barq-ink);
+  background: transparent;
+  user-select: none;
+}
+
+.dynamic-island {
+  width: 100px;
+  height: 25px;
+  background: #000000;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 9px;
+}
+
+.dynamic-island .camera-lens {
+  width: 8.5px;
+  height: 8.5px;
+  background: #111424;
+  border: 1px solid #1E2338;
+  border-radius: 50%;
+}
+
+.status-icons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--barq-ink);
+}
+
+.status-icons svg {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Page Frame Container */
+.barq-page {
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 8px 16px 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Top Navigation Bar */
+.barq-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+}
+
+.barq-back-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: var(--barq-card);
+  border: 1px solid var(--barq-line);
+  display: grid;
+  place-items: center;
+  color: var(--barq-ink);
+  text-decoration: none;
+  font-size: 17px;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+  transition: all 0.2s ease;
+}
+
+.barq-back-circle:hover {
+  border-color: var(--barq-blue);
+  color: var(--barq-blue);
+  transform: translateY(-1px);
+}
+
+/* Centered Brand Header */
+.barq-brand-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px 0 6px;
+}
+
+.barq-brand-text {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--barq-blue);
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+.barq-brand-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: url('saey-mark.svg') center / contain no-repeat;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
+}
+
+.barq-brand-badge svg {
+  display: none;
+}
+
+/* Hero Typography */
+.barq-hero {
+  margin: 4px 0 6px;
+}
+
+.barq-hero.center {
+  text-align: center;
+}
+
+.barq-hero h1 {
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--barq-ink);
+  line-height: 1.3;
+  letter-spacing: -0.4px;
+}
+
+.barq-hero p {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--barq-muted);
+  line-height: 1.6;
+  margin-top: 5px;
+}
+
+/* Segmented Control / Tabs */
+.barq-switch {
+  height: 48px;
+  background: #F1F5F9;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  gap: 4px;
+}
+
+.barq-switch button {
+  height: 40px;
+  flex: 1;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--barq-muted);
+  font: 700 13px var(--barq-font);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.barq-switch button.active {
+  background: #FFFFFF;
+  color: var(--barq-ink);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+}
+
+/* Professional field system — shared by every onboarding screen */
+.barq-input-card {
+  border: 1px solid #E6ECF4;
+  border-radius: 14px;
+  background: var(--barq-field-surface);
+  padding: 8px 9px 9px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.015);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.barq-input-card:focus-within {
+  border-color: var(--barq-blue);
+  box-shadow: 0 0 0 3px var(--barq-field-focus), 0 4px 12px rgba(0, 0, 0, 0.06);
+  background: #FFFFFF;
+}
+
+.barq-input-label {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #475569;
+  padding: 0 4px;
+  line-height: 1.45;
+}
+
+.barq-input-inner {
+  background: #FFFFFF;
+  border: 1px solid var(--barq-line-strong);
+  border-radius: 10px;
+  height: 48px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.barq-input-card:focus-within .barq-input-inner {
+  border-color: #A3A3A3;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.barq-input-inner input {
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--barq-ink);
+  min-width: 0;
+  font: 600 13px var(--barq-font);
+  line-height: 1.5;
+  direction: inherit;
+}
+
+.barq-input-inner input::placeholder {
+  color: var(--barq-light);
+  font-weight: 500;
+}
+
+.barq-input-inner input:focus::placeholder {
+  color: #CBD5E1;
+}
+
+/* Phone country / dial-code selector */
+.barq-phone-country {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+}
+
+.barq-phone-country[hidden] { display: none; }
+
+.barq-country-trigger {
+  min-width: 76px;
+  height: 30px;
+  border: 0;
+  border-inline-start: 1px solid #E2E8F0;
+  padding: 0 7px 0 0;
+  background: transparent;
+  color: #475569;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font: 700 11.5px 'Inter', var(--barq-font);
+  cursor: pointer;
+}
+
+.barq-country-trigger:hover { color: var(--barq-blue); }
+.barq-country-trigger:focus-visible { outline: 2px solid #A3A3A3; outline-offset: 2px; border-radius: 6px; }
+.barq-country-flag { font-size: 16px; line-height: 1; }
+.barq-country-chevron { width: 12px; height: 12px; color: #94A3B8; transition: transform .2s ease; }
+.barq-phone-country.open .barq-country-chevron { transform: rotate(180deg); }
+
+.barq-country-menu {
+  position: absolute;
+  top: calc(100% + 9px);
+  left: 0;
+  z-index: 30;
+  width: 180px;
+  padding: 5px;
+  background: #FFFFFF;
+  border: 1px solid #DCE5F0;
+  border-radius: 12px;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.14);
+}
+
+.barq-country-menu[hidden] { display: none; }
+
+.barq-country-option {
+  width: 100%;
+  min-height: 36px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px;
+  font: 700 11.5px var(--barq-font);
+  cursor: pointer;
+  text-align: right;
+}
+
+.barq-country-option:hover,
+.barq-country-option:focus-visible { background: #F2F2F2; color: var(--barq-blue); outline: 0; }
+.barq-country-option .dial-code { margin-inline-start: auto; font-family: 'Inter', sans-serif; direction: ltr; }
+
+.barq-input-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: #F1F5F9;
+  color: #64748B;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.barq-input-card:focus-within .barq-input-icon {
+  color: var(--barq-blue);
+  background: var(--barq-blue-soft);
+}
+
+.barq-input-icon svg {
+  width: 17px;
+  height: 17px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.barq-eye-btn {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #64748B;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.barq-eye-btn:hover { background: #F1F5F9; color: var(--barq-blue); }
+.barq-eye-btn:focus-visible { outline: 2px solid #A3A3A3; outline-offset: 2px; }
+
+.barq-eye-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+}
+
+/* Forgot Password Link - Aligned to Left as in Image 1 & 3 */
+.barq-forgot-link {
+  align-self: flex-end;
+  margin-top: -4px;
+  color: var(--barq-blue);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  padding-inline: 2px;
+  transition: color 0.2s;
+}
+
+.barq-forgot-link:hover {
+  text-decoration: underline;
+  color: var(--barq-blue-hover);
+}
+
+/* Primary Button */
+.barq-btn-primary {
+  width: 100%;
+  height: 48px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--barq-blue);
+  color: #FFFFFF;
+  font: 800 14px var(--barq-font);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px -3px rgba(0, 0, 0, 0.35);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.barq-btn-primary:hover {
+  background: var(--barq-blue-hover);
+  box-shadow: 0 10px 24px -2px rgba(0, 0, 0, 0.45);
+  transform: translateY(-1px);
+}
+
+.barq-btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Secondary Button (تخطي الآن) */
+.barq-btn-secondary {
+  width: 100%;
+  height: 48px;
+  border: 1px solid var(--barq-line);
+  border-radius: 14px;
+  background: #FFFFFF;
+  color: var(--barq-ink);
+  font: 800 13.5px var(--barq-font);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.barq-btn-secondary:hover {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+  transform: translateY(-1px);
+}
+
+/* Divider: "أو" */
+.barq-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--barq-light);
+  font-size: 12px;
+  font-weight: 700;
+  margin: 4px 0;
+}
+
+.barq-divider::before,
+.barq-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--barq-line);
+}
+
+/* Social Login Buttons */
+.barq-social-row {
+  display: flex;
+  gap: 12px;
+  direction: rtl;
+}
+
+.barq-social-btn {
+  height: 48px;
+  flex: 1;
+  border: 1px solid var(--barq-line);
+  border-radius: 14px;
+  background: #FFFFFF;
+  color: var(--barq-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font: 800 12.5px var(--barq-font);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+  transition: all 0.2s ease;
+}
+
+.barq-social-btn:hover {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+  transform: translateY(-1px);
+}
+
+.barq-provider-logo,
+.barq-social-btn svg {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  min-height: 18px !important;
+  max-width: 18px !important;
+  max-height: 18px !important;
+  display: block;
+  flex-shrink: 0;
+}
+
+.barq-back-circle svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.barq-country-chevron {
+  width: 14px;
+  height: 14px;
+  display: block;
+  flex-shrink: 0;
+}
+
+/* Footer Links */
+.barq-footer {
+  margin-top: auto;
+  text-align: center;
+  color: var(--barq-muted);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 0 4px;
+}
+
+.barq-footer a {
+  color: var(--barq-blue);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.barq-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Location Select Card (Image 2) */
+.barq-select-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.barq-select-box {
+  background: #FFFFFF;
+  border: 1px solid var(--barq-line-strong);
+  border-radius: 12px;
+  height: 50px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+
+.barq-select-box:hover {
+  border-color: var(--barq-blue);
+}
+
+.barq-select-box:focus-within,
+.barq-select-box:active {
+  border-color: var(--barq-blue);
+  box-shadow: 0 0 0 3px var(--barq-field-focus);
+}
+
+.barq-select-value {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--barq-ink);
+}
+
+.barq-select-value.placeholder {
+  color: var(--barq-light);
+  font-weight: 500;
+}
+
+.barq-select-chevron {
+  color: var(--barq-muted);
+  font-size: 14px;
+  display: grid;
+  place-items: center;
+}
+
+/* OTP Track (Image 4) */
+.barq-otp-track {
+  background: var(--barq-field-surface);
+  border: 1px solid #E6ECF4;
+  border-radius: 14px;
+  padding: 7px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  direction: rtl;
+  margin: 12px 0 4px;
+}
+
+.barq-otp-cell {
+  flex: 1;
+  height: 58px;
+  border-radius: 11px;
+  border: 1px solid var(--barq-line-strong);
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 800 22px 'Inter', sans-serif;
+  color: var(--barq-ink);
+  transition: all 0.2s;
+}
+
+.barq-otp-cell.active {
+  border: 2px solid var(--barq-blue);
+  box-shadow: 0 0 0 3px var(--barq-field-focus);
+}
+
+.barq-cursor {
+  display: inline-block;
+  width: 2.5px;
+  height: 26px;
+  background: var(--barq-blue);
+  border-radius: 2px;
+  animation: barqBlink 1s infinite;
+}
+
+@keyframes barqBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.barq-resend-box {
+  text-align: center;
+  margin: 10px 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.barq-resend-timer {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--barq-slate);
+}
+
+.barq-resend-btn {
+  background: transparent;
+  border: 0;
+  color: var(--barq-light);
+  font: 600 13px var(--barq-font);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.barq-resend-btn.active {
+  color: var(--barq-blue);
+  font-weight: 700;
+}
+
+/* Account Type Option Cards (Image 5) */
+.barq-role-card {
+  position: relative;
+  background: #FFFFFF;
+  border: 1px solid var(--barq-line);
+  border-radius: 18px;
+  padding: 20px 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.03);
+  transition: all 0.2s ease;
+}
+
+.barq-role-card:hover {
+  border-color: #CBD5E1;
+  transform: translateY(-1px);
+}
+
+.barq-role-card.selected {
+  border: 2px solid var(--barq-blue);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.barq-role-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: var(--barq-blue-soft);
+  color: var(--barq-blue);
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.barq-role-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.barq-role-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.barq-role-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--barq-ink);
+  margin-bottom: 5px;
+}
+
+.barq-role-desc {
+  font-size: 12.5px;
+  color: var(--barq-muted);
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+.barq-role-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--barq-muted);
+}
+
+.barq-role-note svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+
+.barq-badge-mint {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: var(--barq-green-soft);
+  color: var(--barq-green);
+  font: 800 11px var(--barq-font);
+  padding: 4px 10px;
+  border-radius: 99px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.barq-check-badge {
+  position: absolute;
+  top: 16px;
+  left: 124px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--barq-blue);
+  color: #FFFFFF;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+/* Home Indicator Bar */
+.home-bar {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0 8px;
+  margin-top: auto;
+}
+
+.home-bar-pill {
+  width: 134px;
+  height: 5px;
+  background: #CBD5E1;
+  border-radius: 99px;
+}
+
+/* ==========================================================================
+   Store Setup Media Uploader & Form Polish (Screen 06)
+   ========================================================================== */
+.barq-step-badge {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--barq-blue);
+  background: var(--barq-blue-soft);
+  padding: 4px 12px;
+  border-radius: 99px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  display: inline-flex;
+  align-items: center;
+}
+
+.store-media-wrapper {
+  position: relative;
+  margin-bottom: 22px;
+}
+
+.store-cover-card {
+  height: 124px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #F2F2F2 0%, #E5E5E5 100%);
+  border: 1.5px dashed #A3A3A3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.store-cover-card:hover {
+  border-color: var(--barq-blue);
+  background: linear-gradient(135deg, #E0F2FE 0%, #D1D1D1 100%);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
+
+.store-cover-overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 24px;
+}
+
+.store-upload-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  padding: 6px 14px;
+  border-radius: 99px;
+  border: 1px solid rgba(191, 219, 254, 0.8);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--barq-blue);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.store-cover-card:hover .store-upload-pill {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.store-cover-hint {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #64748B;
+}
+
+.store-avatar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -44px;
+  position: relative;
+  z-index: 2;
+}
+
+.store-avatar-box {
+  width: 78px;
+  height: 78px;
+  border-radius: 22px;
+  background: #FFFFFF;
+  border: 3.5px solid #FFFFFF;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.1), 0 2px 6px rgba(15, 23, 42, 0.04);
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.store-avatar-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+}
+
+.store-avatar-icon-wrap {
+  width: 100%;
+  height: 100%;
+  border-radius: 18px;
+  background: #F8FAFC;
+  display: grid;
+  place-items: center;
+  color: var(--barq-blue);
+}
+
+.store-avatar-badge {
+  position: absolute;
+  bottom: -2px;
+  left: -2px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--barq-blue);
+  border: 2.5px solid #FFFFFF;
+  color: #FFFFFF;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.store-avatar-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-top: 6px;
+}
+
+.store-avatar-title {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--barq-ink);
+}
+
+.store-avatar-subtitle {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #94A3B8;
+}
+
+/* Dropdown Menu shared styles */
+.barq-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  left: 0;
+  background: #FFFFFF;
+  border: 1px solid var(--barq-line);
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.1);
+  z-index: 50;
+  max-height: 200px;
+  overflow-y: auto;
+  display: none;
+}
+
+.barq-dropdown-menu.open {
+  display: block;
+}
+
+.barq-dropdown-item {
+  padding: 11px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--barq-ink);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.15s;
+}
+
+.barq-dropdown-item:hover {
+  background: var(--barq-blue-soft);
+  color: var(--barq-blue);
+}
+
+/* Textarea styling */
+.barq-textarea-inner {
+  background: #FFFFFF;
+  border: 1px solid var(--barq-line-strong);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  gap: 10px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.barq-input-card:focus-within .barq-textarea-inner {
+  border-color: #A3A3A3;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.barq-textarea-inner textarea {
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--barq-ink);
+  font: 600 13px var(--barq-font);
+  line-height: 1.6;
+  min-height: 72px;
+  resize: none;
+  direction: inherit;
+}
+
+.barq-textarea-inner textarea::placeholder {
+  color: var(--barq-light);
+  font-weight: 500;
+}
+.auth-form-error{margin:0 0 10px;padding:9px 11px;border:1px solid #FECACA;border-radius:9px;background:#FEF2F2;color:#B91C1C;font-size:11px;font-weight:700}.barq-btn-primary:disabled{opacity:.65;cursor:wait}
+
+</style>
+  <link rel="stylesheet" href="coupons.css?v=20261011-1">
+</head>
+<body class="saey-coupons">
+  <div class="status-bar"><span class="status-time">9:41</span><div class="status-icons">▮▮　⌁　▰</div></div>
+  <main class="coupons-page">
+    <header class="coupons-head">
+      <a class="coupon-back" href="20-distributor-account.html" aria-label="العودة"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></a>
+      <h1>كوبونات الخصم</h1>
+      <span aria-hidden="true"></span>
+    </header>
+    <p class="coupons-intro">أنشئ عروضًا جذابة وتابع استخدام العملاء لها.</p>
+    <p class="coupon-api-status" id="couponApiStatus" role="alert" hidden></p>
+    <section class="coupon-summary" aria-label="ملخص الكوبونات">
+      <div class="coupon-stat success"><small>الكوبونات النشطة</small><strong id="activeCount">—</strong><span>متاحة للعملاء الآن</span></div>
+      <div class="coupon-stat"><small>إجمالي الاستخدام</small><strong id="usesCount">—</strong><span>من كل الكوبونات</span></div>
+    </section>
+    <div class="coupon-section-head"><h2 id="couponSectionTitle">كل الكوبونات</h2><span id="couponCount">٠ كوبون</span></div>
+    <div class="coupon-filters" role="group" aria-label="تصفية الكوبونات حسب الحالة">
+      <button class="active" type="button" data-filter="all" aria-pressed="true">الكل</button>
+      <button type="button" data-filter="active" aria-pressed="false">نشط</button>
+      <button type="button" data-filter="paused" aria-pressed="false">متوقف</button>
+      <button type="button" data-filter="expired" aria-pressed="false">منتهي</button>
+    </div>
+    <section class="coupon-list" id="couponList"></section>
+  </main>
+  <button class="coupon-fab" id="addCoupon" type="button">+ إضافة كوبون جديد</button>
+
+  <div class="coupon-sheet-backdrop" id="couponSheet" aria-hidden="true">
+    <section class="coupon-sheet" role="dialog" aria-modal="true" aria-labelledby="couponFormTitle">
+      <div class="coupon-sheet-handle"></div>
+      <header><h2 id="couponFormTitle">إضافة كوبون</h2><button class="coupon-sheet-close" id="closeCouponSheet" type="button" aria-label="إغلاق">×</button></header>
+      <form class="coupon-form" id="couponForm">
+        <input id="couponId" type="hidden">
+        <div class="coupon-field"><label for="couponCode">كود الكوبون</label><input id="couponCode" maxlength="20" autocomplete="off" placeholder="مثال: SAVE20" required></div>
+        <div class="coupon-form-grid">
+          <div class="coupon-field"><label for="couponType">نوع الخصم</label><select id="couponType"><option value="percent">نسبة مئوية</option><option value="fixed">مبلغ ثابت</option></select></div>
+          <div class="coupon-field"><label for="couponValue">قيمة الخصم</label><input id="couponValue" type="number" min="1" step="1" inputmode="numeric" required></div>
+        </div>
+        <div class="coupon-form-grid">
+          <div class="coupon-field"><label for="couponMin">الحد الأدنى للطلب</label><input id="couponMin" type="number" min="0" step="1" inputmode="numeric" value="0" required></div>
+          <div class="coupon-field"><label for="couponExpiry">تاريخ الانتهاء</label><input id="couponExpiry" type="date" required></div>
+        </div>
+        <div class="coupon-form-grid">
+          <div class="coupon-field"><label for="couponMaxUses">إجمالي مرات الاستخدام</label><input id="couponMaxUses" type="number" min="1" step="1" inputmode="numeric" value="100" required></div>
+          <div class="coupon-field"><label for="couponPerUser">الحد لكل مستخدم</label><input id="couponPerUser" type="number" min="1" step="1" inputmode="numeric" value="1" required></div>
+        </div>
+        <label class="coupon-toggle" for="couponEnabled"><span class="coupon-toggle-copy"><strong>تفعيل الكوبون</strong><small>عند التفعيل، يمكن للعملاء استخدام الكود أثناء الشراء.</small></span><input id="couponEnabled" type="checkbox" checked></label>
+        <p class="coupon-form-error" id="couponFormError" hidden></p>
+        <button class="coupon-save" type="submit">حفظ الكوبون</button>
+      </form>
+    </section>
+  </div>
+
+  <dialog class="coupon-delete-dialog" id="deleteDialog">
+    <h2>حذف الكوبون؟</h2><p>لن يتمكن العملاء من استخدام هذا الكود بعد حذفه. لا يمكن التراجع عن هذه الخطوة.</p>
+    <div class="coupon-delete-actions"><button type="button" id="cancelDelete">إلغاء</button><button class="danger" type="button" id="confirmDelete">حذف</button></div>
+  </dialog>
+  <script src="coupons-api.js"></script>
+  <script>
+    const list=document.getElementById('couponList'),sheet=document.getElementById('couponSheet'),form=document.getElementById('couponForm'),deleteDialog=document.getElementById('deleteDialog'),apiStatus=document.getElementById('couponApiStatus');let coupons=[],allCoupons=[],couponSummary={},isLoading=true,loadFailed=false,pendingDelete='',currentFilter=['active','paused','expired'].includes(new URLSearchParams(location.search).get('filter'))?new URLSearchParams(location.search).get('filter'):'all';
+    function showApiError(error){apiStatus.textContent=error?.message||'تعذر الاتصال بالخادم. تحقق من الاتصال ثم أعد المحاولة.';apiStatus.hidden=false;}function clearApiError(){apiStatus.hidden=true;apiStatus.textContent='';}
+    const money=n=>`${Number(n).toLocaleString('ar-EG')} ج.م`,dateLabel=value=>new Date(`${value}T12:00:00`).toLocaleDateString('ar-EG',{day:'numeric',month:'short',year:'numeric'}),isExhausted=item=>Number(item.maxUses||0)>0&&Number(item.uses||0)>=Number(item.maxUses),isActive=item=>item.enabled&&!isExhausted(item)&&new Date(`${item.expiresAt}T23:59:59`)>=new Date();
+    const iconEdit='<svg viewBox="0 0 24 24"><path d="m4 20 4.5-1 10-10a2.1 2.1 0 0 0-3-3l-10 10L4 20ZM14 7l3 3"/></svg>',iconDelete='<svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"/></svg>',iconToggle='<svg viewBox="0 0 24 24"><path d="M12 2v10M6.3 5.7a8 8 0 1 0 11.4 0"/></svg>';
+    function render(){
+      const allItems=allCoupons,active=allItems.filter(isActive),items=currentFilter==='all'?allItems:coupons,titles={all:'كل الكوبونات',active:'الكوبونات النشطة',paused:'الكوبونات المتوقفة',expired:'الكوبونات المنتهية'};
+      const hasSummary=!isLoading&&!loadFailed;activeCount.textContent=hasSummary?Number(couponSummary.active_coupons_count??active.length).toLocaleString('ar-EG'):'—';usesCount.textContent=hasSummary?Number(couponSummary.total_uses_count??allItems.reduce((sum,item)=>sum+Number(item.uses||0),0)).toLocaleString('ar-EG'):'—';couponSectionTitle.textContent=titles[currentFilter];couponCount.textContent=currentFilter==='all'?`${allItems.length.toLocaleString('ar-EG')} كوبون`:`${items.length.toLocaleString('ar-EG')} من ${allItems.length.toLocaleString('ar-EG')}`;
+      document.querySelectorAll('[data-filter]').forEach(button=>{const selected=button.dataset.filter===currentFilter;button.classList.toggle('active',selected);button.setAttribute('aria-pressed',String(selected));});
+      if(!items.length){if(loadFailed){list.innerHTML='';return;}const hasAny=allItems.length>0,title=isLoading?'جارٍ تحميل الكوبونات':hasAny?'لا توجد نتائج في هذا الفلتر':'لا توجد كوبونات بعد',description=isLoading?'يرجى الانتظار حتى تكتمل مزامنة بيانات المتجر.':hasAny?'جرّب اختيار حالة أخرى لعرض الكوبونات.':'أضف أول كوبون لتشجيع العملاء على الشراء.';list.innerHTML=`<div class="coupon-empty"><svg viewBox="0 0 24 24"><path d="M4 8.5V6a2 2 0 0 1 2-2h2.5a3.5 3.5 0 0 0 7 0H18a2 2 0 0 1 2 2v2.5a3.5 3.5 0 0 0 0 7V18a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2.5a3.5 3.5 0 0 0 0-7Z"/></svg><h3>${title}</h3><p>${description}</p></div>`;return;}
+      list.innerHTML=items.map(item=>{
+        const activeNow=isActive(item),exhausted=isExhausted(item),state=activeNow?'active':item.enabled?'expired':'paused',value=item.type==='percent'?`${Number(item.value).toLocaleString('ar-EG')}٪`:`${money(item.value)}`,detailsUrl=`20-distributor-coupon-details.html?id=${encodeURIComponent(item.id)}`,menuId=`coupon-menu-${item.id}`;
+        return `<article class="coupon-card coupon-card-v2 status-${state} ${activeNow?'':'inactive'}" role="link" tabindex="0" data-details="${detailsUrl}" aria-label="عرض تفاصيل كوبون ${item.code}"><div class="coupon-card-head"><span class="coupon-status">${activeNow?'نشط':exhausted?'مستنفد':item.enabled?'منتهي':'متوقف'}</span><button class="coupon-menu-trigger" type="button" data-menu="${item.id}" aria-controls="${menuId}" aria-expanded="false" aria-label="خيارات كوبون ${item.code}"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></div><div class="coupon-menu" id="${menuId}" hidden><button type="button" data-action="edit" data-id="${item.id}">${iconEdit}<span>تعديل</span></button><button type="button" data-action="toggle" data-id="${item.id}">${iconToggle}<span>${item.enabled?'إلغاء التفعيل':'تفعيل الكوبون'}</span></button><button class="danger" type="button" data-action="delete" data-id="${item.id}">${iconDelete}<span>حذف</span></button></div><div class="coupon-card-main"><div class="coupon-card-copy"><span class="coupon-code-label">كود الكوبون</span><strong class="coupon-primary-code" dir="ltr">${item.code}</strong><small>الحد الأدنى <b>${money(item.minOrder)}</b> · لكل مستخدم ${Number(item.perUserLimit||1).toLocaleString('ar-EG')}</small></div><div class="coupon-amount ${item.type}"><strong>${value}</strong><span>خصم</span></div></div><div class="coupon-card-footer"><span><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>حتى ${dateLabel(item.expiresAt)}</span><span><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>${Number(item.uses||0).toLocaleString('ar-EG')} / ${Number(item.maxUses||0).toLocaleString('ar-EG')}</span><svg class="coupon-card-arrow" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></div></article>`;
+      }).join('');
+    }
+    const currentApiFilter=()=>currentFilter==='paused'?'inactive':currentFilter;
+    async function reloadCoupons(){const result=await SaeyCouponsApi.listWithSummary();allCoupons=result.items;couponSummary=result.summary;coupons=currentFilter==='all'?allCoupons:await SaeyCouponsApi.list(currentApiFilter());}
+    function openForm(id=''){const item=allCoupons.find(entry=>entry.id===id);form.reset();couponId.value=item?.id||'';couponCode.value=item?.code||'';couponType.value=item?.type||'percent';couponValue.value=item?.value||'';couponMin.value=item?.minOrder??0;couponExpiry.value=item?.expiresAt||'2027-12-31';couponMaxUses.value=item?.maxUses||100;couponPerUser.value=item?.perUserLimit||1;couponEnabled.checked=item?.enabled??true;couponFormTitle.textContent=item?'تعديل الكوبون':'إضافة كوبون';couponFormError.hidden=true;clearApiError();sheet.classList.add('visible');sheet.setAttribute('aria-hidden','false');setTimeout(()=>couponCode.focus(),250);}
+    function closeForm(){sheet.classList.remove('visible');sheet.setAttribute('aria-hidden','true');}
+    addCoupon.onclick=()=>openForm();closeCouponSheet.onclick=closeForm;sheet.onclick=e=>{if(e.target===sheet)closeForm();};
+    document.querySelector('.coupon-filters').onclick=async e=>{const button=e.target.closest('[data-filter]');if(!button)return;currentFilter=button.dataset.filter;coupons=currentFilter==='all'?allCoupons:[];render();try{clearApiError();const apiFilter=currentFilter==='paused'?'inactive':currentFilter;coupons=currentFilter==='all'?allCoupons:await SaeyCouponsApi.list(apiFilter);render();}catch(error){coupons=[];showApiError(error);render();}};
+    function closeMenus(){list.querySelectorAll('.coupon-menu').forEach(menu=>menu.hidden=true);list.querySelectorAll('.coupon-menu-trigger').forEach(button=>button.setAttribute('aria-expanded','false'));list.querySelectorAll('.coupon-card').forEach(card=>card.classList.remove('menu-open'));}
+    list.onclick=async e=>{const menuButton=e.target.closest('[data-menu]'),action=e.target.closest('[data-action]'),card=e.target.closest('[data-details]');if(menuButton){e.stopPropagation();const menu=document.getElementById(menuButton.getAttribute('aria-controls')),shouldOpen=menu.hidden;closeMenus();if(shouldOpen){menu.hidden=false;menuButton.setAttribute('aria-expanded','true');menuButton.closest('.coupon-card').classList.add('menu-open');}return;}if(action){e.stopPropagation();const id=action.dataset.id;closeMenus();if(action.dataset.action==='edit')openForm(id);if(action.dataset.action==='delete'){pendingDelete=id;deleteDialog.showModal();}if(action.dataset.action==='toggle'){try{clearApiError();await SaeyCouponsApi.toggle(id);await reloadCoupons();render();}catch(error){showApiError(error);}}return;}if(card)location.href=card.dataset.details;};
+    list.onkeydown=e=>{const card=e.target.closest('[data-details]');if(e.key==='Escape'){closeMenus();return;}if(card&&(e.key==='Enter'||e.key===' ')&&!e.target.closest('button')){e.preventDefault();location.href=card.dataset.details;}};document.addEventListener('click',closeMenus);
+    form.onsubmit=async e=>{e.preventDefault();const code=couponCode.value.trim().toUpperCase().replace(/\s+/g,''),value=Number(couponValue.value),minimum=Number(couponMin.value),maxUses=Number(couponMaxUses.value),perUserLimit=Number(couponPerUser.value);let message='';if(!/^[A-Z0-9_-]{3,20}$/.test(code))message='استخدم ٣ أحرف أو أرقام إنجليزية على الأقل بدون مسافات.';else if(value<=0||(couponType.value==='percent'&&value>100))message='أدخل قيمة خصم صحيحة، والنسبة لا تزيد عن ١٠٠٪.';else if(maxUses<1||perUserLimit<1||perUserLimit>maxUses)message='تأكد أن حدود الاستخدام صحيحة وأن حد المستخدم لا يتجاوز الإجمالي.';else if(!couponExpiry.value)message='اختر تاريخ انتهاء الكوبون.';if(message){couponFormError.textContent=message;couponFormError.hidden=false;return;}const existing=allCoupons.find(item=>item.id===couponId.value),data={code,type:couponType.value,value,minOrder:Math.max(0,minimum),expiresAt:couponExpiry.value,maxUses,perUserLimit,enabled:couponEnabled.checked,...(existing?{maximumDiscount:existing.maximumDiscount,startsAt:existing.startsAt}:{})};try{clearApiError();if(couponId.value)await SaeyCouponsApi.update(couponId.value,data);else await SaeyCouponsApi.create(data);await reloadCoupons();closeForm();render();}catch(error){couponFormError.textContent=error.message;couponFormError.hidden=false;}};
+    cancelDelete.onclick=()=>deleteDialog.close();confirmDelete.onclick=async()=>{try{clearApiError();await SaeyCouponsApi.remove(pendingDelete);await reloadCoupons();deleteDialog.close();pendingDelete='';render();}catch(error){deleteDialog.close();showApiError(error);}};
+    render();reloadCoupons().then(()=>{isLoading=false;render();const requestedEdit=new URLSearchParams(location.search).get('edit');if(requestedEdit&&allCoupons.some(item=>item.id===requestedEdit))openForm(requestedEdit);}).catch(error=>{isLoading=false;loadFailed=true;showApiError(error);render();});
+  </script>
+</body>
+</html>

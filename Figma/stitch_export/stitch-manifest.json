@@ -1,0 +1,132 @@
+{
+  "project": "سعي - Saey",
+  "version": "1.0",
+  "description": "منصة التجارة والتوزيع - شاشات مرجعية ونظام تصميم معتمد لـ Google Stitch",
+  "designSystem": "DESIGN.md",
+  "screens": [
+    {
+      "file": "screens/01-login.html",
+      "name": "login"
+    },
+    {
+      "file": "screens/02-signup.html",
+      "name": "signup"
+    },
+    {
+      "file": "screens/03-verify-otp.html",
+      "name": "verify otp"
+    },
+    {
+      "file": "screens/04-account-type.html",
+      "name": "account type"
+    },
+    {
+      "file": "screens/05-profile-setup.html",
+      "name": "profile setup"
+    },
+    {
+      "file": "screens/08-user-home.html",
+      "name": "user home"
+    },
+    {
+      "file": "screens/09-categories.html",
+      "name": "categories"
+    },
+    {
+      "file": "screens/10-featured-products.html",
+      "name": "featured products"
+    },
+    {
+      "file": "screens/11-featured-stores.html",
+      "name": "featured stores"
+    },
+    {
+      "file": "screens/12-product-details.html",
+      "name": "product details"
+    },
+    {
+      "file": "screens/13-notifications.html",
+      "name": "notifications"
+    },
+    {
+      "file": "screens/14-chats.html",
+      "name": "chats"
+    },
+    {
+      "file": "screens/15-account.html",
+      "name": "account"
+    },
+    {
+      "file": "screens/16-orders.html",
+      "name": "orders"
+    },
+    {
+      "file": "screens/17-wallet.html",
+      "name": "wallet"
+    },
+    {
+      "file": "screens/18-wallet-transactions.html",
+      "name": "wallet transactions"
+    },
+    {
+      "file": "screens/20-checkout.html",
+      "name": "checkout"
+    },
+    {
+      "file": "screens/21-order-details.html",
+      "name": "order details"
+    },
+    {
+      "file": "screens/26-order-receipt.html",
+      "name": "order receipt"
+    },
+    {
+      "file": "screens/06-distributor-setup.html",
+      "name": "distributor setup"
+    },
+    {
+      "file": "screens/17-distributor-dashboard.html",
+      "name": "distributor dashboard"
+    },
+    {
+      "file": "screens/18-add-product.html",
+      "name": "add product"
+    },
+    {
+      "file": "screens/18-distributor-products.html",
+      "name": "distributor products"
+    },
+    {
+      "file": "screens/19-distributor-ads.html",
+      "name": "distributor ads"
+    },
+    {
+      "file": "screens/20-distributor-coupons.html",
+      "name": "distributor coupons"
+    },
+    {
+      "file": "screens/20-distributor-reviews.html",
+      "name": "distributor reviews"
+    },
+    {
+      "file": "screens/21-distributor-orders.html",
+      "name": "distributor orders"
+    },
+    {
+      "file": "screens/21-distributor-order-details.html",
+      "name": "distributor order details"
+    },
+    {
+      "file": "screens/22-distributor-finance.html",
+      "name": "distributor finance"
+    },
+    {
+      "file": "screens/22-distributor-inventory.html",
+      "name": "distributor inventory"
+    },
+    {
+      "file": "screens/23-distributor-disputes.html",
+      "name": "distributor disputes"
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 (() => {
-  const productId = new URLSearchParams(location.search).get('product_id');
+  const params = new URLSearchParams(location.search);
+  const productId = params.get('product_id') || (params.get('design_mode') === 'static' ? '101' : null);
   const origin = location.protocol === 'file:' ? 'http://127.0.0.1:8000' :
     ['localhost', '127.0.0.1'].includes(location.hostname) ? `${location.protocol}//${location.hostname}:8000` : location.origin;
   const status = document.getElementById('reviewsStatus');

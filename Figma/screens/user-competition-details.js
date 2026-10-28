@@ -1,6 +1,6 @@
 (() => {
   const params = new URLSearchParams(location.search);
-  const competitionId = params.get('id');
+  const competitionId = params.get('id') || (params.get('design_mode') === 'static' ? '401' : null);
   const state = document.getElementById('userContestState');
   const details = document.getElementById('userContestDetails');
   const questionCard = document.getElementById('competitionQuestionCard');

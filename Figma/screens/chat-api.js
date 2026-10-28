@@ -314,7 +314,7 @@
         return;
       }
 
-      const storeId = params.get('store_id');
+      const storeId = params.get('store_id') || (params.get('design_mode') === 'static' ? '201' : null);
       if (!storeId) {
         showError('اختر متجرًا من صفحة المتجر لبدء المحادثة.');
         return;

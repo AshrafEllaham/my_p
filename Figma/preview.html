@@ -2141,7 +2141,7 @@
             <div class="phone-btn-vol-up"></div>
             <div class="phone-btn-vol-down"></div>
             <div class="phone-btn-power"></div>
-            <iframe id="phoneViewportIframe" class="phone-screen-iframe" src="screens/00-splash.html"
+            <iframe id="phoneViewportIframe" class="phone-screen-iframe" src="screens/00-splash.html?design_mode=static"
               title="شاشة الموبايل"></iframe>
             <div class="phone-loading" id="phoneLoading" aria-hidden="true">
               <div class="phone-loading-content">
@@ -2965,7 +2965,7 @@
     }
 
     function screenUrl(screen, cacheBust = true) {
-      const params = new URLSearchParams({ lang: currentLang, theme: currentTheme });
+      const params = new URLSearchParams({ lang: currentLang, theme: currentTheme, design_mode: 'static' });
       if (screen.screenType) params.set('type', screen.screenType);
       if (cacheBust) params.set('v', Date.now());
       return `screens/${screen.file}?${params.toString()}`;
@@ -3025,12 +3025,9 @@
       }
     });
 
-    // Active Screen Bridge — invoked on selection only to keep sidebar hover smooth.
+    // Keep the active screen context inside the preview; no external service is needed.
     function notifyAiHover(screen, action = 'hover') {
       if (!screen) return;
-      const url = `http://localhost:8085/api/hover?file=${encodeURIComponent(screen.file)}&title=${encodeURIComponent(screen.title)}&section=${encodeURIComponent(screen.section)}&theme=${currentTheme}&lang=${currentLang}&action=${action}`;
-      fetch(url, { mode: 'cors' }).catch(() => { });
-
       try {
         localStorage.setItem('antigravity_hover_screen', JSON.stringify({
           file: screen.file,

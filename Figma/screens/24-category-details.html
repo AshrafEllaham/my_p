@@ -191,33 +191,6 @@
       border-radius: 6px;
     }
 
-    /* ── Top-rated grid ── */
-    .cat-rated-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      padding: 0 14px;
-    }
-    .cat-rated-card {
-      position: relative;
-      background: #fff;
-      border: 1px solid #E1E8F1;
-      border-radius: 14px;
-      overflow: hidden;
-      text-decoration: none;
-      color: #0F172A;
-    }
-    .cat-rated-card img {
-      width: 100%;
-      height: 104px;
-      object-fit: cover;
-    }
-    .cat-rated-card-body { padding: 8px 10px; }
-    .cat-rated-card-body strong { display: block; font-size: 11px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .cat-rated-card-body .cat-rated-meta { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
-    .cat-rated-card-body .cat-rated-price { font-size: 12px; font-weight: 900; }
-    .cat-rated-card-body .cat-rated-stars { font-size: 10px; color: #F59E0B; font-weight: 700; }
-
     /* ── Sub-categories chips ── */
     .cat-chips-wrap {
       display: flex;
@@ -254,12 +227,14 @@
       position: sticky;
       bottom: 0;
     }
-      .cat-category-store-list { display:grid; gap:8px; padding:0 14px; }
-    .cat-category-store { display:flex; align-items:center; gap:10px; padding:10px; border:1px solid #E1E8F1; border-radius:12px; color:#0F172A; text-decoration:none; background:#fff; }
+    .cat-category-store-list { display:flex; gap:10px; padding:0 14px; overflow-x:auto; scrollbar-width:none; }
+    .cat-category-store-list::-webkit-scrollbar { display:none; }
+    .cat-category-store { display:flex; flex:0 0 240px; align-items:center; gap:10px; padding:10px; border:1px solid #E1E8F1; border-radius:12px; color:#0F172A; text-decoration:none; background:#fff; }
     .cat-category-store img { width:48px; height:48px; object-fit:cover; border-radius:10px; }
     .cat-category-store strong,.cat-category-store small { display:block; }
     .cat-category-store small { margin-top:3px; color:#64748B; font-size:10px; }
   </style>
+  <script src="preview-design-mode.js"></script>
 </head>
 <body class="saey-flow">
   <div class="status-bar"><span class="status-time">9:41</span><div class="status-icons">▮▮　⌁　▰</div></div>
@@ -362,44 +337,44 @@
       <button class="cat-show-more" type="button" data-show-more="highest_rated">عرض الكل</button>
     </div>
     <p class="cat-products-message" id="highestRatedMessage" role="status" aria-live="polite"></p>
-    <div class="cat-rated-grid" id="highestRatedProducts">
-      <a class="cat-rated-card" data-search="فستان أنيق" href="12-product-details.html">
+    <div class="cat-products-scroll" id="highestRatedProducts">
+      <a class="cat-product-card" data-search="فستان أنيق" href="12-product-details.html">
         <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=350&q=85" alt="فستان">
-        <div class="cat-rated-card-body">
+        <div class="cat-product-card-body">
           <strong>فستان أنيق</strong>
-          <div class="cat-rated-meta">
-            <span class="cat-rated-price">١,٩٠٠ ج.م</span>
-            <span class="cat-rated-stars">★ ٤.٩</span>
+          <div class="cat-product-meta">
+            <span class="cat-product-price">١,٩٠٠ ج.م</span>
+            <span class="cat-product-rating">★ ٤.٩</span>
           </div>
         </div>
       </a>
-      <a class="cat-rated-card" data-search="حذاء رياضي" href="12-product-details.html">
+      <a class="cat-product-card" data-search="حذاء رياضي" href="12-product-details.html">
         <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=350&q=85" alt="حذاء">
-        <div class="cat-rated-card-body">
+        <div class="cat-product-card-body">
           <strong>حذاء رياضي</strong>
-          <div class="cat-rated-meta">
-            <span class="cat-rated-price">٩٥٠ ج.م</span>
-            <span class="cat-rated-stars">★ ٤.٨</span>
+          <div class="cat-product-meta">
+            <span class="cat-product-price">٩٥٠ ج.م</span>
+            <span class="cat-product-rating">★ ٤.٨</span>
           </div>
         </div>
       </a>
-      <a class="cat-rated-card" data-search="جاكيت جلد" href="12-product-details.html">
+      <a class="cat-product-card" data-search="جاكيت جلد" href="12-product-details.html">
         <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=350&q=85" alt="جاكيت">
-        <div class="cat-rated-card-body">
+        <div class="cat-product-card-body">
           <strong>جاكيت جلد</strong>
-          <div class="cat-rated-meta">
-            <span class="cat-rated-price">٢,٨٩٠ ج.م</span>
-            <span class="cat-rated-stars">★ ٤.٩</span>
+          <div class="cat-product-meta">
+            <span class="cat-product-price">٢,٨٩٠ ج.م</span>
+            <span class="cat-product-rating">★ ٤.٩</span>
           </div>
         </div>
       </a>
-      <a class="cat-rated-card" data-search="حقيبة ظهر" href="12-product-details.html">
+      <a class="cat-product-card" data-search="حقيبة ظهر" href="12-product-details.html">
         <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=350&q=85" alt="حقيبة">
-        <div class="cat-rated-card-body">
+        <div class="cat-product-card-body">
           <strong>حقيبة ظهر</strong>
-          <div class="cat-rated-meta">
-            <span class="cat-rated-price">٦٨٠ ج.م</span>
-            <span class="cat-rated-stars">★ ٤.٨</span>
+          <div class="cat-product-meta">
+            <span class="cat-product-price">٦٨٠ ج.م</span>
+            <span class="cat-product-rating">★ ٤.٨</span>
           </div>
         </div>
       </a>
@@ -514,7 +489,7 @@
     const setMessage = (section, message) => { section.message.textContent = message || ''; };
     const createProductCard = (product, sort) => {
       const card = document.createElement('article');
-      card.className = sort === 'most_purchased' ? 'cat-product-card' : 'cat-rated-card';
+      card.className = 'cat-product-card';
       const link = document.createElement('a');
       link.className = 'cat-product-link';
       link.href = `12-product-details.html?product_id=${encodeURIComponent(product.id)}`;
@@ -524,17 +499,17 @@
       image.hidden = !product.image;
       link.append(image);
       const body = document.createElement('div');
-      body.className = sort === 'most_purchased' ? 'cat-product-card-body' : 'cat-rated-card-body';
+      body.className = 'cat-product-card-body';
       const name = document.createElement('strong');
       name.textContent = product.name || '';
       body.append(name);
       const meta = document.createElement('div');
-      meta.className = sort === 'most_purchased' ? 'cat-product-meta' : 'cat-rated-meta';
+      meta.className = 'cat-product-meta';
       const price = document.createElement('span');
-      price.className = sort === 'most_purchased' ? 'cat-product-price' : 'cat-rated-price';
+      price.className = 'cat-product-price';
       price.textContent = `${Number(product.price || 0).toLocaleString('ar-EG')} ج.م`;
       const rating = document.createElement('span');
-      rating.className = sort === 'most_purchased' ? 'cat-product-rating' : 'cat-rated-stars';
+      rating.className = 'cat-product-rating';
       rating.textContent = product.average_rating == null ? '★ —' : `★ ${Number(product.average_rating).toLocaleString('ar-EG', { maximumFractionDigits: 1 })}`;
       meta.append(price, rating);
       body.append(meta);

@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>03 — التحقق من الرمز | تطبيق سعي للتوزيع</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style data-source="auth.css">
+/* ==========================================================================
+   Saey Distribution (تطبيق سعي للتوزيع) — Auth & Onboarding Design System
+   Matches Figma mockups & production screenshots exactly.
+   ========================================================================== */
+
+@import url("app-standard-type.css");
+
+:root {
+  --barq-blue: #000000;
+  --barq-blue-hover: #000000;
+  --barq-blue-soft: #F2F2F2;
+  --barq-blue-border: #D1D1D1;
+  --barq-ink: #0F172A;
+  --barq-slate: #334155;
+  --barq-muted: #64748B;
+  --barq-light: #94A3B8;
+  --barq-line: #E2E8F0;
+  --barq-line-strong: #D7E1EE;
+  --barq-field-surface: #F8FAFD;
+  --barq-field-focus: rgba(0, 0, 0, 0.12);
+  --barq-bg: #F8FAFC;
+  --barq-card: #FFFFFF;
+  --barq-green: #10B981;
+  --barq-green-soft: #ECFDF5;
+  --barq-font: 'Inter', 'Cairo', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body.barq-auth-body {
+  font-family: var(--barq-font);
+  background-color: var(--barq-bg);
+  color: var(--barq-ink);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Status Bar & Dynamic Island Simulation */
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 22px 4px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--barq-ink);
+  background: transparent;
+  user-select: none;
+}
+
+.dynamic-island {
+  width: 100px;
+  height: 25px;
+  background: #000000;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 9px;
+}
+
+.dynamic-island .camera-lens {
+  width: 8.5px;
+  height: 8.5px;
+  background: #111424;
+  border: 1px solid #1E2338;
+  border-radius: 50%;
+}
+
+.status-icons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--barq-ink);
+}
+
+.status-icons svg {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Page Frame Container */
+.barq-page {
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 8px 16px 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Top Navigation Bar */
+.barq-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+}
+
+.barq-back-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: var(--barq-card);
+  border: 1px solid var(--barq-line);
+  display: grid;
+  place-items: center;
+  color: var(--barq-ink);
+  text-decoration: none;
+  font-size: 17px;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+  transition: all 0.2s ease;
+}
+
+.barq-back-circle:hover {
+  border-color: var(--barq-blue);
+  color: var(--barq-blue);
+  transform: translateY(-1px);
+}
+
+/* Centered Brand Header */
+.barq-brand-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px 0 6px;
+}
+
+.barq-brand-text {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--barq-blue);
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+.barq-brand-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: url('saey-mark.svg') center / contain no-repeat;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
+}
+
+.barq-brand-badge svg {
+  display: none;
+}
+
+/* Hero Typography */
+.barq-hero {
+  margin: 4px 0 6px;
+}
+
+.barq-hero.center {
+  text-align: center;
+}
+
+.barq-hero h1 {
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--barq-ink);
+  line-height: 1.3;
+  letter-spacing: -0.4px;
+}
+
+.barq-hero p {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--barq-muted);
+  line-height: 1.6;
+  margin-top: 5px;
+}
+
+/* Segmented Control / Tabs */
+.barq-switch {
+  height: 48px;
+  background: #F1F5F9;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  gap: 4px;
+}
+
+.barq-switch button {
+  height: 40px;
+  flex: 1;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--barq-muted);
+  font: 700 13px var(--barq-font);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.barq-switch button.active {
+  background: #FFFFFF;
+  color: var(--barq-ink);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+}
+
+/* Professional field system — shared by every onboarding screen */
+.barq-input-card {
+  border: 1px solid #E6ECF4;
+  border-radius: 14px;
+  background: var(--barq-field-surface);
+  padding: 8px 9px 9px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.015);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.barq-input-card:focus-within {
+  border-color: var(--barq-blue);
+  box-shadow: 0 0 0 3px var(--barq-field-focus), 0 4px 12px rgba(0, 0, 0, 0.06);
+  background: #FFFFFF;
+}
+
+.barq-input-label {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #475569;
+  padding: 0 4px;
+  line-height: 1.45;
+}
+
+.barq-input-inner {
+  background: #FFFFFF;
+  border: 1px solid var(--barq-line-strong);
+  border-radius: 10px;
+  height: 48px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.barq-input-card:focus-within .barq-input-inner {
+  border-color: #A3A3A3;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.barq-input-inner input {
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--barq-ink);
+  min-width: 0;
+  font: 600 13px var(--barq-font);
+  line-height: 1.5;
+  direction: inherit;
+}
+
+.barq-input-inner input::placeholder {
+  color: var(--barq-light);
+  font-weight: 500;
+}
+
+.barq-input-inner input:focus::placeholder {
+  color: #CBD5E1;
+}
+
+/* Phone country / dial-code selector */
+.barq-phone-country {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+}
+
+.barq-phone-country[hidden] { display: none; }
+
+.barq-country-trigger {
+  min-width: 76px;
+  height: 30px;
+  border: 0;
+  border-inline-start: 1px solid #E2E8F0;
+  padding: 0 7px 0 0;
+  background: transparent;
+  color: #475569;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font: 700 11.5px 'Inter', var(--barq-font);
+  cursor: pointer;
+}
+
+.barq-country-trigger:hover { color: var(--barq-blue); }
+.barq-country-trigger:focus-visible { outline: 2px solid #A3A3A3; outline-offset: 2px; border-radius: 6px; }
+.barq-country-flag { font-size: 16px; line-height: 1; }
+.barq-country-chevron { width: 12px; height: 12px; color: #94A3B8; transition: transform .2s ease; }
+.barq-phone-country.open .barq-country-chevron { transform: rotate(180deg); }
+
+.barq-country-menu {
+  position: absolute;
+  top: calc(100% + 9px);
+  left: 0;
+  z-index: 30;
+  width: 180px;
+  padding: 5px;
+  background: #FFFFFF;
+  border: 1px solid #DCE5F0;
+  border-radius: 12px;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.14);
+}
+
+.barq-country-menu[hidden] { display: none; }
+
+.barq-country-option {
+  width: 100%;
+  min-height: 36px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px;
+  font: 700 11.5px var(--barq-font);
+  cursor: pointer;
+  text-align: right;
+}
+
+.barq-country-option:hover,
+.barq-country-option:focus-visible { background: #F2F2F2; color: var(--barq-blue); outline: 0; }
+.barq-country-option .dial-code { margin-inline-start: auto; font-family: 'Inter', sans-serif; direction: ltr; }
+
+.barq-input-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: #F1F5F9;
+  color: #64748B;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.barq-input-card:focus-within .barq-input-icon {
+  color: var(--barq-blue);
+  background: var(--barq-blue-soft);
+}
+
+.barq-input-icon svg {
+  width: 17px;
+  height: 17px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.barq-eye-btn {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #64748B;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.barq-eye-btn:hover { background: #F1F5F9; color: var(--barq-blue); }
+.barq-eye-btn:focus-visible { outline: 2px solid #A3A3A3; outline-offset: 2px; }
+
+.barq-eye-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+}
+
+/* Forgot Password Link - Aligned to Left as in Image 1 & 3 */
+.barq-forgot-link {
+  align-self: flex-end;
+  margin-top: -4px;
+  color: var(--barq-blue);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  padding-inline: 2px;
+  transition: color 0.2s;
+}
+
+.barq-forgot-link:hover {
+  text-decoration: underline;
+  color: var(--barq-blue-hover);
+}
+
+/* Primary Button */
+.barq-btn-primary {
+  width: 100%;
+  height: 48px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--barq-blue);
+  color: #FFFFFF;
+  font: 800 14px var(--barq-font);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px -3px rgba(0, 0, 0, 0.35);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.barq-btn-primary:hover {
+  background: var(--barq-blue-hover);
+  box-shadow: 0 10px 24px -2px rgba(0, 0, 0, 0.45);
+  transform: translateY(-1px);
+}
+
+.barq-btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Secondary Button (تخطي الآن) */
+.barq-btn-secondary {
+  width: 100%;
+  height: 48px;
+  border: 1px solid var(--barq-line);
+  border-radius: 14px;
+  background: #FFFFFF;
+  color: var(--barq-ink);
+  font: 800 13.5px var(--barq-font);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.barq-btn-secondary:hover {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+  transform: translateY(-1px);
+}
+
+/* Divider: "أو" */
+.barq-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--barq-light);
+  font-size: 12px;
+  font-weight: 700;
+  margin: 4px 0;
+}
+
+.barq-divider::before,
+.barq-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--barq-line);
+}
+
+/* Social Login Buttons */
+.barq-social-row {
+  display: flex;
+  gap: 12px;
+  direction: rtl;
+}
+
+.barq-social-btn {
+  height: 48px;
+  flex: 1;
+  border: 1px solid var(--barq-line);
+  border-radius: 14px;
+  background: #FFFFFF;
+  color: var(--barq-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font: 800 12.5px var(--barq-font);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+  transition: all 0.2s ease;
+}
+
+.barq-social-btn:hover {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+  transform: translateY(-1px);
+}
+
+.barq-provider-logo,
+.barq-social-btn svg {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  min-height: 18px !important;
+  max-width: 18px !important;
+  max-height: 18px !important;
+  display: block;
+  flex-shrink: 0;
+}
+
+.barq-back-circle svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.barq-country-chevron {
+  width: 14px;
+  height: 14px;
+  display: block;
+  flex-shrink: 0;
+}
+
+/* Footer Links */
+.barq-footer {
+  margin-top: auto;
+  text-align: center;
+  color: var(--barq-muted);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 0 4px;
+}
+
+.barq-footer a {
+  color: var(--barq-blue);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.barq-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Location Select Card (Image 2) */
+.barq-select-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.barq-select-box {
+  background: #FFFFFF;
+  border: 1px solid var(--barq-line-strong);
+  border-radius: 12px;
+  height: 50px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+
+.barq-select-box:hover {
+  border-color: var(--barq-blue);
+}
+
+.barq-select-box:focus-within,
+.barq-select-box:active {
+  border-color: var(--barq-blue);
+  box-shadow: 0 0 0 3px var(--barq-field-focus);
+}
+
+.barq-select-value {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--barq-ink);
+}
+
+.barq-select-value.placeholder {
+  color: var(--barq-light);
+  font-weight: 500;
+}
+
+.barq-select-chevron {
+  color: var(--barq-muted);
+  font-size: 14px;
+  display: grid;
+  place-items: center;
+}
+
+/* OTP Track (Image 4) */
+.barq-otp-track {
+  background: var(--barq-field-surface);
+  border: 1px solid #E6ECF4;
+  border-radius: 14px;
+  padding: 7px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  direction: rtl;
+  margin: 12px 0 4px;
+}
+
+.barq-otp-cell {
+  flex: 1;
+  height: 58px;
+  border-radius: 11px;
+  border: 1px solid var(--barq-line-strong);
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 800 22px 'Inter', sans-serif;
+  color: var(--barq-ink);
+  transition: all 0.2s;
+}
+
+.barq-otp-cell.active {
+  border: 2px solid var(--barq-blue);
+  box-shadow: 0 0 0 3px var(--barq-field-focus);
+}
+
+.barq-cursor {
+  display: inline-block;
+  width: 2.5px;
+  height: 26px;
+  background: var(--barq-blue);
+  border-radius: 2px;
+  animation: barqBlink 1s infinite;
+}
+
+@keyframes barqBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.barq-resend-box {
+  text-align: center;
+  margin: 10px 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.barq-resend-timer {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--barq-slate);
+}
+
+.barq-resend-btn {
+  background: transparent;
+  border: 0;
+  color: var(--barq-light);
+  font: 600 13px var(--barq-font);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.barq-resend-btn.active {
+  color: var(--barq-blue);
+  font-weight: 700;
+}
+
+/* Account Type Option Cards (Image 5) */
+.barq-role-card {
+  position: relative;
+  background: #FFFFFF;
+  border: 1px solid var(--barq-line);
+  border-radius: 18px;
+  padding: 20px 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.03);
+  transition: all 0.2s ease;
+}
+
+.barq-role-card:hover {
+  border-color: #CBD5E1;
+  transform: translateY(-1px);
+}
+
+.barq-role-card.selected {
+  border: 2px solid var(--barq-blue);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.barq-role-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: var(--barq-blue-soft);
+  color: var(--barq-blue);
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.barq-role-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.barq-role-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.barq-role-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--barq-ink);
+  margin-bottom: 5px;
+}
+
+.barq-role-desc {
+  font-size: 12.5px;
+  color: var(--barq-muted);
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+.barq-role-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--barq-muted);
+}
+
+.barq-role-note svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+
+.barq-badge-mint {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: var(--barq-green-soft);
+  color: var(--barq-green);
+  font: 800 11px var(--barq-font);
+  padding: 4px 10px;
+  border-radius: 99px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.barq-check-badge {
+  position: absolute;
+  top: 16px;
+  left: 124px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--barq-blue);
+  color: #FFFFFF;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+/* Home Indicator Bar */
+.home-bar {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0 8px;
+  margin-top: auto;
+}
+
+.home-bar-pill {
+  width: 134px;
+  height: 5px;
+  background: #CBD5E1;
+  border-radius: 99px;
+}
+
+/* ==========================================================================
+   Store Setup Media Uploader & Form Polish (Screen 06)
+   ========================================================================== */
+.barq-step-badge {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--barq-blue);
+  background: var(--barq-blue-soft);
+  padding: 4px 12px;
+  border-radius: 99px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  display: inline-flex;
+  align-items: center;
+}
+
+.store-media-wrapper {
+  position: relative;
+  margin-bottom: 22px;
+}
+
+.store-cover-card {
+  height: 124px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #F2F2F2 0%, #E5E5E5 100%);
+  border: 1.5px dashed #A3A3A3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.store-cover-card:hover {
+  border-color: var(--barq-blue);
+  background: linear-gradient(135deg, #E0F2FE 0%, #D1D1D1 100%);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
+
+.store-cover-overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 24px;
+}
+
+.store-upload-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  padding: 6px 14px;
+  border-radius: 99px;
+  border: 1px solid rgba(191, 219, 254, 0.8);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--barq-blue);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.store-cover-card:hover .store-upload-pill {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.store-cover-hint {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #64748B;
+}
+
+.store-avatar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -44px;
+  position: relative;
+  z-index: 2;
+}
+
+.store-avatar-box {
+  width: 78px;
+  height: 78px;
+  border-radius: 22px;
+  background: #FFFFFF;
+  border: 3.5px solid #FFFFFF;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.1), 0 2px 6px rgba(15, 23, 42, 0.04);
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.store-avatar-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+}
+
+.store-avatar-icon-wrap {
+  width: 100%;
+  height: 100%;
+  border-radius: 18px;
+  background: #F8FAFC;
+  display: grid;
+  place-items: center;
+  color: var(--barq-blue);
+}
+
+.store-avatar-badge {
+  position: absolute;
+  bottom: -2px;
+  left: -2px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--barq-blue);
+  border: 2.5px solid #FFFFFF;
+  color: #FFFFFF;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.store-avatar-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-top: 6px;
+}
+
+.store-avatar-title {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--barq-ink);
+}
+
+.store-avatar-subtitle {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #94A3B8;
+}
+
+/* Dropdown Menu shared styles */
+.barq-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  left: 0;
+  background: #FFFFFF;
+  border: 1px solid var(--barq-line);
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.1);
+  z-index: 50;
+  max-height: 200px;
+  overflow-y: auto;
+  display: none;
+}
+
+.barq-dropdown-menu.open {
+  display: block;
+}
+
+.barq-dropdown-item {
+  padding: 11px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--barq-ink);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.15s;
+}
+
+.barq-dropdown-item:hover {
+  background: var(--barq-blue-soft);
+  color: var(--barq-blue);
+}
+
+/* Textarea styling */
+.barq-textarea-inner {
+  background: #FFFFFF;
+  border: 1px solid var(--barq-line-strong);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  gap: 10px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.barq-input-card:focus-within .barq-textarea-inner {
+  border-color: #A3A3A3;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.barq-textarea-inner textarea {
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--barq-ink);
+  font: 600 13px var(--barq-font);
+  line-height: 1.6;
+  min-height: 72px;
+  resize: none;
+  direction: inherit;
+}
+
+.barq-textarea-inner textarea::placeholder {
+  color: var(--barq-light);
+  font-weight: 500;
+}
+.auth-form-error{margin:0 0 10px;padding:9px 11px;border:1px solid #FECACA;border-radius:9px;background:#FEF2F2;color:#B91C1C;font-size:11px;font-weight:700}.barq-btn-primary:disabled{opacity:.65;cursor:wait}
+
+</style>
+  <style data-source="uber-ui.css">
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+/* Uber-inspired UI language: compact type, restrained radius, and one line-icon family. */
+:root {
+  --ui-font: 'Inter', 'Cairo', system-ui, -apple-system, sans-serif;
+  --ui-card-radius: 16px;
+  --ui-control-radius: 10px;
+  --ui-card-shadow: 0 4px 14px rgba(15, 23, 42, 0.035);
+  --ui-icon-size: 20px;
+}
+
+body,
+button,
+input,
+textarea,
+select {
+  font-family: var(--ui-font) !important;
+}
+
+/* Keep the Arabic glyphs readable while using the geometric UI face for Latin text and numbers. */
+[lang="ar"],
+[dir="rtl"] {
+  font-family: var(--ui-font) !important;
+}
+
+/* Uber-style surfaces: flatter, tighter, and less ornamental than the previous cards. */
+.ui-card,
+.quick-action-card,
+.market-card,
+.market-item,
+.catalog-product,
+.catalog-store,
+.product-card,
+.store-card,
+.pickup-card,
+.pickup-card-home,
+.notification-item,
+.chat-row,
+.order-card,
+.order-product,
+.seller-card,
+.view-card,
+.contact-option,
+.choice-list,
+.account-list,
+.conversation-product {
+  border-radius: var(--ui-card-radius) !important;
+  box-shadow: var(--ui-card-shadow) !important;
+}
+
+.ui-card,
+.quick-action-card {
+  padding: 14px !important;
+}
+
+.ui-btn,
+.btn-primary,
+.ui-btn-primary,
+.btn-dark,
+.btn-secondary,
+.barq-btn-primary,
+.barq-btn-secondary,
+.onboarding-action,
+.view-button,
+.add-order,
+.buy-now,
+.sheet-save,
+.apply-filters {
+  border-radius: var(--ui-control-radius) !important;
+  font-family: var(--ui-font) !important;
+}
+
+.input-field,
+.view-input,
+.view-textarea,
+.view-select,
+.market-input,
+.barq-input,
+.barq-textarea,
+.home-search,
+.catalog-search,
+.chat-search,
+.message-composer input {
+  border-radius: var(--ui-control-radius) !important;
+  font-family: var(--ui-font) !important;
+}
+
+.header-btn-circle,
+.back-btn,
+.home-icon-btn,
+.account-icon-button,
+.chats-back,
+.orders-back,
+.catalog-back,
+.notifications-back,
+.details-top a,
+.details-top button,
+.market-back,
+.close-sheet {
+  border-radius: var(--ui-control-radius) !important;
+}
+
+/* One icon treatment: outlined, rounded, and optically 20px like Uber's compact controls. */
+.home-icon-btn svg,
+.home-search svg,
+.home-nav svg,
+.account-icon-button svg,
+.row-icon svg,
+.chats-back svg,
+.chat-search svg,
+.orders-back svg,
+.summary-icon svg,
+.catalog-back svg,
+.catalog-search svg,
+.open-filters svg,
+.notifications-back svg,
+.notification-icon svg,
+.details-top svg,
+.details-actions svg,
+.details-bottom svg,
+.conversation-back svg,
+.conversation-product a svg,
+.message-composer svg,
+.order-details-button svg,
+.barq-input-icon svg,
+.barq-select-chevron svg,
+.contact-option svg,
+.view-back svg {
+  width: var(--ui-icon-size) !important;
+  height: var(--ui-icon-size) !important;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.barq-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.barq-dropdown-item svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Shared floating navigation: compact icon dock with an unmistakable active destination. */
+.saey-bottom-nav {
+  position: relative;
+  width: calc(min(100%, 440px) - 28px);
+  height: 68px !important;
+  min-height: 68px;
+  margin: 0 auto 10px;
+  padding: 6px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 8px;
+  border: 1px solid #E5E7EB;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, .98);
+  box-shadow: 0 12px 25px rgba(15, 23, 42, .11);
+  backdrop-filter: blur(14px);
+  direction: rtl;
+  flex-shrink: 0;
+}
+
+.saey-bottom-nav a {
+  width: 58px;
+  height: 48px;
+  min-width: 58px;
+  flex: 0 0 58px;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 17px;
+  color: #0F172A;
+  text-decoration: none;
+  transition: color .18s ease, background-color .18s ease, box-shadow .18s ease;
+}
+
+.saey-bottom-nav a > span:not(.nav-icon) { display: none; }
+
+.saey-bottom-nav .nav-icon {
+  width: 44px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  background: transparent;
+  color: currentColor;
+  transition: background-color .18s ease, color .18s ease, box-shadow .18s ease;
+}
+
+.saey-bottom-nav svg {
+  width: 21px;
+  height: 21px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.saey-bottom-nav a.active,
+.saey-bottom-nav a[aria-current="page"] {
+  color: #000000;
+}
+
+.saey-bottom-nav a.active .nav-icon,
+.saey-bottom-nav a[aria-current="page"] .nav-icon {
+  width: 58px;
+  height: 44px;
+  border-radius: 17px;
+  background: #F2F2F2 !important;
+  color: #000000;
+  box-shadow: 0 8px 17px rgba(15, 23, 42, .08);
+}
+
+.saey-home .saey-bottom-nav svg {
+  width: 21px !important;
+  height: 21px !important;
+  stroke-width: 1.8 !important;
+}
+
+.saey-home .saey-bottom-nav a.active {
+  background: transparent;
+  box-shadow: none;
+}
+
+.saey-cart .cart-checkout-bar {
+  bottom: 96px;
+}
+
+/* Make the existing interface icons use the same rounded, outlined family. */
+:is(.saey-home, .saey-catalog, .saey-cart, .saey-orders, .saey-chats, .saey-account, .saey-account-view, .saey-conversation, .saey-notifications, .saey-product-details, .saey-wallet, .saey-wallet-transactions, .saey-flow, .saey-coupons) :is(a, button, .row-icon, .summary-icon, .notification-icon, .barq-input-icon, .barq-select-chevron) > svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+:is(.saey-home, .saey-catalog, .saey-cart, .saey-orders, .saey-chats, .saey-account, .saey-account-view, .saey-conversation, .saey-notifications, .saey-product-details, .saey-wallet, .saey-wallet-transactions, .saey-flow, .saey-coupons) :not(.status-icons) > svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+body.saey-account,
+body.saey-orders,
+body.saey-chats {
+  display: flex;
+  flex-direction: column;
+}
+
+.saey-account .account-page,
+.saey-orders .orders-page,
+.saey-chats .chats-page {
+  height: auto;
+  min-height: 0;
+  flex: 1;
+}
+
+/* Supporting text follows the Uber density: readable, but never oversized. */
+.account-row,
+.chat-copy span,
+.order-product small,
+.notification-copy p,
+.view-intro,
+.details-description {
+  line-height: 1.55;
+}
+
+@media (max-width: 370px) {
+  .ui-card,
+  .quick-action-card {
+    padding: 12px !important;
+  }
+
+  .saey-bottom-nav {
+    width: calc(100% - 20px);
+    height: 64px !important;
+    min-height: 64px;
+    margin-bottom: 10px;
+    padding-right: 9px;
+    padding-left: 9px;
+    gap: 5px;
+  }
+
+  .saey-bottom-nav a {
+    width: 54px;
+    height: 46px;
+    min-width: 54px;
+    flex-basis: 54px;
+  }
+
+  .saey-bottom-nav .nav-icon { width: 40px; height: 40px; }
+  .saey-bottom-nav a.active .nav-icon,
+  .saey-bottom-nav a[aria-current="page"] .nav-icon { width: 54px; height: 44px; }
+
+  .saey-cart .cart-checkout-bar {
+    bottom: 84px;
+  }
+}
+
+</style>
+</head>
+<body class="barq-auth-body">
+
+  <!-- Status Bar & Dynamic Island -->
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="dynamic-island"><div class="camera-lens"></div></div>
+    <div class="status-icons">
+      <svg class="status-icon-cellular" viewBox="0 0 17 11" width="17" height="11" fill="currentColor"><path d="M1 9a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-1zm4-2.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v3.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-3.5zm4-2.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1V10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V4zm4-3a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1V10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V1z"/></svg>
+      <svg class="status-icon-wifi" viewBox="0 0 16 12" width="16" height="12" fill="currentColor"><path d="M8 10a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-3.8-3.3a5.5 5.5 0 0 1 7.6 0 .8.8 0 0 0 1.1-1.1 7 7 0 0 0-9.8 0 .8.8 0 0 0 1.1 1.1zm-2.2-2.2a8.5 8.5 0 0 1 12 0 .8.8 0 0 0 1.1-1.1 10 10 0 0 0-14.2 0 .8.8 0 0 0 1.1 1.1z"/></svg>
+      <svg class="status-icon-battery" viewBox="0 0 25 12" width="24" height="11" fill="none"><rect x="0.75" y="0.75" width="20.5" height="10.5" rx="3.25" stroke="currentColor" stroke-width="1.2" stroke-opacity=".4"/><rect x="2.5" y="2.5" width="17" height="7" rx="1.8" fill="currentColor"/><path d="M23 4v4a1.2 1.2 0 0 0 1.2-1.2v-1.6A1.2 1.2 0 0 0 23 4z" fill="currentColor" fill-opacity=".4"/></svg>
+    </div>
+  </div>
+
+  <main class="barq-page">
+
+    <!-- Top Bar with Circular Back Button -->
+    <div class="barq-topbar">
+      <a class="barq-back-circle" href="01-login.html" title="العودة">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m9 18 6-6-6-6"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Screen Title & Subtitle -->
+    <section class="barq-hero" style="margin-top: 10px;">
+      <h1>التحقق من الرمز</h1>
+      <p id="otpDescription">أدخل رمز التحقق المكوّن من 4 أرقام.</p>
+    </section>
+
+    <!-- OTP Track -->
+    <div class="barq-otp-track" id="otpTrack" style="margin-top: 18px;">
+      <div class="barq-otp-cell active" data-index="0">
+        <span class="barq-cursor"></span>
+      </div>
+      <div class="barq-otp-cell" data-index="1"></div>
+      <div class="barq-otp-cell" data-index="2"></div>
+      <div class="barq-otp-cell" data-index="3"></div>
+    </div>
+
+    <!-- Hidden real input for typing interaction -->
+    <input type="text" id="hiddenOtpInput" maxlength="4" value="" inputmode="numeric" autocomplete="one-time-code" style="position: absolute; opacity: 0; pointer-events: none;">
+
+    <!-- Resend Countdown & Action -->
+    <div class="barq-resend-box" style="margin-top: 24px;">
+      <div class="barq-resend-timer" id="timerDisplay">إعادة الإرسال خلال <span style="font-family: 'Inter', sans-serif;" id="timerDigits">00:30</span></div>
+      <button class="barq-resend-btn" id="resendBtn" type="button">إعادة إرسال الرمز</button>
+    </div>
+
+    <!-- Primary Action Button: تحقق -->
+    <p class="auth-form-error" id="otpError" hidden></p>
+    <button class="barq-btn-primary" id="verifyAction" type="button" style="margin-top: 24px;">تحقق</button>
+
+  </main>
+
+  <!-- iOS Home Bar -->
+  <div class="home-bar"><div class="home-bar-pill"></div></div>
+
+  <script>
+    const otpTrack = document.getElementById('otpTrack');
+    const otpParams = new URLSearchParams(location.search), resetFlow = otpParams.get('flow') === 'reset';
+    const signupDraft = resetFlow ? null : JSON.parse(sessionStorage.getItem('saey_signup_draft') || 'null');
+    const recoveryIdentity = sessionStorage.getItem('saey_recovery_identity');
+    if(resetFlow && !recoveryIdentity)location.replace('07-forgot-password.html');
+    if(signupDraft || (resetFlow && /^(localhost|127\.0\.0\.1)$/.test(location.hostname)))document.getElementById('otpDescription').innerHTML='أدخل رمز التحقق المكوّن من 4 أرقام. الرمز التجريبي الحالي هو <strong style="color: var(--barq-ink); font-family: \'Inter\', sans-serif;">1234</strong>';
+    const hiddenInput = document.getElementById('hiddenOtpInput');
+    const cells = Array.from(document.querySelectorAll('.barq-otp-cell'));
+
+    function updateCells() {
+      const val = hiddenInput.value;
+      cells.forEach((cell, idx) => {
+        cell.classList.remove('active');
+        if (idx < val.length) {
+          cell.textContent = val[idx];
+        } else if (idx === val.length) {
+          cell.innerHTML = '<span class="barq-cursor"></span>';
+          cell.classList.add('active');
+        } else {
+          cell.textContent = '';
+        }
+      });
+    }
+
+    otpTrack.addEventListener('click', () => {
+      hiddenInput.focus();
+    });
+
+    hiddenInput.addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/[^0-9]/g, '');
+      updateCells();
+    });
+
+    hiddenInput.addEventListener('focus', () => {
+      updateCells();
+    });
+
+    // Simple countdown timer
+    let secondsLeft = 30;
+    const timerDigits = document.getElementById('timerDigits');
+    const resendBtn = document.getElementById('resendBtn');
+
+    let countdown = setInterval(() => {
+      secondsLeft--;
+      if (secondsLeft <= 0) {
+        clearInterval(countdown);
+        timerDigits.textContent = '00:00';
+        resendBtn.style.color = 'var(--barq-blue)';
+        resendBtn.style.cursor = 'pointer';
+      } else {
+        const str = secondsLeft < 10 ? '0' + secondsLeft : secondsLeft;
+        timerDigits.textContent = '00:' + str;
+      }
+    }, 1000);
+    resendBtn.addEventListener('click', async () => {
+      if(secondsLeft>0)return;
+      if(signupDraft){
+        try {
+          const response=await fetch('http://127.0.0.1:8000/api/send-otp',{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify({phone_code:signupDraft.phone_code,phone:signupDraft.phone})});
+          const result=await response.json();
+          if(!response.ok)throw new Error(result.message||'تعذر إعادة إرسال الرمز.');
+          secondsLeft=30;
+          timerDigits.textContent='00:30';
+          resendBtn.textContent='إعادة إرسال الرمز';
+          countdown=setInterval(()=>{secondsLeft--;if(secondsLeft<=0){clearInterval(countdown);timerDigits.textContent='00:00';}else{timerDigits.textContent='00:'+(secondsLeft<10?'0':'')+secondsLeft;}},1000);
+        } catch(error) { document.getElementById('otpError').textContent=error.message;document.getElementById('otpError').hidden=false; }
+        return;
+      }
+      if(resetFlow && recoveryIdentity){
+        try {
+          const origin=location.protocol==='file:'?'http://127.0.0.1:8000':['localhost','127.0.0.1'].includes(location.hostname)?`${location.protocol}//${location.hostname}:8000`:location.origin;
+          const response=await fetch(`${origin}/api/password-reset/send-otp`,{method:'POST',headers:{Accept:'application/json','Content-Type':'application/json','Accept-Language':'ar'},body:JSON.stringify({identity:recoveryIdentity})});
+          const result=await response.json();
+          if(!response.ok)throw new Error(result.message||'تعذر إعادة إرسال الرمز.');
+          hiddenInput.value='';updateCells();secondsLeft=30;timerDigits.textContent='00:30';resendBtn.textContent='إعادة إرسال الرمز';resendBtn.style.color='';
+          countdown=setInterval(()=>{secondsLeft--;if(secondsLeft<=0){clearInterval(countdown);timerDigits.textContent='00:00';}else{timerDigits.textContent='00:'+(secondsLeft<10?'0':'')+secondsLeft;}},1000);
+        } catch(error) { document.getElementById('otpError').textContent=error.message;document.getElementById('otpError').hidden=false; }
+        return;
+      }
+      hiddenInput.value='';updateCells();resendBtn.textContent='تم إرسال رمز جديد';
+    });
+    document.getElementById('verifyAction').addEventListener('click', async event => {
+      const button=event.currentTarget,error=document.getElementById('otpError');
+      if(hiddenInput.value.length!==4){error.textContent='أدخل رمز التحقق المكوّن من ٤ أرقام.';error.hidden=false;hiddenInput.focus();return;}
+      error.hidden=true;button.disabled=true;button.textContent='جارٍ التحقق…';
+      try {
+        if(signupDraft){
+          const confirmResponse=await fetch('http://127.0.0.1:8000/api/confirm-otp',{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify({phone_code:signupDraft.phone_code,phone:signupDraft.phone,code:hiddenInput.value})});
+          const confirmResult=await confirmResponse.json();
+          if(!confirmResponse.ok){const firstError=Object.values(confirmResult.errors||{}).flat()[0];throw new Error(firstError||confirmResult.message||'رمز التحقق غير صحيح.');}
+          const registerResponse=await fetch('http://127.0.0.1:8000/api/register',{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify(signupDraft)});
+          const registerResult=await registerResponse.json();
+          if(!registerResponse.ok){const firstError=Object.values(registerResult.errors||{}).flat()[0];throw new Error(firstError||registerResult.message||'تعذر إنشاء الحساب.');}
+          sessionStorage.setItem('saey_signup_draft',JSON.stringify({phone_code:signupDraft.phone_code,phone:signupDraft.phone,email:signupDraft.email,userId:registerResult.data?.id,name:registerResult.data?.name,accountType:registerResult.data?.account_type}));
+          localStorage.setItem('saey_api_token',registerResult.data?.access_token||'');
+          location.href=registerResult.data?.onboarding?.next_step==='select_account_type'?'04-account-type.html':'08-user-home.html';
+          return;
+        } else if(resetFlow && recoveryIdentity){
+          const origin=location.protocol==='file:'?'http://127.0.0.1:8000':['localhost','127.0.0.1'].includes(location.hostname)?`${location.protocol}//${location.hostname}:8000`:location.origin;
+          const response=await fetch(`${origin}/api/password-reset/confirm-otp`,{method:'POST',headers:{Accept:'application/json','Content-Type':'application/json','Accept-Language':'ar'},body:JSON.stringify({identity:recoveryIdentity,code:hiddenInput.value})});
+          const result=await response.json();
+          if(!response.ok){const firstError=Object.values(result.errors||{}).flat()[0];throw new Error(firstError||result.message||'رمز التحقق غير صحيح.');}
+          sessionStorage.setItem('saey_recovery_code',hiddenInput.value);
+        } else {
+          localStorage.setItem('saey_otp_verified_at',new Date().toISOString());
+        }
+        location.href=resetFlow?'07-reset-password.html':'05-profile-setup.html';
+      } catch(requestError) {
+        error.textContent=requestError instanceof TypeError?'تعذر الاتصال بالخادم. تحقق من تشغيل API ثم أعد المحاولة.':requestError.message;
+        error.hidden=false;button.disabled=false;button.textContent='تحقق';
+      }
+    });
+  </script>
+</body>
+</html>

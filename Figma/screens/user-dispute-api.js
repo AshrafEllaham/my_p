@@ -1,7 +1,7 @@
 (() => {
   const token = localStorage.getItem('saey_api_token');
   const params = new URLSearchParams(location.search);
-  const orderId = params.get('order_id');
+  const orderId = params.get('order_id') || (params.get('design_mode') === 'static' ? '601' : null);
   if (!token || !orderId) return;
   const origin = location.protocol === 'file:' ? 'http://127.0.0.1:8000' :
     ['localhost', '127.0.0.1'].includes(location.hostname) ? `${location.protocol}//${location.hostname}:8000` : location.origin;
@@ -40,7 +40,7 @@
   const render = dispute => {
     status.textContent = statusLabel[dispute.status] || 'قيد المراجعة';
     note.textContent = `${dispute.reason || 'مشكلة في الطلب'}: ${dispute.details || ''}`;
-    document.getElementById('orderCode').textContent = `#${params.get('code') || '—'}`;
+    document.getElementById('orderCode').textContent = `#${params.get('code') || (params.get('design_mode') === 'static' ? 'SA-1014' : '—')}`;
     details.replaceChildren();
     (dispute.messages || []).forEach(message => {
       const item = document.createElement('p');
