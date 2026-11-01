@@ -2341,17 +2341,17 @@
         title: 'اختر نوع الحساب',
         titleEn: 'Select Account Type',
         tags: ['Account Type', 'Store Role', 'User Role', 'Mint Badge'],
-        desc: 'تحديد طبيعة استخدام التطبيق بين حساب شخصي وحساب متجر، ثم حفظ النوع والموقع الاختياري عبر API العام.',
-        descEn: 'Select a user or store account, then save the type and optional location through the public API.',
+        desc: 'تحديد طبيعة استخدام التطبيق بين حساب شخصي وحساب متجر، مع متابعة تجريبية إلى الشاشة التالية.',
+        descEn: 'Select a personal or store account and continue through the visual prototype.',
         notes: [
           'كارت حساب متجر محدد بإطار أسود 2px مع شارة "موصى به للتجار" وعلامة صح ✓',
           'أيقونات زرقاء مخصصة (مستخدم للمشتريات وشاحنة للموزع)',
-          'يحفظ زر المتابعة نوع الحساب والموقع الاختياري في الحساب المسجل عبر PATCH /api/accounts/{account}/type'
+          'يحفظ زر المتابعة الاختيار محليًا للنموذج ثم يفتح الشاشة التالية'
         ],
         notesEn: [
           'Store card highlighted with 2px black border, mint badge, and black checkmark ✓',
           'Custom squircle icons (user for personal, truck for distributor)',
-          'Continue saves the account type and optional location through PATCH /api/accounts/{account}/type'
+          'Continue stores the selection in the local prototype and opens the next screen'
         ]
       },
       {
@@ -2364,15 +2364,15 @@
         titleEn: 'Location Selection',
         tags: ['Location Setup', 'Country Flag', 'Governorate Dropdown', 'City Dropdown', 'Skip Option'],
         desc: 'اختيار الدولة والمحافظة والمدينة لتخصيص تجربة التوزيع مع قوائم مترابطة وزر تخطي الآن.',
-        descEn: 'Select a country, governorate, and city loaded from the public API to customize the app experience.',
+        descEn: 'Choose a sample country, governorate, and city to preview the location setup screen.',
         notes: [
-          'تُحمّل قائمة الدول عبر GET /api/countries، ثم المحافظات والمدن حسب الاختيار من GET /api/governorates وGET /api/cities',
-          'اختيار الدولة الافتراضية من البيانات المتاحة، ثم حفظ معرّفات الدولة والمحافظة والمدينة المختارة',
+          'قوائم الدولة والمحافظة والمدينة بيانات تجريبية داخل التصميم',
+          'تغيير الاختيار وزر المتابعة يحاكيان التنقل ويحفظان الحالة محليًا',
           'زر متابعة رئيسي أسود مع خيار "تخطي الآن" الثانوي'
         ],
         notesEn: [
-          'Loads countries from GET /api/countries, then filters governorates and cities with GET /api/governorates and GET /api/cities',
-          'Defaults to an available country and saves selected country, governorate, and city IDs',
+          'Country, governorate, and city options are sample design data',
+          'Changing the selection and continuing demonstrates local prototype navigation',
           'Primary black "Continue" button and secondary outline "Skip Now" button'
         ]
       },
@@ -2385,17 +2385,17 @@
         title: 'إعداد ملف المتجر',
         titleEn: 'Store Profile Setup',
         tags: ['Store Profile', 'Merchant Setup'],
-        desc: 'إدخال بيانات المتجر الأساسية وحفظ الاسم والصورة والتصنيف والبيانات الاختيارية عبر API ملف المتجر.',
-        descEn: 'Save the store name, image, category, and optional profile data through the store profile API.',
+        desc: 'إدخال بيانات المتجر الأساسية ومعاينة إكمال الملف الشخصي في النموذج التفاعلي.',
+        descEn: 'Enter sample store details and preview the profile setup flow.',
         notes: [
           'إعداد غلاف المتجر والشعار والاسم والتصنيف والوصف والعنوان',
           'لا تطلب الشاشة بيانات مسؤول المتجر أو التسجيل أو المستندات أو IBAN',
-          'يحفظ النموذج ملف المتجر عبر POST /api/store/profile ثم ينتقل إلى لوحة المتجر'
+          'يحاكي النموذج حفظ البيانات ثم ينتقل إلى لوحة المتجر داخل المعاينة'
         ],
         notesEn: [
           'Set the store cover, logo, name, category, description, and address',
           'The screen does not request owner, registration, document, or IBAN details',
-          'The form saves the store profile through POST /api/store/profile and opens the dashboard'
+          'The form simulates saving the profile and opens the store dashboard in the preview'
         ]
       },
       {
@@ -2544,14 +2544,14 @@
         desc: 'محادثة واحدة مستمرة بين المستخدم والمتجر، مستقلة عن المنتجات، مع رسائل قابلة للبحث والإبلاغ والحظر.',
         descEn: 'One persistent conversation between a user and store, independent of products, with searchable messages, reports, and blocking.',
         notes: [
-          'يفتح المحادثة أو يعيد الغرفة القائمة من POST /api/chat/rooms',
-          'يحمل الرسائل ويرسلها مع البحث والترقيم من /api/chat/rooms/{room}/messages',
-          'يدعم الإبلاغ عن الغرفة وحظرها من /reports و/blocks'
+          'يفتح محادثة ببيانات ورسائل تجريبية',
+          'يحاكي البحث وإرسال الرسائل محليًا داخل النموذج',
+          'يعرض تفاعلات الإبلاغ والحظر كحالات تصميم تجريبية'
         ],
         notesEn: [
-          'Opens one room per user and store through POST /api/chat/rooms',
-          'Loads searchable paginated messages and sends messages through the room endpoint',
-          'Reports or blocks the room through its safety action endpoints'
+          'Opens a sample conversation with prototype messages',
+          'Simulates message search and sending locally',
+          'Shows report and block actions as prototype states'
         ]
       },
       {
@@ -2734,17 +2734,17 @@
       title: 'إكمال الملف الشخصي',
       titleEn: 'Complete Personal Profile',
       tags: ['Personal Profile', 'Avatar', 'Name', 'Address'],
-      desc: 'استكمال اسم المستخدم وصورته المطلوبة وعنوانه الاختياري وحفظها عبر API الملف الشخصي.',
-      descEn: 'Save the required user name and image plus the optional address through the profile API.',
+      desc: 'استكمال الاسم والصورة والعنوان الاختياري ضمن نموذج الملف الشخصي.',
+      descEn: 'Complete the sample name, avatar, and optional address in the profile prototype.',
       notes: [
         'تظهر فقط عند اختيار «حساب شخصي»',
         'تتضمن الصورة والاسم والعنوان',
-        'زر بدء التسوق يحفظ البيانات عبر POST /api/user/profile ثم ينقل المستخدم للرئيسية'
+        'زر بدء التسوق يحاكي حفظ البيانات وينقل المستخدم للرئيسية'
       ],
       notesEn: [
         'Shown only after selecting a personal account',
         'Includes avatar, name, and address',
-        'Start shopping saves through POST /api/user/profile before continuing home'
+        'Start shopping simulates saving the profile before opening the home screen'
       ]
     });
 
@@ -2757,10 +2757,10 @@
       title: 'الرئيسية',
       titleEn: 'User Home',
       tags: ['User', 'Store Discovery', 'Pickup', 'Recommendations'],
-      desc: 'الواجهة الرئيسية للمستخدم مع منتجات مقترحة فعليًا حسب مشترياته ومفضلاته ومحافظته.',
-      descEn: 'The user hub with live product recommendations and nearby stores.',
-      notes: ['الأقسام الرئيسية تُحمّل بصفحات عبر GET /api/user/main-categories مع فلتر البحث', 'الإعلانات الممولة تُحمّل حسب موضع الرئيسية عبر GET /api/user/ads?placement=home', 'تُسجل المشاهدة بعد ظهور نصف كارد الإعلان عبر POST /api/user/ads/{ad}/impressions؛ الضغط على الإعلان يفتح عارض الإعلانات بعد تسجيل النقر عبر POST /api/user/ads/{ad}/clicks', 'قسم مقترح لك يُحمّل عبر GET /api/user/products/recommended', 'المتاجر القريبة تُحمّل عبر GET /api/user/stores/nearby باستخدام إحداثيات موقع الاستلام المحفوظة عند توفرها', 'QR ينشئه المتجر ويُمسح خارج التطبيق'],
-      notesEn: ['Main categories load in pages from GET /api/user/main-categories with a search filter', 'Sponsored ads load for the home placement from GET /api/user/ads?placement=home', 'An impression is recorded when at least half of the ad card is visible using POST /api/user/ads/{ad}/impressions; tapping the ad opens the full-screen viewer after recording a click through POST /api/user/ads/{ad}/clicks', 'Recommended products load from GET /api/user/products/recommended', 'Nearby stores load from GET /api/user/stores/nearby using saved pickup coordinates when available', 'Store QR is scanned outside the app']
+      desc: 'الواجهة الرئيسية للمستخدم مع منتجات ومتاجر وإعلانات ومسابقات تجريبية للتصفح التفاعلي.',
+      descEn: 'The user home screen with sample products, stores, ads, and competitions for interactive browsing.',
+      notes: ['البحث والفلاتر يحدّثان النتائج التجريبية محليًا', 'بطاقات العروض والإعلانات تفتح وجهاتها داخل المعاينة', 'روابط الأقسام والمنتجات والمتاجر والمسابقات تنقل إلى شاشاتها المقابلة', 'بيانات الرئيسية ثابتة لأغراض التصميم فقط', 'QR ينشئه المتجر ويُمسح خارج التطبيق'],
+      notesEn: ['Search and filters update sample results locally', 'Offer and ad cards open their destinations in the preview', 'Category, product, store, and competition links open their matching screens', 'Home content is sample design data only', 'Store QR is scanned outside the app']
     });
 
     screens.push({
@@ -2772,10 +2772,10 @@
       title: 'عرض الإعلانات الممولة',
       titleEn: 'Sponsored Ads Viewer',
       tags: ['Sponsored Ads', 'Vertical Feed', 'Swipe Navigation'],
-      desc: 'عرض إعلان الرئيسية بملء الشاشة، مع السحب لأسفل للانتقال للإعلان التالي وتحميل الإعلانات الفعالة من API.',
-      descEn: 'Full-screen home ad viewer with swipe-down navigation and active ads loaded from the API.',
-      notes: ['تُحمّل الإعلانات المؤهلة للعرض عبر GET /api/user/ads?placement=home أو placement=category&category_id={category}، وإعلانات متجر محدد عبر GET /api/user/stores/{store}/ads', 'السحب لأسفل يعرض الإعلان التالي والسحب لأعلى يعرض السابق، من الإعلانات النشطة التي بدأ موعدها فقط', 'تُسجل المشاهدة عبر POST /api/user/ads/{ad}/impressions', 'إجراء الإعلان ينقل إلى وجهته بعد تسجيل النقر عبر POST /api/user/ads/{ad}/clicks'],
-      notesEn: ['Loads currently eligible ads from GET /api/user/ads?placement=home or placement=category&category_id={category}, and a store feed from GET /api/user/stores/{store}/ads', 'Swipe down opens the next ad and swipe up the previous one, from currently active campaigns only', 'Records impressions through POST /api/user/ads/{ad}/impressions', 'Ad actions open their destination after recording a click through POST /api/user/ads/{ad}/clicks']
+      desc: 'عارض إعلان بملء الشاشة للتنقل بين بطاقات تجريبية بالسحب.',
+      descEn: 'A full-screen ad viewer for swiping through sample cards.',
+      notes: ['السحب يبدّل بين الإعلانات التجريبية', 'الإجراء يفتح وجهة محلية داخل المعاينة', 'لا تُرسل مشاهدات أو نقرات إلى خدمة خارجية'],
+      notesEn: ['Swiping changes between sample ads', 'The action opens a local destination in the preview', 'Views and clicks are not sent to an external service']
     });
 
     screens.push({
@@ -2802,10 +2802,10 @@
       title: 'المفضلة',
       titleEn: 'Favorites',
       tags: ['Favorites', 'Products', 'Stores', 'Pagination'],
-      desc: 'قائمة منتجات ومتاجر المستخدم المحفوظة، محمّلة من API مع فلتر النوع وتقسيم الصفحات.',
-      descEn: 'The user’s saved products and stores, loaded from the API with type filters and pagination.',
-      notes: ['GET /api/user/favorites?type=product أو type=store', 'تقسيم الصفحات عبر pagination=on وlimit_per_page وpage', 'إزالة عنصر محفوظ عبر POST /api/user/favorites/toggle', 'حالات تسجيل الدخول والتحميل والخطأ والفراغ وإعادة المحاولة'],
-      notesEn: ['GET /api/user/favorites?type=product or type=store', 'Pagination uses pagination=on, limit_per_page, and page', 'Remove a saved item through POST /api/user/favorites/toggle', 'Handles authentication, loading, errors, empty results, and retry']
+      desc: 'قائمة تجريبية للمنتجات والمتاجر المحفوظة مع فلتر النوع وتفاعلات محلية.',
+      descEn: 'A sample saved products and stores list with type filters and local interactions.',
+      notes: ['التبديل بين المنتجات والمتاجر يغيّر المحتوى التجريبي', 'إزالة عنصر تغيّر حالته محليًا', 'حالات التحميل والخطأ والفراغ وإعادة المحاولة مخصصة لمعاينة التصميم'],
+      notesEn: ['Switching between products and stores changes sample content', 'Removing an item updates its local prototype state', 'Loading, error, empty, and retry states are visual design examples']
     });
 
     screens.push({
@@ -2834,8 +2834,8 @@
       tags: ['Wallet', 'Balance', 'Transactions'],
       desc: 'محفظة المستخدم لعرض الرصيد ومتابعة عمليات الشحن والشراء والاسترداد.',
       descEn: 'User wallet for balance, top-ups, purchases, and refunds.',
-      notes: ['يعرض الرصيد المتاح وأي مبالغ شحن قيد التأكيد', 'يرسل طلب السحب إلى /api/wallet/withdrawal-requests بصيغة multipart ولا يخصم الرصيد قبل الاعتماد', 'يرسل تحويل الصديق إلى /api/wallet/transfers بصيغة multipart بعد تأكيد المستخدم', 'يرسل الشحن إلى /api/wallet ويفتح صفحة الدفع'],
-      notesEn: ['Shows the available balance and any top-ups awaiting confirmation', 'Submits multipart withdrawal requests to /api/wallet/withdrawal-requests without deducting balance before approval', 'Submits friend transfers to /api/wallet/transfers as multipart after user confirmation', 'Submits top-ups to /api/wallet and opens payment']
+      notes: ['يعرض رصيدًا وحركات تجريبية', 'نماذج الشحن والسحب والتحويل تعرض خطوات التأكيد دون تنفيذ معاملة مالية', 'تظل كل القيم محلية للمعاينة'],
+      notesEn: ['Shows a sample balance and transactions', 'Top-up, withdrawal, and transfer forms preview confirmation steps without processing payments', 'All values remain local to the preview']
     });
 
     screens.push({
@@ -2849,8 +2849,8 @@
       tags: ['Wallet', 'Transactions', 'History'],
       desc: 'سجل عمليات المحفظة الفعلي مع تحميل الصفحات والتنقل بينها.',
       descEn: 'Live wallet transaction history with paginated loading and page navigation.',
-      notes: ['يجلب الرصيد ورابط سجل العمليات المرقّم من /api/wallet', 'يعرض العمليات من رابط transactions_url مع التنقل بين الصفحات', 'يتعامل مع التحميل والأخطاء والحالة الفارغة'],
-      notesEn: ['Loads the balance and paginated transaction URL from /api/wallet', 'Fetches wallet activity from transactions_url and supports page navigation', 'Handles loading, errors, and the empty state']
+      notes: ['يعرض حركات محفظة تجريبية مع فلاتر وتنقل محلي', 'حالات التحميل والخطأ والفراغ أمثلة بصرية', 'لا تُنفذ أي حركة مالية'],
+      notesEn: ['Shows sample wallet activity with local filters and navigation', 'Loading, error, and empty states are visual examples', 'No financial transaction is processed']
     });
 
     screens.push({
@@ -2864,26 +2864,26 @@
       tags: ['Stores', 'Store Profile', 'Products', 'Report'],
       desc: 'صفحة تعريفية بالمتجر تعرض بياناته وتقييمه وموقعه وأبرز منتجاته مع تدفق الإبلاغ الفعلي.',
       descEn: 'Store profile with contact details, rating, location, products, and the live report flow.',
-      notes: ['تحميل بيانات المتجر والسياسات وأحدث المنتجات عبر GET /api/user/stores/{store}', 'تحميل الإعلانات النشطة والصفحات التالية عبر GET /api/user/stores/{store}/ads', 'فتح بطاقة الإعلان يعرضه بملء الشاشة مع السحب للتنقل وتسجيل المشاهدة والنقر عبر مسارات /api/user/ads/{ad}', 'تمرير lat وlong اختياريًا لحساب المسافة', 'المفضلة والإبلاغ والتواصل من إجراءات الشاشة'],
-      notesEn: ['Load store details, policies, and latest products from GET /api/user/stores/{store}', 'Load active ads and more pages from GET /api/user/stores/{store}/ads', 'Opening an ad shows the full-screen swipe viewer and records impressions and clicks through /api/user/ads/{ad} routes', 'Pass optional lat and long to calculate distance', 'Use screen actions for favorites, reporting, and contact']
+      notes: ['يعرض هوية المتجر والسياسات والمنتجات والإعلانات ببيانات تجريبية', 'بطاقة الإعلان تفتح العارض بملء الشاشة', 'التنقل للمفضلة والإبلاغ والدردشة يعمل داخل النموذج فقط'],
+      notesEn: ['Shows store identity, policies, products, and ads using sample content', 'Ad cards open the full-screen viewer', 'Favorites, reports, and chat navigation are prototype interactions only']
     });
 
     screens.push(
-      { id: 25, num: '12', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '09-categories.html', title: 'كل الأقسام', titleEn: 'All Categories', tags: ['Categories', 'Discovery'], desc: 'تصفح وبحث في الأقسام الرئيسية مع انتقال مباشر إلى منتجات القسم.', descEn: 'Browse and search main categories, then open the category product lists.', notes: ['تحميل الأقسام الرئيسية بصفحات عبر GET /api/user/main-categories', 'إرسال البحث إلى API ليطابق اسم القسم بترجمة اللغة الحالية', 'اختيار قسم رئيسي يفتح صفحة المنتجات الخاصة به'], notesEn: ['Load main categories in pages from GET /api/user/main-categories', 'Send search to the API to match names in the current locale', 'Selecting a main category opens its product screen'] },
+      { id: 25, num: '12', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '09-categories.html', title: 'كل الأقسام', titleEn: 'All Categories', tags: ['Categories', 'Discovery'], desc: 'تصفح الأقسام التجريبية وابحث فيها وافتح تفاصيل القسم.', descEn: 'Browse and search sample categories, then open category details.', notes: ['البحث يرشح بيانات الأقسام التجريبية محليًا', 'اختيار قسم يفتح شاشة تفاصيل القسم'], notesEn: ['Search filters sample categories locally', 'Selecting a category opens its detail screen'] },
       { id: 26, num: '13', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '10-featured-products.html', title: 'منتجات مميزة', titleEn: 'Featured Products', tags: ['Products', 'Catalog'], desc: 'كتالوج للمنتجات المميزة مع السعر والتقييم.', descEn: 'Featured product catalog with prices and ratings.', notes: ['شبكة منتجات', 'سعر قبل وبعد الخصم'], notesEn: ['Product grid', 'Original and discounted price'] },
-      { id: 27, num: '14', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '11-featured-stores.html', title: 'متاجر مميزة', titleEn: 'Featured Stores', tags: ['Stores', 'Discovery'], desc: 'قائمة المتاجر مع بحث وفلاتر القسم والمحافظة والترتيب.', descEn: 'Store catalog with search, category, governorate, and ordering filters.', notes: ['تحميل القائمة عبر GET /api/user/stores/nearby', 'البحث باسم المتجر عبر search', 'الفلترة بـ main_category_id وgovernorate_id', 'الترتيب: high_rate أو nearest أو newest؛ الأقرب يحتاج إحداثيات موقع الاستلام'], notesEn: ['Load the list from GET /api/user/stores/nearby', 'Search store names with search', 'Filter with main_category_id and governorate_id', 'Sort by high_rate, nearest, or newest; nearest requires saved pickup coordinates'] },
-      { id: 28, num: '15', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '12-product-details.html', title: 'تفاصيل المنتج', titleEn: 'Product Details', tags: ['Product', 'Pickup', 'Favorite'], desc: 'تفاصيل المنتج الحقيقية من API مع اختيار أحدث منتج متاح عند فتح الشاشة مباشرة من الـ preview.', descEn: 'Live product details from API, automatically selecting the newest available product when opened directly from the preview.', notes: ['GET /api/user/products لاختيار منتج عند غياب product_id', 'GET /api/user/products/{product}', 'GET /api/user/report-reasons', 'POST /api/user/products/{product}/reports'], notesEn: ['GET /api/user/products to resolve a product when product_id is missing', 'GET /api/user/products/{product}', 'GET /api/user/report-reasons', 'POST /api/user/products/{product}/reports'] },
+      { id: 27, num: '14', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '11-featured-stores.html', title: 'متاجر مميزة', titleEn: 'Featured Stores', tags: ['Stores', 'Discovery'], desc: 'قائمة متاجر تجريبية مع البحث وفلاتر القسم والمحافظة والترتيب.', descEn: 'Sample store catalog with search, category, governorate, and sort filters.', notes: ['البحث والفلاتر تطبق محليًا على بيانات المعاينة', 'فتح بطاقة متجر ينقل إلى تفاصيله'], notesEn: ['Search and filters apply locally to preview data', 'Opening a store card navigates to its details'] },
+      { id: 28, num: '15', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '12-product-details.html', title: 'تفاصيل المنتج', titleEn: 'Product Details', tags: ['Product', 'Pickup', 'Favorite'], desc: 'تفاصيل منتج تجريبي مع السعر والصور والمتجر والكمية والشراء المباشر.', descEn: 'Sample product details with price, images, store, quantity, and direct purchase preview.', notes: ['المنتج والصور بيانات تجريبية', 'زر شراء الآن يفتح شاشة تأكيد الطلب', 'المفضلة والإبلاغ يغيران حالة العرض محليًا'], notesEn: ['Product and images are sample content', 'Buy now opens the checkout preview', 'Favorite and report controls update local prototype state'] },
       { id: 29, num: '16', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '13-notifications.html', title: 'الإشعارات', titleEn: 'Notifications', tags: ['Notifications', 'Orders', 'Offers'], desc: 'إشعارات الطلبات والعروض مع إمكانية حذفها كلها.', descEn: 'Order and offer notifications with a clear-all action.', notes: ['حالات طلب الاستلام', 'عروض المتاجر', 'حالة فارغة بعد حذف الكل'], notesEn: ['Pickup order updates', 'Store offers', 'Empty state after clear all'] },
-      { id: 30, num: '17', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '14-chats.html', title: 'الدردشات', titleEn: 'Chats', tags: ['Chat', 'Stores', 'Search'], desc: 'قائمة الغرف النشطة بترتيب آخر رسالة مرسلة أو مستلمة مع البحث باسم المتجر.', descEn: 'Rooms ordered by the latest sent or received message, searchable by store name.', notes: ['تحميل الغرف بصفحات من GET /api/chat/rooms', 'بحث باسم المتجر من API', 'عرض آخر رسالة وعدد الرسائل غير المقروءة'], notesEn: ['Loads paginated rooms from GET /api/chat/rooms', 'Searches store names through the API', 'Shows the last message and unread message count'] }
+      { id: 30, num: '17', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '14-chats.html', title: 'الدردشات', titleEn: 'Chats', tags: ['Chat', 'Stores', 'Search'], desc: 'قائمة محادثات تجريبية مرتبة حسب آخر رسالة مع البحث باسم المتجر.', descEn: 'Sample conversations ordered by latest message and searchable by store name.', notes: ['قائمة ورسائل ثابتة لأغراض المعاينة', 'البحث يرشح أسماء المتاجر محليًا', 'فتح المحادثة يعرض شاشة الرسائل'], notesEn: ['Sample conversations and messages for the preview', 'Search filters store names locally', 'Opening a conversation displays the messages screen'] }
     );
 
     screens.push(
       { id: 40, num: '21', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '20-checkout.html', title: 'تأكيد الطلب والدفع', titleEn: 'Checkout & Wallet Payment', tags: ['Checkout', 'Coupons', 'Wallet'], desc: 'شراء مباشر لمنتج واحد مع تطبيق كوبون المتجر والدفع من المحفظة.', descEn: 'Direct single-product purchase with store coupon validation and wallet payment.', notes: ['إدخال وتحقق من كوبون الخصم', 'تحديث الإجمالي والوفر فورًا', 'فحص الرصيد وإنشاء الطلب'], notesEn: ['Coupon entry and validation', 'Live discount and total update', 'Balance validation and order creation'] },
       { id: 41, num: '22', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '21-order-details.html', title: 'تفاصيل الطلب', titleEn: 'Order Details', tags: ['Orders', 'Tracking', 'Support'], desc: 'تفاصيل الطلب والتتبع والدردشة والإلغاء أو الاسترداد.', descEn: 'Order details, tracking, chat, cancellation, and refund actions.', notes: ['كود الطلب', 'حالة الاستلام', 'إجراءات ما بعد الطلب'], notesEn: ['Order code', 'Pickup state', 'Post-order actions'] },
       { id: 42, num: '23', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '22-rate-order.html', title: 'تقييم المنتج', titleEn: 'Rate Product', tags: ['Reviews', 'Completed Order'], desc: 'إرسال تقييم موثق بعد اكتمال الطلب.', descEn: 'Submit a verified review after order completion.', notes: ['نجوم وتعليق', 'يظهر بعد الاكتمال فقط'], notesEn: ['Stars and comment', 'Shown only after completion'] },
-      { id: 43, num: '24', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '23-search-results.html', title: 'نتائج البحث', titleEn: 'Search Results', tags: ['Search', 'Products', 'Filters'], desc: 'نتائج المنتجات مع البحث وفلتر المحافظة والترتيب وحالات التحميل والخطأ.', descEn: 'Product results with search, governorate filter, sorting, loading and error states.', notes: ['فلترة المحافظة', 'ترتيب المضاف حديثًا', 'عرض المنتجات المشابهة عبر API بصفحات'], notesEn: ['Governorate filter', 'Newest sorting', 'Paginated similar products from API'] },
-      { id: 44, num: '25', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '24-category-details.html', title: 'تفاصيل القسم', titleEn: 'Category Details', tags: ['Category', 'Sponsored', 'Discovery'], desc: 'بحث وإعلان ممول فعلي للقسم وقائمتان للمنتجات الأكثر شراءً والأعلى تقييمًا مع حفظ المنتجات للمفضلة.', descEn: 'Category-specific sponsored ads and paginated product lists with favorite controls.', notes: ['تحميل الإعلان الممول من GET /api/user/ads?placement=category&category_id={category} وعرضه بنفس مكوّن الرئيسية', 'فتح الإعلان يمرر موضع الإعلان ومعرّف القسم الرئيسي إلى عارض السحب بملء الشاشة', 'تحميل الأقسام الفرعية عبر GET /api/user/sub-categories', 'تحميل القائمتين من GET /api/user/products مع ترتيب وصفحات مستقلة وحالة is_favorite لكل مستخدم', 'تبديل مفضلة منتج أو متجر عبر POST /api/user/favorites/toggle بإرسال type وfavoriteable_id', 'البحث واختيار القسم الفرعي يعيدان تحميل المنتجات، وتظل الإعلانات مرتبطة بالقسم الرئيسي'], notesEn: ['Load the category sponsored ad from GET /api/user/ads?placement=category&category_id={category} using the same component as home', 'Open the full-screen swipe viewer with the main category ID preserved', 'Load subcategories from GET /api/user/sub-categories', 'Load both lists from GET /api/user/products with independent sorting, pagination, and per-user is_favorite state', 'Toggle a product or store favorite with POST /api/user/favorites/toggle using type and favoriteable_id', 'Search and subcategory selection reload the product lists; ads remain filtered by the main category'] },
-      { id: 45, num: '26', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '25-product-reviews.html', title: 'تقييمات المنتج', titleEn: 'Product Reviews', tags: ['Reviews', 'Product'], desc: 'التقييمات الظاهرة للمنتج من API مع ملخص وتقسيم صفحات.', descEn: 'Live visible product reviews with summary and pagination.', notes: ['GET /api/user/products/{product}/reviews', 'فلتر التقييم', 'تحميل المزيد وحالات الخطأ'], notesEn: ['GET /api/user/products/{product}/reviews', 'Rating filter', 'Load more and error states'] },
+      { id: 43, num: '24', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '23-search-results.html', title: 'نتائج البحث', titleEn: 'Search Results', tags: ['Search', 'Products', 'Filters'], desc: 'نتائج تجريبية للمنتجات والمتاجر مع البحث والفلاتر.', descEn: 'Sample product and store results with search and filters.', notes: ['البحث والفلاتر يغيران قائمة النتائج محليًا', 'بطاقة النتيجة تفتح تفاصيل المنتج أو المتجر', 'حالات التحميل والخطأ والفراغ أمثلة بصرية'], notesEn: ['Search and filters update results locally', 'Result cards open product or store details', 'Loading, error, and empty states are visual examples'] },
+      { id: 44, num: '25', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '24-category-details.html', title: 'تفاصيل القسم', titleEn: 'Category Details', tags: ['Category', 'Sponsored', 'Discovery'], desc: 'تفاصيل قسم بمنتجات وإعلان تجريبي يستخدم مكوّن الإعلان نفسه في الرئيسية.', descEn: 'Category details with sample products and an ad using the same home ad component.', notes: ['البحث والقسم الفرعي والترتيب يحدّثون البطاقات محليًا', 'بطاقة الإعلان تفتح العارض بملء الشاشة', 'المفضلة والتنقل بين المنتجات تفاعلات محلية'], notesEn: ['Search, subcategory, and sort update cards locally', 'The ad card opens the full-screen viewer', 'Favorites and product navigation are local interactions'] },
+      { id: 45, num: '26', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '25-product-reviews.html', title: 'تقييمات المنتج', titleEn: 'Product Reviews', tags: ['Reviews', 'Product'], desc: 'قائمة تقييمات وملخص تجريبي مع فلاتر وتنقل محلي.', descEn: 'Sample reviews and summary with local filters and navigation.', notes: ['التقييمات والمُلخص بيانات للعرض', 'فلتر التقييم وعرض المزيد يحدّثان القائمة محليًا', 'حالات الخطأ والفراغ أمثلة بصرية'], notesEn: ['Reviews and summary are sample content', 'Rating filters and load-more update the local list', 'Error and empty states are visual examples'] },
       { id: 75, num: '52', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '26-return-request.html', title: 'طلب استرجاع', titleEn: 'Return Request', tags: ['Returns', 'Evidence', 'Refund'], desc: 'إرسال طلب استرجاع بالسبب والتفاصيل والصور والمبلغ المتوقع.', descEn: 'Submit a return request with reason, details, photos, and expected refund.', notes: ['سبب وتفاصيل', 'صور اختيارية', 'مراجعة مبلغ الاسترداد'], notesEn: ['Reason and details', 'Optional photos', 'Refund preview'] },
       { id: 76, num: '53', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '26-return-status.html', title: 'متابعة الاسترجاع', titleEn: 'Return Status', tags: ['Returns', 'Tracking', 'Wallet'], desc: 'متابعة طلب الاسترجاع من الإرسال حتى إعادة المبلغ للمحفظة.', descEn: 'Track a return from submission through wallet refund.', notes: ['خط زمني واضح', 'تفاصيل الطلب', 'تواصل مع المتجر'], notesEn: ['Clear timeline', 'Request details', 'Store chat'] },
       { id: 77, num: '54', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: '26-order-receipt.html', title: 'إيصال الطلب', titleEn: 'Order Receipt', tags: ['Receipt', 'Payment', 'PDF'], desc: 'إيصال شراء تفصيلي قابل للطباعة أو الحفظ PDF.', descEn: 'Detailed purchase receipt ready for printing or PDF saving.', notes: ['تفاصيل الدفع', 'الخصم والإجمالي', 'طباعة وحفظ PDF'], notesEn: ['Payment details', 'Discount and total', 'Print and PDF'] },
@@ -2895,7 +2895,7 @@
     // شاشات بوابة التاجر الجديدة وفق نموذج الإعلانات والعمولة والمحفظة.
     screens.push(
       { id: 51, num: '28', section: 'الموزع', sectionEn: 'Distributor Portal', file: '18-distributor-products.html', title: 'منتجاتي', titleEn: 'My Products', tags: ['Product Catalog', 'Search', 'Filters'], desc: 'كتالوج منتجات التاجر مع البحث والتصفية حسب حالة المنتج، وزر واضح لإضافة منتج جديد.', descEn: 'Merchant catalog with search, status filters, and a clear add-product action.', notes: ['حالات منشور وقيد المراجعة ومسودة', 'السعر والقسم وآخر تحديث', 'زر إضافة واضح في أعلى الصفحة'], notesEn: ['Published, review, and draft states', 'Price, category, and update time', 'Clear add-product action in the header'] },
-      { id: 52, num: '29', section: 'الموزع', sectionEn: 'Distributor Portal', file: '19-add-ad.html', title: 'إضافة إعلان', titleEn: 'Create Ad', tags: ['Ad Placement', 'Scheduling', 'Wallet Payment'], desc: 'إنشاء إعلان بعنوان وصورة أو فيديو، واختيار موضع الإعلان وسعره من إعدادات التطبيق، والباقة والجدولة قبل الدفع من المحفظة.', descEn: 'Create an ad, load placement pricing from app settings, select package and schedule, then review wallet payment.', notes: ['يطلب /api/settings لأسعار home وcategory', 'التطبيق كله أو القسم أو صفحة المتجر', 'جدولة تاريخ ووقت البداية'], notesEn: ['Requests /api/settings for home and category prices', 'App-wide, category, or storefront placement', 'Start date and time scheduling'] },
+      { id: 52, num: '29', section: 'الموزع', sectionEn: 'Distributor Portal', file: '19-add-ad.html', title: 'إضافة إعلان', titleEn: 'Create Ad', tags: ['Ad Placement', 'Scheduling', 'Wallet Payment'], desc: 'معاينة تصميم إنشاء إعلان وموضعه وموعده وملخص تكلفته.', descEn: 'Preview the ad creation design, placement, schedule, and cost summary.', notes: ['خيارات الموضع والأسعار بيانات تجريبية', 'اختيار القسم أو صفحة المتجر', 'تجربة خطوات الجدولة والمراجعة دون دفع'], notesEn: ['Placement options and prices are sample data', 'Choose a category or storefront placement', 'Preview scheduling and review steps without payment'] },
       { id: 55, num: '32', section: 'الموزع', sectionEn: 'Distributor Portal', file: '20-distributor-account.html', title: 'حساب التاجر', titleEn: 'Merchant Account', tags: ['Store Profile', 'Wallet', 'Reviews'], desc: 'حساب التاجر بنفس أسلوب حساب المستخدم، مع إدارة بيانات المتجر والمحفظة والتقييمات وإعدادات الحساب.', descEn: 'Merchant account matching the buyer account style, with store profile, wallet, reviews, and account settings.', notes: ['نفس هوية حساب المستخدم', 'بيانات المتجر والمحفظة والتقييمات', 'إعدادات اللغة والمظهر والدعم'], notesEn: ['Buyer-account visual language', 'Store profile, wallet, and reviews', 'Language, theme, and support settings'] },
       { id: 56, num: '33', section: 'الموزع', sectionEn: 'Distributor Portal', file: '20-distributor-reviews.html', title: 'تقييماتي', titleEn: 'My Reviews', tags: ['Reviews', 'Rating Filter'], desc: 'عرض تقييمات العملاء مع متوسط التقييم وفلاتر الفترة والنجوم.', descEn: 'Customer reviews with rating summary and time or star filters.', notes: ['متوسط التقييم', 'فلترة سريعة', 'تقييمات موثقة مرتبطة بالمنتج'], notesEn: ['Rating average', 'Quick filters', 'Verified product-linked reviews'] },
       { id: 57, num: '34', section: 'الموزع', sectionEn: 'Distributor Portal', file: '21-distributor-orders.html', title: 'طلبات المتجر', titleEn: 'Merchant Orders', tags: ['Orders', 'Fulfillment', 'Pickup'], desc: 'إدارة طلبات المتجر حسب الحالة مع بيانات العميل والمنتج وإجراءات التأكيد والتجهيز والاستلام.', descEn: 'Manage merchant orders by status with customer, product, confirmation, preparation, and pickup actions.', notes: ['ملخص طلبات ومبيعات اليوم', 'فلترة حسب حالة الطلب', 'إجراءات مباشرة لكل مرحلة'], notesEn: ['Daily order and sales summary', 'Status filters', 'Actions for each fulfillment stage'] },
@@ -2929,12 +2929,12 @@
     );
 
     screens.push(
-      { id: 88, num: '12.1', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: 'account-faq.html', screenType: 'user', title: 'الأسئلة الشائعة للمستخدم', titleEn: 'User FAQs', tags: ['FAQs', 'User', 'Help'], desc: 'إجابات الأسئلة الشائعة للمستخدم، محمّلة من واجهة API حسب نوع الحساب.', descEn: 'Frequently asked questions for users, loaded from the API for the selected account type.', notes: ['يفتح من حساب المستخدم', 'يطلب /api/faqs?type=user', 'يعرض التحميل والفراغ والخطأ وإعادة المحاولة'], notesEn: ['Opened from the user account', 'Requests /api/faqs?type=user', 'Shows loading, empty, error, and retry states'] },
-      { id: 89, num: '31.1', section: 'الموزع', sectionEn: 'Distributor Portal', file: 'account-faq.html', screenType: 'store', title: 'الأسئلة الشائعة للمتجر', titleEn: 'Store FAQs', tags: ['FAQs', 'Store', 'Help'], desc: 'إجابات الأسئلة الشائعة للمتجر، محمّلة من واجهة API حسب نوع الحساب.', descEn: 'Frequently asked questions for stores, loaded from the API for the selected account type.', notes: ['يفتح من حساب المتجر', 'يطلب /api/faqs?type=store', 'يعرض التحميل والفراغ والخطأ وإعادة المحاولة'], notesEn: ['Opened from the store account', 'Requests /api/faqs?type=store', 'Shows loading, empty, error, and retry states'] },
-      { id: 90, num: '12.2', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: 'account-about.html', title: 'عن التطبيق', titleEn: 'About Saey', tags: ['Settings', 'About'], desc: 'صفحة «عن سعي» تفتح من إعدادات النظام داخل WebView.', descEn: 'The About Saey page opens from system settings in an embedded webview.', notes: ['يطلب /api/settings', 'يعرض about_app حسب اللغة داخل WebView', 'يعرض حالات التحميل والخطأ وإعادة المحاولة'], notesEn: ['Requests /api/settings', 'Displays about_app for the selected language in a webview', 'Handles loading, error, and retry states'] },
-      { id: 91, num: '12.3', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: 'account-privacy.html', title: 'سياسة الخصوصية', titleEn: 'Privacy Policy', tags: ['Settings', 'Privacy'], desc: 'سياسة الخصوصية تفتح من إعدادات النظام داخل WebView.', descEn: 'The privacy policy opens from system settings in an embedded webview.', notes: ['يطلب /api/settings', 'يعرض privacy حسب اللغة داخل WebView', 'يعرض حالات التحميل والخطأ وإعادة المحاولة'], notesEn: ['Requests /api/settings', 'Displays privacy for the selected language in a webview', 'Handles loading, error, and retry states'] },
-      { id: 92, num: '12.4', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: 'account-terms.html', title: 'الشروط والأحكام', titleEn: 'Terms and Conditions', tags: ['Settings', 'Terms'], desc: 'الشروط والأحكام محمّلة من إعدادات النظام عبر API.', descEn: 'Terms and conditions loaded from the settings API.', notes: ['يطلب /api/settings', 'يعرض terms_conditions داخل WebView', 'يعرض حالات التحميل والخطأ وإعادة المحاولة'], notesEn: ['Requests /api/settings', 'Displays terms_conditions in an embedded webview', 'Handles loading, error, and retry states'] },
-      { id: 93, num: '12.5', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: 'account-contact.html', title: 'تواصل معنا', titleEn: 'Contact Us', tags: ['Settings', 'Contact', 'Socials'], desc: 'تحميل بيانات التواصل من الإعدادات وإرسال رسائل النموذج إلى API.', descEn: 'Loads contact details from settings and submits contact form messages to the API.', notes: ['يطلب /api/settings لعرض بيانات التواصل والشبكات الاجتماعية', 'يرسل النموذج إلى POST /api/contact-us', 'يعرض حالات الإرسال والنجاح وأخطاء التحقق'], notesEn: ['Requests /api/settings for contact details and social links', 'Submits the form to POST /api/contact-us', 'Handles sending, success, and validation errors'] }
+      { id: 88, num: '12.1', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: 'account-faq.html', screenType: 'user', title: 'الأسئلة الشائعة للمستخدم', titleEn: 'User FAQs', tags: ['FAQs', 'User', 'Help'], desc: 'أسئلة شائعة تجريبية للمستخدم حسب نوع الحساب.', descEn: 'Sample user FAQs for the selected account type.', notes: ['يفتح من حساب المستخدم', 'المحتوى محلي داخل التصميم', 'حالات الفراغ والخطأ أمثلة بصرية'], notesEn: ['Opened from the user account', 'Content is local to the design', 'Empty and error states are visual examples'] },
+      { id: 89, num: '31.1', section: 'الموزع', sectionEn: 'Distributor Portal', file: 'account-faq.html', screenType: 'store', title: 'الأسئلة الشائعة للمتجر', titleEn: 'Store FAQs', tags: ['FAQs', 'Store', 'Help'], desc: 'أسئلة شائعة تجريبية للمتجر حسب نوع الحساب.', descEn: 'Sample store FAQs for the selected account type.', notes: ['يفتح من حساب المتجر', 'المحتوى محلي داخل التصميم', 'حالات الفراغ والخطأ أمثلة بصرية'], notesEn: ['Opened from the store account', 'Content is local to the design', 'Empty and error states are visual examples'] },
+      { id: 90, num: '12.2', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: 'account-about.html', title: 'عن التطبيق', titleEn: 'About Saey', tags: ['Settings', 'About'], desc: 'صفحة تعريفية تجريبية عن سعي.', descEn: 'Sample About Saey screen.', notes: ['نصوص محلية للتصميم', 'روابط العودة والتنقل تعمل داخل المعاينة'], notesEn: ['Local design copy', 'Back and navigation links work in the preview'] },
+      { id: 91, num: '12.3', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: 'account-privacy.html', title: 'سياسة الخصوصية', titleEn: 'Privacy Policy', tags: ['Settings', 'Privacy'], desc: 'شاشة تصميمية لعرض سياسة الخصوصية.', descEn: 'Design screen for displaying the privacy policy.', notes: ['محتوى تجريبي محلي', 'لا توجد قراءة إعدادات من خدمة خارجية'], notesEn: ['Local sample content', 'No settings are loaded from an external service'] },
+      { id: 92, num: '12.4', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: 'account-terms.html', title: 'الشروط والأحكام', titleEn: 'Terms and Conditions', tags: ['Settings', 'Terms'], desc: 'شاشة تصميمية لعرض الشروط والأحكام.', descEn: 'Design screen for displaying terms and conditions.', notes: ['محتوى تجريبي محلي', 'حالات القراءة جزء من معاينة التصميم'], notesEn: ['Local sample content', 'Reading states are part of the design preview'] },
+      { id: 93, num: '12.5', section: 'تطبيق المستخدم', sectionEn: 'Buyer Experience', file: 'account-contact.html', title: 'تواصل معنا', titleEn: 'Contact Us', tags: ['Settings', 'Contact', 'Socials'], desc: 'نموذج تواصل تجريبي مع حالات إدخال ونجاح.', descEn: 'Sample contact form with input and success states.', notes: ['إرسال النموذج يعرض نتيجة تجريبية محلية', 'بيانات التواصل وروابط الشبكات أمثلة تصميمية'], notesEn: ['Submitting the form shows a local sample result', 'Contact details and social links are design examples'] }
     );
 
     // الشاشات الحالية المعتمدة في العارض.

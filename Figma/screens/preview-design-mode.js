@@ -1,18 +1,15 @@
 /*
- * Offline-only fixtures for the Figma screen preview.
- * Enabled by preview.html with ?design_mode=static; app flows outside the
- * preview continue to use their configured API.
+ * Local-only fixtures for the Figma design prototype.
+ * Enabled by preview.html with ?design_mode=static. The preview uses sample
+ * data to demonstrate visual states and never connects to a backend API.
  */
 (() => {
   const params = new URLSearchParams(location.search);
   const previewSessionName = '__SAEY_FIGMA_PREVIEW_STATIC__';
-  const isPreviewFrame = window.parent !== window && window.frameElement?.id === 'phoneViewportIframe';
-  const isPreviewSession = isPreviewFrame || window.name === previewSessionName;
-  if (params.get('design_mode') !== 'static' && isPreviewSession) {
+  if (params.get('design_mode') !== 'static') {
     params.set('design_mode', 'static');
     history.replaceState(null, '', `${location.pathname}?${params.toString()}${location.hash}`);
   }
-  if (params.get('design_mode') !== 'static') return;
   window.name = previewSessionName;
 
   const storage = new Map([
