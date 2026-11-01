@@ -94,7 +94,7 @@
     setText('customerAvatar', order.avatar); setText('customerName', order.customer); setText('customerPhone', order.phone); setText('pickupTime', order.pickup); setText('customerNote', order.note);
     setText('subtotal', order.total); setText('discountValue', order.discount); setText('paymentTotal', order.total);
     document.getElementById('orderProductImage').src = order.image; document.getElementById('orderProductImage').alt = order.product;
-    const chatHref = `14-chat-conversation.html?store=${encodeURIComponent(order.customer)}`; document.getElementById('customerChat').href = chatHref; document.getElementById('detailChatAction').href = chatHref;
+    const chatHref = `14-chat-conversation.html?type=merchant&customer_id=${encodeURIComponent(order.id)}&customer=${encodeURIComponent(order.customer)}`; document.getElementById('customerChat').href = chatHref; document.getElementById('detailChatAction').href = chatHref;
     const renderState = () => {
       const config = stateConfig[currentState] || stateConfig.new;
       const badge = document.getElementById('orderStatusBadge'); badge.textContent = config.status; badge.className = config.className;

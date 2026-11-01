@@ -19,7 +19,7 @@
     ['saey_api_user', JSON.stringify({ id: 1, name: 'مريم أحمد', phone: '01012345678' })],
     ['saey_signup_draft', JSON.stringify({ userId: 1, phone_code: '+20', phone: '1012345678' })],
     ['saey_wallet_balance', '2500'],
-    ['saey_order_disputes_v1', JSON.stringify([{ id: 'DSP-601', order: 'SA-1014', note: 'المنتج المستلم لا يطابق الوصف والصور المعروضة.', status: 'under_review', date: '2026-10-28T09:30:00Z' }])]
+    ['saey_order_disputes_v1', JSON.stringify([{ id: 'DSP-601', order: 'SA-1014', customer: 'سارة أحمد', customer_id: 'c1', note: 'المنتج المستلم لا يطابق الوصف والصور المعروضة.', status: 'under_review', date: '2026-10-28T09:30:00Z' }])]
   ]);
   const storageArea = {
     get length() { return storage.size; },

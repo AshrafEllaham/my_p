@@ -204,6 +204,10 @@
     if (!pageElement) return;
 
     const params = new URLSearchParams(location.search);
+    if (params.get('type') === 'merchant') {
+      initMerchantRoom(params);
+      return;
+    }
     const composer = document.getElementById('messageComposer');
     const input = document.getElementById('messageInput');
     const messages = document.getElementById('messages');
@@ -432,6 +436,75 @@
         if (roomId && page === 1 && !document.hidden) loadMessages(1, true);
       }, 12000);
     }
+  };
+
+  const initMerchantRoom = params => {
+    const pageElement = document.querySelector('.conversation-page');
+    const customerName = params.get('customer') || 'سارة أحمد';
+    const customerId = params.get('customer_id') || 'c1';
+    const messages = document.getElementById('messages');
+    const input = document.getElementById('messageInput');
+    const composer = document.getElementById('messageComposer');
+    const search = document.getElementById('messageSearch');
+    const loadOlder = document.getElementById('loadOlderMessages');
+    const loading = document.getElementById('messagesLoading');
+    const errorPanel = document.getElementById('messagesError');
+    const status = document.getElementById('conversationStatus');
+    const back = document.querySelector('.conversation-back');
+    const subtitle = document.querySelector('.conversation-identity > span');
+    const menu = document.getElementById('conversationMenu');
+    const fallback = document.getElementById('storeAvatarFallback');
+    const storeName = document.getElementById('storeName');
+    const storeAvatar = document.getElementById('storeAvatar');
+    const now = Date.now();
+    const seed = customerId === 'c2'
+      ? ['شكرًا، استلمت الطلب اليوم', 'سعداء إن الطلب وصلك، شكرًا لثقتك بمتجرنا.']
+      : customerId === 'c3'
+        ? ['متى يصل الطلب؟', 'طلبك في الطريق، ومن المتوقع وصوله اليوم.']
+        : customerId === 'c4'
+          ? ['هل يمكن استبدال المقاس؟', 'بالتأكيد، أرسل لنا رقم الطلب وسنساعدك.']
+          : ['هل المنتج متوفر باللون الأسود؟', 'نعم، اللون الأسود متوفر حاليًا.', 'ممتاز، أريد طلبه من فضلك.'];
+    let rows = seed.map((body, index) => ({
+      body,
+      is_mine: index % 2 === 1,
+      created_at: new Date(now - (seed.length - index) * 3600000).toISOString(),
+    }));
+
+    storeName.textContent = customerName;
+    subtitle.textContent = 'محادثة مع العميل';
+    back.href = 'merchant-chats.html';
+    back.setAttribute('aria-label', 'العودة لرسائل العملاء');
+    fallback.textContent = customerName.slice(0, 1) || 'ع';
+    storeAvatar.hidden = true;
+    fallback.hidden = false;
+    menu.hidden = true;
+    menu.style.display = 'none';
+    loading.hidden = true;
+    errorPanel.hidden = true;
+    loadOlder.hidden = true;
+    input.disabled = false;
+    composer.querySelector('button').disabled = false;
+
+    const render = () => {
+      const query = search.value.trim();
+      const visible = rows.filter(row => !query || row.body.includes(query));
+      messages.innerHTML = visible.map(message => '<div class="message ' + (message.is_mine ? 'outgoing' : 'incoming') + '">' +
+        '<p>' + escapeHtml(message.body) + '</p><time>' + escapeHtml(formatTime(message.created_at)) + (message.is_mine ? ' <b>✓✓</b>' : '') + '</time></div>').join('');
+      pageElement.scrollTop = pageElement.scrollHeight;
+    };
+
+    composer.addEventListener('submit', event => {
+      event.preventDefault();
+      const body = input.value.trim();
+      if (!body) return;
+      rows.push({body, is_mine: true, created_at: new Date().toISOString()});
+      input.value = '';
+      status.textContent = 'تمت إضافة الرسالة للمعاينة';
+      status.hidden = false;
+      render();
+    });
+    search.addEventListener('input', render);
+    render();
   };
 
   initRoomList();

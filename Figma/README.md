@@ -22,7 +22,8 @@
 - `18-wallet-transactions.html`: سجل عمليات المحفظة والفلاتر.
 - `12-product-details.html`: تفاصيل المنتج ورحلة الشراء المباشر.
 - `08-user-home.html` و`09-categories.html` و`10-featured-products.html` و`11-featured-stores.html`: التصفح والاكتشاف.
-- `13-notifications.html` و`14-chats.html` و`14-chat-conversation.html`: الإشعارات والتواصل.
+- `13-notifications.html` و`14-chats.html` و`14-chat-conversation.html`: إشعارات المستخدم ودردشاته مع المتاجر.
+- `merchant-chats.html`: صندوق وارد التاجر لمحادثات العملاء؛ البحث والرسائل أمثلة محلية داخل معاينة التصميم.
 
 ---
 

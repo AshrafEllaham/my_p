@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const params = new URLSearchParams(window.location.search);
   const language = (params.get('lang') || localStorage.getItem('souq_lang') || 'ar') === 'en' ? 'en' : 'ar';
+  const isStoreAccount = params.get('type') === 'store';
   const copy = language === 'en'
     ? {
         title: 'Contact us', intro: 'Official contact details and Saey social links.',
@@ -8,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
         phone: 'Phone', otherPhone: 'Additional phone', email: 'Email',
         loading: 'Loading contact information...', empty: 'No contact information is available yet.',
         socialsEmpty: 'No social links are available yet.', error: 'Could not load contact information.',
-        retry: 'Try again', back: 'Back to account',
+        retry: 'Try again', back: isStoreAccount ? 'Back to store account' : 'Back to account',
         formTitle: 'Send a message', name: 'Name', subject: 'Subject', message: 'Message',
         messagePlaceholder: 'Describe your request or question', send: 'Send message',
         sending: 'Sending...', sendError: 'The message could not be sent. Please try again.',
@@ -20,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         phone: 'الهاتف', otherPhone: 'هاتف إضافي', email: 'البريد الإلكتروني',
         loading: 'جارٍ تحميل بيانات التواصل...', empty: 'لا توجد معلومات تواصل متاحة حاليًا.',
         socialsEmpty: 'لا توجد روابط اجتماعية متاحة حاليًا.', error: 'تعذر تحميل بيانات التواصل.',
-        retry: 'إعادة المحاولة', back: 'العودة إلى حسابي',
+        retry: 'إعادة المحاولة', back: isStoreAccount ? 'العودة إلى حساب المتجر' : 'العودة إلى حسابي',
         formTitle: 'أرسل رسالة', name: 'الاسم', subject: 'عنوان الرسالة', message: 'الرسالة',
         messagePlaceholder: 'اكتب تفاصيل طلبك أو استفسارك', send: 'إرسال الرسالة',
         sending: 'جارٍ الإرسال...', sendError: 'تعذر إرسال الرسالة. حاول مرة أخرى.',
@@ -46,7 +47,10 @@ document.addEventListener('DOMContentLoaded', () => {
   byId('phoneLabel').textContent = copy.phone;
   byId('otherPhoneLabel').textContent = copy.otherPhone;
   byId('emailLabel').textContent = copy.email;
-  byId('contactBackLink').href = `15-account.html?lang=${language}${params.has('theme') ? `&theme=${encodeURIComponent(params.get('theme'))}` : ''}`;
+  const backParams = new URLSearchParams({lang: language});
+  if (isStoreAccount) backParams.set('type', 'store');
+  if (params.has('theme')) backParams.set('theme', params.get('theme'));
+  byId('contactBackLink').href = `${isStoreAccount ? '20-distributor-account.html' : '15-account.html'}?${backParams.toString()}`;
   byId('contactBackLink').setAttribute('aria-label', copy.back);
   byId('contactRetry').textContent = copy.retry;
   byId('socialsEmpty').textContent = copy.socialsEmpty;

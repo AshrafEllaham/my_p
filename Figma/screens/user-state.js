@@ -193,7 +193,7 @@
     },
     reportOrderIssue(code, note = '') {
       const item = this.updateOrder(code, { state: 'disputed', disputeNote: note || 'أبلغ المستخدم عن مشكلة قبل إتمام الطلب.', disputedAt: new Date().toISOString() });
-      const reports = read('saey_order_disputes_v1', []); reports.unshift({ id: `DSP-${Date.now()}`, order: code, note: item?.disputeNote, status: 'open', date: new Date().toISOString() }); write('saey_order_disputes_v1', reports.slice(0, 40));
+      const reports = read('saey_order_disputes_v1', []); reports.unshift({ id: `DSP-${Date.now()}`, order: code, note: item?.disputeNote, customer: item?.customer || 'محمد أحمد', customer_id: item?.customer_id || 'c1', status: 'open', date: new Date().toISOString() }); write('saey_order_disputes_v1', reports.slice(0, 40));
       if (item) this.addUserNotification({ type: 'order', title: 'تم إيقاف إتمام الطلب', text: `سجلنا المشكلة على الطلب ${code} وسيظل المبلغ محميًا لحين المراجعة.`, href: `21-order-details.html?code=${code}` });
       this.addMerchantNotification({ type:'orders', title:'مشكلة تمنع إتمام الطلب', text:`أوقف المستخدم إتمام الطلب ${code}: ${item?.disputeNote||note}`, href:`21-distributor-order-details.html?order=${code}` });
       return item;
